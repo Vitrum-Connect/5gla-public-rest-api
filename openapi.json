@@ -1,0 +1,27 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "paths": {
+    "/info/version": {
+      "get": {
+        "tags": [
+          "info-controller"
+        ],
+        "description": "Fetch the version of the application.",
+        "operationId": "info.version",
+        "responses": {
+          "200": {
+            "description": "The version of the application.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}

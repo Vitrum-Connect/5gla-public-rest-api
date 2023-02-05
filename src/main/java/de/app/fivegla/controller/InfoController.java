@@ -1,5 +1,8 @@
 package de.app.fivegla.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +24,20 @@ public class InfoController {
      *
      * @return the version of the application
      */
+    @Operation(
+            operationId = "info.version",
+            description = "Fetch the version of the application."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The version of the application.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE
+            )
+    )
     @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getVersion() {
         return applicationVersion;
     }
-
 
 }

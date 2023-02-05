@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                 description = "REST API for the 5GLA environment. This API ensures, that the sensors can be registered and the data can be sent to the 5GLA environment."
         ),
         servers = @io.swagger.v3.oas.annotations.servers.Server(
-                url = "---",
+                url = "n.a.",
                 description = "Currently not available."
         )
 )

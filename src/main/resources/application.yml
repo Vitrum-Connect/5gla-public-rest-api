@@ -1,2 +1,6 @@
 app:
   version: '@project.version@'
+logging:
+  level:
+    root: debug
+    de.app.fivegla: trace

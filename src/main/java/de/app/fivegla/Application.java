@@ -1,8 +1,11 @@
 package de.app.fivegla;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -11,20 +14,26 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @SpringBootApplication
 @OpenAPIDefinition(
-        info = @io.swagger.v3.oas.annotations.info.Info(
+        info = @Info(
                 title = "5GLA REST API",
-                version = "1.0",
+                version = "${app.version:unknown}",
                 description = "REST API for the 5GLA environment. This API ensures, that the sensors can be registered and the data can be sent to the 5GLA environment."
-        ),
-        servers = @io.swagger.v3.oas.annotations.servers.Server(
-                url = "n.a.",
-                description = "Currently not available."
         )
 )
 public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+    /**
+     * Dependency injection for the model mapper.
+     *
+     * @return -
+     */
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }

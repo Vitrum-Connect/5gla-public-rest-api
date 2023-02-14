@@ -101,22 +101,6 @@
                     <finalName>5gla-public-rest-api</finalName>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-maven-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputDir>${project.basedir}</outputDir>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

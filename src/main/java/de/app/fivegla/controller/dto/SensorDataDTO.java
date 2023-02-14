@@ -1,26 +1,22 @@
-package de.app.fivegla.controller.dto.request;
+package de.app.fivegla.controller.dto;
 
-import de.app.fivegla.controller.dto.GeoLocationDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Request for creating sensor data.
+ * The sensor data.
  */
 @Getter
 @Setter
-@Schema(description = "Request for creating sensor data.")
-public class CreateSensorDataRequest {
+@Schema(description = "The sensor data.")
+public class SensorDataDTO {
 
     /**
      * The sensor id.
      */
     @Schema(description = "The sensor id.")
-    @NotBlank
     private String sensorId;
-
 
     /**
      * The sensor name.

@@ -1,5 +1,6 @@
 package de.app.fivegla.controller.dto.response;
 
+import de.app.fivegla.controller.dto.SensorDataDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,6 @@ public class SensorDataResponse {
     /**
      * The sensor data.
      */
-    public List<SensorDataDto> sensorData;
+    public List<SensorDataDTO> sensorData;
 
 }

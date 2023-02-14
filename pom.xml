@@ -62,6 +62,13 @@
             <version>3.1.1</version>
         </dependency>
 
+        <!-- MICROSTREAM -->
+        <dependency>
+            <groupId>one.microstream</groupId>
+            <artifactId>microstream-storage-embedded</artifactId>
+            <version>07.01.00-MS-GA</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -92,22 +99,6 @@
                     <mainClass>de.app.fivegla.Application</mainClass>
                     <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
                     <finalName>5gla-public-rest-api</finalName>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-maven-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputDir>${project.basedir}</outputDir>
                 </configuration>
             </plugin>
         </plugins>

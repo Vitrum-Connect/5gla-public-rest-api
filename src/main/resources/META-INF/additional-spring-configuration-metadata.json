@@ -4,5 +4,11 @@
       "name": "app.version",
       "type": "java.lang.String",
       "description": "Application version."
-  }
-] }
+    },
+    {
+      "name": "app.storage.sensor-master-data",
+      "type": "java.lang.String",
+      "description": "Storage directory for sensor master data."
+    }
+  ]
+}

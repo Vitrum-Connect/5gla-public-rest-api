@@ -39,7 +39,7 @@ ci/local-settings.xml
 .env
 
 # MICROSTREAM | LOCAL
-message-cache
+sensor-master-data
 *.dat
 *.ptd
 *.sft

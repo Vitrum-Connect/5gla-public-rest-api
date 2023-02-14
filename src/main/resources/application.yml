@@ -1,6 +1,8 @@
 app:
   version: '@project.version@'
+  storage:
+    sensor-master-data: ${SENSOR_MASTER_DATA_DATA_DIRECTORY}
 logging:
   level:
-    root: debug
+    root: info
     de.app.fivegla: trace

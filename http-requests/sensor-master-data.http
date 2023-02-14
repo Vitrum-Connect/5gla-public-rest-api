@@ -1,0 +1,24 @@
+### Create new sensor
+POST {{base-url}}/sensor-master-data/
+Content-Type: application/json
+
+{
+  "sensorId": "{{sensor-id}}",
+  "sensorName": "Lorbeerweg 10, Damme",
+  "geoLocation": {
+    "latitude": "52.502991",
+    "longitude": "8.170797"
+  }
+}
+
+### Get all sensors
+
+GET {{base-url}}/sensor-master-data/
+
+### Get sensor by id
+
+GET {{base-url}}/sensor-master-data/{{sensor-id}}
+
+### Delete sensor
+
+DELETE {{base-url}}/sensor-master-data/{{sensor-id}}

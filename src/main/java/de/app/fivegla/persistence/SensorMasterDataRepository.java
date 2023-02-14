@@ -4,9 +4,10 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.domain.SensorMasterData;
+import de.app.fivegla.persistence.root.SensorMasterDataRoot;
+import one.microstream.storage.embedded.types.EmbeddedStorageManager;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,15 @@ import java.util.List;
 @Component
 public class SensorMasterDataRepository {
 
-    private static final List<SensorMasterData> sensorMasterData = new ArrayList<>();
+    private final EmbeddedStorageManager storageManager;
+
+    public SensorMasterDataRepository(EmbeddedStorageManager storageManager) {
+        this.storageManager = storageManager;
+    }
+
+    private SensorMasterDataRoot root() {
+        return (SensorMasterDataRoot) storageManager.root();
+    }
 
     /**
      * Saves the sensor master data.
@@ -23,8 +32,9 @@ public class SensorMasterDataRepository {
      * @param entity The sensor master data.
      */
     public void save(SensorMasterData entity) {
-        if (sensorMasterData.stream().filter(sensorMasterData -> sensorMasterData.getSensorId().equals(entity.getSensorId())).findFirst().isEmpty()) {
-            sensorMasterData.add(entity);
+        if (root().getSensorMasterData().stream().filter(sensorMasterData -> sensorMasterData.getSensorId().equals(entity.getSensorId())).findFirst().isEmpty()) {
+            root().getSensorMasterData().add(entity);
+            storageManager.storeRoot();
         } else {
             var errorMessage = ErrorMessage.builder()
                     .error(Error.SENSOR_ALREADY_EXISTS)
@@ -39,11 +49,11 @@ public class SensorMasterDataRepository {
      * @return the sensor master data
      */
     public List<SensorMasterData> findAll() {
-        return sensorMasterData;
+        return root().getSensorMasterData();
     }
 
     public SensorMasterData findById(String id) {
-        return sensorMasterData.stream().filter(sensorMasterData -> sensorMasterData.getSensorId().equals(id)).findFirst().orElseThrow(() -> {
+        return root().getSensorMasterData().stream().filter(sensorMasterData -> sensorMasterData.getSensorId().equals(id)).findFirst().orElseThrow(() -> {
             var errorMessage = ErrorMessage.builder()
                     .error(Error.SENSOR_NOT_FOUND)
                     .message(String.format("Sensor with the id '%s' does not exists", id)).build();
@@ -57,6 +67,7 @@ public class SensorMasterDataRepository {
      * @param id the sensor id
      */
     public void delete(String id) {
-        sensorMasterData.removeIf(sensorMasterData -> sensorMasterData.getSensorId().equals(id));
+        root().getSensorMasterData().removeIf(sensorMasterData -> sensorMasterData.getSensorId().equals(id));
+        storageManager.storeRoot();
     }
 }

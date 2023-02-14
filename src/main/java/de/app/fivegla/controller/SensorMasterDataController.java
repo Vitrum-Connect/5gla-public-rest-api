@@ -1,9 +1,10 @@
 package de.app.fivegla.controller;
 
 import de.app.fivegla.api.Tags;
+import de.app.fivegla.controller.dto.SensorDataDTO;
 import de.app.fivegla.controller.dto.request.CreateSensorDataRequest;
-import de.app.fivegla.controller.dto.response.SensorDataDto;
 import de.app.fivegla.controller.dto.response.SensorDataResponse;
+import de.app.fivegla.domain.GeoLocation;
 import de.app.fivegla.domain.SensorMasterData;
 import de.app.fivegla.service.SensorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Controller for sensor master data.
@@ -61,45 +66,17 @@ public class SensorMasterDataController {
                     )
             }
     )
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/")
     public ResponseEntity<Void> create(@Parameter(description = "The request to create a sensor.") @Valid @RequestBody CreateSensorDataRequest createSensorDataRequest) {
         var sensorData = SensorMasterData.builder()
                 .sensorId(createSensorDataRequest.getSensorId())
+                .sensorName(createSensorDataRequest.getSensorName())
+                .geoLocation(GeoLocation.builder()
+                        .latitude(createSensorDataRequest.getGeoLocation().getLatitude())
+                        .longitude(createSensorDataRequest.getGeoLocation().getLongitude()).build())
                 .build();
         sensorService.createSensor(sensorData);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    /**
-     * Get all sensors.
-     */
-    @Operation(
-            operationId = "sensor-master-data.fetch-all",
-            description = "Get all sensors.",
-            tags = {Tags.SENSOR_MASTER_DATA}
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "The sensors were successfully retrieved.",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = SensorDataResponse.class
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "The request is invalid."
-                    )
-            }
-    )
-    @GetMapping(value = "/", produces = "application/json")
-    public ResponseEntity<SensorDataResponse> findAll() {
-        var sensorDataDtos = sensorService.findAll().stream().map(sensorData -> modelMapper.map(sensorData, SensorDataDto.class)).toList();
-        return ResponseEntity.ok(SensorDataResponse.builder().sensorData(sensorDataDtos).build());
     }
 
     /**
@@ -118,7 +95,7 @@ public class SensorMasterDataController {
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
-                                            implementation = SensorDataDto.class
+                                            implementation = SensorDataDTO.class
                                     )
                             )
                     ),
@@ -128,10 +105,12 @@ public class SensorMasterDataController {
                     )
             }
     )
-    @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<SensorDataDto> find(@Parameter(description = "The id of the sensor.") String id) {
-        var sensorData = sensorService.findById(id);
-        return ResponseEntity.ok(modelMapper.map(sensorData, SensorDataDto.class));
+    @GetMapping(value = {"/", "/{id}"}, produces = "application/json")
+    public ResponseEntity<SensorDataResponse> find(@Parameter(description = "The id of the sensor.", required = true) @PathVariable(required = false) Optional<String> id) {
+        final List<SensorMasterData> sensorData;
+        sensorData = id.map(s -> Collections.singletonList(sensorService.findById(s))).orElseGet(sensorService::findAll);
+        var sensorDataDtos = sensorData.stream().map(s -> modelMapper.map(s, SensorDataDTO.class)).toList();
+        return ResponseEntity.ok(SensorDataResponse.builder().sensorData(sensorDataDtos).build());
     }
 
     /**
@@ -155,7 +134,7 @@ public class SensorMasterDataController {
             }
     )
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@Parameter(description = "The id of the sensor.") String id) {
+    public ResponseEntity<Void> delete(@Parameter(description = "The id of the sensor.", required = true) @PathVariable String id) {
         sensorService.delete(id);
         return ResponseEntity.ok().build();
     }

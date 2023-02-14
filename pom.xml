@@ -90,8 +90,6 @@
                         <goals>
                             <goal>repackage</goal>
                             <goal>build-info</goal>
-                            <goal>start</goal>
-                            <goal>stop</goal>
                         </goals>
                     </execution>
                 </executions>

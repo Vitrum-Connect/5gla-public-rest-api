@@ -23,6 +23,11 @@ public class SensorMasterData {
     private String sensorName;
 
     /**
+     * The sensor type.
+     */
+    private SensorType sensorType;
+
+    /**
      * The geolocation.
      */
     private GeoLocation geoLocation;

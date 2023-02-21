@@ -5,4 +5,5 @@ package de.app.fivegla.api;
  */
 public interface Tags {
     String SENSOR_MASTER_DATA = "sensor-master-data";
+    String SENSOR_DATA = "sensor-data";
 }

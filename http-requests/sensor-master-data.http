@@ -5,6 +5,21 @@ Content-Type: application/json
 {
   "sensorId": "{{sensor-id}}",
   "sensorName": "Lorbeerweg 10, Damme",
+  "sensorType": "SOIL_SCOUT",
+  "geoLocation": {
+    "latitude": "52.502991",
+    "longitude": "8.170797"
+  }
+}
+
+### Update existing sensor
+PUT {{base-url}}/sensor-master-data/
+Content-Type: application/json
+
+{
+  "sensorId": "{{sensor-id}}",
+  "sensorName": "Lorbeerweg 10, Damme",
+  "sensorType": "SOIL_SCOUT",
   "geoLocation": {
     "latitude": "52.502991",
     "longitude": "8.170797"

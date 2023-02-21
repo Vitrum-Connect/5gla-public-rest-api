@@ -70,4 +70,17 @@ public class SensorMasterDataRepository {
         root().getSensorMasterData().removeIf(sensorMasterData -> sensorMasterData.getSensorId().equals(id));
         storageManager.storeRoot();
     }
+
+    /**
+     * Updates the sensor master data.
+     *
+     * @param updatedSensorMasterData the updated sensor master data
+     */
+    public void update(SensorMasterData updatedSensorMasterData) {
+        var sensorMasterData = findById(updatedSensorMasterData.getSensorId());
+        sensorMasterData.setSensorType(updatedSensorMasterData.getSensorType());
+        sensorMasterData.setSensorName(updatedSensorMasterData.getSensorName());
+        sensorMasterData.setGeoLocation(updatedSensorMasterData.getGeoLocation());
+        storageManager.storeRoot();
+    }
 }

@@ -2,6 +2,8 @@ app:
   version: '@project.version@'
   storage:
     sensor-master-data: ${SENSOR_MASTER_DATA_DATA_DIRECTORY}
+fiware:
+  context-broker-url: ${CONTEXT_BROKER_URL}
 logging:
   level:
     root: info

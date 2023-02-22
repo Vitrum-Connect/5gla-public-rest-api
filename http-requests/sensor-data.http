@@ -1,0 +1,7 @@
+POST {{base-url}}/sensor-data/
+Content-Type: application/json
+
+{
+  "sensorId": "{{sensor-id}}",
+  "base64EncodedSensorData": "ewogICAgICAidGltZXN0YW1wIjogIjIwMjMtMDItMDhUMTM6NDQ6MjAuOTU3MDQxWiIsCiAgICAgICJkZXZpY2UiOiAxNDA1MywKICAgICAgInRlbXBlcmF0dXJlIjogMS41LAogICAgICAibW9pc3R1cmUiOiAwLjE5NywKICAgICAgImNvbmR1Y3Rpdml0eSI6IDAuMTA0NCwKICAgICAgImRpZWxlY3RyaWNpdHkiOiAxNS43MDI4LAogICAgICAic2l0ZSI6IDE3MzQsCiAgICAgICJzYWxpbml0eSI6IDAuNTQwOCwKICAgICAgImZpZWxkX2NhcGFjaXR5IjogMC4yLAogICAgICAid2lsdGluZ19wb2ludCI6IG51bGwsCiAgICAgICJ3YXRlcl9iYWxhbmNlIjogMC45OAogICAgfQ=="
+}

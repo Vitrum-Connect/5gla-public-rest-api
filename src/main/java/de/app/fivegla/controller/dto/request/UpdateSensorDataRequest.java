@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Request for creating sensor data.")
-public class CreateSensorDataRequest {
+public class UpdateSensorDataRequest {
 
     /**
      * The sensor id.

@@ -9,6 +9,11 @@
       "name": "app.storage.sensor-master-data",
       "type": "java.lang.String",
       "description": "Storage directory for sensor master data."
+    },
+    {
+      "name": "fiware.context-broker-url",
+      "type": "java.lang.String",
+      "description": "URL of the context broker."
     }
   ]
 }

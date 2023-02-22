@@ -3,6 +3,7 @@ package de.app.fivegla.controller;
 import de.app.fivegla.api.Tags;
 import de.app.fivegla.controller.dto.SensorDataDTO;
 import de.app.fivegla.controller.dto.request.CreateSensorDataRequest;
+import de.app.fivegla.controller.dto.request.UpdateSensorDataRequest;
 import de.app.fivegla.controller.dto.response.SensorDataResponse;
 import de.app.fivegla.domain.GeoLocation;
 import de.app.fivegla.domain.SensorMasterData;
@@ -66,17 +67,59 @@ public class SensorMasterDataController {
                     )
             }
     )
-    @PostMapping(value = "/")
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@Parameter(description = "The request to create a sensor.") @Valid @RequestBody CreateSensorDataRequest createSensorDataRequest) {
         var sensorData = SensorMasterData.builder()
                 .sensorId(createSensorDataRequest.getSensorId())
                 .sensorName(createSensorDataRequest.getSensorName())
+                .sensorType(createSensorDataRequest.getSensorType())
                 .geoLocation(GeoLocation.builder()
                         .latitude(createSensorDataRequest.getGeoLocation().getLatitude())
                         .longitude(createSensorDataRequest.getGeoLocation().getLongitude()).build())
                 .build();
         sensorService.createSensor(sensorData);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * Update an existing sensor.
+     */
+    @Operation(
+            operationId = "sensor-master-data.update",
+            description = "Update an existing sensor.",
+            tags = {Tags.SENSOR_MASTER_DATA},
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "The request to update an existing sensor.",
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CreateSensorDataRequest.class)
+                    )
+            )
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "The sensor was successfully updated."
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "The request is invalid."
+                    )
+            }
+    )
+    @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@Parameter(description = "The request to update an existing sensor.") @Valid @RequestBody UpdateSensorDataRequest updateSensorDataRequest) {
+        var sensorData = SensorMasterData.builder()
+                .sensorId(updateSensorDataRequest.getSensorId())
+                .sensorName(updateSensorDataRequest.getSensorName())
+                .sensorType(updateSensorDataRequest.getSensorType())
+                .geoLocation(GeoLocation.builder()
+                        .latitude(updateSensorDataRequest.getGeoLocation().getLatitude())
+                        .longitude(updateSensorDataRequest.getGeoLocation().getLongitude()).build())
+                .build();
+        sensorService.updateSensor(sensorData);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -105,7 +148,7 @@ public class SensorMasterDataController {
                     )
             }
     )
-    @GetMapping(value = {"/", "/{id}"}, produces = "application/json")
+    @GetMapping(value = {"/", "/{id}"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SensorDataResponse> find(@Parameter(description = "The id of the sensor.", required = true) @PathVariable(required = false) Optional<String> id) {
         final List<SensorMasterData> sensorData;
         sensorData = id.map(s -> Collections.singletonList(sensorService.findById(s))).orElseGet(sensorService::findAll);

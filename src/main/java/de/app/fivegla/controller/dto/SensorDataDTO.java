@@ -1,5 +1,6 @@
 package de.app.fivegla.controller.dto;
 
+import de.app.fivegla.domain.SensorType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +30,11 @@ public class SensorDataDTO {
      */
     @Schema(description = "The geolocation.")
     private GeoLocationDTO geoLocation;
+
+    /**
+     * The sensor type.
+     */
+    @Schema(description = "The sensor type.")
+    private SensorType sensorType;
 
 }

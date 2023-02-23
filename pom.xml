@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.app.5gla</groupId>
-    <artifactId>public-rest-api</artifactId>
+    <artifactId>soil-scout-integration-service</artifactId>
     <version>1.0.0</version>
 
     <properties>

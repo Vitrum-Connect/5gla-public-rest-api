@@ -2,7 +2,8 @@
   <configuration default="false" name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <envs>
       <env name="CONTEXT_BROKER_URL" value="localhost:8080" />
-      <env name="SENSOR_MASTER_DATA_DATA_DIRECTORY" value="./sensor-master-data" />
+      <env name="SOILSCOUT_USERNAME" value="FelixSchmidt" />
+      <env name="SOILSCOUT_PASSWORD" value="Ostfalia2023" />
     </envs>
     <module name="public-rest-api" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="de.app.fivegla.Application" />

@@ -1,7 +1,7 @@
-package de.app.fivegla.integration.parser;
+package de.app.fivegla.integration.soilscout.parser;
 
 import com.google.gson.Gson;
-import de.app.fivegla.integration.data.SoilScoutData;
+import de.app.fivegla.integration.soilscout.model.SoilScoutData;
 import org.springframework.stereotype.Component;
 
 /**

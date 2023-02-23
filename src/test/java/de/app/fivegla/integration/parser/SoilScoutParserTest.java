@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.parser;
 
+import de.app.fivegla.integration.soilscout.parser.SoilScoutParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

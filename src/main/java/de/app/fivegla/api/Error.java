@@ -9,10 +9,7 @@ import lombok.Getter;
 public enum Error {
 
     INVALID_REQUEST(errorOf(1)),
-    SENSOR_ALREADY_EXISTS(errorOf(2)),
-    SENSOR_NOT_FOUND(errorOf(3)),
-    SENSOR_TYPE_UNKNOWN(errorOf(4)),
-    SOIL_SCOUT_COULD_NOT_AUTHENTICATE(errorOf(5));
+    SOIL_SCOUT_COULD_NOT_AUTHENTICATE(errorOf(1));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

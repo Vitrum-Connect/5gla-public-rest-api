@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.data;
+package de.app.fivegla.integration.soilscout.model;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;

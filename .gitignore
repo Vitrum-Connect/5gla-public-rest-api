@@ -20,6 +20,7 @@ buildNumber.properties
 .idea
 *.ipr
 *.iws
+.run
 
 # ECLIPSE #
 .classpath
@@ -37,9 +38,3 @@ ci/local-settings.xml
 
 # ENV FOR DOCKER-COMPOSE SECRETS #
 .env
-
-# MICROSTREAM | LOCAL
-sensor-master-data
-*.dat
-*.ptd
-*.sft

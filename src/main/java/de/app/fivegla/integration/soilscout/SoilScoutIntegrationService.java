@@ -39,7 +39,7 @@ public class SoilScoutIntegrationService {
      *
      * @return List of sensors.
      */
-    public List<SoilScoutSensor> fetchSensors() {
+    public List<SoilScoutSensor> findAllSensors() {
         var soilScoutSsoResponse = getSSOToken();
         var soilScoutAccessTokenResponse = getBearerToken(soilScoutSsoResponse.getSsoToken());
         return getDevices(soilScoutAccessTokenResponse.getAccess());

@@ -1,10 +1,8 @@
 app:
   version: '@project.version@'
-  storage:
-    sensor-master-data: ${SENSOR_MASTER_DATA_DATA_DIRECTORY}
   sensors:
     soilscout:
-      url: ${SOILSCOUT_URL}
+      url: https://soilscouts.fi/api/v1/
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
 fiware:

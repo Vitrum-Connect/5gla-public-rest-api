@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.app.5gla</groupId>
-    <artifactId>public-rest-api</artifactId>
+    <artifactId>soil-scout-integration-service</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -65,13 +65,6 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>3.1.1</version>
-        </dependency>
-
-        <!-- MICROSTREAM -->
-        <dependency>
-            <groupId>one.microstream</groupId>
-            <artifactId>microstream-storage-embedded</artifactId>
-            <version>07.01.00-MS-GA</version>
         </dependency>
 
         <!-- GSON -->

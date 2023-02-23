@@ -1,14 +1,14 @@
 app:
   version: '@project.version@'
   storage:
-    sensor-master-data: ${SENSOR_MASTER_DATA_DATA_DIRECTORY}
+    sensor-master-data: ./sesnsor-master-data-test
   sensors:
     soilscout:
-      url: ${SOILSCOUT_URL}
+      url: https://soilscouts.fi/api/v1/
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
 fiware:
-  context-broker-url: ${CONTEXT_BROKER_URL}
+  context-broker-url: localhost:5661/
 logging:
   level:
     root: info

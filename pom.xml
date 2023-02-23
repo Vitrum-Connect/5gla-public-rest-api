@@ -67,13 +67,6 @@
             <version>3.1.1</version>
         </dependency>
 
-        <!-- MICROSTREAM -->
-        <dependency>
-            <groupId>one.microstream</groupId>
-            <artifactId>microstream-storage-embedded</artifactId>
-            <version>07.01.00-MS-GA</version>
-        </dependency>
-
         <!-- GSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>

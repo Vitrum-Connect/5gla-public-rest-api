@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.soilscout.job;
 
 import de.app.fivegla.integration.soilscout.SoilScoutIntegrationService;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,6 +19,8 @@ import java.time.temporal.ChronoUnit;
 public class SoilScoutScheduledDataImport {
 
     private final SoilScoutIntegrationService soilScoutIntegrationService;
+
+    @Getter
     private Instant lastRun;
 
     public SoilScoutScheduledDataImport(SoilScoutIntegrationService soilScoutIntegrationService) {
@@ -27,7 +30,7 @@ public class SoilScoutScheduledDataImport {
     /**
      * Run scheduled data import.
      */
-    @Scheduled(cron = "0 */15 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void run() {
         if (lastRun != null) {
             log.info("Running scheduled data import from Soil Scout API");

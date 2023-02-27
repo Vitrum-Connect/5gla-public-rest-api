@@ -1,0 +1,2 @@
+### Get all sensors
+GET {{base-url}}/soil-scout/

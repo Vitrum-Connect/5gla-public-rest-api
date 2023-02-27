@@ -15,9 +15,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @OpenAPIDefinition(
         info = @Info(
-                title = "5GLA REST API",
-                version = "${app.version:unknown}",
-                description = "REST API for the 5GLA environment. This API ensures, that the sensors can be registered and the data can be sent to the 5GLA environment."
+                title = "5GLA Soil Scout Integration Service",
+                version = "${app.version:unknown}"
         )
 )
 public class Application {

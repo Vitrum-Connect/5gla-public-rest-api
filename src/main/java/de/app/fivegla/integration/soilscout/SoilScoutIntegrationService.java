@@ -6,8 +6,11 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.soilscout.dto.request.SoilScoutSsoRequest;
 import de.app.fivegla.integration.soilscout.dto.request.SoilScoutTokenRequest;
 import de.app.fivegla.integration.soilscout.dto.response.SoilScoutAccessTokenResponse;
+import de.app.fivegla.integration.soilscout.dto.response.SoilScoutMeasurementResponse;
 import de.app.fivegla.integration.soilscout.dto.response.SoilScoutSsoResponse;
+import de.app.fivegla.integration.soilscout.model.SoilScoutData;
 import de.app.fivegla.integration.soilscout.model.SoilScoutSensor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,15 +18,16 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * Soil Scout integration service to access devices and sensor data.
  */
+@Slf4j
 @Service
 public class SoilScoutIntegrationService {
 
@@ -35,11 +39,49 @@ public class SoilScoutIntegrationService {
     private String password;
 
     /**
+     * Fetch all soil scout sensor data.
+     *
+     * @return all soil scout data for the sensor
+     */
+    public List<SoilScoutData> findAllMeasurements(Instant since, Instant until) {
+        var soilScoutSsoResponse = getSSOToken();
+        var soilScoutAccessTokenResponse = getBearerToken(soilScoutSsoResponse.getSsoToken());
+        return findAllMeasurements(since, until, soilScoutAccessTokenResponse.getAccess());
+    }
+
+    private List<SoilScoutData> findAllMeasurements(Instant since, Instant until, String accessToken) {
+        var restTemplate = new RestTemplate();
+        var headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(accessToken);
+        var httpEntity = new HttpEntity<String>(headers);
+        var uri = UriComponentsBuilder.fromHttpUrl(url + "/measurements/?since={since}&until={until}")
+                .encode()
+                .toUriString();
+        var uriVariables = Map.of("since",
+                formatInstant(since),
+                "until",
+                formatInstant(until));
+        var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, SoilScoutMeasurementResponse.class, uriVariables);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            log.debug("There are {} sensor data sets in total.", Objects.requireNonNull(response.getBody()).getResults().length);
+            return Arrays.asList(Objects.requireNonNull(response.getBody()).getResults());
+        } else {
+            var errorMessage = ErrorMessage.builder().error(Error.SOIL_SCOUT_COULD_NOT_AUTHENTICATE).message("Could not fetch devices for SoilScout API.").build();
+            throw new BusinessException(errorMessage);
+        }
+    }
+
+    private String formatInstant(Instant instant) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Date.from(instant));
+    }
+
+    /**
      * Fetches all sensors from the SoilScout API.
      *
      * @return List of sensors.
      */
-    public List<SoilScoutSensor> fetchSensors() {
+    public List<SoilScoutSensor> findAllSensors() {
         var soilScoutSsoResponse = getSSOToken();
         var soilScoutAccessTokenResponse = getBearerToken(soilScoutSsoResponse.getSsoToken());
         return getDevices(soilScoutAccessTokenResponse.getAccess());
@@ -94,5 +136,4 @@ public class SoilScoutIntegrationService {
             throw new BusinessException(errorMessage);
         }
     }
-
 }

@@ -1,0 +1,8 @@
+### Get version
+GET {{base-url}}/info/version
+
+### Get last run
+GET {{base-url}}/info/last-run
+
+### Get all sensors
+GET {{base-url}}/soil-scout

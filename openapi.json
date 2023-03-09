@@ -1,8 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "5GLA REST API",
-    "description": "REST API for the 5GLA environment. This API ensures, that the sensors can be registered and the data can be sent to the 5GLA environment.",
+    "title": "5GLA Soil Scout Integration Service",
     "version": "1.0.0"
   },
   "servers": [
@@ -12,192 +11,19 @@
     }
   ],
   "paths": {
-    "/sensor-master-data/": {
+    "/soil-scout/": {
       "get": {
         "tags": [
-          "sensor-master-data"
+          "soil-scout"
         ],
-        "description": "Get sensor by id.",
-        "operationId": "sensor-master-data.fetch-by-id_1",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The id of the sensor.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "The request is invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SensorDataResponse"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "The sensor was successfully retrieved.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SensorDataDTO"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "sensor-master-data"
-        ],
-        "description": "Update an existing sensor.",
-        "operationId": "sensor-master-data.update",
-        "requestBody": {
-          "description": "The request to update an existing sensor.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateSensorDataRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "description": "Fetch all soil scout sensors.",
+        "operationId": "soil-scout.find-all",
         "responses": {
           "200": {
-            "description": "The sensor was successfully updated."
-          },
-          "400": {
-            "description": "The request is invalid."
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "sensor-master-data"
-        ],
-        "description": "Create a new sensor.",
-        "operationId": "sensor-master-data.create",
-        "requestBody": {
-          "description": "The request to create a sensor.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateSensorDataRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "The sensor was successfully created."
-          },
-          "400": {
-            "description": "The request is invalid."
-          }
-        }
-      }
-    },
-    "/sensor-data/": {
-      "post": {
-        "tags": [
-          "sensor-data"
-        ],
-        "description": "Publish new sensor data.",
-        "operationId": "sensor-data.publish",
-        "requestBody": {
-          "description": "The request to publish sensor data.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PublishSensorDataRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "400": {
-            "description": "The request is invalid."
-          },
-          "201": {
-            "description": "The sensor data was published successfully."
-          }
-        }
-      }
-    },
-    "/sensor-master-data/{id}": {
-      "get": {
-        "tags": [
-          "sensor-master-data"
-        ],
-        "description": "Get sensor by id.",
-        "operationId": "sensor-master-data.fetch-by-id",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The id of the sensor.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "The request is invalid.",
+            "description": "All soil scout sensors.",
             "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SensorDataResponse"
-                }
-              }
+              "application/json": {}
             }
-          },
-          "200": {
-            "description": "The sensor was successfully retrieved.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SensorDataDTO"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "sensor-master-data"
-        ],
-        "description": "Delete sensor by id.",
-        "operationId": "sensor-master-data.delete-by-id",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The id of the sensor.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The sensor was successfully deleted."
-          },
-          "400": {
-            "description": "The request is invalid."
           }
         }
       }
@@ -218,103 +44,24 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "CreateSensorDataRequest": {
-        "required": [
-          "sensorId"
+    },
+    "/info/last-run": {
+      "get": {
+        "tags": [
+          "info-controller"
         ],
-        "type": "object",
-        "properties": {
-          "sensorId": {
-            "type": "string",
-            "description": "The sensor id."
-          },
-          "sensorName": {
-            "type": "string",
-            "description": "The sensor name."
-          },
-          "geoLocation": {
-            "$ref": "#/components/schemas/GeoLocationDTO"
-          },
-          "sensorType": {
-            "type": "string",
-            "description": "The sensor type.",
-            "enum": [
-              "SOIL_SCOUT"
-            ]
-          }
-        },
-        "description": "Request for creating sensor data."
-      },
-      "GeoLocationDTO": {
-        "type": "object",
-        "properties": {
-          "latitude": {
-            "type": "number",
-            "description": "The latitude.",
-            "format": "double"
-          },
-          "longitude": {
-            "type": "number",
-            "description": "The longitude.",
-            "format": "double"
-          }
-        },
-        "description": "The geolocation."
-      },
-      "PublishSensorDataRequest": {
-        "type": "object",
-        "properties": {
-          "sensorId": {
-            "type": "string",
-            "description": "The sensor id."
-          },
-          "base64EncodedSensorData": {
-            "type": "string",
-            "description": "The Base64 encoded sensor data."
-          }
-        },
-        "description": "Request for publishing sensor data."
-      },
-      "SensorDataDTO": {
-        "type": "object",
-        "properties": {
-          "sensorId": {
-            "type": "string",
-            "description": "The sensor id."
-          },
-          "sensorName": {
-            "type": "string",
-            "description": "The sensor name."
-          },
-          "geoLocation": {
-            "$ref": "#/components/schemas/GeoLocationDTO"
-          },
-          "sensorType": {
-            "type": "string",
-            "description": "The sensor type.",
-            "enum": [
-              "SOIL_SCOUT"
-            ]
-          }
-        },
-        "description": "The sensor data."
-      },
-      "SensorDataResponse": {
-        "type": "object",
-        "properties": {
-          "sensorData": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SensorDataDTO"
+        "description": "Fetch the last run of the import.",
+        "operationId": "info.last-rum",
+        "responses": {
+          "200": {
+            "description": "The last run of the application.",
+            "content": {
+              "application/json": {}
             }
           }
-        },
-        "description": "The response for retrieving sensor data."
+        }
       }
     }
-  }
+  },
+  "components": {}
 }

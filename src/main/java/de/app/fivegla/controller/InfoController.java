@@ -5,6 +5,7 @@ import de.app.fivegla.controller.dto.VersionResponse;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -44,7 +45,8 @@ public class InfoController {
             responseCode = "200",
             description = "The version of the application.",
             content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = VersionResponse.class)
             )
     )
     @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,7 +68,8 @@ public class InfoController {
             responseCode = "200",
             description = "The last run of the application.",
             content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = LastRunResponse.class)
             )
     )
     @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)

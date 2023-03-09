@@ -74,6 +74,13 @@
             <version>2.10.1</version>
         </dependency>
 
+        <!-- MicroStream -->
+        <dependency>
+            <groupId>one.microstream</groupId>
+            <artifactId>microstream-integrations-spring-boot3</artifactId>
+            <version>08.00.00-MS-EA2</version>
+        </dependency>
+
         <!-- JUNIT -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

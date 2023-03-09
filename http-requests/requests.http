@@ -6,3 +6,6 @@ GET {{base-url}}/info/last-run
 
 ### Get all sensors
 GET {{base-url}}/soil-scout
+
+### Start import manually
+POST {{base-url}}/data-import/run

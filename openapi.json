@@ -2,6 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "5GLA Soil Scout Integration Service",
+    "description": "This service provides the integration of the Soil Scout API with the 5GLA platform.",
     "version": "1.0.0"
   },
   "servers": [
@@ -11,6 +12,20 @@
     }
   ],
   "paths": {
+    "/data-import/run": {
+      "post": {
+        "tags": [
+          "data-import-controller"
+        ],
+        "description": "Run the import manually.",
+        "operationId": "data-import.run",
+        "responses": {
+          "200": {
+            "description": "The import was started."
+          }
+        }
+      }
+    },
     "/soil-scout/": {
       "get": {
         "tags": [
@@ -22,7 +37,11 @@
           "200": {
             "description": "All soil scout sensors.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoilScoutSensorResponse"
+                }
+              }
             }
           }
         }
@@ -39,7 +58,11 @@
           "200": {
             "description": "The version of the application.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionResponse"
+                }
+              }
             }
           }
         }
@@ -56,12 +79,163 @@
           "200": {
             "description": "The last run of the application.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LastRunResponse"
+                }
+              }
             }
           }
         }
       }
     }
   },
-  "components": {}
+  "components": {
+    "schemas": {
+      "SoilScoutLocation": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "soil_type": {
+            "type": "string"
+          },
+          "soil_density": {
+            "type": "number",
+            "format": "double"
+          },
+          "field_capacity": {
+            "type": "number",
+            "format": "double"
+          },
+          "wilting_point": {
+            "type": "number",
+            "format": "double"
+          },
+          "irrigation_threshold": {
+            "type": "number",
+            "format": "double"
+          },
+          "site_id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SoilScoutSensor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imei": {
+            "type": "string"
+          },
+          "location": {
+            "$ref": "#/components/schemas/SoilScoutLocation"
+          },
+          "site": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "serial_number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "device_type": {
+            "type": "string"
+          },
+          "voltage_external": {
+            "type": "number",
+            "format": "double"
+          },
+          "voltage_battery": {
+            "type": "number",
+            "format": "double"
+          },
+          "last_seen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "device_status": {
+            "type": "string"
+          },
+          "antenna_type": {
+            "type": "string"
+          },
+          "antenna_orientation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rain_mm_per_pulse": {
+            "type": "number",
+            "format": "double"
+          },
+          "has_battery": {
+            "type": "string"
+          }
+        },
+        "description": "The sensors."
+      },
+      "SoilScoutSensorResponse": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "The timestamp of the response."
+          },
+          "sensors": {
+            "type": "array",
+            "description": "The sensors.",
+            "items": {
+              "$ref": "#/components/schemas/SoilScoutSensor"
+            }
+          }
+        },
+        "description": "Response wrapper."
+      },
+      "VersionResponse": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "The timestamp of the response."
+          },
+          "version": {
+            "type": "string",
+            "description": "The version."
+          }
+        },
+        "description": "Response wrapper."
+      },
+      "LastRunResponse": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "The timestamp of the response."
+          },
+          "lastRun": {
+            "type": "string",
+            "description": "The last run."
+          }
+        },
+        "description": "Response wrapper."
+      }
+    }
+  }
 }

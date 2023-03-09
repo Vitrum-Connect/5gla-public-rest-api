@@ -16,7 +16,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @OpenAPIDefinition(
         info = @Info(
                 title = "5GLA Soil Scout Integration Service",
-                version = "${app.version:unknown}"
+                version = "${app.version:unknown}",
+                description = "This service provides the integration of the Soil Scout API with the 5GLA platform."
         )
 )
 public class Application {

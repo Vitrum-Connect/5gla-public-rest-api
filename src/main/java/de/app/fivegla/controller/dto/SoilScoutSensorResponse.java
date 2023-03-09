@@ -1,0 +1,23 @@
+package de.app.fivegla.controller.dto;
+
+import de.app.fivegla.integration.soilscout.model.SoilScoutSensor;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+import lombok.Getter;
+
+import java.util.List;
+
+/**
+ * Response wrapper.
+ */
+@Builder
+@Schema(description = "Response wrapper.")
+public class SoilScoutSensorResponse extends Response {
+
+    /**
+     * The sensors.
+     */
+    @Getter
+    @Schema(description = "The sensors.")
+    private List<SoilScoutSensor> sensors;
+}

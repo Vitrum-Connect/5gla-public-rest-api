@@ -14,11 +14,13 @@ public class ApplicationData {
     private transient StorageManager storageManager;
 
     @Getter
-    private Instant lastRun;
+    private LastRun lastRun;
 
     public void setLastRun(Instant lastRun) {
-        this.lastRun = lastRun;
-        storageManager.store(lastRun);
+        var newLastRun = new LastRun();
+        newLastRun.setLastRun(lastRun);
+        this.lastRun = newLastRun;
+        storageManager.store(this);
     }
 
 }

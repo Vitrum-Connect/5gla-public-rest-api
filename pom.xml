@@ -77,7 +77,7 @@
         <!-- MicroStream -->
         <dependency>
             <groupId>one.microstream</groupId>
-            <artifactId>microstream-integrations-spring-boot</artifactId>
+            <artifactId>microstream-integrations-spring-boot3</artifactId>
             <version>08.00.00-MS-EA2</version>
         </dependency>
 

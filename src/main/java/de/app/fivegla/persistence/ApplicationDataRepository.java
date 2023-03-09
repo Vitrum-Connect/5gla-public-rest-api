@@ -14,7 +14,11 @@ public class ApplicationDataRepository {
     }
 
     public Instant getLastRun() {
-        return applicationData.getLastRun();
+        if (applicationData.getLastRun() == null) {
+            return null;
+        } else {
+            return applicationData.getLastRun().getLastRun();
+        }
     }
 
     public void updateLastRun() {

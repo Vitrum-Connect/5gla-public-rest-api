@@ -32,7 +32,7 @@ public class SoilScoutScheduledDataImport {
      */
     @Scheduled(cron = "0 */5 * * * *")
     public void run() {
-        if (applicationDataRepository != null) {
+        if (applicationDataRepository.getLastRun() != null) {
             log.info("Running scheduled data import from Soil Scout API");
             var measurements = soilScoutIntegrationService.findAllMeasurements(applicationDataRepository.getLastRun(), Instant.now());
             log.info("Found {} measurements", measurements.size());

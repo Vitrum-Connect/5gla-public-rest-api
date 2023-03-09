@@ -38,3 +38,6 @@ ci/local-settings.xml
 
 # ENV FOR DOCKER-COMPOSE SECRETS #
 .env
+
+# LOCAL MICROSTREAM  #
+.microstream

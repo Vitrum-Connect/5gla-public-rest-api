@@ -73,7 +73,11 @@ public class SoilScoutIntegrationService {
     }
 
     private String formatInstant(Instant instant) {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Date.from(instant));
+        if (instant == null) {
+            return null;
+        } else {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Date.from(instant));
+        }
     }
 
     /**

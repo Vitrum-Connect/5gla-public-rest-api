@@ -3,7 +3,6 @@ package de.app.fivegla.integration.soilscout.job;
 import de.app.fivegla.integration.soilscout.SoilScoutIntegrationService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
-@Scope("singleton")
 public class SoilScoutScheduledDataImport {
 
     private final SoilScoutIntegrationService soilScoutIntegrationService;

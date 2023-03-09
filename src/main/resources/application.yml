@@ -11,3 +11,8 @@ logging:
   level:
     root: info
     de.app.fivegla: trace
+    one.microstream: debug
+one:
+  microstream:
+    storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}
+    channel-count: 2

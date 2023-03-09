@@ -1,6 +1,6 @@
 package de.app.fivegla.controller;
 
-import de.app.fivegla.integration.soilscout.job.SoilScoutScheduledDataImport;
+import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,10 +23,10 @@ public class InfoController {
     @Value("${app.version:unknown}")
     private String applicationVersion;
 
-    private final SoilScoutScheduledDataImport soilScoutScheduledDataImport;
+    private final ApplicationDataRepository applicationDataRepository;
 
-    public InfoController(SoilScoutScheduledDataImport soilScoutScheduledDataImport) {
-        this.soilScoutScheduledDataImport = soilScoutScheduledDataImport;
+    public InfoController(ApplicationDataRepository applicationDataRepository) {
+        this.applicationDataRepository = applicationDataRepository;
     }
 
     /**
@@ -64,7 +64,7 @@ public class InfoController {
     )
     @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Instant> getLastImport() {
-        return ResponseEntity.ok(soilScoutScheduledDataImport.getLastRun());
+        return ResponseEntity.ok(applicationDataRepository.getLastRun());
     }
 
 }

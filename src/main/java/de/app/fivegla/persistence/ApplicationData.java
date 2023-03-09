@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
 
+/**
+ * Application data.
+ */
 @Storage
 public class ApplicationData {
 
@@ -14,12 +17,15 @@ public class ApplicationData {
     private transient StorageManager storageManager;
 
     @Getter
-    private LastRun lastRun;
+    private Instant lastRun;
 
+    /**
+     * Update the last run.
+     *
+     * @param lastRun the last run
+     */
     public void setLastRun(Instant lastRun) {
-        var newLastRun = new LastRun();
-        newLastRun.setLastRun(lastRun);
-        this.lastRun = newLastRun;
+        this.lastRun = lastRun;
         storageManager.store(this);
     }
 

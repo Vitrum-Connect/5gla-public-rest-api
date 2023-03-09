@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for data import purpose, will only be active if the profile is set correctly.
+ */
 @RestController
 @RequestMapping("/data-import")
 @Profile("manual-import-allowed")

@@ -17,7 +17,7 @@ public class ApplicationDataRepository {
         if (applicationData.getLastRun() == null) {
             return null;
         } else {
-            return applicationData.getLastRun().getLastRun();
+            return applicationData.getLastRun();
         }
     }
 

@@ -5,6 +5,9 @@ app:
       url: https://soilscouts.fi/api/v1/
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
+  scheduled:
+    data-import:
+      cron: "0 0 0 * * *" # every day at midnight
 fiware:
   context-broker-url: ${CONTEXT_BROKER_URL}
 logging:

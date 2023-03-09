@@ -30,7 +30,7 @@ public class SoilScoutScheduledDataImport {
     /**
      * Run scheduled data import.
      */
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "${app.scheduled.data-import.cron}}")
     public void run() {
         if (applicationDataRepository.getLastRun() != null) {
             log.info("Running scheduled data import from Soil Scout API");

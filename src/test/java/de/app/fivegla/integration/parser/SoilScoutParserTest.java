@@ -6,19 +6,21 @@ import org.junit.jupiter.api.Test;
 
 class SoilScoutParserTest {
 
-    private String sensorData = "{\n" +
-            "  \"timestamp\": \"2020-05-01T12:00:00.000Z\",\n" +
-            "  \"device\": 1,\n" +
-            "  \"temperature\": 20.0,\n" +
-            "  \"moisture\": 0.5,\n" +
-            "  \"conductivity\": 0.5,\n" +
-            "  \"dielectricity\": 0.5,\n" +
-            "  \"site\": 1,\n" +
-            "  \"salinity\": 0.5,\n" +
-            "  \"field_capacity\": 0.5,\n" +
-            "  \"wilting_point\": 0.5,\n" +
-            "  \"water_balance\": 0.5\n" +
-            "}";
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String sensorData = """
+            {
+              "timestamp": "2020-05-01T12:00:00.000Z",
+              "device": 1,
+              "temperature": 20.0,
+              "moisture": 0.5,
+              "conductivity": 0.5,
+              "dielectricity": 0.5,
+              "site": 1,
+              "salinity": 0.5,
+              "field_capacity": 0.5,
+              "wilting_point": 0.5,
+              "water_balance": 0.5
+            }""";
 
     @Test
     void givenValidSensorDataWhenParsingTheDataTheResultShouldBeValid() {

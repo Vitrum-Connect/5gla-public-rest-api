@@ -81,6 +81,13 @@
             <version>08.00.00-MS-EA2</version>
         </dependency>
 
+        <!-- FIWARE INTEGRATION LAYER -->
+        <dependency>
+            <groupId>de.app.5gla</groupId>
+            <artifactId>fiware-integration-layer</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- JUNIT -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

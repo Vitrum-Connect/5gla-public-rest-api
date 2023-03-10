@@ -34,10 +34,13 @@ src/main/generated
 .lck
 
 # LOCAL SETTINGS #
-ci/local-settings.xml
+.github/workflows/local-settings.xml
 
 # ENV FOR DOCKER-COMPOSE SECRETS #
 .env
 
 # LOCAL MICROSTREAM  #
 .microstream
+
+# LOCAL SETTINGS #
+.github/settings.local.xml

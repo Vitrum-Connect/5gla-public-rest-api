@@ -21,4 +21,6 @@ jobs:
           java-version: 17
           distribution: microsoft
       - name: Build with Maven
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
         run: mvn -B verify --file pom.xml --settings .github/settings.xml

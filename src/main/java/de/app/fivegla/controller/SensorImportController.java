@@ -1,6 +1,6 @@
 package de.app.fivegla.controller;
 
-import de.app.fivegla.integration.soilscout.job.SoilScoutScheduledDataImport;
+import de.app.fivegla.integration.soilscout.job.SoilScoutScheduledSensorImport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.context.annotation.Profile;
@@ -11,24 +11,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Controller for data import purpose, will only be active if the profile is set correctly.
+ * Controller for sensor import purpose, will only be active if the profile is set correctly.
  */
 @RestController
-@RequestMapping("/data-import")
+@RequestMapping("/sensor-import")
 @Profile("manual-import-allowed")
-public class DataImportController {
+public class SensorImportController {
 
-    private final SoilScoutScheduledDataImport soilScoutScheduledDataImport;
+    private final SoilScoutScheduledSensorImport soilScoutScheduledSensorImport;
 
-    public DataImportController(SoilScoutScheduledDataImport soilScoutScheduledDataImport) {
-        this.soilScoutScheduledDataImport = soilScoutScheduledDataImport;
+    public SensorImportController(SoilScoutScheduledSensorImport soilScoutScheduledSensorImport) {
+        this.soilScoutScheduledSensorImport = soilScoutScheduledSensorImport;
     }
 
     /**
      * Run the import.
      */
     @Operation(
-            operationId = "data-import.run",
+            operationId = "sensor-import.run",
             description = "Run the import manually."
     )
     @ApiResponse(
@@ -37,7 +37,7 @@ public class DataImportController {
     )
     @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> runImport() {
-        soilScoutScheduledDataImport.run();
+        soilScoutScheduledSensorImport.run();
         return ResponseEntity.ok().build();
     }
 

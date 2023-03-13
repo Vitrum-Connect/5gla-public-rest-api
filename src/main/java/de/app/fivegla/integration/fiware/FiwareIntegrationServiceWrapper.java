@@ -2,10 +2,10 @@ package de.app.fivegla.integration.fiware;
 
 
 import de.app.fivegla.api.Constants;
-import de.app.fivegla.fiware.FiwareIntegrationService;
+import de.app.fivegla.fiware.DeviceIntegrationService;
+import de.app.fivegla.fiware.api.enums.DeviceCategoryValues;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
-import de.app.fivegla.fiware.model.DeviceCategoryValues;
 import de.app.fivegla.integration.soilscout.model.SoilScoutSensor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,8 +40,8 @@ public class FiwareIntegrationServiceWrapper {
         return Constants.FIWARE_SOIL_SCOUT_SENSOR_ID_PREFIX + sensor.getId();
     }
 
-    private FiwareIntegrationService fiwareIntegrationService() {
-        return new FiwareIntegrationService(contextBrokerUrl);
+    private DeviceIntegrationService fiwareIntegrationService() {
+        return new DeviceIntegrationService(contextBrokerUrl);
     }
 
 }

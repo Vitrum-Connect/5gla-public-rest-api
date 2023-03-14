@@ -1,9 +1,9 @@
-name: Docker CI
+name: Docker Release
 
 on:
   push:
-    branches:
-      - "main"
+    tags:
+      - v*
 
 env:
   REGISTRY: ghcr.io
@@ -29,6 +29,8 @@ jobs:
           distribution: microsoft
 
       - name: Build with Maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn -B verify --file pom.xml --settings .github/settings.xml
 
       - name: Login to GitHub Container Registry

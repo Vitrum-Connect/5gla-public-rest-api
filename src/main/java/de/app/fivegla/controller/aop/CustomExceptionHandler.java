@@ -28,6 +28,7 @@ public class CustomExceptionHandler {
      */
     @ExceptionHandler(value = {BusinessException.class})
     public ProblemDetail handleBusinessExceptions(BusinessException businessException) throws ErrorResponseException {
+        log.error("A business exception occurred: ", businessException);
         var errorMessage = ErrorMessage.builder()
                 .error(businessException.getErrorMessage().getError())
                 .message(businessException.getErrorMessage().getMessage()).build();
@@ -42,7 +43,8 @@ public class CustomExceptionHandler {
      * @throws ErrorResponseException Error response exception
      */
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, IllegalArgumentException.class, InvalidFormatException.class, HttpMessageNotReadableException.class})
-    public ProblemDetail handleCommonExceptions() throws ErrorResponseException {
+    public ProblemDetail handleCommonExceptions(Throwable t) throws ErrorResponseException {
+        log.error("An invalid request occurred.", t);
         var errorMessage = ErrorMessage.builder()
                 .error(Error.INVALID_REQUEST)
                 .message("This was an invalid request. Please check the request parameters and try again.").build();

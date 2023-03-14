@@ -123,7 +123,7 @@
                 <configuration>
                     <mainClass>de.app.fivegla.Application</mainClass>
                     <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
-                    <finalName>5gla-public-rest-api</finalName>
+                    <finalName>application</finalName>
                 </configuration>
             </plugin>
             <plugin>

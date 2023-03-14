@@ -1,6 +1,6 @@
 FROM openjdk:17
 
-ADD target/5gla-public-rest-api.jar /opt/application/application.jar
+ADD target/application.jar /opt/application/application.jar
 
 RUN chmod 775 -R /opt/application && chown 1000:root -R /opt/application
 

@@ -45,3 +45,4 @@ src/main/generated
 
 # LOCAL SETTINGS #
 .github/settings.local.xml
+*.env

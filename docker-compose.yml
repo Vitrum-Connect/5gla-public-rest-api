@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  5gla-soilscout-integration-service:
+    image: ghcr.io/vitrum-connect/5gla-soilscout-integration-service:latest
+    environment:
+      - CONTEXT_BROKER_URL=${CONTEXT_BROKER_URL}
+      - MICROSTREAM_STORAGE_DIRECTORY=${MICROSTREAM_STORAGE_DIRECTORY}
+      - SOILSCOUT_USERNAME=${SOILSCOUT_USERNAME}
+      - SOILSCOUT_PASSWORD=${SOILSCOUT_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1:8080}:8080"

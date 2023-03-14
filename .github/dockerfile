@@ -9,4 +9,4 @@ EXPOSE 8080
 
 WORKDIR /opt/application
 
-ENTRYPOINT ["java","-jar","application.jar"]
+ENTRYPOINT ["java","-jar","application.jar","--add-exports java.base/jdk.internal.misc=ALL-UNNAMED"]

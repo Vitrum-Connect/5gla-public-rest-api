@@ -85,7 +85,7 @@
         <dependency>
             <groupId>de.app.5gla</groupId>
             <artifactId>fiware-integration-layer</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
 
         <!-- JUNIT -->
@@ -124,6 +124,20 @@
                     <mainClass>de.app.fivegla.Application</mainClass>
                     <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
                     <finalName>5gla-public-rest-api</finalName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- SUREFIRE -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*IT.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.soilscout.job;
 
-import de.app.fivegla.integration.soilscout.SoilScoutIntegrationService;
+import de.app.fivegla.integration.fiware.FiwareIntegrationServiceWrapper;
+import de.app.fivegla.integration.soilscout.SoilScoutMeasurementIntegrationService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,13 +17,16 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class SoilScoutScheduledDataImport {
 
-    private final SoilScoutIntegrationService soilScoutIntegrationService;
+    private final SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
     private final ApplicationDataRepository applicationDataRepository;
+    private final FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public SoilScoutScheduledDataImport(SoilScoutIntegrationService soilScoutIntegrationService,
-                                        ApplicationDataRepository applicationDataRepository) {
-        this.soilScoutIntegrationService = soilScoutIntegrationService;
+    public SoilScoutScheduledDataImport(SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService,
+                                        ApplicationDataRepository applicationDataRepository,
+                                        FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
+        this.soilScoutMeasurementIntegrationService = soilScoutMeasurementIntegrationService;
         this.applicationDataRepository = applicationDataRepository;
+        this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;
     }
 
     /**
@@ -32,12 +36,16 @@ public class SoilScoutScheduledDataImport {
     public void run() {
         if (applicationDataRepository.getLastRun() != null) {
             log.info("Running scheduled data import from Soil Scout API");
-            var measurements = soilScoutIntegrationService.findAllMeasurements(applicationDataRepository.getLastRun(), Instant.now());
+            var measurements = soilScoutMeasurementIntegrationService.findAll(applicationDataRepository.getLastRun(), Instant.now());
             log.info("Found {} measurements", measurements.size());
+            log.info("Persisting {} measurements", measurements.size());
+            measurements.forEach(fiwareIntegrationServiceWrapper::persist);
         } else {
             log.info("Running initial data import from Soil Scout API, this may take a while");
-            var measurements = soilScoutIntegrationService.findAllMeasurements(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
+            var measurements = soilScoutMeasurementIntegrationService.findAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
             log.info("Found {} measurements", measurements.size());
+            log.info("Persisting {} measurements", measurements.size());
+            measurements.forEach(fiwareIntegrationServiceWrapper::persist);
         }
         applicationDataRepository.updateLastRun();
     }

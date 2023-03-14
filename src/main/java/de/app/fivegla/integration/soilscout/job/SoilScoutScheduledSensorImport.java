@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.soilscout.job;
 
 import de.app.fivegla.integration.fiware.FiwareIntegrationServiceWrapper;
-import de.app.fivegla.integration.soilscout.SoilScoutIntegrationService;
+import de.app.fivegla.integration.soilscout.SoilScoutSensorIntegrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SoilScoutScheduledSensorImport {
 
-    private final SoilScoutIntegrationService soilScoutIntegrationService;
+    private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
     private final FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public SoilScoutScheduledSensorImport(SoilScoutIntegrationService soilScoutIntegrationService,
+    public SoilScoutScheduledSensorImport(SoilScoutSensorIntegrationService soilScoutSensorIntegrationService,
                                           FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
-        this.soilScoutIntegrationService = soilScoutIntegrationService;
+        this.soilScoutSensorIntegrationService = soilScoutSensorIntegrationService;
         this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;
     }
 
@@ -28,9 +28,9 @@ public class SoilScoutScheduledSensorImport {
     @Scheduled(cron = "${app.scheduled.sensor-import.cron}}")
     public void run() {
         log.info("Running scheduled sensor import from Soil Scout API");
-        var sensors = soilScoutIntegrationService.findAllSensors();
+        var sensors = soilScoutSensorIntegrationService.findAll();
         log.info("Found {} sensors", sensors.size());
-        sensors.forEach(fiwareIntegrationServiceWrapper::createSensor);
+        sensors.forEach(fiwareIntegrationServiceWrapper::persist);
     }
 
 }

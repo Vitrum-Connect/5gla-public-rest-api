@@ -1,15 +1,22 @@
 app:
   version: '@project.version@'
-  storage:
-    sensor-master-data: ./sesnsor-master-data-test
   sensors:
     soilscout:
       url: https://soilscouts.fi/api/v1/
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
+  scheduled:
+    data-import:
+      cron: "0 0 0 * * *" # every day at midnight
+    sensor-import:
+      cron: "0 0 0 * * *" # every day at midnight
 fiware:
-  context-broker-url: localhost:5661/
+  context-broker-url: ${CONTEXT_BROKER_URL}
 logging:
   level:
-    root: info
+    root: warn
     de.app.fivegla: trace
+one:
+  microstream:
+    storage-directory: .microstream-integration-test
+    channel-count: 2

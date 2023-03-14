@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
- * Controller for data import purpose, will only be active if the profile is set correctly.
+ * Controller for sensor data import purpose, will only be active if the profile is set correctly.
  */
 @RestController
-@RequestMapping("/data-import")
+@RequestMapping("/sensor-data-import")
 @Profile("manual-import-allowed")
-public class DataImportController {
+public class SensorDataImportController {
 
     private final SoilScoutScheduledDataImport soilScoutScheduledDataImport;
 
-    public DataImportController(SoilScoutScheduledDataImport soilScoutScheduledDataImport) {
+    public SensorDataImportController(SoilScoutScheduledDataImport soilScoutScheduledDataImport) {
         this.soilScoutScheduledDataImport = soilScoutScheduledDataImport;
     }
 
@@ -28,7 +29,7 @@ public class DataImportController {
      * Run the import.
      */
     @Operation(
-            operationId = "data-import.run",
+            operationId = "sensor-data-import.run",
             description = "Run the import manually."
     )
     @ApiResponse(

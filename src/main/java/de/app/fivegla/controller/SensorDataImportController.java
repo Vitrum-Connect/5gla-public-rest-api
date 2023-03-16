@@ -1,6 +1,6 @@
 package de.app.fivegla.controller;
 
-import de.app.fivegla.integration.soilscout.job.SoilScoutScheduledDataImport;
+import de.app.fivegla.integration.soilscout.job.ScheduledMeasurementImport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.context.annotation.Profile;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Profile("manual-import-allowed")
 public class SensorDataImportController {
 
-    private final SoilScoutScheduledDataImport soilScoutScheduledDataImport;
+    private final ScheduledMeasurementImport scheduledMeasurementImport;
 
-    public SensorDataImportController(SoilScoutScheduledDataImport soilScoutScheduledDataImport) {
-        this.soilScoutScheduledDataImport = soilScoutScheduledDataImport;
+    public SensorDataImportController(ScheduledMeasurementImport scheduledMeasurementImport) {
+        this.scheduledMeasurementImport = scheduledMeasurementImport;
     }
 
     /**
@@ -38,7 +38,7 @@ public class SensorDataImportController {
     )
     @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> runImport() {
-        soilScoutScheduledDataImport.run();
+        scheduledMeasurementImport.run();
         return ResponseEntity.ok().build();
     }
 

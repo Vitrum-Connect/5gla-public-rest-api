@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 public class SoilScoutMeasurementIntegrationServiceIT {
 
     @Autowired
-    private SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
+    private MeasurementIntegrationService soilScoutMeasurementIntegrationService;
 
     @Test
     void givenTimeRangeOf14DaysWhenFetchingSensorDataTheServiceShouldReturnMeasurements() {

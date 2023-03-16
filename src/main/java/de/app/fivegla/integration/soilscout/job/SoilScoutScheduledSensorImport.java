@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.soilscout.job;
 
 import de.app.fivegla.integration.fiware.FiwareIntegrationServiceWrapper;
-import de.app.fivegla.integration.soilscout.SoilScoutSensorIntegrationService;
+import de.app.fivegla.integration.soilscout.SensorIntegrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SoilScoutScheduledSensorImport {
 
-    private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
+    private final SensorIntegrationService soilScoutSensorIntegrationService;
     private final FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public SoilScoutScheduledSensorImport(SoilScoutSensorIntegrationService soilScoutSensorIntegrationService,
+    public SoilScoutScheduledSensorImport(SensorIntegrationService soilScoutSensorIntegrationService,
                                           FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
         this.soilScoutSensorIntegrationService = soilScoutSensorIntegrationService;
         this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;

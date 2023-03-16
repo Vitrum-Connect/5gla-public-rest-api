@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @Builder
-public class SoilScoutTokenRequest {
+public class TokenRequest {
 
     /**
      * SSO token.

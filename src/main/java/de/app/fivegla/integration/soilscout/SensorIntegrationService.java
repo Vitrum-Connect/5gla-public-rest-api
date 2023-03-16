@@ -4,7 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.soilscout.cache.SensorCache;
-import de.app.fivegla.integration.soilscout.model.SoilScoutSensor;
+import de.app.fivegla.integration.soilscout.model.Sensor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,11 +24,11 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
-public class SoilScoutSensorIntegrationService extends AbstractSoilScoutIntegrationService {
+public class SensorIntegrationService extends AbstractIntegrationService {
 
     private final SensorCache sensorCache;
 
-    public SoilScoutSensorIntegrationService(SensorCache sensorCache) {
+    public SensorIntegrationService(SensorCache sensorCache) {
         this.sensorCache = sensorCache;
     }
 
@@ -37,17 +37,17 @@ public class SoilScoutSensorIntegrationService extends AbstractSoilScoutIntegrat
      *
      * @return List of sensors.
      */
-    public List<SoilScoutSensor> findAll() {
+    public List<Sensor> findAll() {
         return getSensors(getAccessToken());
     }
 
-    private List<SoilScoutSensor> getSensors(String accessToken) {
+    private List<Sensor> getSensors(String accessToken) {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(accessToken);
         var httpEntity = new HttpEntity<String>(headers);
-        var response = restTemplate.exchange(url + "/devices/", HttpMethod.GET, httpEntity, SoilScoutSensor[].class);
+        var response = restTemplate.exchange(url + "/devices/", HttpMethod.GET, httpEntity, Sensor[].class);
         if (response.getStatusCode().is2xxSuccessful()) {
             return Arrays.asList(Objects.requireNonNull(response.getBody()));
         } else {
@@ -62,7 +62,7 @@ public class SoilScoutSensorIntegrationService extends AbstractSoilScoutIntegrat
      * @param id The id of the sensor.
      * @return The sensor.
      */
-    public SoilScoutSensor find(int id) {
+    public Sensor find(int id) {
         if (sensorCache.get(id).isPresent()) {
             return sensorCache.get(id).get();
         } else {
@@ -70,14 +70,14 @@ public class SoilScoutSensorIntegrationService extends AbstractSoilScoutIntegrat
         }
     }
 
-    private SoilScoutSensor getSensor(int id, String access) {
+    private Sensor getSensor(int id, String access) {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(access);
         var httpEntity = new HttpEntity<String>(headers);
         try {
-            var response = restTemplate.exchange(url + "/devices/" + id, HttpMethod.GET, httpEntity, SoilScoutSensor.class);
+            var response = restTemplate.exchange(url + "/devices/" + id, HttpMethod.GET, httpEntity, Sensor.class);
             if (response.getStatusCode().is2xxSuccessful()) {
                 var sensor = Objects.requireNonNull(response.getBody());
                 sensorCache.put(sensor);

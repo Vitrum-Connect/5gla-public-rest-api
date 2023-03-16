@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class SoilScoutSensor {
+public class Sensor {
     int id;
 
     @JsonProperty("serial_number")
@@ -30,7 +30,7 @@ public class SoilScoutSensor {
     @JsonProperty("voltage_battery")
     double voltageBattery;
 
-    SoilScoutLocation location;
+    Location location;
 
     int site;
 

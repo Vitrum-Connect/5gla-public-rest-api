@@ -1,6 +1,6 @@
 package de.app.fivegla.integration.soilscout.dto.response;
 
-import de.app.fivegla.integration.soilscout.model.SoilScoutSensorData;
+import de.app.fivegla.integration.soilscout.model.SensorData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,10 +9,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SoilScoutMeasurementResponse {
+public class MeasurementResponse {
 
     private String next;
     private String previous;
-    private SoilScoutSensorData[] results;
+    private SensorData[] results;
 
 }

@@ -1,6 +1,6 @@
 package de.app.fivegla.integration.soilscout.cache;
 
-import de.app.fivegla.integration.soilscout.model.SoilScoutSensor;
+import de.app.fivegla.integration.soilscout.model.Sensor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,30 +26,30 @@ public class SensorCache {
      * @param sensorId the sensor id
      * @return the sensor
      */
-    public Optional<SoilScoutSensor> get(int sensorId) {
+    public Optional<Sensor> get(int sensorId) {
         if (CACHE.containsKey(sensorId)) {
             var sensorCacheEntry = CACHE.get(sensorId);
             if (!sensorCacheEntry.isValid()) {
                 CACHE.remove(sensorId);
             } else {
-                return Optional.of(sensorCacheEntry.getSoilScoutSensor());
+                return Optional.of(sensorCacheEntry.getSensor());
             }
         }
         return Optional.empty();
     }
 
-    public void put(SoilScoutSensor sensor) {
+    public void put(Sensor sensor) {
         CACHE.put(sensor.getId(), new SensorCacheEntry(sensor));
     }
 
     private static class SensorCacheEntry {
         private final Instant placedInCache;
         @Getter
-        private final SoilScoutSensor soilScoutSensor;
+        private final Sensor sensor;
 
-        private SensorCacheEntry(SoilScoutSensor soilScoutSensor) {
+        private SensorCacheEntry(Sensor sensor) {
             this.placedInCache = Instant.now();
-            this.soilScoutSensor = soilScoutSensor;
+            this.sensor = sensor;
         }
 
         private boolean isValid() {

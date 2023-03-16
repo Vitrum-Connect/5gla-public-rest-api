@@ -10,9 +10,9 @@ import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
-import de.app.fivegla.integration.soilscout.SoilScoutSensorIntegrationService;
-import de.app.fivegla.integration.soilscout.model.SoilScoutSensor;
-import de.app.fivegla.integration.soilscout.model.SoilScoutSensorData;
+import de.app.fivegla.integration.soilscout.SensorIntegrationService;
+import de.app.fivegla.integration.soilscout.model.Sensor;
+import de.app.fivegla.integration.soilscout.model.SensorData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +26,11 @@ import java.util.UUID;
 @Service
 public class FiwareIntegrationServiceWrapper {
 
-    private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
+    private final SensorIntegrationService soilScoutSensorIntegrationService;
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
 
-    public FiwareIntegrationServiceWrapper(SoilScoutSensorIntegrationService soilScoutSensorIntegrationService,
+    public FiwareIntegrationServiceWrapper(SensorIntegrationService soilScoutSensorIntegrationService,
                                            DeviceIntegrationService deviceIntegrationService,
                                            DeviceMeasurementIntegrationService deviceMeasurementIntegrationService) {
         this.soilScoutSensorIntegrationService = soilScoutSensorIntegrationService;
@@ -43,7 +43,7 @@ public class FiwareIntegrationServiceWrapper {
      *
      * @param sensor the sensor to create
      */
-    public void persist(SoilScoutSensor sensor) {
+    public void persist(Sensor sensor) {
         var device = Device.builder()
                 .id(getFiwareId(sensor.getId()))
                 .deviceCategory(DeviceCategory.builder()
@@ -58,7 +58,7 @@ public class FiwareIntegrationServiceWrapper {
      *
      * @param sensorData the sensor data to create
      */
-    public void persist(SoilScoutSensorData sensorData) {
+    public void persist(SensorData sensorData) {
         try {
             var soilScoutSensor = soilScoutSensorIntegrationService.find(sensorData.getDevice());
             log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
@@ -103,13 +103,13 @@ public class FiwareIntegrationServiceWrapper {
         }
     }
 
-    private static DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(SoilScoutSensorData sensorData, SoilScoutSensor soilScoutSensor) {
+    private static DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(SensorData sensorData, Sensor sensor) {
         return DeviceMeasurement.builder()
                 .id(getFiwareId())
                 .refDevice(getFiwareId(sensorData.getDevice()))
                 .dateObserved(sensorData.getTimestamp().toString())
                 .location(Location.builder()
-                        .coordinates(List.of(soilScoutSensor.getLocation().getLatitude(), soilScoutSensor.getLocation().getLongitude()))
+                        .coordinates(List.of(sensor.getLocation().getLatitude(), sensor.getLocation().getLongitude()))
                         .build());
     }
 

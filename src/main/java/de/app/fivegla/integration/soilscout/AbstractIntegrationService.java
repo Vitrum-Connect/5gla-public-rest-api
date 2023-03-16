@@ -31,10 +31,10 @@ abstract class AbstractIntegrationService {
     protected String url;
 
     @Value("${app.sensors.soilscout.username}")
-    protected String username;
+    private String username;
 
     @Value("${app.sensors.soilscout.password}")
-    protected String password;
+    private String password;
 
     @Autowired
     protected AccessTokenCache accessTokenCache;

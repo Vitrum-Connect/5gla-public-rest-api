@@ -1,6 +1,6 @@
 package de.app.fivegla.integration.soilscout.cache;
 
-import de.app.fivegla.integration.soilscout.dto.response.SoilScoutAccessAndRefreshTokenResponse;
+import de.app.fivegla.integration.soilscout.dto.response.AccessAndRefreshTokenResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class AccessTokenCache {
     private Instant lastTokenRequest;
 
     @Getter
-    private SoilScoutAccessAndRefreshTokenResponse soilScoutAccessAndRefreshTokenResponse;
+    private AccessAndRefreshTokenResponse accessAndRefreshTokenResponse;
 
     /**
      * Check if the access token is still valid.
@@ -51,10 +51,10 @@ public class AccessTokenCache {
     /**
      * Update the access token.
      *
-     * @param soilScoutAccessAndRefreshTokenResponse the new access token
+     * @param accessAndRefreshTokenResponse the new access token
      */
-    public void updateAccessToken(SoilScoutAccessAndRefreshTokenResponse soilScoutAccessAndRefreshTokenResponse) {
-        this.soilScoutAccessAndRefreshTokenResponse = soilScoutAccessAndRefreshTokenResponse;
+    public void updateAccessToken(AccessAndRefreshTokenResponse accessAndRefreshTokenResponse) {
+        this.accessAndRefreshTokenResponse = accessAndRefreshTokenResponse;
         this.lastTokenRequest = Instant.now();
     }
 

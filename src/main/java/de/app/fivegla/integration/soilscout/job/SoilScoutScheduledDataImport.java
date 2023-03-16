@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.soilscout.job;
 
 import de.app.fivegla.integration.fiware.FiwareIntegrationServiceWrapper;
-import de.app.fivegla.integration.soilscout.SoilScoutMeasurementIntegrationService;
+import de.app.fivegla.integration.soilscout.MeasurementIntegrationService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,11 +17,11 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class SoilScoutScheduledDataImport {
 
-    private final SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
+    private final MeasurementIntegrationService soilScoutMeasurementIntegrationService;
     private final ApplicationDataRepository applicationDataRepository;
     private final FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public SoilScoutScheduledDataImport(SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService,
+    public SoilScoutScheduledDataImport(MeasurementIntegrationService soilScoutMeasurementIntegrationService,
                                         ApplicationDataRepository applicationDataRepository,
                                         FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
         this.soilScoutMeasurementIntegrationService = soilScoutMeasurementIntegrationService;

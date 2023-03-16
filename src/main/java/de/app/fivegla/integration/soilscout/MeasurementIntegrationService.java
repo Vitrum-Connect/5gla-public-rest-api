@@ -3,8 +3,8 @@ package de.app.fivegla.integration.soilscout;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.soilscout.dto.response.SoilScoutMeasurementResponse;
-import de.app.fivegla.integration.soilscout.model.SoilScoutSensorData;
+import de.app.fivegla.integration.soilscout.dto.response.MeasurementResponse;
+import de.app.fivegla.integration.soilscout.model.SensorData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,19 +23,19 @@ import java.util.*;
  */
 @Slf4j
 @Service
-public class SoilScoutMeasurementIntegrationService extends AbstractSoilScoutIntegrationService {
+public class MeasurementIntegrationService extends AbstractIntegrationService {
 
     /**
      * Fetch all soil scout sensor data.
      *
      * @return all soil scout data for the sensor
      */
-    public List<SoilScoutSensorData> findAll(Instant since, Instant until) {
+    public List<SensorData> findAll(Instant since, Instant until) {
         return findAll(since, until, getAccessToken());
     }
 
 
-    private List<SoilScoutSensorData> findAll(Instant since, Instant until, String accessToken) {
+    private List<SensorData> findAll(Instant since, Instant until, String accessToken) {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -48,7 +48,7 @@ public class SoilScoutMeasurementIntegrationService extends AbstractSoilScoutInt
                 formatInstant(since),
                 "until",
                 formatInstant(until));
-        var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, SoilScoutMeasurementResponse.class, uriVariables);
+        var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, MeasurementResponse.class, uriVariables);
         if (response.getStatusCode().is2xxSuccessful()) {
             log.debug("There are {} sensor data sets in total.", Objects.requireNonNull(response.getBody()).getResults().length);
             return Arrays.asList(Objects.requireNonNull(response.getBody()).getResults());

@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 @Getter
 @Builder
-public class SoilScoutSsoRequest {
+public class SsoRequest {
 
     /**
      * Username.

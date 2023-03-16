@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SoilScoutLocation {
+public class Location {
 
     double latitude;
 

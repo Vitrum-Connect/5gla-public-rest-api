@@ -1,6 +1,6 @@
 package de.app.fivegla.controller.dto;
 
-import de.app.fivegla.integration.soilscout.model.SoilScoutSensor;
+import de.app.fivegla.integration.soilscout.model.Sensor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +19,5 @@ public class SoilScoutSensorResponse extends Response {
      */
     @Getter
     @Schema(description = "The sensors.")
-    private List<SoilScoutSensor> sensors;
+    private List<Sensor> sensors;
 }

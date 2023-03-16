@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class SoilScoutSensorData {
+public class SensorData {
 
     private Date timestamp;
     private int device;

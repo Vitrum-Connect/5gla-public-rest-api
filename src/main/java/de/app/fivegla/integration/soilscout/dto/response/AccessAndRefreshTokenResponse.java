@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SoilScoutAccessAndRefreshTokenResponse {
+public class AccessAndRefreshTokenResponse {
 
     /**
      * Access token.

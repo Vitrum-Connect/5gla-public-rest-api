@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class SoilScoutSensorIntegrationServiceIT {
+public class SensorIntegrationServiceIT {
 
     @Autowired
-    private SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
+    private SensorIntegrationService soilScoutSensorIntegrationService;
 
     @Test
     void whenFetchingSensorsTheServiceShouldReturnSensors() {

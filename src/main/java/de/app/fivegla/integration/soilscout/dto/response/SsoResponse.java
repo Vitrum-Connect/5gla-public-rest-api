@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SoilScoutSsoResponse {
+public class SsoResponse {
 
     /**
      * SSO token.

@@ -4,11 +4,11 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.soilscout.cache.AccessTokenCache;
-import de.app.fivegla.integration.soilscout.dto.request.SoilScoutSsoRequest;
-import de.app.fivegla.integration.soilscout.dto.request.SoilScoutTokenRefreshRequest;
-import de.app.fivegla.integration.soilscout.dto.request.SoilScoutTokenRequest;
-import de.app.fivegla.integration.soilscout.dto.response.SoilScoutAccessAndRefreshTokenResponse;
-import de.app.fivegla.integration.soilscout.dto.response.SoilScoutSsoResponse;
+import de.app.fivegla.integration.soilscout.dto.request.SsoRequest;
+import de.app.fivegla.integration.soilscout.dto.request.TokenRefreshRequest;
+import de.app.fivegla.integration.soilscout.dto.request.TokenRequest;
+import de.app.fivegla.integration.soilscout.dto.response.AccessAndRefreshTokenResponse;
+import de.app.fivegla.integration.soilscout.dto.response.SsoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ import java.util.Objects;
  * Abstract soil scout integration service.
  */
 @Slf4j
-abstract class AbstractSoilScoutIntegrationService {
+abstract class AbstractIntegrationService {
 
     @Value("${app.sensors.soilscout.url}")
     protected String url;
@@ -45,20 +45,20 @@ abstract class AbstractSoilScoutIntegrationService {
         } else {
             getBearerToken();
         }
-        return accessTokenCache.getSoilScoutAccessAndRefreshTokenResponse().getAccess();
+        return accessTokenCache.getAccessAndRefreshTokenResponse().getAccess();
     }
 
     private void getBearerToken() {
         if (accessTokenCache.isRefreshTokenValid()) {
             log.debug("Refresh token is still valid. Fetching a new access / refresh token.");
-            var soilScoutTokenRefreshRequest = SoilScoutTokenRefreshRequest.builder()
-                    .refreshToken(accessTokenCache.getSoilScoutAccessAndRefreshTokenResponse().getRefresh())
+            var soilScoutTokenRefreshRequest = TokenRefreshRequest.builder()
+                    .refreshToken(accessTokenCache.getAccessAndRefreshTokenResponse().getRefresh())
                     .build();
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             var httpEntity = new HttpEntity<>(soilScoutTokenRefreshRequest, headers);
-            var response = restTemplate.exchange(url + "/auth/token/refresh/", HttpMethod.POST, httpEntity, SoilScoutAccessAndRefreshTokenResponse.class);
+            var response = restTemplate.exchange(url + "/auth/token/refresh/", HttpMethod.POST, httpEntity, AccessAndRefreshTokenResponse.class);
             if (response.getStatusCode().is2xxSuccessful()) {
                 accessTokenCache.updateAccessToken(response.getBody());
             } else {
@@ -68,14 +68,14 @@ abstract class AbstractSoilScoutIntegrationService {
         } else {
             log.debug("Refresh token is not valid. Fetching a new access / refresh token.");
             String ssoToken = getSsoToken();
-            var soilScoutTokenRequest = SoilScoutTokenRequest.builder()
+            var soilScoutTokenRequest = TokenRequest.builder()
                     .ssoToken(ssoToken)
                     .build();
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             var httpEntity = new HttpEntity<>(soilScoutTokenRequest, headers);
-            var response = restTemplate.exchange(url + "/auth/token/sso/", HttpMethod.POST, httpEntity, SoilScoutAccessAndRefreshTokenResponse.class);
+            var response = restTemplate.exchange(url + "/auth/token/sso/", HttpMethod.POST, httpEntity, AccessAndRefreshTokenResponse.class);
             if (response.getStatusCode().is2xxSuccessful()) {
                 accessTokenCache.updateAccessToken(response.getBody());
             } else {
@@ -86,7 +86,7 @@ abstract class AbstractSoilScoutIntegrationService {
     }
 
     private String getSsoToken() {
-        var soilScoutSsoRequest = SoilScoutSsoRequest.builder()
+        var soilScoutSsoRequest = SsoRequest.builder()
                 .username(username)
                 .password(password)
                 .build();
@@ -94,7 +94,7 @@ abstract class AbstractSoilScoutIntegrationService {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         var httpEntity = new HttpEntity<>(soilScoutSsoRequest, headers);
-        var response = restTemplate.exchange(url + "/auth/login/sso/", HttpMethod.POST, httpEntity, SoilScoutSsoResponse.class);
+        var response = restTemplate.exchange(url + "/auth/login/sso/", HttpMethod.POST, httpEntity, SsoResponse.class);
         if (response.getStatusCode().is2xxSuccessful()) {
             return Objects.requireNonNull(response.getBody()).getSsoToken();
         } else {

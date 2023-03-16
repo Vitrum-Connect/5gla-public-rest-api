@@ -15,15 +15,15 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
-public class SoilScoutScheduledDataImport {
+public class ScheduledMeasurementImport {
 
     private final MeasurementIntegrationService soilScoutMeasurementIntegrationService;
     private final ApplicationDataRepository applicationDataRepository;
     private final FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public SoilScoutScheduledDataImport(MeasurementIntegrationService soilScoutMeasurementIntegrationService,
-                                        ApplicationDataRepository applicationDataRepository,
-                                        FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
+    public ScheduledMeasurementImport(MeasurementIntegrationService soilScoutMeasurementIntegrationService,
+                                      ApplicationDataRepository applicationDataRepository,
+                                      FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
         this.soilScoutMeasurementIntegrationService = soilScoutMeasurementIntegrationService;
         this.applicationDataRepository = applicationDataRepository;
         this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class SoilScoutScheduledSensorImport {
+public class ScheduledSensorImport {
 
     private final SensorIntegrationService soilScoutSensorIntegrationService;
     private final FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public SoilScoutScheduledSensorImport(SensorIntegrationService soilScoutSensorIntegrationService,
-                                          FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
+    public ScheduledSensorImport(SensorIntegrationService soilScoutSensorIntegrationService,
+                                 FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
         this.soilScoutSensorIntegrationService = soilScoutSensorIntegrationService;
         this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;
     }

@@ -38,14 +38,10 @@ public class SensorIntegrationService extends AbstractIntegrationService {
      * @return List of sensors.
      */
     public List<Sensor> findAll() {
-        return getSensors(getAccessToken());
-    }
-
-    private List<Sensor> getSensors(String accessToken) {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(accessToken);
+        headers.setBearerAuth(getAccessToken());
         var httpEntity = new HttpEntity<String>(headers);
         var response = restTemplate.exchange(url + "/devices/", HttpMethod.GET, httpEntity, Sensor[].class);
         if (response.getStatusCode().is2xxSuccessful()) {

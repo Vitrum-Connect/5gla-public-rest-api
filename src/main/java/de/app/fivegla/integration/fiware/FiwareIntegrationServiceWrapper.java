@@ -39,21 +39,6 @@ public class FiwareIntegrationServiceWrapper {
     }
 
     /**
-     * Create a new soil scout sensor in FIWARE.
-     *
-     * @param sensor the sensor to create
-     */
-    public void persist(Sensor sensor) {
-        var device = Device.builder()
-                .id(getFiwareId(sensor.getId()))
-                .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(DeviceCategoryValues.SoilScoutSensor.getKey()))
-                        .build())
-                .build();
-        deviceIntegrationService.persist(device);
-    }
-
-    /**
      * Create soil scout sensor data in FIWARE.
      *
      * @param sensorData the sensor data to create
@@ -62,6 +47,7 @@ public class FiwareIntegrationServiceWrapper {
         try {
             var soilScoutSensor = soilScoutSensorIntegrationService.find(sensorData.getDevice());
             log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
+            persist(soilScoutSensor);
 
             var temperature = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
                     .controlledProperty("temperature")
@@ -101,6 +87,16 @@ public class FiwareIntegrationServiceWrapper {
         } catch (BusinessException e) {
             log.error("Could not find sensor with id {} in Soil Scout API.", sensorData.getDevice());
         }
+    }
+
+    private void persist(Sensor sensor) {
+        var device = Device.builder()
+                .id(getFiwareId(sensor.getId()))
+                .deviceCategory(DeviceCategory.builder()
+                        .value(List.of(DeviceCategoryValues.SoilScoutSensor.getKey()))
+                        .build())
+                .build();
+        deviceIntegrationService.persist(device);
     }
 
     private static DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(SensorData sensorData, Sensor sensor) {

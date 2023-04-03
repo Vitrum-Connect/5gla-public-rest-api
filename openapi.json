@@ -3,23 +3,9 @@
   "info": {
     "title": "5GLA Soil Scout Integration Service",
     "description": "This service provides the integration of the Soil Scout API with the 5GLA platform.",
-    "version": "1.0.0"
+    "version": "4.0.0"
   },
   "paths": {
-    "/sensor-import/run": {
-      "post": {
-        "tags": [
-          "sensor-import-controller"
-        ],
-        "description": "Run the import manually.",
-        "operationId": "sensor-import.run",
-        "responses": {
-          "200": {
-            "description": "The import was started."
-          }
-        }
-      }
-    },
     "/sensor-data-import/run": {
       "post": {
         "tags": [
@@ -30,6 +16,30 @@
         "responses": {
           "200": {
             "description": "The import was started."
+          }
+        }
+      }
+    },
+    "/csv-sensor-data-import/": {
+      "post": {
+        "tags": [
+          "csv-sensor-data-import-controller"
+        ],
+        "description": "Import sensor data from CSV.",
+        "operationId": "csv-sensor-data-import.import",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CsvSensorDataImportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The import has been started."
           }
         }
       }
@@ -79,6 +89,19 @@
   },
   "components": {
     "schemas": {
+      "CsvSensorDataImportRequest": {
+        "type": "object",
+        "properties": {
+          "base64EncodedCsvData": {
+            "type": "string",
+            "description": "The base64 encoded CSV data."
+          },
+          "decodedCsvData": {
+            "type": "string"
+          }
+        },
+        "description": "CSV data import request."
+      },
       "VersionResponse": {
         "type": "object",
         "properties": {

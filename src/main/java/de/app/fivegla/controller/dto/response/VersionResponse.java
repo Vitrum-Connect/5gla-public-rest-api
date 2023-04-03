@@ -1,4 +1,4 @@
-package de.app.fivegla.controller.dto;
+package de.app.fivegla.controller.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -9,13 +9,13 @@ import lombok.Getter;
  */
 @Builder
 @Schema(description = "Response wrapper.")
-public class LastRunResponse extends Response {
+public class VersionResponse extends Response {
 
     /**
-     * The last run.
+     * The version.
      */
     @Getter
-    @Schema(description = "The last run.")
-    private final String lastRun;
+    @Schema(description = "The version.")
+    private String version;
 
 }

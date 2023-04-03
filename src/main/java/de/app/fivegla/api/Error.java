@@ -9,7 +9,8 @@ import lombok.Getter;
 public enum Error {
 
     INVALID_REQUEST(errorOf(1)),
-    SOIL_SCOUT_COULD_NOT_AUTHENTICATE(errorOf(1));
+    SOIL_SCOUT_COULD_NOT_AUTHENTICATE(errorOf(2)),
+    CSV_DATA_IMPORT_FAILED(errorOf(3));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

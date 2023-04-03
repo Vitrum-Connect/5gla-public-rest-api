@@ -12,6 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Sensor {
+
     int id;
 
     @JsonProperty("serial_number")

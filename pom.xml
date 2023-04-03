@@ -24,6 +24,7 @@
 
     <dependencies>
         <!-- SPRING BOOT -->
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -90,6 +91,7 @@
         </dependency>
 
         <!-- CSV -->
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>

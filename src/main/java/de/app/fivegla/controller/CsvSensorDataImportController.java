@@ -3,7 +3,6 @@ package de.app.fivegla.controller;
 import de.app.fivegla.controller.dto.request.CsvSensorDataImportRequest;
 import de.app.fivegla.integration.csv.CsvDataImportIntegrationService;
 import de.app.fivegla.integration.fiware.FiwareIntegrationServiceWrapper;
-import de.app.fivegla.integration.soilscout.model.SensorData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * Controller for sensor data import purpose.

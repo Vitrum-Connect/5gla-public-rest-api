@@ -39,13 +39,13 @@ public class ScheduledMeasurementImport {
             var measurements = soilScoutMeasurementIntegrationService.findAll(applicationDataRepository.getLastRun(), Instant.now());
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
-            measurements.forEach(fiwareIntegrationServiceWrapper::persist);
+            fiwareIntegrationServiceWrapper.persist(measurements);
         } else {
             log.info("Running initial data import from Soil Scout API, this may take a while");
             var measurements = soilScoutMeasurementIntegrationService.findAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
-            measurements.forEach(fiwareIntegrationServiceWrapper::persist);
+            fiwareIntegrationServiceWrapper.persist(measurements);
         }
         applicationDataRepository.updateLastRun();
     }

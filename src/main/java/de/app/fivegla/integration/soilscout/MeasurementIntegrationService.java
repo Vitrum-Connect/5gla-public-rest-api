@@ -34,7 +34,6 @@ public class MeasurementIntegrationService extends AbstractIntegrationService {
         return findAll(since, until, getAccessToken());
     }
 
-
     private List<SensorData> findAll(Instant since, Instant until, String accessToken) {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();

@@ -2,9 +2,12 @@ package de.app.fivegla.controller;
 
 import de.app.fivegla.controller.dto.request.CsvSensorDataImportRequest;
 import de.app.fivegla.integration.csv.CsvDataImportIntegrationService;
+import de.app.fivegla.integration.fiware.FiwareIntegrationServiceWrapper;
+import de.app.fivegla.integration.soilscout.model.SensorData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,17 +15,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Controller for sensor data import purpose.
  */
+@Slf4j
 @RestController
 @RequestMapping("/csv-sensor-data-import")
 public class CsvSensorDataImportController {
 
     private final CsvDataImportIntegrationService csvDataImportIntegrationService;
+    private final FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public CsvSensorDataImportController(CsvDataImportIntegrationService csvDataImportIntegrationService) {
+    public CsvSensorDataImportController(CsvDataImportIntegrationService csvDataImportIntegrationService,
+                                         FiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper) {
         this.csvDataImportIntegrationService = csvDataImportIntegrationService;
+        this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;
     }
 
     /**
@@ -41,7 +50,9 @@ public class CsvSensorDataImportController {
     )
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> importSensorDataFromCsv(@Valid @RequestBody CsvSensorDataImportRequest request) {
-        csvDataImportIntegrationService.importCsvData(request.getDecodedCsvData());
+        var sensorData = csvDataImportIntegrationService.readSensorDataFromCsv(request.getDecodedCsvData());
+        log.info("Read {} sensor data entries from CSV.", sensorData.size());
+        fiwareIntegrationServiceWrapper.persist(sensorData);
         return ResponseEntity.ok().build();
     }
 

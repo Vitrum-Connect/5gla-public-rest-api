@@ -38,12 +38,22 @@ public class FiwareIntegrationServiceWrapper {
         this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
     }
 
+
     /**
      * Create soil scout sensor data in FIWARE.
      *
      * @param sensorData the sensor data to create
      */
-    public void persist(SensorData sensorData) {
+    public void persist(List<SensorData> sensorData) {
+        sensorData.forEach(this::persist);
+    }
+
+    /**
+     * Create soil scout sensor data in FIWARE.
+     *
+     * @param sensorData the sensor data to create
+     */
+    private void persist(SensorData sensorData) {
         try {
             var soilScoutSensor = soilScoutSensorIntegrationService.find(sensorData.getDevice());
             log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());

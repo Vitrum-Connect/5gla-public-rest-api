@@ -19,7 +19,7 @@ class CsvDataImportIntegrationServiceTest {
     void givenValidCsvDataForImportWhenReadingHeadersThenTheServiceShouldReturnTheHeaders() throws Throwable {
         var resource = this.getClass().getClassLoader().getResource("csv-data-import-test.csv");
         var fileContent = Files.readString(Path.of(Objects.requireNonNull(resource).toURI()));
-        var sensorData = csvDataImportIntegrationService.importCsvData(fileContent);
+        var sensorData = csvDataImportIntegrationService.readSensorDataFromCsv(fileContent);
 
         Assertions.assertEquals(4706 - 1, sensorData.size()); // -1 because of the header line
 

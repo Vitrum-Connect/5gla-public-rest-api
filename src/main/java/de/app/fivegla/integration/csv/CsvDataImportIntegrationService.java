@@ -6,7 +6,6 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.StringReader;
@@ -22,7 +21,7 @@ public class CsvDataImportIntegrationService {
     /**
      * Import CSV data for one or multiple sensors.
      */
-    public List<SensorData> importCsvData(String csvData) {
+    public List<SensorData> readSensorDataFromCsv(String csvData) {
         try {
             var sensorData = new CsvToBeanBuilder<SensorData>(new StringReader(csvData))
                     .withType(SensorData.class)

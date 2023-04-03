@@ -14,6 +14,7 @@ import java.time.Instant;
 public class ApplicationData {
 
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
     private transient StorageManager storageManager;
 
     @Getter

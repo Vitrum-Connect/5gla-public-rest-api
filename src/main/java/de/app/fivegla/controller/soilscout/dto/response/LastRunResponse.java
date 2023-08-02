@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * Response wrapper.
  */
+@Getter
 @Builder
 @Schema(description = "Response wrapper.")
 public class LastRunResponse extends Response {
@@ -17,7 +18,6 @@ public class LastRunResponse extends Response {
     /**
      * The last run.
      */
-    @Getter
     @Schema(description = "The last run for each manufacturer.")
     private final Map<Manufacturer, String> lastRuns;
 

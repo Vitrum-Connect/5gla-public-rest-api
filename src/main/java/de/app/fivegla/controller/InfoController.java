@@ -1,7 +1,8 @@
 package de.app.fivegla.controller;
 
-import de.app.fivegla.controller.dto.response.LastRunResponse;
-import de.app.fivegla.controller.dto.response.VersionResponse;
+import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.controller.soilscout.dto.response.LastRunResponse;
+import de.app.fivegla.controller.soilscout.dto.response.VersionResponse;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 /**
  * Controller for information purpose.
@@ -74,8 +76,10 @@ public class InfoController {
     )
     @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LastRunResponse> getLastImport() {
-        var lastRun = applicationDataRepository.getLastRun() != null ? DateTimeFormatter.ISO_INSTANT.format(applicationDataRepository.getLastRun()) : null;
-        return ResponseEntity.ok(LastRunResponse.builder().lastRun(lastRun).build());
+        var lastRuns = new HashMap<Manufacturer, String>();
+        applicationDataRepository.getLastRuns()
+                .forEach((key, value) -> lastRuns.put(key, DateTimeFormatter.ISO_INSTANT.format(value)));
+        return ResponseEntity.ok(LastRunResponse.builder().lastRuns(lastRuns).build());
     }
 
 }

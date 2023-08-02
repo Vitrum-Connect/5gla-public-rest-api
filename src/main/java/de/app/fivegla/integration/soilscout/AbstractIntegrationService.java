@@ -3,7 +3,7 @@ package de.app.fivegla.integration.soilscout;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.soilscout.cache.AccessTokenCache;
+import de.app.fivegla.integration.soilscout.cache.SoilScoutAccessTokenCache;
 import de.app.fivegla.integration.soilscout.dto.request.SsoRequest;
 import de.app.fivegla.integration.soilscout.dto.request.TokenRefreshRequest;
 import de.app.fivegla.integration.soilscout.dto.request.TokenRequest;
@@ -37,22 +37,22 @@ abstract class AbstractIntegrationService {
     private String password;
 
     @Autowired
-    protected AccessTokenCache accessTokenCache;
+    protected SoilScoutAccessTokenCache soilScoutAccessTokenCache;
 
    protected String getAccessToken() {
-        if (accessTokenCache.isAccessTokenValid()) {
+        if (soilScoutAccessTokenCache.isAccessTokenValid()) {
             log.debug("Access token is still valid. Using the access token from cache.");
         } else {
             getBearerToken();
         }
-        return accessTokenCache.getAccessAndRefreshTokenResponse().getAccess();
+        return soilScoutAccessTokenCache.getAccessAndRefreshTokenResponse().getAccess();
     }
 
     private void getBearerToken() {
-        if (accessTokenCache.isRefreshTokenValid()) {
+        if (soilScoutAccessTokenCache.isRefreshTokenValid()) {
             log.debug("Refresh token is still valid. Fetching a new access / refresh token.");
             var soilScoutTokenRefreshRequest = TokenRefreshRequest.builder()
-                    .refreshToken(accessTokenCache.getAccessAndRefreshTokenResponse().getRefresh())
+                    .refreshToken(soilScoutAccessTokenCache.getAccessAndRefreshTokenResponse().getRefresh())
                     .build();
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
@@ -60,7 +60,7 @@ abstract class AbstractIntegrationService {
             var httpEntity = new HttpEntity<>(soilScoutTokenRefreshRequest, headers);
             var response = restTemplate.exchange(url + "/auth/token/refresh/", HttpMethod.POST, httpEntity, AccessAndRefreshTokenResponse.class);
             if (response.getStatusCode().is2xxSuccessful()) {
-                accessTokenCache.updateAccessToken(response.getBody());
+                soilScoutAccessTokenCache.updateAccessToken(response.getBody());
             } else {
                 var errorMessage = ErrorMessage.builder().error(Error.SOIL_SCOUT_COULD_NOT_AUTHENTICATE).message("Could not fetch bearer token for SoilScout API.").build();
                 throw new BusinessException(errorMessage);
@@ -77,7 +77,7 @@ abstract class AbstractIntegrationService {
             var httpEntity = new HttpEntity<>(soilScoutTokenRequest, headers);
             var response = restTemplate.exchange(url + "/auth/token/sso/", HttpMethod.POST, httpEntity, AccessAndRefreshTokenResponse.class);
             if (response.getStatusCode().is2xxSuccessful()) {
-                accessTokenCache.updateAccessToken(response.getBody());
+                soilScoutAccessTokenCache.updateAccessToken(response.getBody());
             } else {
                 var errorMessage = ErrorMessage.builder().error(Error.SOIL_SCOUT_COULD_NOT_AUTHENTICATE).message("Could not fetch bearer token for SoilScout API.").build();
                 throw new BusinessException(errorMessage);

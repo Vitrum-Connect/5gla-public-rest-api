@@ -16,19 +16,54 @@
       "description": "URL of the context broker."
     },
     {
-      "name": "app.sensors.soilscout.url",
+      "name": "app.sensors.farm21.username",
       "type": "java.lang.String",
-      "description": "SoilScout API URL."
+      "description": "Username for farm21 sensors."
     },
     {
-      "name": "app.sensors.soilscout.username",
+      "name": "app.sensors.farm21.password",
       "type": "java.lang.String",
-      "description": "SoilScout API username."
+      "description": "Password for farm21 sensors."
     },
     {
-      "name": "app.sensors.soilscout.password",
+      "name": "app.sensors.farm21.api-token",
       "type": "java.lang.String",
-      "description": "SoilScout API password."
+      "description": "API token for farm21 sensors."
+    },
+    {
+      "name": "app.sensors.soil-scout.url",
+      "type": "java.lang.String",
+      "description": "URL for soil scout sensors."
+    },
+    {
+      "name": "app.sensors.farm21.url",
+      "type": "java.lang.String",
+      "description": "URL for farm21 sensors."
+    },
+    {
+      "name": "app.sensors.soil-scout.username",
+      "type": "java.lang.String",
+      "description": "Username for soil scout sensors."
+    },
+    {
+      "name": "app.sensors.soil-scout.password",
+      "type": "java.lang.String",
+      "description": "Password for soil scout sensors."
+    },
+    {
+      "name": "app.scheduled.farm21.data-import.cron",
+      "type": "java.lang.String",
+      "description": "Cron expression for farm21 data import."
+    },
+    {
+      "name": "app.scheduled.farm21.sensor-import.cron",
+      "type": "java.lang.String",
+      "description": "Cron expression for farm21 sensor import."
+    },
+    {
+      "name": "app.scheduled.soil-scout.data-import.cron",
+      "type": "java.lang.String",
+      "description": "Cron expression for soil scout data import."
     }
   ]
 }

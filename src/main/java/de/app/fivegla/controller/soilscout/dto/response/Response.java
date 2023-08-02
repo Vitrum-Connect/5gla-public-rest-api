@@ -9,12 +9,12 @@ import java.time.format.DateTimeFormatter;
 /**
  * Base class for all responses.
  */
+@Getter
 abstract class Response {
 
     /**
      * The timestamp of the response.
      */
-    @Getter
     @Schema(description = "The timestamp of the response.")
     private final String timestamp;
 

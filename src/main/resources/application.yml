@@ -1,13 +1,24 @@
 app:
   version: '@project.version@'
   sensors:
-    soilscout:
+    farm21:
+      url: https://app.farm21.tech/api/v2/public/
+      username: ${FARM21_USERNAME}
+      password: ${FARM21_PASSWORD}
+      api-token: ${FARM21_API_TOKEN}
+    soil-scout:
       url: https://soilscouts.fi/api/v1/
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
   scheduled:
-    data-import:
-      cron: "0 0 0 * * *" # every day at midnight
+    farm21:
+      data-import:
+        cron: "0 0 0 * * *" # every day at midnight
+      sensor-import:
+        cron: "0 0 0 * * *" # every day at midnight
+    soil-scout:
+      data-import:
+        cron: "0 0 0 * * *" # every day at midnight
 fiware:
   context-broker-url: ${CONTEXT_BROKER_URL}
 logging:

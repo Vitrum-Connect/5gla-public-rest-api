@@ -14,21 +14,6 @@
       "name": "fiware.context-broker-url",
       "type": "java.lang.String",
       "description": "URL of the context broker."
-    },
-    {
-      "name": "app.sensors.soilscout.url",
-      "type": "java.lang.String",
-      "description": "SoilScout API URL."
-    },
-    {
-      "name": "app.sensors.soilscout.username",
-      "type": "java.lang.String",
-      "description": "SoilScout API username."
-    },
-    {
-      "name": "app.sensors.soilscout.password",
-      "type": "java.lang.String",
-      "description": "SoilScout API password."
     }
   ]
 }

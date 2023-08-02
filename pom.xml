@@ -42,9 +42,9 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <!--suppress VulnerableLibrariesLocal -->
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>

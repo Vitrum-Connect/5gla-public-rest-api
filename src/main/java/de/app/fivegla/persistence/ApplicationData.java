@@ -7,6 +7,7 @@ import one.microstream.storage.types.StorageManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,12 +29,15 @@ public class ApplicationData {
      * @param lastRun the last run
      */
     public void setLastRun(Manufacturer manufacturer, Instant lastRun) {
-        this.lastRuns.put(manufacturer, lastRun);
+        if (lastRuns == null) {
+            lastRuns = new HashMap<>();
+        }
+        lastRuns.put(manufacturer, lastRun);
         storageManager.store(this);
     }
 
     public Instant getLastRun(Manufacturer manufacturer) {
-        return this.lastRuns.get(manufacturer);
+        return lastRuns.get(manufacturer);
     }
 
 }

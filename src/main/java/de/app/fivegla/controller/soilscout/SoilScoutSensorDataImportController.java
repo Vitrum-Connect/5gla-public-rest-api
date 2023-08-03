@@ -2,6 +2,7 @@ package de.app.fivegla.controller.soilscout;
 
 import de.app.fivegla.api.BaseMappings;
 import de.app.fivegla.integration.soilscout.job.SoilScoutScheduledMeasurementImport;
+import de.app.fivegla.swagger.Tags;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.context.annotation.Profile;
@@ -31,7 +32,8 @@ public class SoilScoutSensorDataImportController {
      */
     @Operation(
             operationId = "sensor-data-import.run",
-            description = "Run the import manually."
+            description = "Run the import manually.",
+            tags = {Tags.SOIL_SCOUT}
     )
     @ApiResponse(
             responseCode = "200",

@@ -74,6 +74,11 @@
       "name": "app.scheduled.agranimo.sensor-import.cron",
       "type": "java.lang.String",
       "description": "Cron expression for agranimo sensor import."
+    },
+    {
+      "name": "app.sensors.micasense.image.path.base.url",
+      "type": "java.lang.String",
+      "description": "Base URL for micasense images."
     }
   ]
 }

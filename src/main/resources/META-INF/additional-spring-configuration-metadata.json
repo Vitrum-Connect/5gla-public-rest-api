@@ -64,6 +64,11 @@
       "name": "app.scheduled.soil-scout.data-import.cron",
       "type": "java.lang.String",
       "description": "Cron expression for soil scout data import."
+    },
+    {
+      "name": "app.scheduled.agranimo.data-import.cron",
+      "type": "java.lang.String",
+      "description": "Cron expression for agranimo data import."
     }
   ]
 }

@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -102,14 +100,6 @@ public class AgranimoSoilMoistureService {
                 log.info("Could not fetch soil moisture data for zone {}.", zone.getName());
             }
         });
-    }
-
-    private String formatInstant(Instant instant) {
-        if (instant == null) {
-            return null;
-        } else {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Date.from(instant));
-        }
     }
 
 }

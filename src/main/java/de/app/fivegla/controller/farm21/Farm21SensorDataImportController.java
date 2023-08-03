@@ -2,7 +2,6 @@ package de.app.fivegla.controller.farm21;
 
 import de.app.fivegla.api.BaseMappings;
 import de.app.fivegla.integration.farm21.job.Farm21ScheduledSensorDataImport;
-import de.app.fivegla.swagger.Tags;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.context.annotation.Profile;
@@ -33,7 +32,7 @@ public class Farm21SensorDataImportController {
     @Operation(
             operationId = "sensor-data-import.run",
             description = "Run the import manually.",
-            tags = {Tags.FARM_21}
+            tags = BaseMappings.FARM_21
     )
     @ApiResponse(
             responseCode = "200",

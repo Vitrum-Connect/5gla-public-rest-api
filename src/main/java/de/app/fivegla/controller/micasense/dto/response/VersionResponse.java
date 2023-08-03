@@ -7,6 +7,7 @@ import lombok.Getter;
 /**
  * Response wrapper.
  */
+@Getter
 @Builder
 @Schema(description = "Response wrapper.")
 public class VersionResponse extends Response {
@@ -14,7 +15,6 @@ public class VersionResponse extends Response {
     /**
      * The version.
      */
-    @Getter
     @Schema(description = "The version.")
     private String version;
 

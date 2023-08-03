@@ -7,6 +7,7 @@ import lombok.Getter;
 /**
  * Response wrapper.
  */
+@Getter
 @Builder
 @Schema(description = "Response wrapper.")
 public class LastRunResponse extends Response {
@@ -14,7 +15,6 @@ public class LastRunResponse extends Response {
     /**
      * The last run.
      */
-    @Getter
     @Schema(description = "The last run.")
     private final String lastRun;
 

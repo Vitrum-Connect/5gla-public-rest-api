@@ -69,6 +69,11 @@
       "name": "app.scheduled.agranimo.data-import.cron",
       "type": "java.lang.String",
       "description": "Cron expression for agranimo data import."
+    },
+    {
+      "name": "app.scheduled.agranimo.sensor-import.cron",
+      "type": "java.lang.String",
+      "description": "Cron expression for agranimo sensor import."
     }
   ]
 }

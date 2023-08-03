@@ -42,6 +42,8 @@ src/main/generated
 # LOCAL MICROSTREAM  #
 .microstream
 .microstream-*
+microstream
+microstream-*
 
 # LOCAL SETTINGS #
 .github/settings.local.xml

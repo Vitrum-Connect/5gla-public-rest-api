@@ -14,6 +14,7 @@ import java.util.UUID;
  */
 @Slf4j
 @Service
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class AgranimoFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;

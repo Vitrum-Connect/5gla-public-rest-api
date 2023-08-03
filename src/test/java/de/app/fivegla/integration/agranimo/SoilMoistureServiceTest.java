@@ -12,8 +12,8 @@ class AgranimoSoilMoistureServiceTest {
     @Autowired
     private AgranimoSoilMoistureService soilMoistureService;
 
-    private Instant since = Instant.ofEpochSecond(1662087600);
-    private Instant until = Instant.ofEpochSecond(1662617200);
+    private final Instant since = Instant.ofEpochSecond(1662087600);
+    private final Instant until = Instant.ofEpochSecond(1662617200);
 
     @Test
     void givenInvalidTimePeriodWhenFetchingWaterVolumeShouldNotCauseAnError() {

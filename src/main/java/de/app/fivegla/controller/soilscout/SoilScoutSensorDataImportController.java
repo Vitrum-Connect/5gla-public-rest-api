@@ -31,7 +31,8 @@ public class SoilScoutSensorDataImportController {
      */
     @Operation(
             operationId = "sensor-data-import.run",
-            description = "Run the import manually."
+            description = "Run the import manually.",
+            tags = BaseMappings.SOIL_SCOUT
     )
     @ApiResponse(
             responseCode = "200",

@@ -77,8 +77,11 @@ public class InfoController {
     @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LastRunResponse> getLastImport() {
         var lastRuns = new HashMap<Manufacturer, String>();
-        applicationDataRepository.getLastRuns()
-                .forEach((key, value) -> lastRuns.put(key, DateTimeFormatter.ISO_INSTANT.format(value)));
+        var savedLastRuns = applicationDataRepository.getLastRuns();
+        if (null != savedLastRuns) {
+            savedLastRuns
+                    .forEach((key, value) -> lastRuns.put(key, DateTimeFormatter.ISO_INSTANT.format(value)));
+        }
         return ResponseEntity.ok(LastRunResponse.builder().lastRuns(lastRuns).build());
     }
 

@@ -40,7 +40,8 @@ public class SoilScoutSoilScoutCsvSensorDataImportController {
      */
     @Operation(
             operationId = "csv-sensor-data-import.import",
-            description = "Import sensor data from CSV."
+            description = "Import sensor data from CSV.",
+            tags = BaseMappings.SOIL_SCOUT
     )
     @ApiResponse(
             responseCode = "200",

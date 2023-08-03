@@ -37,7 +37,8 @@ public class ImageProcessingController {
      */
     @Operation(
             operationId = "images.process-image",
-            description = "Processes one or multiple images from the mica sense camera."
+            description = "Processes one or multiple images from the mica sense camera.",
+            tags = BaseMappings.MICA_SENSE
     )
     @ApiResponse(
             responseCode = "200",

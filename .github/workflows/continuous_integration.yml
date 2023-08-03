@@ -17,6 +17,7 @@ env:
   AGRANIMO_PASSWORD: ${{ secrets.AGRANIMO_PASSWORD }}
   CONTEXT_BROKER_URL: localhost:5221
   MICROSTREAM_STORAGE_DIRECTORY: ./microstream-integration-test
+  IMAGE_BASE_PATH_URL: localhost:8080/images
 
 jobs:
   build_jdk_17:

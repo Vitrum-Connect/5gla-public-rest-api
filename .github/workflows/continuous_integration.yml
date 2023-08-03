@@ -9,6 +9,15 @@ on:
     branches:
       - "main"
 
+env:
+  FARM21_API_TOKEN: ${{ vars.FARM21_API_TOKEN }}
+  SOILSCOUT_USERNAME: ${{ vars.SOILSCOUT_USERNAME }}
+  SOILSCOUT_PASSWORD: ${{ vars.SOILSCOUT_PASSWORD
+  AGRANIMO_USERNAME: ${{ vars.AGRANIMO_USERNAME }}
+  AGRANIMO_PASSWORD: ${{ vars.AGRANIMO_PASSWORD }}
+  CONTEXT_BROKER_URL: localhost:5221
+  MICROSTREAM_STORAGE_DIRECTORY: ./microstream-integration-test
+
 jobs:
   build_jdk_17:
     name: Build with Java 17

@@ -31,7 +31,8 @@ public class Farm21SensorDataImportController {
      */
     @Operation(
             operationId = "sensor-data-import.run",
-            description = "Run the import manually."
+            description = "Run the import manually.",
+            tags = BaseMappings.FARM_21
     )
     @ApiResponse(
             responseCode = "200",

@@ -66,7 +66,8 @@ public class ImageProcessingController {
      */
     @Operation(
             operationId = "images.get-image",
-            description = "Returns an image from the mica sense camera stored in the database."
+            description = "Returns an image from the mica sense camera stored in the database.",
+            tags = BaseMappings.MICA_SENSE
     )
     @ApiResponse(
             responseCode = "200",

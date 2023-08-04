@@ -3,6 +3,7 @@ package de.app.fivegla.controller.micasense;
 import de.app.fivegla.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
+import de.app.fivegla.controller.swagger.OperationTags;
 import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,7 +39,7 @@ public class ImageProcessingController {
     @Operation(
             operationId = "images.process-image",
             description = "Processes one or multiple images from the mica sense camera.",
-            tags = BaseMappings.MICA_SENSE
+            tags = OperationTags.MICA_SENSE
     )
     @ApiResponse(
             responseCode = "200",
@@ -67,7 +68,7 @@ public class ImageProcessingController {
     @Operation(
             operationId = "images.get-image",
             description = "Returns an image from the mica sense camera stored in the database.",
-            tags = BaseMappings.MICA_SENSE
+            tags = OperationTags.MICA_SENSE
     )
     @ApiResponse(
             responseCode = "200",

@@ -1,8 +1,8 @@
 package de.app.fivegla.api;
 
 /**
- * Sensor names.
+ * Sensor manufacturers.
  */
 public enum Manufacturer {
-    SOIL_SCOUT, FARM21
+    SOIL_SCOUT, AGRANIMO, FARM21
 }

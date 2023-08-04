@@ -1,7 +1,8 @@
-package de.app.fivegla.controller.soilscout;
+package de.app.fivegla.controller.manual_import;
 
 import de.app.fivegla.api.BaseMappings;
-import de.app.fivegla.integration.soilscout.job.SoilScoutScheduledMeasurementImport;
+import de.app.fivegla.controller.swagger.OperationTags;
+import de.app.fivegla.integration.farm21.job.Farm21ScheduledSensorDataImport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.context.annotation.Profile;
@@ -16,23 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for sensor data import purpose, will only be active if the profile is set correctly.
  */
 @RestController
-@RequestMapping(BaseMappings.SOIL_SCOUT + "/import")
+@RequestMapping(BaseMappings.FARM_21 + "/import")
 @Profile("manual-import-allowed")
-public class SoilScoutSensorDataImportController {
+public class Farm21SensorDataImportController {
 
-    private final SoilScoutScheduledMeasurementImport soilScoutScheduledMeasurementImport;
+    private final Farm21ScheduledSensorDataImport farm21ScheduledSensorDataImport;
 
-    public SoilScoutSensorDataImportController(SoilScoutScheduledMeasurementImport soilScoutScheduledMeasurementImport) {
-        this.soilScoutScheduledMeasurementImport = soilScoutScheduledMeasurementImport;
+    public Farm21SensorDataImportController(Farm21ScheduledSensorDataImport farm21ScheduledSensorDataImport) {
+        this.farm21ScheduledSensorDataImport = farm21ScheduledSensorDataImport;
     }
 
     /**
      * Run the import.
      */
     @Operation(
-            operationId = "sensor-data-import.run",
+            operationId = "farm21.import.run",
             description = "Run the import manually.",
-            tags = BaseMappings.SOIL_SCOUT
+            tags = OperationTags.MANUAL_IMPORT
     )
     @ApiResponse(
             responseCode = "200",
@@ -40,7 +41,7 @@ public class SoilScoutSensorDataImportController {
     )
     @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> runImport() {
-        soilScoutScheduledMeasurementImport.run();
+        farm21ScheduledSensorDataImport.run();
         return ResponseEntity.ok().build();
     }
 

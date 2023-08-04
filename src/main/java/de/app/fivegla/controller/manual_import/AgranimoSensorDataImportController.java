@@ -1,7 +1,8 @@
-package de.app.fivegla.controller.farm21;
+package de.app.fivegla.controller.manual_import;
 
 import de.app.fivegla.api.BaseMappings;
-import de.app.fivegla.integration.farm21.job.Farm21ScheduledSensorDataImport;
+import de.app.fivegla.controller.swagger.OperationTags;
+import de.app.fivegla.integration.agranimo.job.AgranimoScheduledMeasurementImport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.context.annotation.Profile;
@@ -16,23 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for sensor data import purpose, will only be active if the profile is set correctly.
  */
 @RestController
-@RequestMapping(BaseMappings.FARM_21 + "/import")
+@RequestMapping(BaseMappings.AGRANIMO + "/import")
 @Profile("manual-import-allowed")
-public class Farm21SensorDataImportController {
+public class AgranimoSensorDataImportController {
 
-    private final Farm21ScheduledSensorDataImport farm21ScheduledSensorDataImport;
+    private final AgranimoScheduledMeasurementImport agranimoScheduledMeasurementImport;
 
-    public Farm21SensorDataImportController(Farm21ScheduledSensorDataImport farm21ScheduledSensorDataImport) {
-        this.farm21ScheduledSensorDataImport = farm21ScheduledSensorDataImport;
+    public AgranimoSensorDataImportController(AgranimoScheduledMeasurementImport agranimoScheduledMeasurementImport) {
+        this.agranimoScheduledMeasurementImport = agranimoScheduledMeasurementImport;
     }
 
     /**
      * Run the import.
      */
     @Operation(
-            operationId = "sensor-data-import.run",
+            operationId = "agranimo.import.run",
             description = "Run the import manually.",
-            tags = BaseMappings.FARM_21
+            tags = OperationTags.MANUAL_IMPORT
     )
     @ApiResponse(
             responseCode = "200",
@@ -40,7 +41,7 @@ public class Farm21SensorDataImportController {
     )
     @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> runImport() {
-        farm21ScheduledSensorDataImport.run();
+        agranimoScheduledMeasurementImport.run();
         return ResponseEntity.ok().build();
     }
 

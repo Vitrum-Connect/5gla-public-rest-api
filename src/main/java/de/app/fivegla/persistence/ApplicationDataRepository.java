@@ -33,7 +33,7 @@ public class ApplicationDataRepository {
      * @return the last run
      */
     public Optional<Instant> getLastRun(Manufacturer manufacturer) {
-        return applicationData != null ? Optional.ofNullable(applicationData.getLastRun(manufacturer)) : Optional.empty();
+        return applicationData != null ? applicationData.getLastRun(manufacturer) : Optional.empty();
     }
 
     /**

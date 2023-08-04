@@ -1,8 +1,9 @@
 package de.app.fivegla.controller;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.controller.soilscout.dto.response.LastRunResponse;
-import de.app.fivegla.controller.soilscout.dto.response.VersionResponse;
+import de.app.fivegla.controller.dto.response.LastRunResponse;
+import de.app.fivegla.controller.dto.response.VersionResponse;
+import de.app.fivegla.controller.swagger.OperationTags;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,7 +42,8 @@ public class InfoController {
      */
     @Operation(
             operationId = "info.version",
-            description = "Fetch the version of the application."
+            description = "Fetch the version of the application.",
+            tags = OperationTags.INFO
     )
     @ApiResponse(
             responseCode = "200",
@@ -64,7 +66,8 @@ public class InfoController {
      */
     @Operation(
             operationId = "info.last-rum",
-            description = "Fetch the last run of the import."
+            description = "Fetch the last run of the import.",
+            tags = OperationTags.INFO
     )
     @ApiResponse(
             responseCode = "200",

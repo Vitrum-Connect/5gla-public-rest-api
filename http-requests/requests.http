@@ -5,4 +5,7 @@ GET {{base-url}}/info/version
 GET {{base-url}}/info/last-run
 
 ### Start import for sensor data manually
-POST {{base-url}}/sensor-data-import/run
+POST {{base-url}}/farm21/import/run
+
+### Start import for sensor data manually
+POST {{base-url}}/soil-scout/import/run

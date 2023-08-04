@@ -1,8 +1,8 @@
-package de.app.fivegla.integration.soilscout.job;
+package de.app.fivegla.integration.agranimo.job;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.integration.agranimo.fiware.AgranimoFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementIntegrationService;
-import de.app.fivegla.integration.soilscout.fiware.SoilScoutFiwareIntegrationServiceWrapper;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,40 +16,40 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
-public class SoilScoutScheduledMeasurementImport {
+public class AgranimoScheduledMeasurementImport {
 
     private final SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
     private final ApplicationDataRepository applicationDataRepository;
-    private final SoilScoutFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
+    private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
 
-    public SoilScoutScheduledMeasurementImport(SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService,
-                                               ApplicationDataRepository applicationDataRepository,
-                                               SoilScoutFiwareIntegrationServiceWrapper soilScoutFiwareIntegrationServiceWrapper) {
+    public AgranimoScheduledMeasurementImport(SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService,
+                                              ApplicationDataRepository applicationDataRepository,
+                                              AgranimoFiwareIntegrationServiceWrapper agranimoFiwareIntegrationServiceWrapper) {
         this.soilScoutMeasurementIntegrationService = soilScoutMeasurementIntegrationService;
         this.applicationDataRepository = applicationDataRepository;
-        this.fiwareIntegrationServiceWrapper = soilScoutFiwareIntegrationServiceWrapper;
+        this.fiwareIntegrationServiceWrapper = agranimoFiwareIntegrationServiceWrapper;
     }
 
     /**
      * Run scheduled data import.
      */
-    @Scheduled(cron = "${app.scheduled.soil-scout.data-import.cron}}")
+    @Scheduled(cron = "${app.scheduled.agranimo.data-import.cron}}")
     public void run() {
-        if (applicationDataRepository.getLastRun(Manufacturer.SOIL_SCOUT).isPresent()) {
-            log.info("Running scheduled data import from Soil Scout API");
-            var lastRun = applicationDataRepository.getLastRun(Manufacturer.SOIL_SCOUT).get();
+        if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
+            log.info("Running scheduled data import from Agranimo API");
+            var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).get();
             var measurements = soilScoutMeasurementIntegrationService.findAll(lastRun, Instant.now());
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
             fiwareIntegrationServiceWrapper.persist(measurements);
         } else {
-            log.info("Running initial data import from Soil Scout API, this may take a while");
+            log.info("Running initial data import from Agranimo API, this may take a while");
             var measurements = soilScoutMeasurementIntegrationService.findAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
             fiwareIntegrationServiceWrapper.persist(measurements);
         }
-        applicationDataRepository.updateLastRun(Manufacturer.SOIL_SCOUT);
+        applicationDataRepository.updateLastRun(Manufacturer.AGRANIMO);
     }
 
 }

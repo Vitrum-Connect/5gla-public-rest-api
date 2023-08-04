@@ -1,4 +1,4 @@
-package de.app.fivegla.controller.soilscout.dto.response;
+package de.app.fivegla.controller.dto.response;
 
 import de.app.fivegla.api.Manufacturer;
 import io.swagger.v3.oas.annotations.media.Schema;

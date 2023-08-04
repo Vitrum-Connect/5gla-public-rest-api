@@ -1,8 +1,8 @@
 package de.app.fivegla.controller.micasense;
 
 import de.app.fivegla.api.BaseMappings;
-import de.app.fivegla.controller.micasense.dto.request.ImageProcessingRequest;
-import de.app.fivegla.controller.micasense.dto.response.ImageProcessingResponse;
+import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
+import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

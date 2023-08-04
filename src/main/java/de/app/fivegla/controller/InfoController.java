@@ -1,8 +1,8 @@
 package de.app.fivegla.controller;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.controller.soilscout.dto.response.LastRunResponse;
-import de.app.fivegla.controller.soilscout.dto.response.VersionResponse;
+import de.app.fivegla.controller.dto.response.LastRunResponse;
+import de.app.fivegla.controller.dto.response.VersionResponse;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

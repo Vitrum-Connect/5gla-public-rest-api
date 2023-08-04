@@ -1,4 +1,4 @@
-package de.app.fivegla.controller.micasense.dto.response;
+package de.app.fivegla.controller.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

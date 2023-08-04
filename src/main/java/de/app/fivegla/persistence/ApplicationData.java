@@ -8,10 +8,7 @@ import one.microstream.storage.types.StorageManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Application data.
@@ -47,8 +44,12 @@ public class ApplicationData {
      * @param manufacturer The manufacturer.
      * @return The last run.
      */
-    public Instant getLastRun(Manufacturer manufacturer) {
-        return lastRuns.get(manufacturer);
+    public Optional<Instant> getLastRun(Manufacturer manufacturer) {
+        if (lastRuns == null) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(lastRuns.get(manufacturer));
+        }
     }
 
 

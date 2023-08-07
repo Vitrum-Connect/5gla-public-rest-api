@@ -2,7 +2,6 @@ package de.app.fivegla.integration.agranimo.job;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.agranimo.fiware.AgranimoFiwareIntegrationServiceWrapper;
-import de.app.fivegla.integration.soilscout.SoilScoutMeasurementIntegrationService;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,16 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AgranimoScheduledMeasurementImport {
 
-    private final SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
     private final ApplicationDataRepository applicationDataRepository;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
-    public AgranimoScheduledMeasurementImport(SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService,
-                                              ApplicationDataRepository applicationDataRepository,
+    public AgranimoScheduledMeasurementImport(ApplicationDataRepository applicationDataRepository,
                                               AgranimoFiwareIntegrationServiceWrapper agranimoFiwareIntegrationServiceWrapper,
                                               JobMonitor jobMonitor) {
-        this.soilScoutMeasurementIntegrationService = soilScoutMeasurementIntegrationService;
         this.applicationDataRepository = applicationDataRepository;
         this.fiwareIntegrationServiceWrapper = agranimoFiwareIntegrationServiceWrapper;
         this.jobMonitor = jobMonitor;

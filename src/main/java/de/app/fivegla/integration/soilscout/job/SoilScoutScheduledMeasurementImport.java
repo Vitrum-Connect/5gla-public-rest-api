@@ -39,6 +39,7 @@ public class SoilScoutScheduledMeasurementImport {
      */
     @Scheduled(cron = "${app.scheduled.soil-scout.data-import.cron}}")
     public void run() {
+        jobMonitor.incNrOfRuns(Manufacturer.SOIL_SCOUT);
         if (applicationDataRepository.getLastRun(Manufacturer.SOIL_SCOUT).isPresent()) {
             log.info("Running scheduled data import from Soil Scout API");
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.SOIL_SCOUT).get();

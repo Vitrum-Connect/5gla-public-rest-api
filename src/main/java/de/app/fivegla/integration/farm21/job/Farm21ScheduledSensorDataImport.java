@@ -39,6 +39,7 @@ public class Farm21ScheduledSensorDataImport {
      */
     @Scheduled(cron = "${app.scheduled.farm21.data-import.cron}}")
     public void run() {
+        jobMonitor.incNrOfRuns(Manufacturer.FARM21);
         if (applicationDataRepository.getLastRun(Manufacturer.FARM21).isPresent()) {
             log.info("Running scheduled data import from Farm21 API");
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.FARM21).get();

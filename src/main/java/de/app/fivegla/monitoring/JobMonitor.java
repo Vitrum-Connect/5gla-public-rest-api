@@ -18,15 +18,22 @@ import java.util.Map;
 public class JobMonitor {
 
     private static final String ENTITY_COUNTER_KEY_PREFIX = "entities_fetched_";
+    private static final String NR_OF_RUNS = "number_of_runs_";
     private final Map<Manufacturer, Counter> counters = new HashMap<>();
+    private final Map<Manufacturer, Counter> runs = new HashMap<>();
 
     public JobMonitor(CollectorRegistry registry) {
         Arrays.stream(Manufacturer.values())
                 .forEach(manufacturer -> {
-                    var counter = Counter.build(ENTITY_COUNTER_KEY_PREFIX + manufacturer.name().toLowerCase(),
+                    var entityCounter = Counter.build(ENTITY_COUNTER_KEY_PREFIX + manufacturer.name().toLowerCase(),
                                     "Number of entities fetched from " + manufacturer.name())
                             .register(registry);
-                    counters.put(manufacturer, counter);
+                    counters.put(manufacturer, entityCounter);
+
+                    var runCounter = Counter.build(NR_OF_RUNS + manufacturer.name().toLowerCase(),
+                                    "Number of runs for " + manufacturer.name())
+                            .register(registry);
+                    runs.put(manufacturer, runCounter);
                 });
     }
 
@@ -46,5 +53,19 @@ public class JobMonitor {
         }
     }
 
+    /**
+     * Increment number of runs.
+     *
+     * @param manufacturer manufacturer.
+     */
+    public void incNrOfRuns(Manufacturer manufacturer) {
+        log.info("Incrementing number of runs for {}", manufacturer);
+        var counter = runs.get(manufacturer);
+        if (counter == null) {
+            log.warn("No counter found for manufacturer {}", manufacturer);
+        } else {
+            counter.inc();
+        }
+    }
 
 }

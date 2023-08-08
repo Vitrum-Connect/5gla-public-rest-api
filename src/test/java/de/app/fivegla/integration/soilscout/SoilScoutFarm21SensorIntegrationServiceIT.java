@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.soilscout;
 
+import de.app.fivegla.SpringBootIntegrationTestBase;
 import de.app.fivegla.api.exceptions.BusinessException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class SoilScoutFarm21SensorIntegrationServiceIT {
+public class SoilScoutFarm21SensorIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;

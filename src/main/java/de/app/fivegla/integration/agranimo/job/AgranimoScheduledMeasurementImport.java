@@ -33,6 +33,7 @@ public class AgranimoScheduledMeasurementImport {
      */
     @Scheduled(cron = "${app.scheduled.agranimo.data-import.cron}}")
     public void run() {
+        jobMonitor.incNrOfRuns(Manufacturer.AGRANIMO);
         if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
             jobMonitor.nrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
         } else {

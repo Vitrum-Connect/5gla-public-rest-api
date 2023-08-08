@@ -1,12 +1,13 @@
 package de.app.fivegla.integration.farm21;
 
+import de.app.fivegla.SpringBootIntegrationTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Farm21SoilScoutFarm21SensorIntegrationServiceIT {
+class Farm21SoilScoutFarm21SensorIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private Farm21SensorIntegrationService farm21SensorIntegrationService;

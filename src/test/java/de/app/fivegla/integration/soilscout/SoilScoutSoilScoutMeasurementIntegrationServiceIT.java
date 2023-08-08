@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.soilscout;
 
+import de.app.fivegla.SpringBootIntegrationTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @SpringBootTest
-public class SoilScoutSoilScoutMeasurementIntegrationServiceIT {
+public class SoilScoutSoilScoutMeasurementIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;

@@ -5,9 +5,10 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agvolution.model.Device;
-import de.app.fivegla.integration.agvolution.model.TimeSeriesEntry;
+import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.request.QueryRequest;
 import de.app.fivegla.integration.agvolution.response.DeviceTimeseriesDataResponse;
+import de.app.fivegla.integration.agvolution.response.inner.DeviceTimeSeriesEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service for the Farm21 API.
@@ -59,7 +61,7 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
      *
      * @return List of sensors.
      */
-    public List<TimeSeriesEntry> findAll(Device device, Instant begin) {
+    public List<SeriesEntry> findAll(Device device, Instant begin) {
         try {
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
@@ -71,28 +73,31 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()
-                        .error(Error.AGVOLUTION_COULD_NOT_FETCH_DEVICES)
-                        .message("Could not fetch devices from the API.")
+                        .error(Error.AGVOLUTION_COULD_NOT_FETCH_TIME_SERIES)
+                        .message("Could not fetch time series from the API.")
                         .build());
             } else {
-                log.info("Successfully fetched devices from the API.");
+                log.info("Successfully fetched time series from the API.");
                 var devices = response.getBody();
                 if (null == devices) {
                     throw new BusinessException(ErrorMessage.builder()
-                            .error(Error.AGVOLUTION_COULD_NOT_FETCH_DEVICES)
-                            .message("Could not fetch devices from the API. Response was empty.")
+                            .error(Error.AGVOLUTION_COULD_NOT_FETCH_TIME_SERIES)
+                            .message("Could not fetch time series from the API. Response was empty.")
                             .build());
                 } else {
+                    return devices.getData().getDeviceTimeSeriesEntries().stream()
+                            .map(DeviceTimeSeriesEntry::getSeriesEntries)
+                            .flatMap(List::stream)
+                            .collect(Collectors.toList());
                 }
             }
         } catch (Exception e) {
             log.error("Error while fetching the devices from API.", e);
             throw new BusinessException(ErrorMessage.builder()
-                    .error(Error.AGVOLUTION_COULD_NOT_FETCH_DEVICES)
-                    .message("Could not fetch devices from the API.")
+                    .error(Error.AGVOLUTION_COULD_NOT_FETCH_TIME_SERIES)
+                    .message("Could not fetch time series from the API.")
                     .build());
         }
-        return Collections.emptyList();
     }
 
 }

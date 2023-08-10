@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
 
-import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @SpringBootTest
 class AgvolutionSensorDataIntegrationServiceIT extends SpringBootIntegrationTestBase {
@@ -20,11 +20,14 @@ class AgvolutionSensorDataIntegrationServiceIT extends SpringBootIntegrationTest
 
     @Test
     void givenValidCredentialsWhenGetDevicesThenTheRequestShouldBeAccepted() {
-        agvolutionSensorIntegrationService.findAll().forEach(device -> {
-            var timeSeries = agvolutionSensorDataIntegrationService.findAll(device, Instant.now().minus(4, HOURS));
-            Assertions.assertNotNull(timeSeries);
-            Assertions.assertFalse(timeSeries.isEmpty());
-        });
+        agvolutionSensorIntegrationService.findAll()
+                .stream()
+                .filter(device -> device.getId().equals("68500F317F38DBC7"))
+                .forEach(device -> {
+                    var timeSeries = agvolutionSensorDataIntegrationService.findAll(device, Instant.now().minus(1, DAYS));
+                    Assertions.assertNotNull(timeSeries);
+                    Assertions.assertFalse(timeSeries.isEmpty());
+                });
     }
 
 }

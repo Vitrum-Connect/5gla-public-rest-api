@@ -14,6 +14,10 @@ app:
       url: https://public-staging.agranimo.com
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
+    agvolution:
+      url: https://api.agvolution.com
+      username: ${AGVOLUTION_USERNAME}
+      password: ${AGVOLUTION_PASSWORD}
     micasense:
       image:
         path:

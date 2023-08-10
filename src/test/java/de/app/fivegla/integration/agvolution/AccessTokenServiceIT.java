@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.agranimo;
+package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.SpringBootIntegrationTestBase;
 import org.assertj.core.api.Assertions;
@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LoginServiceIT extends SpringBootIntegrationTestBase {
+class AccessTokenServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
-    private LoginService loginService;
+    private AccessTokenService accessTokenService;
 
     @Test
     void givenValidCredentialsWhenLoginThenTheRequestShouldBeAccepted() {
-        var optionalAccessToken = loginService.fetchAccessToken();
+        var optionalAccessToken = accessTokenService.fetchAccessToken();
         Assertions.assertThat(optionalAccessToken).isNotBlank();
     }
 }

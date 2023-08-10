@@ -16,7 +16,7 @@ class AgvolutionSensorIntegrationServiceIT extends SpringBootIntegrationTestBase
     void givenValidCredentialsWhenGetDevicesThenTheRequestShouldBeAccepted() {
         var allDevices = agvolutionSensorIntegrationService.findAll();
         Assertions.assertNotNull(allDevices);
-        Assertions.assertTrue(!allDevices.isEmpty());
+        Assertions.assertFalse(allDevices.isEmpty());
     }
 
 }

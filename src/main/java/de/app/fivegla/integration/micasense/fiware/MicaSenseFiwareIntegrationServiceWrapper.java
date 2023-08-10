@@ -2,6 +2,7 @@ package de.app.fivegla.integration.micasense.fiware;
 
 
 import de.app.fivegla.api.Constants;
+import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.api.InstantFormatter;
@@ -11,6 +12,7 @@ import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.DroneDeviceMeasurement;
 import de.app.fivegla.model.micasense.MicaSenseImage;
+import de.app.fivegla.monitoring.FiwareEntityMonitor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,14 +28,17 @@ import java.util.UUID;
 public class MicaSenseFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService;
+    private final FiwareEntityMonitor fiwareEntityMonitor;
 
     @Value("${app.sensors.micasense.image.path.base.url}")
     private String imagePathBaseUrl;
 
     public MicaSenseFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                    DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService) {
+                                                    DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService,
+                                                    FiwareEntityMonitor fiwareEntityMonitor) {
         this.deviceIntegrationService = deviceIntegrationService;
         this.droneDeviceMeasurementIntegrationService = droneDeviceMeasurementIntegrationService;
+        this.fiwareEntityMonitor = fiwareEntityMonitor;
     }
 
     /**
@@ -48,6 +53,7 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
                 .id(fiwareId)
                 .build();
         deviceIntegrationService.persist(device);
+        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.MICA_SENSE);
     }
 
     private static String getFiwareId(String id) {
@@ -68,6 +74,7 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
                 .imagePath(imagePathBaseUrl + image.getOid())
                 .build();
         droneDeviceMeasurementIntegrationService.persist(droneDeviceMeasurement);
+        fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.MICA_SENSE);
     }
 
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(MicaSenseImage image) {

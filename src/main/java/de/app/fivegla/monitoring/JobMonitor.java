@@ -17,20 +17,18 @@ import java.util.Map;
 @Service
 public class JobMonitor {
 
-    private static final String ENTITY_COUNTER_KEY_PREFIX = "entities_fetched_";
-    private static final String NR_OF_RUNS = "number_of_runs_";
     private final Map<Manufacturer, Counter> counters = new HashMap<>();
     private final Map<Manufacturer, Counter> runs = new HashMap<>();
 
     public JobMonitor(CollectorRegistry registry) {
         Arrays.stream(Manufacturer.values())
                 .forEach(manufacturer -> {
-                    var entityCounter = Counter.build(ENTITY_COUNTER_KEY_PREFIX + manufacturer.name().toLowerCase(),
+                    var entityCounter = Counter.build(Metrics.ENTITIES_FETCHED_PREFIX + manufacturer.name().toLowerCase(),
                                     "Number of entities fetched from " + manufacturer.name())
                             .register(registry);
                     counters.put(manufacturer, entityCounter);
 
-                    var runCounter = Counter.build(NR_OF_RUNS + manufacturer.name().toLowerCase(),
+                    var runCounter = Counter.build(Metrics.NR_OF_JOB_RUNS + manufacturer.name().toLowerCase(),
                                     "Number of runs for " + manufacturer.name())
                             .register(registry);
                     runs.put(manufacturer, runCounter);

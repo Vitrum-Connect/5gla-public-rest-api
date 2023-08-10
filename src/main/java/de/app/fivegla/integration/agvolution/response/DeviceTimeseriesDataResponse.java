@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.agvolution.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.app.fivegla.integration.agvolution.response.inner.Devices;
+import de.app.fivegla.integration.agvolution.response.inner.DeviceTimeSeries;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +10,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class DeviceDataResponse {
-    private Devices data;
+public class DeviceTimeseriesDataResponse {
+    private DeviceTimeSeries data;
 }

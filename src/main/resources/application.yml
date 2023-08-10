@@ -37,6 +37,11 @@ app:
         cron: "0 0 0 * * *" # every day at midnight
       sensor-import:
         cron: "0 0 0 * * *" # every day at midnight
+    agvolution:
+      data-import:
+        cron: "0 0 0 * * *" # every day at midnight
+      sensor-import:
+        cron: "0 0 0 * * *" # every day at midnight
 fiware:
   context-broker-url: ${CONTEXT_BROKER_URL}
 logging:

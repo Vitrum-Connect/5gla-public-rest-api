@@ -37,10 +37,16 @@ fiware:
   context-broker-url: ${CONTEXT_BROKER_URL}
 logging:
   level:
-    root: info
+    root: debug
     de.app.fivegla: trace
     one.microstream: debug
 one:
   microstream:
     storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}
     channel-count: 2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

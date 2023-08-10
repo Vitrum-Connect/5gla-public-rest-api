@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.agranimo;
 
+import de.app.fivegla.SpringBootIntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Instant;
 
 @SpringBootTest
-class AgranimoSoilMoistureServiceTest {
+class AgranimoSoilMoistureServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private AgranimoSoilMoistureService soilMoistureService;

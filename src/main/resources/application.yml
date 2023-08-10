@@ -43,7 +43,6 @@ logging:
   level:
     root: debug
     de.app.fivegla: trace
-    one.microstream: debug
 one:
   microstream:
     storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}

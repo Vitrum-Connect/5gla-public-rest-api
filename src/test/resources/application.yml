@@ -43,6 +43,7 @@ logging:
   level:
     root: warn
     de.app.fivegla: trace
+    org.springframework.web.client: trace
 one:
   microstream:
     storage-directory: .microstream-integration-test

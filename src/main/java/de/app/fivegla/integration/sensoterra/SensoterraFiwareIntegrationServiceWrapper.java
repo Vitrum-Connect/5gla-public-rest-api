@@ -1,12 +1,16 @@
 package de.app.fivegla.integration.sensoterra;
 
 
+import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
+import de.app.fivegla.fiware.model.DeviceMeasurement;
+import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import de.app.fivegla.monitoring.FiwareEntityMonitor;
@@ -20,7 +24,6 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class SensoterraFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
@@ -36,6 +39,13 @@ public class SensoterraFiwareIntegrationServiceWrapper {
 
     public void persist(Probe probe, List<ProbeData> probeData) {
         persist(probe);
+        probeData.forEach(probeDataEntry -> {
+            var deviceMeasurement = createDefaultDeviceMeasurement(probe, probeDataEntry)
+                    .build();
+            log.info("Persisting measurement for probe: {}", probe);
+            deviceMeasurementIntegrationService.persist(deviceMeasurement);
+            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENSOTERRA);
+        });
     }
 
     private void persist(Probe probe) {
@@ -46,7 +56,22 @@ public class SensoterraFiwareIntegrationServiceWrapper {
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
+        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.SENSOTERRA);
+    }
 
+    private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(Probe probe, ProbeData probeData) {
+        log.debug("Persisting probe data for probe: {}", probe);
+        log.debug("Persisting probe data: {}", probeData);
+        return DeviceMeasurement.builder()
+                .id(FiwareDevicMeasurementeId.create(Manufacturer.SENSOTERRA))
+                .refDevice(FiwareDeviceId.create(Manufacturer.SENSOTERRA, String.valueOf(probe.getId())))
+                .dateObserved(InstantFormat.format(probeData.getTimestamp()))
+                .location(Location.builder()
+                        .coordinates(List.of(probe.getLatitude(), probe.getLongitude()))
+                        .build())
+                .controlledProperty("value")
+                .numValue(probeData.getValue())
+                .unit(probeData.getUnit());
     }
 
 }

@@ -128,6 +128,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
+        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.FARM21);
     }
 
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(Sensor sensor, SensorData sensorData) {

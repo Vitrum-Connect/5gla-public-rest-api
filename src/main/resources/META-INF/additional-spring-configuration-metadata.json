@@ -51,34 +51,29 @@
       "description": "Password for soil scout sensors."
     },
     {
-      "name": "app.scheduled.farm21.data-import.cron",
-      "type": "java.lang.String",
-      "description": "Cron expression for farm21 data import."
-    },
-    {
-      "name": "app.scheduled.farm21.sensor-import.cron",
-      "type": "java.lang.String",
-      "description": "Cron expression for farm21 sensor import."
-    },
-    {
-      "name": "app.scheduled.soil-scout.data-import.cron",
-      "type": "java.lang.String",
-      "description": "Cron expression for soil scout data import."
-    },
-    {
-      "name": "app.scheduled.agranimo.data-import.cron",
-      "type": "java.lang.String",
-      "description": "Cron expression for agranimo data import."
-    },
-    {
-      "name": "app.scheduled.agranimo.sensor-import.cron",
-      "type": "java.lang.String",
-      "description": "Cron expression for agranimo sensor import."
-    },
-    {
       "name": "app.sensors.micasense.image.path.base.url",
       "type": "java.lang.String",
       "description": "Base URL for micasense images."
+    },
+    {
+      "name": "app.sensors.agvolution.url",
+      "type": "java.lang.String",
+      "description": "URL for Agvolution API."
+    },
+    {
+      "name": "app.sensors.agvolution.username",
+      "type": "java.lang.String",
+      "description": "Username for Agvolution API."
+    },
+    {
+      "name": "app.sensors.agvolution.password",
+      "type": "java.lang.String",
+      "description": "Password for Agvolution API."
+    },
+    {
+      "name": "app.scheduled.data-import.cron",
+      "type": "java.lang.String",
+      "description": "CRON expression for data import."
     }
   ]
 }

@@ -1,8 +1,7 @@
 package de.app.fivegla.integration.micasense;
 
-import de.app.fivegla.integration.micasense.fiware.MicaSenseFiwareIntegrationServiceWrapper;
-import de.app.fivegla.model.micasense.MicaSenseChannel;
-import de.app.fivegla.model.micasense.MicaSenseImage;
+import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
+import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

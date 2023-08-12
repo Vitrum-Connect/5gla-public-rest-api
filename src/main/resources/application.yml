@@ -14,32 +14,24 @@ app:
       url: https://public-staging.agranimo.com
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
+    agvolution:
+      url: https://api.agvolution.com
+      username: ${AGVOLUTION_USERNAME}
+      password: ${AGVOLUTION_PASSWORD}
     micasense:
       image:
         path:
           base:
             url: ${IMAGE_PATH_BASE_URL}
   scheduled:
-    farm21:
-      data-import:
-        cron: "0 0 0 * * *" # every day at midnight
-      sensor-import:
-        cron: "0 0 0 * * *" # every day at midnight
-    soil-scout:
-      data-import:
-        cron: "0 0 0 * * *" # every day at midnight
-    agranimo:
-      data-import:
-        cron: "0 0 0 * * *" # every day at midnight
-      sensor-import:
-        cron: "0 0 0 * * *" # every day at midnight
+    data-import:
+      cron: "0 */15 * * * *" # every 15 minutes
 fiware:
   context-broker-url: ${CONTEXT_BROKER_URL}
 logging:
   level:
-    root: debug
+    root: info
     de.app.fivegla: trace
-    one.microstream: debug
 one:
   microstream:
     storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}

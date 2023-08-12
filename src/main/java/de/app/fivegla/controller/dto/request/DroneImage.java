@@ -1,6 +1,6 @@
 package de.app.fivegla.controller.dto.request;
 
-import de.app.fivegla.model.micasense.MicaSenseChannel;
+import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

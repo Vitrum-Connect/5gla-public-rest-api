@@ -40,9 +40,8 @@ public class SensoterraFiwareIntegrationServiceWrapper {
     public void persist(Probe probe, List<ProbeData> probeData) {
         persist(probe);
         probeData.forEach(probeDataEntry -> {
-            var deviceMeasurement = createDefaultDeviceMeasurement(probe, probeDataEntry)
-                    .build();
             log.info("Persisting measurement for probe: {}", probe);
+            var deviceMeasurement = createDeviceMeasurement(probe, probeDataEntry);
             deviceMeasurementIntegrationService.persist(deviceMeasurement);
             fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENSOTERRA);
         });
@@ -59,7 +58,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.SENSOTERRA);
     }
 
-    private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(Probe probe, ProbeData probeData) {
+    private DeviceMeasurement createDeviceMeasurement(Probe probe, ProbeData probeData) {
         log.debug("Persisting probe data for probe: {}", probe);
         log.debug("Persisting probe data: {}", probeData);
         return DeviceMeasurement.builder()
@@ -71,7 +70,8 @@ public class SensoterraFiwareIntegrationServiceWrapper {
                         .build())
                 .controlledProperty("value")
                 .numValue(probeData.getValue())
-                .unit(probeData.getUnit());
+                .unit(probeData.getUnit())
+                .build();
     }
 
 }

@@ -5,7 +5,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agranimo.cache.UserDataCache;
 import de.app.fivegla.integration.agranimo.dto.Credentials;
-import de.app.fivegla.integration.agranimo.request.LoginRequest;
+import de.app.fivegla.integration.agranimo.dto.request.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

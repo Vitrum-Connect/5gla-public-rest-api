@@ -1,7 +1,8 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.model.micasense.MicaSenseImage;
+import de.app.fivegla.api.ManufacturerType;
+import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -22,7 +23,7 @@ public class ApplicationDataRepository {
      *
      * @return the last runs
      */
-    public Map<Manufacturer, Instant> getLastRuns() {
+    public Map<ManufacturerType, Instant> getLastRuns() {
         return applicationData.getLastRuns();
     }
 

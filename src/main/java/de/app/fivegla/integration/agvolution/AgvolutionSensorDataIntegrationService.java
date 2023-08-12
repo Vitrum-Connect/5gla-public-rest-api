@@ -6,9 +6,9 @@ import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agvolution.model.Device;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
-import de.app.fivegla.integration.agvolution.request.QueryRequest;
-import de.app.fivegla.integration.agvolution.response.DeviceTimeseriesDataResponse;
-import de.app.fivegla.integration.agvolution.response.inner.DeviceTimeSeriesEntry;
+import de.app.fivegla.integration.agvolution.dto.request.QueryRequest;
+import de.app.fivegla.integration.agvolution.dto.response.DeviceTimeseriesDataResponse;
+import de.app.fivegla.integration.agvolution.dto.response.inner.DeviceTimeSeriesEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -52,16 +52,29 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
                 }
             }""";
 
-    AgvolutionSensorDataIntegrationService(AccessTokenService accessTokenService) {
+    private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
+
+    AgvolutionSensorDataIntegrationService(AccessTokenService accessTokenService,
+                                           AgvolutionSensorIntegrationService agvolutionSensorIntegrationService) {
         super(accessTokenService);
+        this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
     }
+
+    public List<SeriesEntry> findAll(Instant begin) {
+        List<Device> allDevices = agvolutionSensorIntegrationService.findAll();
+        return allDevices.stream()
+                .map(device -> findAll(device, begin))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
 
     /**
      * Fetches all sensors from the SoilScout API.
      *
      * @return List of sensors.
      */
-    public List<SeriesEntry> findAll(Device device, Instant begin) {
+    List<SeriesEntry> findAll(Device device, Instant begin) {
         try {
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();

@@ -40,7 +40,7 @@ public class ProbeDataIntegrationService extends AbstractIntegrationService {
      * Fetches all probes from the Sensoterra API.
      *
      * @param begin The beginning date to fetch the data for.
-     * @return List of probes.
+     * @return Map of probes.
      */
     public Map<Probe, List<ProbeData>> fetchAll(Instant begin) {
         var probeData = new HashMap<Probe, List<ProbeData>>();

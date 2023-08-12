@@ -71,11 +71,6 @@
       "description": "Password for Agvolution API."
     },
     {
-      "name": "app.scheduled.sensor-import.cron",
-      "type": "java.lang.String",
-      "description": "CRON expression for sensor import."
-    },
-    {
       "name": "app.scheduled.data-import.cron",
       "type": "java.lang.String",
       "description": "CRON expression for data import."

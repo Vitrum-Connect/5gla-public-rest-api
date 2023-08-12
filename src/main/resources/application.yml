@@ -25,9 +25,7 @@ app:
             url: ${IMAGE_PATH_BASE_URL}
   scheduled:
     data-import:
-      cron: "0 0 0 * * *" # every day at midnight
-    sensor-import:
-      cron: "0 0 0 * * *" # every day at midnight
+      cron: "0 */15 * * * *" # every 15 minutes
 fiware:
   context-broker-url: ${CONTEXT_BROKER_URL}
 logging:

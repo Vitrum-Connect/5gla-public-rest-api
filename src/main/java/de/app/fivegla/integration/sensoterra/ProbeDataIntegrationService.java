@@ -2,15 +2,17 @@ package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
+import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.sensoterra.model.Location;
 import de.app.fivegla.integration.sensoterra.model.Probe;
+import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,31 +22,36 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class ProbeIntegrationService extends AbstractIntegrationService {
-    public ProbeIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService) {
+public class ProbeDataIntegrationService extends AbstractIntegrationService {
+    public ProbeDataIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService) {
         super(apiKeyIntegrationService);
     }
 
     /**
      * Fetches all probes from the Sensoterra API.
      *
-     * @param location The location to fetch the probes for.
+     * @param probe The probe to fetch the data for.
+     * @param begin The beginning date to fetch the data for.
      * @return List of probes.
      */
-    public List<Probe> fetchAll(Location location) {
+    public List<ProbeData> fetchAll(Probe probe, Instant begin) {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("api_key", getApiKey());
             var httpEntity = new HttpEntity<>(headers);
-            var uri = UriComponentsBuilder.fromHttpUrl(url + "/probe/{locationId}")
+            var uri = UriComponentsBuilder.fromHttpUrl(url + "/probe/{probeId}/{from}/{to}")
                     .encode()
                     .toUriString();
             var uriVariables = Map.of(
-                    "locationId",
-                    location.getId());
-            var response = new RestTemplate().exchange(uri, HttpMethod.GET, httpEntity, Probe[].class, uriVariables);
+                    "probeId",
+                    probe.getId(),
+                    "from",
+                    InstantFormat.format(begin),
+                    "to",
+                    InstantFormat.format(Instant.now()));
+            var response = new RestTemplate().exchange(uri, HttpMethod.GET, httpEntity, ProbeData[].class, uriVariables);
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while fetching the probes from the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()
@@ -71,5 +78,4 @@ public class ProbeIntegrationService extends AbstractIntegrationService {
                     .build());
         }
     }
-
 }

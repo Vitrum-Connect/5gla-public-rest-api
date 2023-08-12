@@ -13,43 +13,29 @@ import java.util.Date;
 @Setter
 public class Sensor {
 
-    int id;
-
+    private int id;
     @JsonProperty("serial_number")
-    int serialNumber;
-
-    String name;
-
-    String imei;
-
+    private int serialNumber;
+    private String name;
+    private String imei;
     @JsonProperty("device_type")
-    String deviceType;
-
+    private String deviceType;
     @JsonProperty("voltage_external")
-    double voltageExternal;
-
+    private double voltageExternal;
     @JsonProperty("voltage_battery")
-    double voltageBattery;
-
-    Location location;
-
-    int site;
-
+    private double voltageBattery;
+    private Location location;
+    private int site;
     @JsonProperty("last_seen")
-    Date lastSeen;
-
+    private Date lastSeen;
     @JsonProperty("device_status")
-    String deviceStatus;
-
+    private String deviceStatus;
     @JsonProperty("antenna_type")
-    String antennaType;
-
+    private String antennaType;
     @JsonProperty("antenna_orientation")
-    int antennaOrientation;
-
+    private int antennaOrientation;
     @JsonProperty("rain_mm_per_pulse")
-    double rainMmPerPulse;
-
+    private double rainMmPerPulse;
     @JsonProperty("has_battery")
-    String hasBattery;
+    private String hasBattery;
 }

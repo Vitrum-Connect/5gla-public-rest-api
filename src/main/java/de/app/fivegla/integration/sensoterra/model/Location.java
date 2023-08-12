@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class Location {
     private String name;
-    private String id;
+    private int id;
     @JsonProperty("customer_id")
     private String customerId;
     private String code;

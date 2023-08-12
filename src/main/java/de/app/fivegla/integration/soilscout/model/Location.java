@@ -12,28 +12,20 @@ import lombok.Setter;
 @Setter
 public class Location {
 
-    double latitude;
-
-    double longitude;
-
-    double height;
-
+    private double latitude;
+    private double longitude;
+    private double height;
     @JsonProperty("soil_type")
-    String soilType;
-
+    private String soilType;
     @JsonProperty("soil_density")
-    double soilDensity;
-
+    private double soilDensity;
     @JsonProperty("field_capacity")
-    double fieldCapacity;
-
+    private double fieldCapacity;
     @JsonProperty("wilting_point")
-    double wiltingPoint;
-
+    private double wiltingPoint;
     @JsonProperty("irrigation_threshold")
-    double irrigationThreshold;
-
+    private double irrigationThreshold;
     @JsonProperty("site_id")
-    int siteId;
+    private int siteId;
 
 }

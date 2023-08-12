@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.integration.agranimo.AgranimoFiwareIntegrationServiceWrapper;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;

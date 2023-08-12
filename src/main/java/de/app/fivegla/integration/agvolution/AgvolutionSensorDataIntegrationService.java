@@ -54,9 +54,9 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
 
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
 
-    AgvolutionSensorDataIntegrationService(AccessTokenService accessTokenService,
+    AgvolutionSensorDataIntegrationService(AccessTokenIntegrationService accessTokenIntegrationService,
                                            AgvolutionSensorIntegrationService agvolutionSensorIntegrationService) {
-        super(accessTokenService);
+        super(accessTokenIntegrationService);
         this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
     }
 

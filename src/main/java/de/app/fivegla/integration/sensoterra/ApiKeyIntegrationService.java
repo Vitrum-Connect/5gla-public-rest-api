@@ -1,11 +1,11 @@
-package de.app.fivegla.integration.agranimo;
+package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.agranimo.cache.UserDataCache;
-import de.app.fivegla.integration.agranimo.dto.Credentials;
-import de.app.fivegla.integration.agranimo.dto.request.LoginRequest;
+import de.app.fivegla.integration.sensoterra.cache.ApiKeyWithSettingsCache;
+import de.app.fivegla.integration.sensoterra.dto.ApiKeyWithSettings;
+import de.app.fivegla.integration.sensoterra.dto.request.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,41 +13,38 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Service for login against the API.
+ * Service for integration with Sensoterra.
  */
 @Slf4j
 @Service
-public class LoginService {
+public class ApiKeyIntegrationService {
 
-    @Value("${app.sensors.agranimo.url}")
+    private final ApiKeyWithSettingsCache apiKeyWithSettingsCache;
+
+    @Value("${app.sensors.sensoterra.url}")
     private String url;
 
-    @Value("${app.sensors.agranimo.username}")
+    @Value("${app.sensors.sensoterra.username}")
     private String username;
 
-    @Value("${app.sensors.agranimo.password}")
+    @Value("${app.sensors.sensoterra.password}")
     private String password;
 
-    private final UserDataCache userDataCache;
-
-    /**
-     * Service for integration with Agranimo.
-     */
-    public LoginService(UserDataCache userDataCache) {
-        this.userDataCache = userDataCache;
+    public ApiKeyIntegrationService(ApiKeyWithSettingsCache apiKeyWithSettingsCache) {
+        this.apiKeyWithSettingsCache = apiKeyWithSettingsCache;
     }
 
     /**
-     * Fetch the access token from the API.
+     * Fetch the API key from the API.
      */
-    public String fetchAccessToken() {
-        if (userDataCache.isExpired()) {
+    public String fetchApiKey() {
+        if (apiKeyWithSettingsCache.isExpired()) {
             try {
-                var response = new RestTemplate().postForEntity(url + "/auth/login", new LoginRequest(username, password), Credentials.class);
-                if (response.getStatusCode() != HttpStatus.CREATED) {
+                var response = new RestTemplate().postForEntity(url + "/customer/auth", new LoginRequest(username, password), ApiKeyWithSettings.class);
+                if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()
-                            .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
+                            .error(Error.SENSOTERRA_COULD_NOT_LOGIN_AGAINST_API)
                             .message("Could not login against the API.")
                             .build());
                 } else {
@@ -55,24 +52,24 @@ public class LoginService {
                     var credentials = response.getBody();
                     if (null == credentials) {
                         throw new BusinessException(ErrorMessage.builder()
-                                .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
+                                .error(Error.SENSOTERRA_COULD_NOT_LOGIN_AGAINST_API)
                                 .message("Could not login against the API. Response was empty.")
                                 .build());
                     } else {
-                        log.info("Access token found after successful: {}", credentials.getAccessToken());
-                        userDataCache.setCredentials(credentials);
-                        return credentials.getAccessToken();
+                        log.info("API key found: {}", credentials.getApiKey());
+                        apiKeyWithSettingsCache.setApiKeyWithSettings(credentials);
+                        return credentials.getApiKey();
                     }
                 }
             } catch (Exception e) {
                 log.error("Error while login against the API.", e);
                 throw new BusinessException(ErrorMessage.builder()
-                        .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
+                        .error(Error.SENSOTERRA_COULD_NOT_LOGIN_AGAINST_API)
                         .message("Could not login against the API.")
                         .build());
             }
         } else {
-            return userDataCache.getAccessToken();
+            return apiKeyWithSettingsCache.getApiKey();
         }
     }
 

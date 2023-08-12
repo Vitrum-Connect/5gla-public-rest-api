@@ -18,6 +18,10 @@ app:
       url: https://api.agvolution.com
       username: ${AGVOLUTION_USERNAME}
       password: ${AGVOLUTION_PASSWORD}
+    sensoterra:
+      url: https://monitor.sensoterra.com/api/v3
+      username: ${SENSOTERRA_USERNAME}
+      password: ${SENSOTERRA_PASSWORD}
     micasense:
       image:
         path:

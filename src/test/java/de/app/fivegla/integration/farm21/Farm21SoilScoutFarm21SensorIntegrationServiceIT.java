@@ -1,10 +1,11 @@
 package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.SpringBootIntegrationTestBase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class Farm21SoilScoutFarm21SensorIntegrationServiceIT extends SpringBootIntegrationTestBase {
@@ -15,8 +16,8 @@ class Farm21SoilScoutFarm21SensorIntegrationServiceIT extends SpringBootIntegrat
     @Test
     void givenExistingSensorsWhenSearchingViaApiTheServiceShouldReturnAllOfThem() {
         var sensors = farm21SensorIntegrationService.findAll();
-        Assertions.assertNotNull(sensors);
-        Assertions.assertFalse(sensors.isEmpty());
+        assertThat(sensors).isNotNull();
+        assertThat(sensors).isNotEmpty();
     }
 
 }

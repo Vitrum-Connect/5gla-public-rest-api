@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.SpringBootIntegrationTestBase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Instant;
 
 import static java.time.temporal.ChronoUnit.DAYS;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class AgvolutionSensorDataIntegrationServiceIT extends SpringBootIntegrationTestBase {
@@ -25,8 +25,8 @@ class AgvolutionSensorDataIntegrationServiceIT extends SpringBootIntegrationTest
                 .filter(device -> device.getId().equals("68500F317F38DBC7"))
                 .forEach(device -> {
                     var timeSeries = agvolutionSensorDataIntegrationService.findAll(device, Instant.now().minus(1, DAYS));
-                    Assertions.assertNotNull(timeSeries);
-                    Assertions.assertFalse(timeSeries.isEmpty());
+                    assertThat(timeSeries).isNotNull();
+                    assertThat(timeSeries).isNotEmpty();
                 });
     }
 

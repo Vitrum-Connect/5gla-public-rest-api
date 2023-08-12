@@ -1,10 +1,11 @@
 package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.SpringBootIntegrationTestBase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class AgvolutionSensorIntegrationServiceIT extends SpringBootIntegrationTestBase {
@@ -15,8 +16,8 @@ class AgvolutionSensorIntegrationServiceIT extends SpringBootIntegrationTestBase
     @Test
     void givenValidCredentialsWhenGetDevicesThenTheRequestShouldBeAccepted() {
         var allDevices = agvolutionSensorIntegrationService.findAll();
-        Assertions.assertNotNull(allDevices);
-        Assertions.assertFalse(allDevices.isEmpty());
+        assertThat(allDevices).isNotNull();
+        assertThat(allDevices).isNotEmpty();
     }
 
 }

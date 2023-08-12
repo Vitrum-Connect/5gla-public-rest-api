@@ -17,15 +17,15 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class AgranimoSoilMoistureService {
+public class AgranimoSoilMoistureIntegrationService {
 
     @Value("${app.sensors.agranimo.url}")
     private String url;
 
     private final ZoneService zoneService;
-    private final LoginService loginService;
+    private final LoginIntegrationService loginService;
 
-    public AgranimoSoilMoistureService(ZoneService zoneService, LoginService loginService) {
+    public AgranimoSoilMoistureIntegrationService(ZoneService zoneService, LoginIntegrationService loginService) {
         this.zoneService = zoneService;
         this.loginService = loginService;
     }

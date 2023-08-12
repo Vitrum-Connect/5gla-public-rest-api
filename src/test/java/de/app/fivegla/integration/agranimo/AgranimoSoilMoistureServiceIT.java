@@ -11,7 +11,7 @@ import java.time.Instant;
 class AgranimoSoilMoistureServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
-    private AgranimoSoilMoistureService soilMoistureService;
+    private AgranimoSoilMoistureIntegrationService soilMoistureService;
 
     private final Instant since = Instant.ofEpochSecond(1662087600);
     private final Instant until = Instant.ofEpochSecond(1662617200);

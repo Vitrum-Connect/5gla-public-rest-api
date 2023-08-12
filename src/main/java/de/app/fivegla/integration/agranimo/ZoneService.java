@@ -25,10 +25,10 @@ public class ZoneService {
     @Value("${app.sensors.agranimo.url}")
     private String url;
 
-    private final LoginService loginService;
+    private final LoginIntegrationService loginService;
     private final UserDataCache userDataCache;
 
-    public ZoneService(LoginService loginService, UserDataCache userDataCache) {
+    public ZoneService(LoginIntegrationService loginService, UserDataCache userDataCache) {
         this.loginService = loginService;
         this.userDataCache = userDataCache;
     }

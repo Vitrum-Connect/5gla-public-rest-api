@@ -8,5 +8,6 @@ public enum ManufacturerType {
     AGRANIMO,
     FARM21,
     MICA_SENSE,
-    AGVOLUTION
+    AGVOLUTION,
+    SENSOTERRA
 }

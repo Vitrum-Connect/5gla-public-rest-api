@@ -14,17 +14,17 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
-public class Farm21SensorDataImport {
+public class Farm21MeasurementImport {
 
     private final Farm21SensorDataIntegrationService farm21SensorDataIntegrationService;
     private final ApplicationDataRepository applicationDataRepository;
     private final Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
-    public Farm21SensorDataImport(Farm21SensorDataIntegrationService farm21SensorDataIntegrationService,
-                                  ApplicationDataRepository applicationDataRepository,
-                                  Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper,
-                                  JobMonitor jobMonitor) {
+    public Farm21MeasurementImport(Farm21SensorDataIntegrationService farm21SensorDataIntegrationService,
+                                   ApplicationDataRepository applicationDataRepository,
+                                   Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper,
+                                   JobMonitor jobMonitor) {
         this.farm21SensorDataIntegrationService = farm21SensorDataIntegrationService;
         this.applicationDataRepository = applicationDataRepository;
         this.farm21FiwareIntegrationServiceWrapper = farm21FiwareIntegrationServiceWrapper;

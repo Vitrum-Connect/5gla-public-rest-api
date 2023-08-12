@@ -7,7 +7,6 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.enums.DeviceCategoryValues;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -111,7 +110,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var device = Device.builder()
                 .id(FiwareDeviceId.create(Manufacturer.SOIL_SCOUT, String.valueOf(sensor.getId())))
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(DeviceCategoryValues.SoilScoutSensor.getKey()))
+                        .value(List.of(Manufacturer.SOIL_SCOUT.key()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);

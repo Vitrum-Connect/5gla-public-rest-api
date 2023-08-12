@@ -1,8 +1,12 @@
 package de.app.fivegla.integration.sensoterra;
 
 
+import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.model.Device;
+import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import de.app.fivegla.monitoring.FiwareEntityMonitor;
@@ -31,6 +35,18 @@ public class SensoterraFiwareIntegrationServiceWrapper {
     }
 
     public void persist(Probe probe, List<ProbeData> probeData) {
-        log.error("Not implemented yet");
+        persist(probe);
     }
+
+    private void persist(Probe probe) {
+        var device = Device.builder()
+                .id(FiwareDeviceId.create(Manufacturer.SENSOTERRA, String.valueOf(probe.getId())))
+                .deviceCategory(DeviceCategory.builder()
+                        .value(List.of(Manufacturer.SENSOTERRA.key()))
+                        .build())
+                .build();
+        deviceIntegrationService.persist(device);
+
+    }
+
 }

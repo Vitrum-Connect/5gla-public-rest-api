@@ -7,7 +7,6 @@ import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.enums.DeviceCategoryValues;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -125,7 +124,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
         var device = Device.builder()
                 .id(FiwareDeviceId.create(Manufacturer.FARM21, String.valueOf(sensor.getId())))
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(DeviceCategoryValues.Farm21Sensor.getKey()))
+                        .value(List.of(Manufacturer.FARM21.key()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);

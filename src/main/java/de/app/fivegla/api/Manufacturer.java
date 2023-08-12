@@ -39,4 +39,13 @@ public enum Manufacturer {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Unknown manufacturer type: " + manufacturerType));
     }
+
+    /**
+     * Returns the manufacturer for the given manufacturer type.
+     *
+     * @return the manufacturer.
+     */
+    public String key() {
+        return name().toLowerCase();
+    }
 }

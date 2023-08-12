@@ -12,7 +12,6 @@ import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
-import de.app.fivegla.integration.soilscout.SoilScoutSensorIntegrationService;
 import de.app.fivegla.integration.soilscout.model.Sensor;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.monitoring.FiwareEntityMonitor;

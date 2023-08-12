@@ -35,13 +35,12 @@ public class AgvolutionMeasurementImport {
     /**
      * Run scheduled data import.
      */
-    @Scheduled(cron = "${app.scheduled.data-import.cron}}")
     public void run() {
         jobMonitor.incNrOfRuns(Manufacturer.FARM21);
-        if (applicationDataRepository.getLastRun(Manufacturer.FARM21).isPresent()) {
+        var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGVOLUTION);
+        if (lastRun.isPresent()) {
             log.info("Running scheduled data import from Farm21 API");
-            var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGVOLUTION).get();
-            var seriesEntries = agvolutionSensorDataIntegrationService.findAll(lastRun);
+            var seriesEntries = agvolutionSensorDataIntegrationService.findAll(lastRun.get());
             jobMonitor.nrOfEntitiesFetched(seriesEntries.size(), Manufacturer.AGVOLUTION);
             log.info("Found {} seriesEntries", seriesEntries.size());
             log.info("Persisting {} seriesEntries", seriesEntries.size());

@@ -20,11 +20,11 @@ class AgvolutionSensorDataIntegrationServiceIT extends SpringBootIntegrationTest
 
     @Test
     void givenValidCredentialsWhenGetDevicesThenTheRequestShouldBeAccepted() {
-        agvolutionSensorIntegrationService.findAll()
+        agvolutionSensorIntegrationService.fetchAll()
                 .stream()
                 .filter(device -> device.getId().equals("68500F317F38DBC7"))
                 .forEach(device -> {
-                    var timeSeries = agvolutionSensorDataIntegrationService.findAll(device, Instant.now().minus(1, DAYS));
+                    var timeSeries = agvolutionSensorDataIntegrationService.fetchAll(device, Instant.now().minus(1, DAYS));
                     assertThat(timeSeries).isNotNull();
                     assertThat(timeSeries).isNotEmpty();
                 });

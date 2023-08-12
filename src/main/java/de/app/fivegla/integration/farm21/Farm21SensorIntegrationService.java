@@ -28,7 +28,7 @@ public class Farm21SensorIntegrationService extends AbstractIntegrationService {
      *
      * @return List of sensors.
      */
-    public List<Sensor> findAll() {
+    public List<Sensor> fetchAll() {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

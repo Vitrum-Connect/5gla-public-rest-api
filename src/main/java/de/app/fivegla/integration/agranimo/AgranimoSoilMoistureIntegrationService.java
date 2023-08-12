@@ -37,7 +37,7 @@ public class AgranimoSoilMoistureIntegrationService {
      * @param until The date until to fetch the data.
      */
     public void fetchWaterContent(Instant since, Instant until) {
-        fetchData(since, until, SoilMoistureType.WATER_CONTENT);
+        fetchAll(since, until, SoilMoistureType.WATER_CONTENT);
     }
 
     /**
@@ -47,7 +47,7 @@ public class AgranimoSoilMoistureIntegrationService {
      * @param until The date until to fetch the data.
      */
     public void fetchWaterHeight(Instant since, Instant until) {
-        fetchData(since, until, SoilMoistureType.WATER_HEIGHT);
+        fetchAll(since, until, SoilMoistureType.WATER_HEIGHT);
     }
 
     /**
@@ -57,13 +57,13 @@ public class AgranimoSoilMoistureIntegrationService {
      * @param until The date until to fetch the data.
      */
     public void fetchWaterVolume(Instant since, Instant until) {
-        fetchData(since, until, SoilMoistureType.WATER_VOLUMETRIC);
+        fetchAll(since, until, SoilMoistureType.WATER_VOLUMETRIC);
     }
 
     /**
      * Fetch the soil moisture from the API.
      */
-    private void fetchData(Instant since, Instant until, SoilMoistureType soilMoistureType) {
+    private void fetchAll(Instant since, Instant until, SoilMoistureType soilMoistureType) {
         zoneService.fetchZones().forEach(zone -> {
             log.info("Fetching soil moisture data for zone {}.", zone.getName());
             log.debug("Fetching soil moisture data for zone {} from {} to {}.", zone.getId(), since, until);

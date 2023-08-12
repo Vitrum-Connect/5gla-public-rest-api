@@ -15,7 +15,7 @@ class Farm21SoilScoutFarm21SensorIntegrationServiceIT extends SpringBootIntegrat
 
     @Test
     void givenExistingSensorsWhenSearchingViaApiTheServiceShouldReturnAllOfThem() {
-        var sensors = farm21SensorIntegrationService.findAll();
+        var sensors = farm21SensorIntegrationService.fetchAll();
         assertThat(sensors).isNotNull();
         assertThat(sensors).isNotEmpty();
     }

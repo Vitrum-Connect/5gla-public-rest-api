@@ -18,7 +18,7 @@ public class SoilScoutSoilScoutMeasurementIntegrationServiceIT extends SpringBoo
 
     @Test
     void givenTimeRangeOf14DaysWhenFetchingSensorDataTheServiceShouldReturnMeasurements() {
-        var measurements = soilScoutMeasurementIntegrationService.findAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
+        var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
         assertThat(measurements).isNotNull();
         assertThat(measurements).isNotEmpty();
     }

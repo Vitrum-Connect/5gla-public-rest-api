@@ -20,7 +20,8 @@ public enum Error {
     AGVOLUTION_COULD_NOT_FETCH_DEVICES(errorOf(10)),
     AGVOLUTION_COULD_NOT_FETCH_TIME_SERIES(errorOf(11)),
     SENSOTERRA_COULD_NOT_LOGIN_AGAINST_API(errorOf(12)),
-    SENSOTERRA_COULD_NOT_FETCH_LOCATIONS(errorOf(13));
+    SENSOTERRA_COULD_NOT_FETCH_LOCATIONS(errorOf(13)),
+    SENSOTERRA_COULD_NOT_FETCH_PROBES(errorOf(14));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

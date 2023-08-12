@@ -59,7 +59,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
      */
     private void persist(SensorData sensorData) {
         try {
-            var soilScoutSensor = soilScoutSensorIntegrationService.find(sensorData.getDevice());
+            var soilScoutSensor = soilScoutSensorIntegrationService.fetch(sensorData.getDevice());
             log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
             persist(soilScoutSensor);
 
@@ -103,7 +103,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
             deviceMeasurementIntegrationService.persist(waterBalance);
             fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOIL_SCOUT);
         } catch (BusinessException e) {
-            log.error("Could not find sensor with id {} in Soil Scout API.", sensorData.getDevice());
+            log.error("Could not fetch sensor with id {} in Soil Scout API.", sensorData.getDevice());
         }
     }
 

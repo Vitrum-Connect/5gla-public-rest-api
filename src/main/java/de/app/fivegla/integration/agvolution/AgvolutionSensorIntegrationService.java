@@ -33,7 +33,7 @@ public class AgvolutionSensorIntegrationService extends AbstractIntegrationServi
      *
      * @return List of sensors.
      */
-    public List<Device> findAll() {
+    public List<Device> fetchAll() {
         try {
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();

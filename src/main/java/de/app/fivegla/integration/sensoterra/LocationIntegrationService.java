@@ -23,13 +23,12 @@ public class LocationIntegrationService extends AbstractIntegrationService {
         super(apiKeyIntegrationService);
     }
 
-
     /**
-     * Fetches all sensors from the SoilScout API.
+     * Fetches all locations from the API.
      *
-     * @return List of sensors.
+     * @return List of locations.
      */
-    public List<Location> findAll() {
+    public List<Location> fetchAll() {
         try {
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();

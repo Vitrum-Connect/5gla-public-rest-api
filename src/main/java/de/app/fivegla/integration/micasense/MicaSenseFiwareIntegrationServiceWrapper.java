@@ -7,7 +7,6 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.api.InstantFormatter;
-import de.app.fivegla.fiware.api.enums.DeviceCategoryValues;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -48,7 +47,7 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
         var fiwareId = FiwareDeviceId.create(Manufacturer.MICA_SENSE, droneId);
         var device = Device.builder()
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(DeviceCategoryValues.MicaSenseDrone.getKey()))
+                        .value(List.of(Manufacturer.MICA_SENSE.key()))
                         .build())
                 .id(fiwareId)
                 .build();

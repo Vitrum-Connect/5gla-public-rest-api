@@ -30,11 +30,11 @@ public class SoilScoutMeasurementIntegrationService extends AbstractIntegrationS
      *
      * @return all soil scout data for the sensor
      */
-    public List<SensorData> findAll(Instant since, Instant until) {
-        return findAll(since, until, getAccessToken());
+    public List<SensorData> fetchAll(Instant since, Instant until) {
+        return fetchAll(since, until, getAccessToken());
     }
 
-    private List<SensorData> findAll(Instant since, Instant until, String accessToken) {
+    private List<SensorData> fetchAll(Instant since, Instant until, String accessToken) {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

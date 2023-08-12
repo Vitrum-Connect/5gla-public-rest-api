@@ -2,12 +2,12 @@ app:
   version: '@project.version@'
   sensors:
     farm21:
-      url: https://app.farm21.tech/api/v2/public/
+      url: https://app.farm21.tech/api/v2/public
       username: ${FARM21_USERNAME}
       password: ${FARM21_PASSWORD}
       api-token: ${FARM21_API_TOKEN}
     soil-scout:
-      url: https://soilscouts.fi/api/v1/
+      url: https://soilscouts.fi/api/v1
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
     agranimo:
@@ -18,6 +18,10 @@ app:
       url: https://api.agvolution.com
       username: ${AGVOLUTION_USERNAME}
       password: ${AGVOLUTION_PASSWORD}
+    sensoterra:
+      url: https://monitor.sensoterra.com/api/v3
+      username: ${SENSOTERRA_USERNAME}
+      password: ${SENSOTERRA_PASSWORD}
     micasense:
       image:
         path:

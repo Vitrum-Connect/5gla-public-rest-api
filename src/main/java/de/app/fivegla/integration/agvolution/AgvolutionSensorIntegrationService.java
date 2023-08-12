@@ -3,9 +3,9 @@ package de.app.fivegla.integration.agvolution;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.agvolution.model.Device;
 import de.app.fivegla.integration.agvolution.dto.request.QueryRequest;
 import de.app.fivegla.integration.agvolution.dto.response.DeviceDataResponse;
+import de.app.fivegla.integration.agvolution.model.Device;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,8 +24,8 @@ import java.util.List;
 @Service
 public class AgvolutionSensorIntegrationService extends AbstractIntegrationService {
 
-    AgvolutionSensorIntegrationService(AccessTokenService accessTokenService) {
-        super(accessTokenService);
+    AgvolutionSensorIntegrationService(AccessTokenIntegrationService accessTokenIntegrationService) {
+        super(accessTokenIntegrationService);
     }
 
     /**
@@ -33,7 +33,7 @@ public class AgvolutionSensorIntegrationService extends AbstractIntegrationServi
      *
      * @return List of sensors.
      */
-    public List<Device> findAll() {
+    public List<Device> fetchAll() {
         try {
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
@@ -43,7 +43,7 @@ public class AgvolutionSensorIntegrationService extends AbstractIntegrationServi
             var httpEntity = new HttpEntity<>(new QueryRequest("{devices{id,position{lon,lat},latestSignal}}"), headers);
             var response = restTemplate.postForEntity(url + "/devices", httpEntity, DeviceDataResponse.class);
             if (response.getStatusCode() != HttpStatus.OK) {
-                log.error("Error while login against the API. Status code: {}", response.getStatusCode());
+                log.error("Error while fetching devices from the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()
                         .error(Error.AGVOLUTION_COULD_NOT_FETCH_DEVICES)
                         .message("Could not fetch devices from the API.")

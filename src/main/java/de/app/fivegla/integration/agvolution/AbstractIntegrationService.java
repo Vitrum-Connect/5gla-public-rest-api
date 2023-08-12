@@ -9,16 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 @Slf4j
 abstract class AbstractIntegrationService {
 
-    private final AccessTokenService accessTokenService;
+    private final AccessTokenIntegrationService accessTokenIntegrationService;
 
     @Value("${app.sensors.agvolution.url}")
     protected String url;
 
-    AbstractIntegrationService(AccessTokenService accessTokenService) {
-        this.accessTokenService = accessTokenService;
+    AbstractIntegrationService(AccessTokenIntegrationService accessTokenIntegrationService) {
+        this.accessTokenIntegrationService = accessTokenIntegrationService;
     }
 
     protected String getAccessToken() {
-        return accessTokenService.fetchAccessToken();
+        return accessTokenIntegrationService.fetchAccessToken();
     }
 }

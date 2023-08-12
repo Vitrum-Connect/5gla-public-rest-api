@@ -13,7 +13,8 @@ public enum Manufacturer {
     AGRANIMO(ManufacturerType.AGRANIMO, "urn:5gla:agranimo-sensor:", "urn:5gla:agranimo-sensor:data:"),
     FARM21(ManufacturerType.FARM21, "urn:5gla:farm21-sensor:", "urn:5gla:farm21-sensor:data:"),
     MICA_SENSE(ManufacturerType.MICA_SENSE, "urn:5gla:mica-sense-drone:", "urn:5gla:mica-sense-drone:data:"),
-    AGVOLUTION(ManufacturerType.AGVOLUTION, "urn:5gla:agvolution-sensor:", "urn:5gla:agvolution-sensor:data:");
+    AGVOLUTION(ManufacturerType.AGVOLUTION, "urn:5gla:agvolution-sensor:", "urn:5gla:agvolution-sensor:data:"),
+    SENSOTERRA(ManufacturerType.SENSOTERRA, "urn:5gla:sensoterra-sensor:", "urn:5gla:sensoterra-sensor:data:");
 
     private final ManufacturerType manufacturerType;
     private final String fiwareDeviceIdPrefix;
@@ -37,5 +38,14 @@ public enum Manufacturer {
         return Arrays.stream(Manufacturer.values()).filter(m -> m.manufacturerType == manufacturerType)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Unknown manufacturer type: " + manufacturerType));
+    }
+
+    /**
+     * Returns the manufacturer for the given manufacturer type.
+     *
+     * @return the manufacturer.
+     */
+    public String key() {
+        return name().toLowerCase();
     }
 }

@@ -37,7 +37,7 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
      *
      * @return List of sensors.
      */
-    public List<Sensor> findAll() {
+    public List<Sensor> fetchAll() {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -58,7 +58,7 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
      * @param id The id of the sensor.
      * @return The sensor.
      */
-    public Sensor find(int id) {
+    public Sensor fetch(int id) {
         if (soilScoutSensorCache.get(id).isPresent()) {
             return soilScoutSensorCache.get(id).get();
         } else {

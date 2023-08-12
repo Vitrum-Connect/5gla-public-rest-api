@@ -40,13 +40,13 @@ public class Farm21SensorDataIntegrationService extends AbstractIntegrationServi
      * @param until End date.
      * @return Map of sensors with sensor data.
      */
-    public Map<Sensor, List<SensorData>> findAll(Instant since, Instant until) {
-        var sensors = farm21SensorIntegrationService.findAll();
+    public Map<Sensor, List<SensorData>> fetchAll(Instant since, Instant until) {
+        var sensors = farm21SensorIntegrationService.fetchAll();
         log.debug("Found {} sensors", sensors.size());
         Map<Sensor, List<SensorData>> sensorsWithSensorData = new HashMap<>();
         sensors.forEach(sensor -> {
             log.debug("Processing sensor {}", sensor.getId());
-            var sensorData = findAllForSensor(sensor.getId(), since, until);
+            var sensorData = fetchAllForSensor(sensor.getId(), since, until);
             log.debug("Found {} sensor data for sensor {}", sensorData.size(), sensor.getId());
             if (!sensorData.isEmpty()) {
                 sensorsWithSensorData.put(sensor, sensorData);
@@ -57,7 +57,7 @@ public class Farm21SensorDataIntegrationService extends AbstractIntegrationServi
         return sensorsWithSensorData;
     }
 
-    private List<SensorData> findAllForSensor(int sensorId, Instant since, Instant until) {
+    private List<SensorData> fetchAllForSensor(int sensorId, Instant since, Instant until) {
         try {
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();

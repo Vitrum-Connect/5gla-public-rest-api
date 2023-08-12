@@ -7,7 +7,6 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.enums.DeviceCategoryValues;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -59,7 +58,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
      */
     private void persist(SensorData sensorData) {
         try {
-            var soilScoutSensor = soilScoutSensorIntegrationService.find(sensorData.getDevice());
+            var soilScoutSensor = soilScoutSensorIntegrationService.fetch(sensorData.getDevice());
             log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
             persist(soilScoutSensor);
 
@@ -103,7 +102,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
             deviceMeasurementIntegrationService.persist(waterBalance);
             fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOIL_SCOUT);
         } catch (BusinessException e) {
-            log.error("Could not find sensor with id {} in Soil Scout API.", sensorData.getDevice());
+            log.error("Could not fetch sensor with id {} in Soil Scout API.", sensorData.getDevice());
         }
     }
 
@@ -111,7 +110,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var device = Device.builder()
                 .id(FiwareDeviceId.create(Manufacturer.SOIL_SCOUT, String.valueOf(sensor.getId())))
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(DeviceCategoryValues.SoilScoutSensor.getKey()))
+                        .value(List.of(Manufacturer.SOIL_SCOUT.key()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);

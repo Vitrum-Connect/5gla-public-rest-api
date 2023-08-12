@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 public class SoilScoutFarm21SensorIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
@@ -15,25 +17,25 @@ public class SoilScoutFarm21SensorIntegrationServiceIT extends SpringBootIntegra
 
     @Test
     void whenFetchingSensorsTheServiceShouldReturnSensors() {
-        var sensors = soilScoutSensorIntegrationService.findAll();
-        Assertions.assertNotNull(sensors);
-        Assertions.assertFalse(sensors.isEmpty());
+        var sensors = soilScoutSensorIntegrationService.fetchAll();
+        assertThat(sensors).isNotNull();
+        assertThat(sensors).isNotEmpty();
     }
 
     @Test
     void givenExistingSensorsWhenFetchingSingleSensorTheServiceShouldReturnTheSpecificSensor() {
-        var sensors = soilScoutSensorIntegrationService.findAll();
-        Assertions.assertNotNull(sensors);
-        Assertions.assertFalse(sensors.isEmpty());
+        var sensors = soilScoutSensorIntegrationService.fetchAll();
+        assertThat(sensors).isNotNull();
+        assertThat(sensors).isNotEmpty();
         sensors.forEach(soilScoutSensor -> {
-            var sensor = soilScoutSensorIntegrationService.find(soilScoutSensor.getId());
+            var sensor = soilScoutSensorIntegrationService.fetch(soilScoutSensor.getId());
             Assertions.assertEquals(soilScoutSensor.getId(), sensor.getId());
         });
     }
 
     @Test
     void givenMissingSensorWhenFetchingSingleSensorTheServiceShouldReturn() {
-        Assertions.assertThrows(BusinessException.class, () -> soilScoutSensorIntegrationService.find(42));
+        Assertions.assertThrows(BusinessException.class, () -> soilScoutSensorIntegrationService.fetch(42));
     }
 
 }

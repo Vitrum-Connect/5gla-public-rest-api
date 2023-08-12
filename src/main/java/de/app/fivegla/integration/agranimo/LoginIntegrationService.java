@@ -1,11 +1,11 @@
-package de.app.fivegla.integration.agvolution;
+package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.agvolution.cache.AccessTokenCache;
-import de.app.fivegla.integration.agvolution.dto.Credentials;
-import de.app.fivegla.integration.agvolution.dto.request.LoginRequest;
+import de.app.fivegla.integration.agranimo.cache.UserDataCache;
+import de.app.fivegla.integration.agranimo.dto.Credentials;
+import de.app.fivegla.integration.agranimo.dto.request.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,37 +17,37 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Service
-public class AccessTokenService {
+public class LoginIntegrationService {
 
-    @Value("${app.sensors.agvolution.url}")
+    @Value("${app.sensors.agranimo.url}")
     private String url;
 
-    @Value("${app.sensors.agvolution.username}")
+    @Value("${app.sensors.agranimo.username}")
     private String username;
 
-    @Value("${app.sensors.agvolution.password}")
+    @Value("${app.sensors.agranimo.password}")
     private String password;
 
-    private final AccessTokenCache accessTokenCache;
+    private final UserDataCache userDataCache;
 
     /**
-     * Service for integration with Agvolution.
+     * Service for integration with Agranimo.
      */
-    public AccessTokenService(AccessTokenCache accessTokenCache) {
-        this.accessTokenCache = accessTokenCache;
+    public LoginIntegrationService(UserDataCache userDataCache) {
+        this.userDataCache = userDataCache;
     }
 
     /**
      * Fetch the access token from the API.
      */
     public String fetchAccessToken() {
-        if (accessTokenCache.isExpired()) {
+        if (userDataCache.isExpired()) {
             try {
-                var response = new RestTemplate().postForEntity(url + "/auth/session", new LoginRequest(username, password), Credentials.class);
-                if (response.getStatusCode() != HttpStatus.OK) {
+                var response = new RestTemplate().postForEntity(url + "/auth/login", new LoginRequest(username, password), Credentials.class);
+                if (response.getStatusCode() != HttpStatus.CREATED) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()
-                            .error(Error.AGVOLUTION_COULD_NOT_LOGIN_AGAINST_API)
+                            .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
                             .message("Could not login against the API.")
                             .build());
                 } else {
@@ -55,24 +55,24 @@ public class AccessTokenService {
                     var credentials = response.getBody();
                     if (null == credentials) {
                         throw new BusinessException(ErrorMessage.builder()
-                                .error(Error.AGVOLUTION_COULD_NOT_LOGIN_AGAINST_API)
+                                .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
                                 .message("Could not login against the API. Response was empty.")
                                 .build());
                     } else {
-                        log.info("Access token found: {}", credentials.getAccessToken());
-                        accessTokenCache.setCredentials(credentials);
+                        log.info("Access token found after successful: {}", credentials.getAccessToken());
+                        userDataCache.setCredentials(credentials);
                         return credentials.getAccessToken();
                     }
                 }
             } catch (Exception e) {
                 log.error("Error while login against the API.", e);
                 throw new BusinessException(ErrorMessage.builder()
-                        .error(Error.AGVOLUTION_COULD_NOT_LOGIN_AGAINST_API)
+                        .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
                         .message("Could not login against the API.")
                         .build());
             }
         } else {
-            return accessTokenCache.getAccessToken();
+            return userDataCache.getAccessToken();
         }
     }
 

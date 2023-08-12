@@ -2,7 +2,8 @@ package de.app.fivegla.event;
 
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
-import de.app.fivegla.integration.farm21.Farm21SensorDataImport;
+import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
+import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -18,16 +19,19 @@ public class DataImportEventHandler {
     private final SoilScoutMeasurementImport soilScoutScheduledMeasurementImport;
     private final AgranimoMeasurementImport agranimoScheduledMeasurementImport;
     private final AgvolutionMeasurementImport agvolutionMeasurementImport;
-    private final Farm21SensorDataImport farm21SensorDataImport;
+    private final Farm21MeasurementImport farm21MeasurementImport;
+    private final SensoterraMeasurementImport sensoterraMeasurementImport;
 
     public DataImportEventHandler(SoilScoutMeasurementImport soilScoutMeasurementImport,
                                   AgranimoMeasurementImport agranimoMeasurementImport,
                                   AgvolutionMeasurementImport agvolutionMeasurementImport,
-                                  Farm21SensorDataImport farm21SensorDataImport) {
+                                  Farm21MeasurementImport farm21MeasurementImport,
+                                  SensoterraMeasurementImport sensoterraMeasurementImport) {
         this.soilScoutScheduledMeasurementImport = soilScoutMeasurementImport;
         this.agranimoScheduledMeasurementImport = agranimoMeasurementImport;
         this.agvolutionMeasurementImport = agvolutionMeasurementImport;
-        this.farm21SensorDataImport = farm21SensorDataImport;
+        this.farm21MeasurementImport = farm21MeasurementImport;
+        this.sensoterraMeasurementImport = sensoterraMeasurementImport;
     }
 
     @EventListener(DataImportEvent.class)
@@ -36,7 +40,8 @@ public class DataImportEventHandler {
             case SOIL_SCOUT -> soilScoutScheduledMeasurementImport.run();
             case AGVOLUTION -> agvolutionMeasurementImport.run();
             case AGRANIMO -> agranimoScheduledMeasurementImport.run();
-            case FARM21 -> farm21SensorDataImport.run();
+            case FARM21 -> farm21MeasurementImport.run();
+            case SENSOTERRA -> sensoterraMeasurementImport.run();
             case MICA_SENSE -> log.info("There is no scheduled data import for MicaSense");
             default -> throw new IllegalArgumentException("Unknown manufacturer: " + dataImportEvent.manufacturer());
         }

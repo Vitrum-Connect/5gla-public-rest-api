@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.agvolution;
+package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.SpringBootIntegrationTestBase;
 import org.assertj.core.api.Assertions;
@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AccessTokenServiceIT extends SpringBootIntegrationTestBase {
+class ApiKeyIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
-    private AccessTokenService accessTokenService;
+    private ApiKeyIntegrationService apiKeyIntegrationService;
 
     @Test
     void givenValidCredentialsWhenLoginThenTheRequestShouldBeAccepted() {
-        var optionalAccessToken = accessTokenService.fetchAccessToken();
+        var optionalAccessToken = apiKeyIntegrationService.fetchApiKey();
         Assertions.assertThat(optionalAccessToken).isNotBlank();
     }
 }

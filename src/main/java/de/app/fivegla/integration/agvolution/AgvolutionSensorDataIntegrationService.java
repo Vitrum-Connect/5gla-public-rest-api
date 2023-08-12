@@ -4,11 +4,11 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.agvolution.model.Device;
-import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.dto.request.QueryRequest;
 import de.app.fivegla.integration.agvolution.dto.response.DeviceTimeseriesDataResponse;
 import de.app.fivegla.integration.agvolution.dto.response.inner.DeviceTimeSeriesEntry;
+import de.app.fivegla.integration.agvolution.model.Device;
+import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -54,16 +54,22 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
 
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
 
-    AgvolutionSensorDataIntegrationService(AccessTokenService accessTokenService,
+    AgvolutionSensorDataIntegrationService(AccessTokenIntegrationService accessTokenIntegrationService,
                                            AgvolutionSensorIntegrationService agvolutionSensorIntegrationService) {
-        super(accessTokenService);
+        super(accessTokenIntegrationService);
         this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
     }
 
-    public List<SeriesEntry> findAll(Instant begin) {
-        List<Device> allDevices = agvolutionSensorIntegrationService.findAll();
+    /**
+     * Fetches all series from the SoilScout API.
+     *
+     * @param begin The date since to fetch the data.
+     * @return List of series.
+     */
+    public List<SeriesEntry> fetchAll(Instant begin) {
+        List<Device> allDevices = agvolutionSensorIntegrationService.fetchAll();
         return allDevices.stream()
-                .map(device -> findAll(device, begin))
+                .map(device -> fetchAll(device, begin))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
@@ -74,7 +80,7 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
      *
      * @return List of sensors.
      */
-    List<SeriesEntry> findAll(Device device, Instant begin) {
+    List<SeriesEntry> fetchAll(Device device, Instant begin) {
         try {
             var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();

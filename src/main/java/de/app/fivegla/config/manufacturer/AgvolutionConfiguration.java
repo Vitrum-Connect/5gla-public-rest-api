@@ -4,13 +4,10 @@ import de.app.fivegla.api.Manufacturer;
 
 /**
  * Represents the configuration for Agvolution.
- *
  * Agvolution is a class used to configure Agvolution data sources.
- *
  * The configuration includes information such as whether Agvolution is enabled,
  * the manufacturer, FIWARE device ID prefix, FIWARE device measurement ID prefix,
  * username, password, and URL.
- *
  * This configuration class implements the CommonManufacturerConfiguration interface
  * and provides an implementation for the manufacturerName() method.
  *

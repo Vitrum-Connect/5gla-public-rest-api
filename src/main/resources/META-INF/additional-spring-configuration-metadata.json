@@ -214,6 +214,16 @@
       "name": "app.fiware.context-broker-url",
       "type": "java.lang.String",
       "description": "The URL of the FIWARE Context Broker."
+    },
+    {
+      "name": "app.sensors.sentek.apiToken",
+      "type": "java.lang.String",
+      "description": "The API token to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.sentek.url",
+      "type": "java.lang.String",
+      "description": "The URL of the sensor manufacturer."
     }
   ]
 }

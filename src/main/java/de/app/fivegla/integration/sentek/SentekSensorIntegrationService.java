@@ -26,6 +26,12 @@ import java.util.Map;
 public class SentekSensorIntegrationService extends AbstractIntegrationService {
 
 
+    /**
+     * Fetches all logger data from the Sentek API.
+     *
+     * @return A list of Logger objects representing the fetched data.
+     * @throws BusinessException If there was an error fetching the data from the Sentek API.
+     */
     public List<Logger> fetchAll() {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();

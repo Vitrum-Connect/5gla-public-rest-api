@@ -22,7 +22,9 @@ public enum Error {
     SENSOTERRA_COULD_NOT_LOGIN_AGAINST_API(errorOf(12)),
     SENSOTERRA_COULD_NOT_FETCH_LOCATIONS(errorOf(13)),
     SENSOTERRA_COULD_NOT_FETCH_PROBES(errorOf(14)),
-    SENTEK_XML_PARSING_ERROR(errorOf(15));
+    SENTEK_XML_PARSING_ERROR(errorOf(15)),
+    SENTEK_COULD_NOT_FETCH_SENSORS(errorOf(16)),
+    FARM21_COULD_NOT_FETCH_DEVICES(errorOf(17));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

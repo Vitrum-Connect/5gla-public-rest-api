@@ -52,4 +52,11 @@ class SentekSensorIntegrationServiceTest extends SpringBootIntegrationTestBase {
         }
     }
 
+    @Test
+    void givenValidApiTokenWhenAccessingTheApiThenTheResultShouldBeValid() {
+        var sensors = sentekSensorIntegrationService.fetchAll();
+        assertThat(sensors).isNotNull();
+        assertThat(sensors).isNotEmpty();
+    }
+
 }

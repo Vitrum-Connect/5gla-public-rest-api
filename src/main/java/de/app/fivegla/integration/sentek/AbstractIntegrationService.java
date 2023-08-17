@@ -15,7 +15,7 @@ abstract class AbstractIntegrationService {
     @Value("${app.sensors.sentek.apiToken}")
     protected String apiToken;
 
-    protected String getAccessToken() {
+    protected String getApiToken() {
         return apiToken;
     }
 

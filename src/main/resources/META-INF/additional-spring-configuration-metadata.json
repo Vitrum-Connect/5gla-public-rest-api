@@ -1,79 +1,219 @@
 {
   "properties": [
     {
-      "name": "app.version",
+      "name": "app.sensors.farm21.manufacturer",
       "type": "java.lang.String",
-      "description": "Application version."
+      "description": "The manufacturer of the sensor."
     },
     {
-      "name": "app.storage.sensor-master-data",
+      "name": "app.sensors.farm21.fiwareDeviceIdPrefix",
       "type": "java.lang.String",
-      "description": "Storage directory for sensor master data."
+      "description": "The prefix of the device id in FIWARE."
     },
     {
-      "name": "fiware.context-broker-url",
+      "name": "app.sensors.farm21.fiwareDeviceMeasurementIdPrefix",
       "type": "java.lang.String",
-      "description": "URL of the context broker."
+      "description": "The prefix of the sensor data id in FIWARE."
     },
     {
-      "name": "app.sensors.farm21.username",
+      "name": "app.sensors.farm21.enabled",
       "type": "java.lang.String",
-      "description": "Username for farm21 sensors."
-    },
-    {
-      "name": "app.sensors.farm21.password",
-      "type": "java.lang.String",
-      "description": "Password for farm21 sensors."
-    },
-    {
-      "name": "app.sensors.farm21.api-token",
-      "type": "java.lang.String",
-      "description": "API token for farm21 sensors."
-    },
-    {
-      "name": "app.sensors.soil-scout.url",
-      "type": "java.lang.String",
-      "description": "URL for soil scout sensors."
+      "description": "Whether the sensors are enabled or not."
     },
     {
       "name": "app.sensors.farm21.url",
       "type": "java.lang.String",
-      "description": "URL for farm21 sensors."
+      "description": "The URL of the sensor manufacturer."
     },
     {
-      "name": "app.sensors.soil-scout.username",
+      "name": "app.sensors.farm21.username",
       "type": "java.lang.String",
-      "description": "Username for soil scout sensors."
+      "description": "The username to access the API sensor manufacturer."
     },
     {
-      "name": "app.sensors.soil-scout.password",
+      "name": "app.sensors.farm21.password",
       "type": "java.lang.String",
-      "description": "Password for soil scout sensors."
+      "description": "The password to access the API sensor manufacturer."
     },
     {
-      "name": "app.sensors.micasense.image.path.base.url",
+      "name": "app.sensors.farm21.apiToken",
       "type": "java.lang.String",
-      "description": "Base URL for micasense images."
+      "description": "The API token to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.soilscout.manufacturer",
+      "type": "java.lang.String",
+      "description": "The manufacturer of the sensor."
+    },
+    {
+      "name": "app.sensors.soilscout.fiwareDeviceIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the device id in FIWARE."
+    },
+    {
+      "name": "app.sensors.soilscout.fiwareDeviceMeasurementIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the sensor data id in FIWARE."
+    },
+    {
+      "name": "app.sensors.soilscout.enabled",
+      "type": "java.lang.String",
+      "description": "Whether the sensors are enabled or not."
+    },
+    {
+      "name": "app.sensors.soilscout.url",
+      "type": "java.lang.String",
+      "description": "The URL of the sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.soilscout.username",
+      "type": "java.lang.String",
+      "description": "The username to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.soilscout.password",
+      "type": "java.lang.String",
+      "description": "The password to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.agranimo.manufacturer",
+      "type": "java.lang.String",
+      "description": "The manufacturer of the sensor."
+    },
+    {
+      "name": "app.sensors.agranimo.fiwareDeviceIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the device id in FIWARE."
+    },
+    {
+      "name": "app.sensors.agranimo.fiwareDeviceMeasurementIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the sensor data id in FIWARE."
+    },
+    {
+      "name": "app.sensors.agranimo.enabled",
+      "type": "java.lang.String",
+      "description": "Whether the sensors are enabled or not."
+    },
+    {
+      "name": "app.sensors.agranimo.url",
+      "type": "java.lang.String",
+      "description": "The URL of the sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.agranimo.username",
+      "type": "java.lang.String",
+      "description": "The username to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.agranimo.password",
+      "type": "java.lang.String",
+      "description": "The password to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.agvolution.manufacturer",
+      "type": "java.lang.String",
+      "description": "The manufacturer of the sensor."
+    },
+    {
+      "name": "app.sensors.agvolution.fiwareDeviceIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the device id in FIWARE."
+    },
+    {
+      "name": "app.sensors.agvolution.fiwareDeviceMeasurementIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the sensor data id in FIWARE."
+    },
+    {
+      "name": "app.sensors.agvolution.enabled",
+      "type": "java.lang.String",
+      "description": "Whether the sensors are enabled or not."
     },
     {
       "name": "app.sensors.agvolution.url",
       "type": "java.lang.String",
-      "description": "URL for Agvolution API."
+      "description": "The URL of the sensor manufacturer."
     },
     {
       "name": "app.sensors.agvolution.username",
       "type": "java.lang.String",
-      "description": "Username for Agvolution API."
+      "description": "The username to access the API sensor manufacturer."
     },
     {
       "name": "app.sensors.agvolution.password",
       "type": "java.lang.String",
-      "description": "Password for Agvolution API."
+      "description": "The password to access the API sensor manufacturer."
     },
     {
-      "name": "app.scheduled.data-import.cron",
+      "name": "app.sensors.sensoterra.manufacturer",
       "type": "java.lang.String",
-      "description": "CRON expression for data import."
+      "description": "The manufacturer of the sensor."
+    },
+    {
+      "name": "app.sensors.sensoterra.fiwareDeviceIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the device id in FIWARE."
+    },
+    {
+      "name": "app.sensors.sensoterra.fiwareDeviceMeasurementIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the sensor data id in FIWARE."
+    },
+    {
+      "name": "app.sensors.sensoterra.enabled",
+      "type": "java.lang.String",
+      "description": "Whether the sensors are enabled or not."
+    },
+    {
+      "name": "app.sensors.sensoterra.url",
+      "type": "java.lang.String",
+      "description": "The URL of the sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.sensoterra.username",
+      "type": "java.lang.String",
+      "description": "The username to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.sensoterra.password",
+      "type": "java.lang.String",
+      "description": "The password to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.micasense.manufacturer",
+      "type": "java.lang.String",
+      "description": "The manufacturer of the sensor."
+    },
+    {
+      "name": "app.sensors.micasense.fiwareDeviceIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the device id in FIWARE."
+    },
+    {
+      "name": "app.sensors.micasense.fiwareDeviceMeasurementIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the sensor data id in FIWARE."
+    },
+    {
+      "name": "app.sensors.micasense.enabled",
+      "type": "java.lang.String",
+      "description": "Whether the sensors are enabled or not."
+    },
+    {
+      "name": "app.sensors.micasense.imageBasePathUrl",
+      "type": "java.lang.String",
+      "description": "The base path URL of the images of the sensor manufacturer."
+    },
+    {
+      "name": "app.scheduledDataImportCron",
+      "type": "java.lang.String",
+      "description": "The cron expression to schedule the data import."
+    },
+    {
+      "name": "app.fiware.context-broker-url",
+      "type": "java.lang.String",
+      "description": "The URL of the FIWARE Context Broker."
     }
   ]
 }

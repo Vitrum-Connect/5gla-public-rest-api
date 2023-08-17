@@ -35,24 +35,24 @@ public class SoilScoutMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.SOIL_SCOUT);
-        if (applicationDataRepository.getLastRun(Manufacturer.SOIL_SCOUT).isPresent()) {
+        jobMonitor.incNrOfRuns(Manufacturer.SOILSCOUT);
+        if (applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {
             log.info("Running scheduled data import from Soil Scout API");
-            var lastRun = applicationDataRepository.getLastRun(Manufacturer.SOIL_SCOUT).get();
+            var lastRun = applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).get();
             var measurements = soilScoutMeasurementIntegrationService.fetchAll(lastRun, Instant.now());
-            jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SOIL_SCOUT);
+            jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SOILSCOUT);
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
             fiwareIntegrationServiceWrapper.persist(measurements);
         } else {
             log.info("Running initial data import from Soil Scout API, this may take a while");
             var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
-            jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SOIL_SCOUT);
+            jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SOILSCOUT);
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
             fiwareIntegrationServiceWrapper.persist(measurements);
         }
-        applicationDataRepository.updateLastRun(Manufacturer.SOIL_SCOUT);
+        applicationDataRepository.updateLastRun(Manufacturer.SOILSCOUT);
     }
 
 }

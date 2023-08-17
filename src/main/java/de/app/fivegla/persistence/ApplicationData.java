@@ -1,7 +1,6 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.api.ManufacturerType;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import lombok.Getter;
 import one.microstream.integrations.spring.boot.types.Storage;
@@ -22,7 +21,7 @@ public class ApplicationData {
     private transient StorageManager storageManager;
 
     @Getter
-    private Map<ManufacturerType, Instant> lastRuns;
+    private Map<Manufacturer, Instant> lastRuns;
 
     private List<MicaSenseImage> micaSenseImages;
 
@@ -35,7 +34,7 @@ public class ApplicationData {
         if (lastRuns == null) {
             lastRuns = new HashMap<>();
         }
-        lastRuns.put(manufacturer.getManufacturerType(), lastRun);
+        lastRuns.put(manufacturer, lastRun);
         storageManager.store(this);
     }
 
@@ -49,7 +48,7 @@ public class ApplicationData {
         if (lastRuns == null) {
             return Optional.empty();
         } else {
-            return Optional.ofNullable(lastRuns.get(manufacturer.getManufacturerType()));
+            return Optional.ofNullable(lastRuns.get(manufacturer));
         }
     }
 

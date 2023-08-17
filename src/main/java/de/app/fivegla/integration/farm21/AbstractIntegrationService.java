@@ -12,7 +12,7 @@ abstract class AbstractIntegrationService {
     @Value("${app.sensors.farm21.url}")
     protected String url;
 
-    @Value("${app.sensors.farm21.api-token}")
+    @Value("${app.sensors.farm21.apiToken}")
     protected String apiToken;
 
     protected String getAccessToken() {

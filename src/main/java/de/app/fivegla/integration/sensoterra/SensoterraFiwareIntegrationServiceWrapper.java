@@ -5,6 +5,8 @@ import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.config.ApplicationConfiguration;
+import de.app.fivegla.config.manufacturer.SensoterraConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.Device;
@@ -28,13 +30,16 @@ public class SensoterraFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final FiwareEntityMonitor fiwareEntityMonitor;
+    private final ApplicationConfiguration applicationConfiguration;
 
     public SensoterraFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
                                                      DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                     FiwareEntityMonitor fiwareEntityMonitor) {
+                                                     FiwareEntityMonitor fiwareEntityMonitor,
+                                                     ApplicationConfiguration applicationConfiguration) {
         this.deviceIntegrationService = deviceIntegrationService;
         this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
         this.fiwareEntityMonitor = fiwareEntityMonitor;
+        this.applicationConfiguration = applicationConfiguration;
     }
 
     public void persist(Probe probe, List<ProbeData> probeData) {
@@ -49,9 +54,9 @@ public class SensoterraFiwareIntegrationServiceWrapper {
 
     private void persist(Probe probe) {
         var device = Device.builder()
-                .id(FiwareDeviceId.create(Manufacturer.SENSOTERRA, String.valueOf(probe.getId())))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(probe.getId())))
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(Manufacturer.SENSOTERRA.key()))
+                        .value(List.of(getManufacturerConfiguration().getKey()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
@@ -62,8 +67,8 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         log.debug("Persisting probe data for probe: {}", probe);
         log.debug("Persisting probe data: {}", probeData);
         return DeviceMeasurement.builder()
-                .id(FiwareDevicMeasurementeId.create(Manufacturer.SENSOTERRA))
-                .refDevice(FiwareDeviceId.create(Manufacturer.SENSOTERRA, String.valueOf(probe.getId())))
+                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
+                .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(probe.getId())))
                 .dateObserved(InstantFormat.format(probeData.getTimestamp()))
                 .location(Location.builder()
                         .coordinates(List.of(probe.getLatitude(), probe.getLongitude()))
@@ -72,6 +77,10 @@ public class SensoterraFiwareIntegrationServiceWrapper {
                 .numValue(probeData.getValue())
                 .unit(probeData.getUnit())
                 .build();
+    }
+
+    private SensoterraConfiguration getManufacturerConfiguration() {
+        return applicationConfiguration.getSensors().sensoterra();
     }
 
 }

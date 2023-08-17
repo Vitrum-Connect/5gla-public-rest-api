@@ -2,36 +2,55 @@ app:
   version: '@project.version@'
   sensors:
     farm21:
-      url: https://app.farm21.tech/api/v2/public/
+      manufacturer: FARM21
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:farm21:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:farm21:"
+      enabled: true
+      url: https://app.farm21.tech/api/v2/public
       username: ${FARM21_USERNAME}
       password: ${FARM21_PASSWORD}
-      api-token: ${FARM21_API_TOKEN}
-    soil-scout:
-      url: https://soilscouts.fi/api/v1/
+      apiToken: ${FARM21_API_TOKEN}
+    soilscout:
+      manufacturer: SOIL_SCOUT
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:soilscout:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:soilscout:"
+      enabled: true
+      url: https://soilscouts.fi/api/v1
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
     agranimo:
+      manufacturer: AGRANIMO
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agranimo:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agranimo:"
+      enabled: true
       url: https://public-staging.agranimo.com
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
     agvolution:
+      manufacturer: AGVOLUTION
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agvolution:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agvolution:"
+      enabled: true
       url: https://api.agvolution.com
       username: ${AGVOLUTION_USERNAME}
       password: ${AGVOLUTION_PASSWORD}
     sensoterra:
+      manufacturer: SENSOTERRA
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:sensoterra:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:sensoterra:"
+      enabled: true
       url: https://monitor.sensoterra.com/api/v3
       username: ${SENSOTERRA_USERNAME}
       password: ${SENSOTERRA_PASSWORD}
     micasense:
-      image:
-        path:
-          base:
-            url: ${IMAGE_PATH_BASE_URL}
-  scheduled:
-    data-import:
-      cron: "0 0 0 * * *" # every day at midnight
-fiware:
-  context-broker-url: ${CONTEXT_BROKER_URL}
+      manufacturer: MICASENSE
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:micasense:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:micasense:"
+      enabled: true
+      imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
+  scheduledDataImportCron: "0 */15 * * * *" # every 15 minutes
+  fiware:
+    contextBrokerUrl: ${CONTEXT_BROKER_URL}
 logging:
   level:
     root: warn

@@ -1,5 +1,7 @@
 package de.app.fivegla.api;
 
+import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
+
 import java.util.UUID;
 
 /**
@@ -10,22 +12,22 @@ public class FiwareDeviceId {
     /**
      * Creates a FIWARE device ID.
      *
-     * @param manufacturer The manufacturer.
+     * @param manufacturerConfiguration The manufacturer.
      * @return The FIWARE device ID.
      */
-    public static String create(Manufacturer manufacturer) {
-        return create(manufacturer, UUID.randomUUID().toString());
+    public static String create(CommonManufacturerConfiguration manufacturerConfiguration) {
+        return create(manufacturerConfiguration, UUID.randomUUID().toString());
     }
 
     /**
      * Creates a FIWARE device ID.
      *
-     * @param manufacturer The manufacturer.
-     * @param id           The ID.
+     * @param commonManufacturerConfiguration The manufacturer.
+     * @param id                              The ID.
      * @return The FIWARE device ID.
      */
-    public static String create(Manufacturer manufacturer, String id) {
-        return manufacturer.getFiwareDeviceIdPrefix() + id;
+    public static String create(CommonManufacturerConfiguration commonManufacturerConfiguration, String id) {
+        return commonManufacturerConfiguration.fiwareDeviceIdPrefix() + id;
     }
 
 

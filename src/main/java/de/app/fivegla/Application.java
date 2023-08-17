@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * The main class of the application.
  */
 @EnableWebMvc
+@EnableConfigurationProperties
 @SpringBootApplication
 @OpenAPIDefinition(
         info = @Info(
@@ -26,7 +28,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 )
 public class Application {
 
-    @Value("${fiware.context-broker-url}")
+    @Value("${app.fiware.contextBrokerUrl}")
     private String contextBrokerUrl;
 
     public static void main(String[] args) {

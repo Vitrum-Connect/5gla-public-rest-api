@@ -37,7 +37,7 @@ public class DataImportEventHandler {
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
         switch (dataImportEvent.manufacturer()) {
-            case SOIL_SCOUT -> soilScoutScheduledMeasurementImport.run();
+            case SOILSCOUT -> soilScoutScheduledMeasurementImport.run();
             case AGVOLUTION -> agvolutionMeasurementImport.run();
             case AGRANIMO -> agranimoScheduledMeasurementImport.run();
             case FARM21 -> farm21MeasurementImport.run();

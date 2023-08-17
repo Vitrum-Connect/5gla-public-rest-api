@@ -6,6 +6,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
+import de.app.fivegla.integration.sentek.model.xml.Logger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.StringReader;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,28 @@ import java.util.Map;
 @Service
 public class SentekSensorDataIntegrationService extends AbstractIntegrationService {
 
+    private final SentekSensorIntegrationService sentekSensorIntegrationService;
+
+    public SentekSensorDataIntegrationService(SentekSensorIntegrationService sentekSensorIntegrationService) {
+        this.sentekSensorIntegrationService = sentekSensorIntegrationService;
+    }
+
+    /**
+     * Fetches all readings for a given timestamp from all sensors.
+     *
+     * @param from the starting timestamp to fetch readings from
+     * @return a map containing the sensor names as keys and a list of readings as values
+     */
+    public Map<Logger, List<Reading>> fetchAll(Instant from) {
+        var readings = new HashMap<Logger, List<Reading>>();
+        var sensors = sentekSensorIntegrationService.fetchAll();
+        sensors.forEach(sensor -> {
+            var allReadingsForSensor = fetchAll(sensor.getName(), from);
+            readings.put(sensor, allReadingsForSensor);
+        });
+        return readings;
+    }
+
     /**
      * Fetches all readings from the Sentek API for a given logger name and starting time.
      *
@@ -36,7 +60,7 @@ public class SentekSensorDataIntegrationService extends AbstractIntegrationServi
      * @return A list of Reading objects representing the sensor data.
      * @throws BusinessException If an error occurs while fetching the sensor data.
      */
-    public List<Reading> fetchAll(String loggerName, Instant from) {
+    protected List<Reading> fetchAll(String loggerName, Instant from) {
         var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));

@@ -4,6 +4,7 @@ import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
 import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
+import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -21,17 +22,20 @@ public class DataImportEventHandler {
     private final AgvolutionMeasurementImport agvolutionMeasurementImport;
     private final Farm21MeasurementImport farm21MeasurementImport;
     private final SensoterraMeasurementImport sensoterraMeasurementImport;
+    private final SentekMeasurementImport sentekMeasurementImport;
 
     public DataImportEventHandler(SoilScoutMeasurementImport soilScoutMeasurementImport,
                                   AgranimoMeasurementImport agranimoMeasurementImport,
                                   AgvolutionMeasurementImport agvolutionMeasurementImport,
                                   Farm21MeasurementImport farm21MeasurementImport,
-                                  SensoterraMeasurementImport sensoterraMeasurementImport) {
+                                  SensoterraMeasurementImport sensoterraMeasurementImport,
+                                  SentekMeasurementImport sentekMeasurementImport) {
         this.soilScoutScheduledMeasurementImport = soilScoutMeasurementImport;
         this.agranimoScheduledMeasurementImport = agranimoMeasurementImport;
         this.agvolutionMeasurementImport = agvolutionMeasurementImport;
         this.farm21MeasurementImport = farm21MeasurementImport;
         this.sensoterraMeasurementImport = sensoterraMeasurementImport;
+        this.sentekMeasurementImport = sentekMeasurementImport;
     }
 
     @EventListener(DataImportEvent.class)
@@ -42,6 +46,7 @@ public class DataImportEventHandler {
             case AGRANIMO -> agranimoScheduledMeasurementImport.run();
             case FARM21 -> farm21MeasurementImport.run();
             case SENSOTERRA -> sensoterraMeasurementImport.run();
+            case SENTEK -> sentekMeasurementImport.run();
             case MICA_SENSE -> log.info("There is no scheduled data import for MicaSense");
             default -> throw new IllegalArgumentException("Unknown manufacturer: " + dataImportEvent.manufacturer());
         }

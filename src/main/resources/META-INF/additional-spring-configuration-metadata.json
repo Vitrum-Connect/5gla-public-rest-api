@@ -224,6 +224,26 @@
       "name": "app.sensors.sentek.url",
       "type": "java.lang.String",
       "description": "The URL of the sensor manufacturer."
+    },
+    {
+      "name": "app.sensors.sentek.manufacturer",
+      "type": "java.lang.String",
+      "description": "The manufacturer of the sensor."
+    },
+    {
+      "name": "app.sensors.sentek.fiwareDeviceIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the device id in FIWARE."
+    },
+    {
+      "name": "app.sensors.sentek.fiwareDeviceMeasurementIdPrefix",
+      "type": "java.lang.String",
+      "description": "The prefix of the sensor data id in FIWARE."
+    },
+    {
+      "name": "app.sensors.sentek.enabled",
+      "type": "java.lang.String",
+      "description": "Whether the sensors are enabled or not."
     }
   ]
 }

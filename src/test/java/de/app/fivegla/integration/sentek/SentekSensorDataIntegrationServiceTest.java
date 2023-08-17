@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -48,6 +51,13 @@ class SentekSensorDataIntegrationServiceTest extends SpringBootIntegrationTestBa
         } catch (Exception e) {
             Assertions.fail(e);
         }
+    }
+
+    @Test
+    void givenValidApiTokenWhenAccessingTheApiThenTheResultShouldBeValid() {
+        var readings = sentekSensorDataIntegrationService.fetchAll("Ostfalia001", Instant.now().minus(14, ChronoUnit.DAYS));
+        assertThat(readings).isNotNull();
+        assertThat(readings).isNotEmpty();
     }
 
 }

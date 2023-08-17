@@ -27,4 +27,15 @@ public final class InstantFormat {
             return formatter.format(instant);
         }
     }
+
+    /**
+     * Format the current instant using a specific format for Irrimax.
+     *
+     * @return The formatted instant.
+     */
+    public static String formatForIrrimax(Instant instant) {
+        var formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+                .withZone(ZoneId.systemDefault());
+        return formatter.format(instant);
+    }
 }

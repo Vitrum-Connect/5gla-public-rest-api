@@ -1,8 +1,6 @@
 package de.app.fivegla.config.manufacturer;
 
 import de.app.fivegla.api.Manufacturer;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Represents the configuration for Agvolution.

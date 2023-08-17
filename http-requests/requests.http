@@ -6,3 +6,6 @@ GET {{base-url}}/info/last-run
 
 ### Start import for sensor data manually
 POST {{base-url}}/manual-import/import/run
+
+### Start import for sensor data manually
+GET https://www.irrimaxlive.com/api/?cmd=getloggers&key=97dd8120-b417-4028-84e7-1880e8904a5c

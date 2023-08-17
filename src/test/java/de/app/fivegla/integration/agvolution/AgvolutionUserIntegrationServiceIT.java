@@ -11,7 +11,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class AgvolutionSensorDataIntegrationServiceIT extends SpringBootIntegrationTestBase {
+class AgvolutionUserIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private AgvolutionSensorDataIntegrationService agvolutionSensorDataIntegrationService;

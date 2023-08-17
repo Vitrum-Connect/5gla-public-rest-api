@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.sentek.model;
+package de.app.fivegla.integration.sentek.model.xml;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

@@ -5,6 +5,8 @@ import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.config.ApplicationConfiguration;
+import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.Device;
@@ -28,13 +30,16 @@ public class Farm21FiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final FiwareEntityMonitor fiwareEntityMonitor;
+    private final ApplicationConfiguration applicationConfiguration;
 
     public Farm21FiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
                                                  DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                 FiwareEntityMonitor fiwareEntityMonitor) {
+                                                 FiwareEntityMonitor fiwareEntityMonitor,
+                                                 ApplicationConfiguration applicationConfiguration) {
         this.deviceIntegrationService = deviceIntegrationService;
         this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
         this.fiwareEntityMonitor = fiwareEntityMonitor;
+        this.applicationConfiguration = applicationConfiguration;
     }
 
     /**
@@ -122,9 +127,9 @@ public class Farm21FiwareIntegrationServiceWrapper {
 
     private void persist(Sensor sensor) {
         var device = Device.builder()
-                .id(FiwareDeviceId.create(Manufacturer.FARM21, String.valueOf(sensor.getId())))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(Manufacturer.FARM21.key()))
+                        .value(List.of(getManufacturerConfiguration().getKey()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
@@ -135,12 +140,16 @@ public class Farm21FiwareIntegrationServiceWrapper {
         log.debug("Persisting sensor data for sensor: {}", sensor);
         log.debug("Persisting sensor data: {}", sensorData);
         return DeviceMeasurement.builder()
-                .id(FiwareDevicMeasurementeId.create(Manufacturer.FARM21, String.valueOf(sensorData.getId())))
-                .refDevice(FiwareDeviceId.create(Manufacturer.FARM21, String.valueOf(sensor.getId())))
+                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration(), String.valueOf(sensorData.getId())))
+                .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
                 .dateObserved(InstantFormat.format(sensorData.getMeasuredAt()))
                 .location(Location.builder()
                         .coordinates(List.of(sensorData.getLatitude(), sensorData.getLongitude()))
                         .build());
+    }
+
+    private CommonManufacturerConfiguration getManufacturerConfiguration() {
+        return applicationConfiguration.getSensors().farm21();
     }
 
 }

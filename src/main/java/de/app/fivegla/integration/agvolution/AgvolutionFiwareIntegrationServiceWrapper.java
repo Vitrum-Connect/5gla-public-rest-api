@@ -5,6 +5,8 @@ import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.InstantFormat;
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.config.ApplicationConfiguration;
+import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.Device;
@@ -30,13 +32,16 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final FiwareEntityMonitor fiwareEntityMonitor;
+    private final ApplicationConfiguration applicationConfiguration;
 
     public AgvolutionFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
                                                      DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                     FiwareEntityMonitor fiwareEntityMonitor) {
+                                                     FiwareEntityMonitor fiwareEntityMonitor,
+                                                     ApplicationConfiguration applicationConfiguration) {
         this.deviceIntegrationService = deviceIntegrationService;
         this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
         this.fiwareEntityMonitor = fiwareEntityMonitor;
+        this.applicationConfiguration = applicationConfiguration;
     }
 
     public void persist(SeriesEntry seriesEntry) {
@@ -51,12 +56,12 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
             });
         });
     }
-    
+
     private void persist(String deviceId) {
         var device = Device.builder()
-                .id(FiwareDeviceId.create(Manufacturer.AGVOLUTION, deviceId))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), deviceId))
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(Manufacturer.AGVOLUTION.key()))
+                        .value(List.of(getManufacturerConfiguration().getKey()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
@@ -69,8 +74,8 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         var deviceMeasurements = new ArrayList<DeviceMeasurement>();
         timeSeriesEntry.getValues().forEach(timeSeriesValue -> {
             var deviceMeasurement = DeviceMeasurement.builder()
-                    .id(FiwareDevicMeasurementeId.create(Manufacturer.AGVOLUTION))
-                    .refDevice(FiwareDeviceId.create(Manufacturer.AGVOLUTION, String.valueOf(seriesEntry.getDeviceId())))
+                    .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
+                    .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(seriesEntry.getDeviceId())))
                     .dateObserved(InstantFormat.format(timeSeriesValue.getTime()))
                     .location(Location.builder()
                             .coordinates(List.of(seriesEntry.getLatitude(), seriesEntry.getLongitude()))
@@ -82,5 +87,9 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
             deviceMeasurements.add(deviceMeasurement);
         });
         return deviceMeasurements;
+    }
+
+    private CommonManufacturerConfiguration getManufacturerConfiguration() {
+        return applicationConfiguration.getSensors().agvolution();
     }
 }

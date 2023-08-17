@@ -3,7 +3,8 @@ package de.app.fivegla.integration.micasense;
 
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
-import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.config.ApplicationConfiguration;
+import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.api.InstantFormatter;
@@ -28,31 +29,34 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService;
     private final FiwareEntityMonitor fiwareEntityMonitor;
+    private final ApplicationConfiguration applicationConfiguration;
 
-    @Value("${app.sensors.micasense.image.path.base.url}")
+    @Value("${app.sensors.micasense.imagePathBaseUrl}")
     private String imagePathBaseUrl;
 
     public MicaSenseFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
                                                     DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService,
-                                                    FiwareEntityMonitor fiwareEntityMonitor) {
+                                                    FiwareEntityMonitor fiwareEntityMonitor,
+                                                    ApplicationConfiguration applicationConfiguration) {
         this.deviceIntegrationService = deviceIntegrationService;
         this.droneDeviceMeasurementIntegrationService = droneDeviceMeasurementIntegrationService;
         this.fiwareEntityMonitor = fiwareEntityMonitor;
+        this.applicationConfiguration = applicationConfiguration;
     }
 
     /**
      * Create a new device in FIWARE.
      */
     public void createOrUpdateDevice(String droneId) {
-        var fiwareId = FiwareDeviceId.create(Manufacturer.MICA_SENSE, droneId);
+        var fiwareId = FiwareDeviceId.create(getManufacturerConfiguration(), droneId);
         var device = Device.builder()
                 .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(Manufacturer.MICA_SENSE.key()))
+                        .value(List.of(getManufacturerConfiguration().getKey()))
                         .build())
                 .id(fiwareId)
                 .build();
         deviceIntegrationService.persist(device);
-        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.MICA_SENSE);
+        fiwareEntityMonitor.sensorsSavedOrUpdated(getManufacturerConfiguration().manufacturer());
     }
 
     /**
@@ -64,20 +68,24 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
         var droneDeviceMeasurement = DroneDeviceMeasurement.builder()
                 .deviceMeasurement(createDefaultDeviceMeasurement(image)
                         .build())
-                .id(FiwareDevicMeasurementeId.create(Manufacturer.MICA_SENSE, image.getOid()))
+                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration(), image.getOid()))
                 .channel(image.getChannel().name())
                 .imagePath(imagePathBaseUrl + image.getOid())
                 .build();
         droneDeviceMeasurementIntegrationService.persist(droneDeviceMeasurement);
-        fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.MICA_SENSE);
+        fiwareEntityMonitor.entitiesSavedOrUpdated(getManufacturerConfiguration().manufacturer());
     }
 
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(MicaSenseImage image) {
         log.debug("Persisting drone image for drone: {}", image.getDroneId());
         return DeviceMeasurement.builder()
-                .id(FiwareDevicMeasurementeId.create(Manufacturer.MICA_SENSE))
-                .refDevice(FiwareDeviceId.create(Manufacturer.MICA_SENSE, image.getDroneId()))
+                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
+                .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), image.getDroneId()))
                 .dateObserved(InstantFormatter.format(image.getMeasuredAt()))
                 .location(image.getLocation());
+    }
+
+    private CommonManufacturerConfiguration getManufacturerConfiguration() {
+        return applicationConfiguration.getSensors().micasense();
     }
 }

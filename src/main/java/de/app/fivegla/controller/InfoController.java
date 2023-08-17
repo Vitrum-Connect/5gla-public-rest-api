@@ -1,9 +1,9 @@
 package de.app.fivegla.controller;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.response.LastRunResponse;
 import de.app.fivegla.controller.dto.response.VersionResponse;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -83,7 +83,7 @@ public class InfoController {
         var savedLastRuns = applicationDataRepository.getLastRuns();
         if (null != savedLastRuns) {
             savedLastRuns
-                    .forEach((key, value) -> lastRuns.put(Manufacturer.fromManufacturerType(key), DateTimeFormatter.ISO_INSTANT.format(value)));
+                    .forEach((key, value) -> lastRuns.put(key, DateTimeFormatter.ISO_INSTANT.format(value)));
         }
         return ResponseEntity.ok(LastRunResponse.builder().lastRuns(lastRuns).build());
     }

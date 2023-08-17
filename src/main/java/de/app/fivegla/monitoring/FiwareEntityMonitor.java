@@ -43,7 +43,7 @@ public class FiwareEntityMonitor {
     }
 
     /**
-     * Monitor number of entities saved.
+     * Monitor the number of entities saved.
      */
     public void entitiesSavedOrUpdated(Manufacturer manufacturer, int nrOfEntities) {
         log.info("Saved {} entities from {}", nrOfEntities, manufacturer);
@@ -57,14 +57,14 @@ public class FiwareEntityMonitor {
     }
 
     /**
-     * Monitor number of entities saved.
+     * Monitor the number of entities saved.
      */
     public void entitiesSavedOrUpdated(Manufacturer manufacturer) {
         entitiesSavedOrUpdated(manufacturer, 1);
     }
 
     /**
-     * Monitor number of sensors saved.
+     * Monitor the number of sensors saved.
      */
     public void sensorsSavedOrUpdated(Manufacturer manufacturer, int nrOfSensors) {
         log.info("Saved {} sensors from {}", nrOfSensors, manufacturer);
@@ -78,7 +78,7 @@ public class FiwareEntityMonitor {
     }
 
     /**
-     * Monitor number of sensors saved.
+     * Monitor the number of sensors saved.
      */
     public void sensorsSavedOrUpdated(Manufacturer manufacturer) {
         sensorsSavedOrUpdated(manufacturer, 1);

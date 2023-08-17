@@ -48,3 +48,4 @@ microstream-*
 # LOCAL SETTINGS #
 .github/settings.local.xml
 *.env
+*.5gla-*

@@ -25,6 +25,7 @@ public class AgranimoMeasurementImport {
         this.fiwareIntegrationServiceWrapper = agranimoFiwareIntegrationServiceWrapper;
         this.jobMonitor = jobMonitor;
     }
+
     public void run() {
         jobMonitor.incNrOfRuns(Manufacturer.AGRANIMO);
         if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {

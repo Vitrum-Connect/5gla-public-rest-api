@@ -3,7 +3,7 @@ package de.app.fivegla.integration.sentek;
 import com.opencsv.bean.CsvToBeanBuilder;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
-import de.app.fivegla.api.InstantFormat;
+import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
@@ -71,7 +71,7 @@ public class SentekSensorDataIntegrationService extends AbstractIntegrationServi
         log.debug("Fetching sensor data from URI: {}", uri);
         var uriVariables = Map.of("apiToken", getApiToken(),
                 "loggerName", loggerName,
-                "from", InstantFormat.formatForIrrimax(from));
+                "from", Format.formatForIrrimax(from));
         var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);
         if (response.getStatusCode().is2xxSuccessful()) {
             return parse(response.getBody());

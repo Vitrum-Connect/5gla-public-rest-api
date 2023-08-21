@@ -3,13 +3,24 @@ package de.app.fivegla.api;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * Instant formatter.
  */
-public final class InstantFormat {
+public final class Format {
 
-    private InstantFormat() {
+    private Format() {
+    }
+
+    /**
+     * Formats a given Date object.
+     *
+     * @param date the Date object to be formatted
+     * @return the formatted string representation of the date
+     */
+    public static String format(Date date) {
+        return format(date.toInstant());
     }
 
     /**

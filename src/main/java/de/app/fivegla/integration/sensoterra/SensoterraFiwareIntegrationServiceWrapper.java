@@ -3,7 +3,7 @@ package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
-import de.app.fivegla.api.InstantFormat;
+import de.app.fivegla.api.Format;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.SensoterraConfiguration;
@@ -69,7 +69,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         return DeviceMeasurement.builder()
                 .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
                 .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(probe.getId())))
-                .dateObserved(InstantFormat.format(probeData.getTimestamp()))
+                .dateObserved(Format.format(probeData.getTimestamp()))
                 .location(Location.builder()
                         .coordinates(List.of(probe.getLatitude(), probe.getLongitude()))
                         .build())

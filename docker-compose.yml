@@ -1,15 +1,31 @@
 version: "3.7"
 services:
   5gla-soilscout-integration-service:
-    image: ghcr.io/vitrum-connect/5gla-soilscout-integration-service:latest
+    image: ghcr.io/vitrum-connect/5gla-sensor-integration-services:latest
     environment:
-      - CONTEXT_BROKER_URL=${CONTEXT_BROKER_URL}
-      - MICROSTREAM_STORAGE_DIRECTORY=${MICROSTREAM_STORAGE_DIRECTORY}
-      - SOIL_SCOUT_USERNAME=${SOIL_SCOUT_USERNAME}
-      - SOIL_SCOUT_PASSWORD=${SOIL_SCOUT_PASSWORD}
-      - FARM21_USERNAME=${FARM21_USERNAME}
-      - FARM21_PASSWORD=${FARM21_PASSWORD}
+      # Spring
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      # FIWARE Context Broker
+      - CONTEXT_BROKER_URL=${CONTEXT_BROKER_URL}
+      # Microstream
+      - MICROSTREAM_STORAGE_DIRECTORY=${MICROSTREAM_STORAGE_DIRECTORY}
+      # Agranimo Integration
+      - AGRANIMO_USERNAME=${AGRANIMO_USERNAME}
+      # Agvolution Integration
+      - AGVOLUTION_PASSWORD=${AGVOLUTION_PASSWORD}
+      - AGVOLUTION_USERNAME=${AGVOLUTION_USERNAME}
+      # Farm21 Integration
+      - FARM21_API_TOKEN=${FARM21_API_TOKEN}
+      # Sensoterra Integration
+      - SENSOTERRA_USERNAME=${SENSOTERRA_USERNAME}
+      - SENSOTERRA_PASSWORD=${SENSOTERRA_PASSWORD}
+      # Soilscout Integration
+      - SOILSCOUT_USERNAME=${SOILSCOUT_USERNAME}
+      - SOILSCOUT_PASSWORD=${SOILSCOUT_PASSWORD}
+      # Sentek Integration
+      - SENTEK_API_TOKEN=${SENTEK_API_TOKEN}
+      # MicaSense Integration
+      - IMAGE_PATH_BASE_URL=${IMAGE_PATH_BASE_URL}
     restart: unless-stopped
     ports:
       - "${BIND_ADDRESS:-127.0.0.1:8080}:8080"

@@ -3,7 +3,7 @@ package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
-import de.app.fivegla.api.InstantFormat;
+import de.app.fivegla.api.Format;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
@@ -142,7 +142,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
         return DeviceMeasurement.builder()
                 .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration(), String.valueOf(sensorData.getId())))
                 .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
-                .dateObserved(InstantFormat.format(sensorData.getMeasuredAt()))
+                .dateObserved(Format.format(sensorData.getMeasuredAt()))
                 .location(Location.builder()
                         .coordinates(List.of(sensorData.getLatitude(), sensorData.getLongitude()))
                         .build());

@@ -2,7 +2,7 @@ package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
-import de.app.fivegla.api.InstantFormat;
+import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.farm21.dto.response.SensorDataResponse;
 import de.app.fivegla.integration.farm21.model.Sensor;
@@ -83,9 +83,9 @@ public class Farm21SensorDataIntegrationService extends AbstractIntegrationServi
             var uriVariables = Map.of("id",
                     sensorId,
                     "since",
-                    InstantFormat.format(since),
+                    Format.format(since),
                     "until",
-                    InstantFormat.format(until));
+                    Format.format(until));
             log.debug("URI variables: {}", uriVariables);
             var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, SensorDataResponse.class, uriVariables);
             if (response.getStatusCode().is2xxSuccessful()) {

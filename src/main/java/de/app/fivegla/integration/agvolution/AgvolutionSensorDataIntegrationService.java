@@ -2,7 +2,7 @@ package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
-import de.app.fivegla.api.InstantFormat;
+import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agvolution.dto.request.QueryRequest;
 import de.app.fivegla.integration.agvolution.dto.response.DeviceTimeseriesDataResponse;
@@ -87,7 +87,7 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(getAccessToken());
-            var httpEntity = new HttpEntity<>(new QueryRequest(String.format(QUERY, device.getId(), InstantFormat.format(begin))), headers);
+            var httpEntity = new HttpEntity<>(new QueryRequest(String.format(QUERY, device.getId(), Format.format(begin))), headers);
             var response = restTemplate.postForEntity(url + "/devices", httpEntity, DeviceTimeseriesDataResponse.class);
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while login against the API. Status code: {}", response.getStatusCode());

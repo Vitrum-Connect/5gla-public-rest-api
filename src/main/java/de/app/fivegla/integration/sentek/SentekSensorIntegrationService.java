@@ -21,6 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Integration service for fetching data from the Sentek API.
+ */
 @Slf4j
 @Service
 public class SentekSensorIntegrationService extends AbstractIntegrationService {

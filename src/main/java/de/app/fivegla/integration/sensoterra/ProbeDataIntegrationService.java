@@ -2,7 +2,7 @@ package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
-import de.app.fivegla.api.InstantFormat;
+import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
@@ -59,9 +59,9 @@ public class ProbeDataIntegrationService extends AbstractIntegrationService {
                         "probeId",
                         probe.getId(),
                         "from",
-                        InstantFormat.format(begin),
+                        Format.format(begin),
                         "to",
-                        InstantFormat.format(Instant.now()));
+                        Format.format(Instant.now()));
                 var response = new RestTemplate().exchange(uri, HttpMethod.GET, httpEntity, ProbeData[].class, uriVariables);
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while fetching the probes from the API. Status code: {}", response.getStatusCode());

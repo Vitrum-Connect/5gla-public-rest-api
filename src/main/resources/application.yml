@@ -48,6 +48,13 @@ app:
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:micasense:"
       enabled: true
       imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
+    sentek:
+      manufacturer: SENTEK
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:sentek:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:sentek:"
+      enabled: true
+      url: https://www.irrimaxlive.com/api
+      apiToken: ${SENTEK_API_TOKEN}
   scheduledDataImportCron: "0 */15 * * * *" # every 15 minutes
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}

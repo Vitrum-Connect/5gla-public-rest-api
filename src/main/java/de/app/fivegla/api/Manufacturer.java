@@ -9,5 +9,6 @@ public enum Manufacturer {
     FARM21,
     MICA_SENSE,
     AGVOLUTION,
-    SENSOTERRA
+    SENSOTERRA,
+    SENTEK
 }

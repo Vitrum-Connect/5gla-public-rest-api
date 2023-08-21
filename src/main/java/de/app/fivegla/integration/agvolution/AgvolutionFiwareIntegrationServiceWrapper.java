@@ -3,7 +3,7 @@ package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
-import de.app.fivegla.api.InstantFormat;
+import de.app.fivegla.api.Format;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
@@ -76,7 +76,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
             var deviceMeasurement = DeviceMeasurement.builder()
                     .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
                     .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(seriesEntry.getDeviceId())))
-                    .dateObserved(InstantFormat.format(timeSeriesValue.getTime()))
+                    .dateObserved(Format.format(timeSeriesValue.getTime()))
                     .location(Location.builder()
                             .coordinates(List.of(seriesEntry.getLatitude(), seriesEntry.getLongitude()))
                             .build())

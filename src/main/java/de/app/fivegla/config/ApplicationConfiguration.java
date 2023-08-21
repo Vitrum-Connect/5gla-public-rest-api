@@ -29,6 +29,7 @@ public class ApplicationConfiguration {
             case AGRANIMO -> sensors.agranimo().enabled();
             case MICA_SENSE -> sensors.micasense().enabled();
             case AGVOLUTION -> sensors.agvolution().enabled();
+            case SENTEK -> sensors.sentek().enabled();
         };
     }
 }

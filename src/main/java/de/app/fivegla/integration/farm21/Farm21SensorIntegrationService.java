@@ -38,7 +38,7 @@ public class Farm21SensorIntegrationService extends AbstractIntegrationService {
         if (response.getStatusCode().is2xxSuccessful()) {
             return List.of(Objects.requireNonNull(response.getBody()));
         } else {
-            var errorMessage = ErrorMessage.builder().error(Error.FARM21_COULD_NOT_AUTHENTICATE).message("Could not fetch devices for Farm21 API.").build();
+            var errorMessage = ErrorMessage.builder().error(Error.FARM21_COULD_NOT_FETCH_DEVICES).message("Could not fetch devices for Farm21 API.").build();
             throw new BusinessException(errorMessage);
         }
     }

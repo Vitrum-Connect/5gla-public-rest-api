@@ -94,8 +94,7 @@ public class SentekSensorDataIntegrationService extends AbstractIntegrationServi
         var csvReader = new CsvToBeanBuilder<Reading>(new StringReader(csv))
                 .withType(Reading.class)
                 .build();
-        var readings = csvReader.parse();
-        return readings;
+        return csvReader.parse();
     }
 
 }

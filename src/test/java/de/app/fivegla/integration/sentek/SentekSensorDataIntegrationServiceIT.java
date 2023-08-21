@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class SentekSensorDataIntegrationServiceTest extends SpringBootIntegrationTestBase {
+class SentekSensorDataIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private SentekSensorDataIntegrationService sentekSensorDataIntegrationService;

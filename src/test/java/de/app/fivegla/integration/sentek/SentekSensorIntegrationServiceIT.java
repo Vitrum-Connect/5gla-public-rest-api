@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class SentekSensorIntegrationServiceTest extends SpringBootIntegrationTestBase {
+class SentekSensorIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private SentekSensorIntegrationService sentekSensorIntegrationService;

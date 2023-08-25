@@ -7,7 +7,7 @@ import de.app.fivegla.integration.weenat.cache.WeenatUserDataCache;
 import de.app.fivegla.integration.weenat.request.LoginRequest;
 import de.app.fivegla.integration.weenat.response.AccessTokenResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,19 +17,9 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Service
-public class WeenatAccessTokenIntegrationService {
+public class WeenatAccessTokenIntegrationService extends AbstractIntegrationService {
 
-    private final WeenatUserDataCache userDataCache;
-
-    @Value("${app.sensors.weenat.url}")
-    private String url;
-
-    @Value("${app.sensors.weenat.username}")
-    private String username;
-
-    @Value("${app.sensors.weenat.password}")
-    private String password;
-
+    final WeenatUserDataCache userDataCache;
 
     /**
      * Service for integration with Agranimo.
@@ -37,7 +27,6 @@ public class WeenatAccessTokenIntegrationService {
     public WeenatAccessTokenIntegrationService(WeenatUserDataCache userDataCache) {
         this.userDataCache = userDataCache;
     }
-
 
     /**
      * Retrieves the access token from Agranimo API for authentication.
@@ -49,7 +38,13 @@ public class WeenatAccessTokenIntegrationService {
     public String fetchAccessToken() {
         if (userDataCache.isExpired()) {
             try {
-                var response = new RestTemplate().postForEntity(url + "/api-token-auth", new LoginRequest(username, password), AccessTokenResponse.class);
+                if (StringUtils.isAnyBlank(getUsername(), getPassword())) {
+                    throw new BusinessException(ErrorMessage.builder()
+                            .error(Error.WEENAT_COULD_NOT_LOGIN_AGAINST_API)
+                            .message("Could not login against the API. Username or password is empty.")
+                            .build());
+                }
+                var response = new RestTemplate().postForEntity(getUrl() + "/api-token-auth", new LoginRequest(getUsername(), getPassword()), AccessTokenResponse.class);
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()
@@ -73,7 +68,7 @@ public class WeenatAccessTokenIntegrationService {
             } catch (Exception e) {
                 log.error("Error while login against the API.", e);
                 throw new BusinessException(ErrorMessage.builder()
-                        .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
+                        .error(Error.WEENAT_COULD_NOT_LOGIN_AGAINST_API)
                         .message("Could not login against the API.")
                         .build());
             }

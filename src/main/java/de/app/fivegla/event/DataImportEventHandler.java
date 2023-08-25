@@ -6,6 +6,7 @@ import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
 import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
 import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
+import de.app.fivegla.integration.weenat.WeenatMeasurementImport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -18,24 +19,27 @@ import org.springframework.stereotype.Component;
 public class DataImportEventHandler {
 
     private final SoilScoutMeasurementImport soilScoutScheduledMeasurementImport;
-    private final AgranimoMeasurementImport agranimoScheduledMeasurementImport;
+    private final AgranimoMeasurementImport agranimoMeasurementImport;
     private final AgvolutionMeasurementImport agvolutionMeasurementImport;
     private final Farm21MeasurementImport farm21MeasurementImport;
     private final SensoterraMeasurementImport sensoterraMeasurementImport;
     private final SentekMeasurementImport sentekMeasurementImport;
+    private final WeenatMeasurementImport weenatMeasurementImport;
 
     public DataImportEventHandler(SoilScoutMeasurementImport soilScoutMeasurementImport,
                                   AgranimoMeasurementImport agranimoMeasurementImport,
                                   AgvolutionMeasurementImport agvolutionMeasurementImport,
                                   Farm21MeasurementImport farm21MeasurementImport,
                                   SensoterraMeasurementImport sensoterraMeasurementImport,
-                                  SentekMeasurementImport sentekMeasurementImport) {
+                                  SentekMeasurementImport sentekMeasurementImport,
+                                  WeenatMeasurementImport weenatMeasurementImport1) {
         this.soilScoutScheduledMeasurementImport = soilScoutMeasurementImport;
-        this.agranimoScheduledMeasurementImport = agranimoMeasurementImport;
+        this.agranimoMeasurementImport = agranimoMeasurementImport;
         this.agvolutionMeasurementImport = agvolutionMeasurementImport;
         this.farm21MeasurementImport = farm21MeasurementImport;
         this.sensoterraMeasurementImport = sensoterraMeasurementImport;
         this.sentekMeasurementImport = sentekMeasurementImport;
+        this.weenatMeasurementImport = weenatMeasurementImport1;
     }
 
     @EventListener(DataImportEvent.class)
@@ -43,10 +47,11 @@ public class DataImportEventHandler {
         switch (dataImportEvent.manufacturer()) {
             case SOILSCOUT -> soilScoutScheduledMeasurementImport.run();
             case AGVOLUTION -> agvolutionMeasurementImport.run();
-            case AGRANIMO -> agranimoScheduledMeasurementImport.run();
+            case AGRANIMO -> agranimoMeasurementImport.run();
             case FARM21 -> farm21MeasurementImport.run();
             case SENSOTERRA -> sensoterraMeasurementImport.run();
             case SENTEK -> sentekMeasurementImport.run();
+            case WEENAT -> weenatMeasurementImport.run();
             case MICA_SENSE -> log.info("There is no scheduled data import for MicaSense");
             default -> throw new IllegalArgumentException("Unknown manufacturer: " + dataImportEvent.manufacturer());
         }

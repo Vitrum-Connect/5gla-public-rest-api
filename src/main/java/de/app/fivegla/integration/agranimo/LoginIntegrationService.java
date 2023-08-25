@@ -29,12 +29,15 @@ public class LoginIntegrationService {
     private String password;
 
     private final UserDataCache userDataCache;
+    private final RestTemplate restTemplate;
 
     /**
      * Service for integration with Agranimo.
      */
-    public LoginIntegrationService(UserDataCache userDataCache) {
+    public LoginIntegrationService(UserDataCache userDataCache,
+                                   RestTemplate restTemplate) {
         this.userDataCache = userDataCache;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -43,7 +46,7 @@ public class LoginIntegrationService {
     public String fetchAccessToken() {
         if (userDataCache.isExpired()) {
             try {
-                var response = new RestTemplate().postForEntity(url + "/auth/login", new LoginRequest(username, password), Credentials.class);
+                var response = restTemplate.postForEntity(url + "/auth/login", new LoginRequest(username, password), Credentials.class);
                 if (response.getStatusCode() != HttpStatus.CREATED) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()

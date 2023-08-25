@@ -24,10 +24,14 @@ public class AgranimoSoilMoistureIntegrationService {
 
     private final ZoneService zoneService;
     private final LoginIntegrationService loginService;
+    private final RestTemplate restTemplate;
 
-    public AgranimoSoilMoistureIntegrationService(ZoneService zoneService, LoginIntegrationService loginService) {
+    public AgranimoSoilMoistureIntegrationService(ZoneService zoneService,
+                                                  LoginIntegrationService loginService,
+                                                  RestTemplate restTemplate) {
         this.zoneService = zoneService;
         this.loginService = loginService;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -85,7 +89,7 @@ public class AgranimoSoilMoistureIntegrationService {
                         "type",
                         soilMoistureType.getKey());
                 log.debug("Calling API with URI {} and variables {}.", uri, uriVariables);
-                var response = new RestTemplate().exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);
+                var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);
 
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while fetching soil moisture from the API. Status code: {}", response.getStatusCode());

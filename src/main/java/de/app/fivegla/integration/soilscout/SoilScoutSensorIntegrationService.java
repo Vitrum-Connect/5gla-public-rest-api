@@ -12,7 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +37,6 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
      * @return List of sensors.
      */
     public List<Sensor> fetchAll() {
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(getAccessToken());
@@ -67,7 +65,6 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
     }
 
     private Sensor getSensor(int id, String access) {
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(access);

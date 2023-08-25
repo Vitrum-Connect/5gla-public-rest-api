@@ -53,11 +53,14 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
             }""";
 
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
+    private final RestTemplate restTemplate;
 
     AgvolutionSensorDataIntegrationService(AccessTokenIntegrationService accessTokenIntegrationService,
-                                           AgvolutionSensorIntegrationService agvolutionSensorIntegrationService) {
+                                           AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
+                                           RestTemplate restTemplate) {
         super(accessTokenIntegrationService);
         this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -82,7 +85,6 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
      */
     List<SeriesEntry> fetchAll(Device device, Instant begin) {
         try {
-            var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);

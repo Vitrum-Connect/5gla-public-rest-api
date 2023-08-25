@@ -29,12 +29,15 @@ public class AccessTokenIntegrationService {
     private String password;
 
     private final AccessTokenCache accessTokenCache;
+    private final RestTemplate restTemplate;
 
     /**
      * Service for integration with Agvolution.
      */
-    public AccessTokenIntegrationService(AccessTokenCache accessTokenCache) {
+    public AccessTokenIntegrationService(AccessTokenCache accessTokenCache,
+                                         RestTemplate restTemplate) {
         this.accessTokenCache = accessTokenCache;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -43,7 +46,7 @@ public class AccessTokenIntegrationService {
     public String fetchAccessToken() {
         if (accessTokenCache.isExpired()) {
             try {
-                var response = new RestTemplate().postForEntity(url + "/auth/session", new LoginRequest(username, password), Credentials.class);
+                var response = restTemplate.postForEntity(url + "/auth/session", new LoginRequest(username, password), Credentials.class);
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()

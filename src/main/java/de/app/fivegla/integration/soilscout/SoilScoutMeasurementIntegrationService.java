@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.text.SimpleDateFormat;
@@ -35,7 +34,6 @@ public class SoilScoutMeasurementIntegrationService extends AbstractIntegrationS
     }
 
     private List<SensorData> fetchAll(Instant since, Instant until, String accessToken) {
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(accessToken);

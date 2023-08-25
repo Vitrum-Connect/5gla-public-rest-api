@@ -39,7 +39,10 @@ abstract class AbstractIntegrationService {
     @Autowired
     protected SoilScoutAccessTokenCache soilScoutAccessTokenCache;
 
-   protected String getAccessToken() {
+    @Autowired
+    protected RestTemplate restTemplate;
+
+    protected String getAccessToken() {
         if (soilScoutAccessTokenCache.isAccessTokenValid()) {
             log.debug("Access token is still valid. Using the access token from cache.");
         } else {
@@ -54,7 +57,6 @@ abstract class AbstractIntegrationService {
             var soilScoutTokenRefreshRequest = TokenRefreshRequest.builder()
                     .refreshToken(soilScoutAccessTokenCache.getAccessAndRefreshTokenResponse().getRefresh())
                     .build();
-            var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             var httpEntity = new HttpEntity<>(soilScoutTokenRefreshRequest, headers);
@@ -71,7 +73,6 @@ abstract class AbstractIntegrationService {
             var soilScoutTokenRequest = TokenRequest.builder()
                     .ssoToken(ssoToken)
                     .build();
-            var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             var httpEntity = new HttpEntity<>(soilScoutTokenRequest, headers);
@@ -90,7 +91,6 @@ abstract class AbstractIntegrationService {
                 .username(username)
                 .password(password)
                 .build();
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         var httpEntity = new HttpEntity<>(soilScoutSsoRequest, headers);

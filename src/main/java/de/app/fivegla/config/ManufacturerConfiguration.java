@@ -13,5 +13,6 @@ public record ManufacturerConfiguration(
         AgvolutionConfiguration agvolution,
         SensoterraConfiguration sensoterra,
         MicasenseConfiguration micasense,
-        SentekConfiguration sentek){
+        SentekConfiguration sentek,
+        WeenatConfiguration weenat) {
 }

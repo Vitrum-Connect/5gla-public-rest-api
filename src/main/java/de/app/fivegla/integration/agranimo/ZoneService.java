@@ -27,10 +27,14 @@ public class ZoneService {
 
     private final LoginIntegrationService loginService;
     private final UserDataCache userDataCache;
+    private final RestTemplate restTemplate;
 
-    public ZoneService(LoginIntegrationService loginService, UserDataCache userDataCache) {
+    public ZoneService(LoginIntegrationService loginService,
+                       UserDataCache userDataCache,
+                       RestTemplate restTemplate) {
         this.loginService = loginService;
         this.userDataCache = userDataCache;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -45,7 +49,7 @@ public class ZoneService {
                 var httpEntity = new HttpEntity<>(headers);
                 var uri = UriComponentsBuilder.fromHttpUrl(url + "/zone")
                         .toUriString();
-                var response = new RestTemplate().exchange(uri, HttpMethod.GET, httpEntity, Zone[].class);
+                var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Zone[].class);
 
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while fetching zones from the API. Status code: {}", response.getStatusCode());

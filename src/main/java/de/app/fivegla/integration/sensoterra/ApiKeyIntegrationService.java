@@ -30,8 +30,12 @@ public class ApiKeyIntegrationService {
     @Value("${app.sensors.sensoterra.password}")
     private String password;
 
-    public ApiKeyIntegrationService(ApiKeyWithSettingsCache apiKeyWithSettingsCache) {
+    private final RestTemplate restTemplate;
+
+    public ApiKeyIntegrationService(ApiKeyWithSettingsCache apiKeyWithSettingsCache,
+                                    RestTemplate restTemplate) {
         this.apiKeyWithSettingsCache = apiKeyWithSettingsCache;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -40,7 +44,7 @@ public class ApiKeyIntegrationService {
     public String fetchApiKey() {
         if (apiKeyWithSettingsCache.isExpired()) {
             try {
-                var response = new RestTemplate().postForEntity(url + "/customer/auth", new LoginRequest(username, password), ApiKeyWithSettings.class);
+                var response = restTemplate.postForEntity(url + "/customer/auth", new LoginRequest(username, password), ApiKeyWithSettings.class);
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()

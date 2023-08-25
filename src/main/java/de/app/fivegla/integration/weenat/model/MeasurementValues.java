@@ -15,74 +15,74 @@ import lombok.Setter;
 public class MeasurementValues {
 
     @JsonProperty("T")
-    private String temperature;
+    private Double temperature;
 
     @JsonProperty("U")
-    private String relativeHumidity;
+    private Double relativeHumidity;
 
     @JsonProperty("RR")
-    private String cumulativeRainfall;
+    private Double cumulativeRainfall;
 
     @JsonProperty("FF")
-    private String windSpeed;
+    private Double windSpeed;
 
     @JsonProperty("FXY")
-    private String windGustSpeed;
+    private Double windGustSpeed;
 
     @JsonProperty("T_15")
-    private String soilTemperature15;
+    private Double soilTemperature15;
 
     @JsonProperty("T_30")
-    private String soilTemperature30;
+    private Double soilTemperature30;
 
     @JsonProperty("T_60")
-    private String soilTemperature60;
+    private Double soilTemperature60;
 
     @JsonProperty("WHYD_15")
-    private String soilWaterPotential15;
+    private Double soilWaterPotential15;
 
     @JsonProperty("WHYD_30")
-    private String soilWaterPotential30;
+    private Double soilWaterPotential30;
 
     @JsonProperty("WHYD_60")
-    private String soilWaterPotential60;
+    private Double soilWaterPotential60;
 
     @JsonProperty("T_DRY")
-    private String dryTemperature;
+    private Double dryTemperature;
 
     @JsonProperty("T_WET")
-    private String wetTemperature;
+    private Double wetTemperature;
 
     @JsonProperty("LW_DRY")
-    private String leafWetnessDuration;
+    private Double leafWetnessDuration;
 
     @JsonProperty("LW_V")
-    private String leafWetnessVoltage;
+    private Double leafWetnessVoltage;
 
     @JsonProperty("T_SOIL")
-    private String soilTemperature;
+    private Double soilTemperature;
 
     @JsonProperty("SSI")
-    private String solarIrridiance;
+    private Double solarIrridiance;
 
     @JsonProperty("SSI_MIN")
-    private String minimumSolarIrridiance;
+    private Double minimumSolarIrridiance;
 
     @JsonProperty("SSI_MAX")
-    private String maximumSolarIrridiance;
+    private Double maximumSolarIrridiance;
 
     @JsonProperty("PPFD")
-    private String photosyntheticallyActiveRadiation;
+    private Double photosyntheticallyActiveRadiation;
 
     @JsonProperty("PPFD_MIN")
-    private String minimumPhotosyntheticallyActiveRadiation;
+    private Double minimumPhotosyntheticallyActiveRadiation;
 
     @JsonProperty("PPFD_MAX")
-    private String maximumPhotosyntheticallyActiveRadiation;
+    private Double maximumPhotosyntheticallyActiveRadiation;
 
     @JsonProperty("T_DEW")
-    private String dewPoint;
+    private Double dewPoint;
 
     @JsonProperty("ETP")
-    private String potentialEvapotranspiration;
+    private Double potentialEvapotranspiration;
 }

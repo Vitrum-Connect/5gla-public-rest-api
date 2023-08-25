@@ -5,7 +5,7 @@ app:
       manufacturer: FARM21
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:farm21:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:farm21:"
-      enabled: true
+      enabled: false
       url: https://app.farm21.tech/api/v2/public
       username: ${FARM21_USERNAME}
       password: ${FARM21_PASSWORD}
@@ -14,7 +14,7 @@ app:
       manufacturer: SOIL_SCOUT
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:soilscout:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:soilscout:"
-      enabled: true
+      enabled: false
       url: https://soilscouts.fi/api/v1
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
@@ -22,7 +22,7 @@ app:
       manufacturer: AGRANIMO
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agranimo:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agranimo:"
-      enabled: true
+      enabled: false
       url: https://public-staging.agranimo.com
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
@@ -30,7 +30,7 @@ app:
       manufacturer: AGVOLUTION
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agvolution:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agvolution:"
-      enabled: true
+      enabled: false
       url: https://api.agvolution.com
       username: ${AGVOLUTION_USERNAME}
       password: ${AGVOLUTION_PASSWORD}
@@ -38,7 +38,7 @@ app:
       manufacturer: SENSOTERRA
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:sensoterra:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:sensoterra:"
-      enabled: true
+      enabled: false
       url: https://monitor.sensoterra.com/api/v3
       username: ${SENSOTERRA_USERNAME}
       password: ${SENSOTERRA_PASSWORD}
@@ -46,7 +46,7 @@ app:
       manufacturer: MICASENSE
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:micasense:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:micasense:"
-      enabled: true
+      enabled: false
       imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
     sentek:
       manufacturer: SENTEK

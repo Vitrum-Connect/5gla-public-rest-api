@@ -27,7 +27,8 @@ public enum Error {
     FARM21_COULD_NOT_FETCH_DEVICES(errorOf(17)),
     SENTEK_COULD_NOT_FETCH_SENSOR_DATA(errorOf(18)),
     WEENAT_COULD_NOT_LOGIN_AGAINST_API(errorOf(19)),
-    WEENAT_COULD_NOT_FETCH_METADATA(errorOf(20));
+    WEENAT_COULD_NOT_FETCH_PLOTS(errorOf(20)),
+    WEENAT_COULD_NOT_FETCH_MEASURES(errorOf(21));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

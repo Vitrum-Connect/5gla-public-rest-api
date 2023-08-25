@@ -8,14 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class WeenatAccessMetadataIntegrationServiceIT extends SpringBootIntegrationTestBase {
+class WeenatPlotIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
-    private WeenatMetadataIntegrationService weenatMetadataIntegrationService;
+    private WeenatPlotIntegrationService weenatPlotIntegrationService;
 
     @Test
     void givenValidCredentialsWhenLoginThenTheRequestShouldBeAccepted() {
-        var metadata = weenatMetadataIntegrationService.fetchAll();
+        var metadata = weenatPlotIntegrationService.fetchAll();
         assertThat(metadata).isNotNull();
         assertThat(metadata).isNotEmpty();
     }

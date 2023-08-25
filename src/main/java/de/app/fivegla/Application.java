@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -73,5 +74,15 @@ public class Application {
     @Bean
     public DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService() {
         return new DroneDeviceMeasurementIntegrationService(contextBrokerUrl);
+    }
+
+    /**
+     * Dependency injection for the rest template.
+     *
+     * @return -
+     */
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

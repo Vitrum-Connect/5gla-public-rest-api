@@ -29,4 +29,8 @@ public class WeenatUserDataCache {
         return validUntil == null || Instant.now().isAfter(validUntil);
     }
 
+    public void setAccessToken(String accessToken) {
+        this.validUntil = Instant.now().plusSeconds(TTL);
+        this.accessToken = accessToken;
+    }
 }

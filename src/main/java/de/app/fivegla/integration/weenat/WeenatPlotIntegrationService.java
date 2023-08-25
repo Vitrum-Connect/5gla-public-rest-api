@@ -3,7 +3,7 @@ package de.app.fivegla.integration.weenat;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.integration.weenat.model.Metadata;
+import de.app.fivegla.integration.weenat.model.Plot;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ import java.util.List;
 @Getter
 @Setter
 @Service
-public class WeenatMetadataIntegrationService extends AbstractIntegrationService {
+public class WeenatPlotIntegrationService extends AbstractIntegrationService {
 
     private final WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService;
 
-    public WeenatMetadataIntegrationService(WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService) {
+    public WeenatPlotIntegrationService(WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService) {
         this.weenatAccessTokenIntegrationService = weenatAccessTokenIntegrationService;
     }
 
@@ -32,16 +32,16 @@ public class WeenatMetadataIntegrationService extends AbstractIntegrationService
      * @return a list of metadata objects
      * @throws BusinessException if there was an error fetching the metadata
      */
-    public List<Metadata> fetchAll() {
+    public List<Plot> fetchAll() {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(weenatAccessTokenIntegrationService.fetchAccessToken());
         var httpEntity = new HttpEntity<String>(headers);
-        var response = new RestTemplate().exchange(getUrl() + "/v2/access/plots", HttpMethod.GET, httpEntity, Metadata[].class);
+        var response = new RestTemplate().exchange(getUrl() + "/v2/access/plots", HttpMethod.GET, httpEntity, Plot[].class);
         if (response.getStatusCode() != HttpStatus.OK) {
             log.error("Could not fetch metadata from the API. Response code was {}.", response.getStatusCode());
             throw new BusinessException(ErrorMessage.builder()
-                    .error(Error.WEENAT_COULD_NOT_FETCH_METADATA)
+                    .error(Error.WEENAT_COULD_NOT_FETCH_PLOTS)
                     .message("Could not fetch metadata from the API.")
                     .build());
         } else {
@@ -49,7 +49,7 @@ public class WeenatMetadataIntegrationService extends AbstractIntegrationService
             var metadataResponse = response.getBody();
             if (null == metadataResponse) {
                 throw new BusinessException(ErrorMessage.builder()
-                        .error(Error.WEENAT_COULD_NOT_FETCH_METADATA)
+                        .error(Error.WEENAT_COULD_NOT_FETCH_PLOTS)
                         .message("Could not fetch metadata from the API. Response was empty.")
                         .build());
             } else {

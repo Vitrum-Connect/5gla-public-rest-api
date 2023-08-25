@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Metadata {
+public class Plot {
     private Long id;
     private String name;
     private Double latitude;

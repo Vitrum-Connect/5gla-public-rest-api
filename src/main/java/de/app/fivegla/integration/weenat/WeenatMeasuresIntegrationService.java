@@ -77,12 +77,10 @@ public class WeenatMeasuresIntegrationService extends AbstractIntegrationService
                         //noinspection unchecked
                         var measures = (HashMap<Long, MeasurementValues>) objectMapper.readValue(metadataResponse, type);
                         List<Measurement> measurements = new ArrayList<>();
-                        measures.forEach((timestamp, measurementValues) -> {
-                            measurements.add(Measurement.builder()
-                                    .timestamp(Instant.ofEpochSecond(timestamp))
-                                    .measurementValues(measurementValues)
-                                    .build());
-                        });
+                        measures.forEach((timestamp, measurementValues) -> measurements.add(Measurement.builder()
+                                .timestamp(Instant.ofEpochSecond(timestamp))
+                                .measurementValues(measurementValues)
+                                .build()));
                         if (!measures.isEmpty()) {
                             plotsWithMeasurements.put(plot, measurementsBuilder.measurements(measurements).build());
                         }

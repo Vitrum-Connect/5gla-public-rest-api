@@ -8,8 +8,9 @@ import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ParseWeenatMeasurementResponseJson {
+class ParseWeenatMeasurementResponseJsonTest {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String JSON = """
             {
                 "1692882000": {

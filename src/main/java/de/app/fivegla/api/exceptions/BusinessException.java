@@ -6,12 +6,12 @@ import lombok.Getter;
 /**
  * Exception for business errors.
  */
+@Getter
 public class BusinessException extends RuntimeException {
 
     /**
      * The error message.
      */
-    @Getter
     private final ErrorMessage errorMessage;
 
     public BusinessException(ErrorMessage errorMessage) {

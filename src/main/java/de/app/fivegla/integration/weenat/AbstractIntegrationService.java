@@ -1,6 +1,5 @@
 package de.app.fivegla.integration.weenat;
 
-import de.app.fivegla.integration.weenat.cache.WeenatUserDataCache;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;

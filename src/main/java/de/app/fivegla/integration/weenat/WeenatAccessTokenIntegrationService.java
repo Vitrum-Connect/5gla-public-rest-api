@@ -19,13 +19,16 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WeenatAccessTokenIntegrationService extends AbstractIntegrationService {
 
-    final WeenatUserDataCache userDataCache;
+    private final WeenatUserDataCache userDataCache;
+    private final RestTemplate restTemplate;
 
     /**
      * Service for integration with Agranimo.
      */
-    public WeenatAccessTokenIntegrationService(WeenatUserDataCache userDataCache) {
+    public WeenatAccessTokenIntegrationService(WeenatUserDataCache userDataCache,
+                                               RestTemplate restTemplate) {
         this.userDataCache = userDataCache;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -44,7 +47,7 @@ public class WeenatAccessTokenIntegrationService extends AbstractIntegrationServ
                             .message("Could not login against the API. Username or password is empty.")
                             .build());
                 }
-                var response = new RestTemplate().postForEntity(getUrl() + "/api-token-auth", new LoginRequest(getUsername(), getPassword()), AccessTokenResponse.class);
+                var response = restTemplate.postForEntity(getUrl() + "/api-token-auth", new LoginRequest(getUsername(), getPassword()), AccessTokenResponse.class);
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()

@@ -38,7 +38,6 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
      * @return List of sensors.
      */
     public List<Sensor> fetchAll() {
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(getAccessToken());
@@ -67,7 +66,6 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
     }
 
     private Sensor getSensor(int id, String access) {
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(access);

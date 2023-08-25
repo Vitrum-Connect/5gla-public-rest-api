@@ -28,9 +28,12 @@ import java.util.*;
 public class Farm21SensorDataIntegrationService extends AbstractIntegrationService {
 
     private final Farm21SensorIntegrationService farm21SensorIntegrationService;
+    private final RestTemplate restTemplate;
 
-    public Farm21SensorDataIntegrationService(Farm21SensorIntegrationService farm21SensorIntegrationService) {
+    public Farm21SensorDataIntegrationService(Farm21SensorIntegrationService farm21SensorIntegrationService,
+                                              RestTemplate restTemplate) {
         this.farm21SensorIntegrationService = farm21SensorIntegrationService;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -59,7 +62,6 @@ public class Farm21SensorDataIntegrationService extends AbstractIntegrationServi
 
     private List<SensorData> fetchAllForSensor(int sensorId, Instant since, Instant until) {
         try {
-            var restTemplate = new RestTemplate();
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setBearerAuth(getAccessToken());

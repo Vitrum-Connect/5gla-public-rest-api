@@ -28,6 +28,11 @@ import java.util.Map;
 @Service
 public class SentekSensorIntegrationService extends AbstractIntegrationService {
 
+    private final RestTemplate restTemplate;
+
+    public SentekSensorIntegrationService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * Fetches all logger data from the Sentek API.
@@ -36,7 +41,6 @@ public class SentekSensorIntegrationService extends AbstractIntegrationService {
      * @throws BusinessException If there was an error fetching the data from the Sentek API.
      */
     public List<Logger> fetchAll() {
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));
         var httpEntity = new HttpEntity<String>(headers);

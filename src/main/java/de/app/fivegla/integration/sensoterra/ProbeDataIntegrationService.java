@@ -27,13 +27,16 @@ public class ProbeDataIntegrationService extends AbstractIntegrationService {
 
     private final LocationIntegrationService locationIntegrationService;
     private final ProbeIntegrationService probeIntegrationService;
+    private final RestTemplate restTemplate;
 
     public ProbeDataIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService,
                                        LocationIntegrationService locationIntegrationService,
-                                       ProbeIntegrationService probeIntegrationService) {
+                                       ProbeIntegrationService probeIntegrationService,
+                                       RestTemplate restTemplate) {
         super(apiKeyIntegrationService);
         this.locationIntegrationService = locationIntegrationService;
         this.probeIntegrationService = probeIntegrationService;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -62,7 +65,7 @@ public class ProbeDataIntegrationService extends AbstractIntegrationService {
                         Format.format(begin),
                         "to",
                         Format.format(Instant.now()));
-                var response = new RestTemplate().exchange(uri, HttpMethod.GET, httpEntity, ProbeData[].class, uriVariables);
+                var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, ProbeData[].class, uriVariables);
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while fetching the probes from the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()

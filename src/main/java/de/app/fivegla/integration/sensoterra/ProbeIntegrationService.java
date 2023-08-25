@@ -21,8 +21,13 @@ import java.util.Map;
 @Slf4j
 @Service
 public class ProbeIntegrationService extends AbstractIntegrationService {
-    public ProbeIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService) {
+
+    private final RestTemplate restTemplate;
+
+    public ProbeIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService,
+                                   RestTemplate restTemplate) {
         super(apiKeyIntegrationService);
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -44,7 +49,7 @@ public class ProbeIntegrationService extends AbstractIntegrationService {
             var uriVariables = Map.of(
                     "locationId",
                     location.getId());
-            var response = new RestTemplate().exchange(uri, HttpMethod.GET, httpEntity, Probe[].class, uriVariables);
+            var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Probe[].class, uriVariables);
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while fetching the probes from the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()

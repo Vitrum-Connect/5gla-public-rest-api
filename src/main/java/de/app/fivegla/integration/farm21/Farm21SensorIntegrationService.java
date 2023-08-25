@@ -23,13 +23,18 @@ import java.util.Objects;
 @Service
 public class Farm21SensorIntegrationService extends AbstractIntegrationService {
 
+    private final RestTemplate restTemplate;
+
+    Farm21SensorIntegrationService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     /**
      * Fetches all sensors from the SoilScout API.
      *
      * @return List of sensors.
      */
     public List<Sensor> fetchAll() {
-        var restTemplate = new RestTemplate();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(getAccessToken());

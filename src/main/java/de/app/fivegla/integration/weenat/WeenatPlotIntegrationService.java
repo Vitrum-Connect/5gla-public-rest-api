@@ -21,9 +21,12 @@ import java.util.List;
 public class WeenatPlotIntegrationService extends AbstractIntegrationService {
 
     private final WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService;
+    private final RestTemplate restTemplate;
 
-    public WeenatPlotIntegrationService(WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService) {
+    public WeenatPlotIntegrationService(WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService,
+                                        RestTemplate restTemplate) {
         this.weenatAccessTokenIntegrationService = weenatAccessTokenIntegrationService;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -37,7 +40,7 @@ public class WeenatPlotIntegrationService extends AbstractIntegrationService {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(weenatAccessTokenIntegrationService.fetchAccessToken());
         var httpEntity = new HttpEntity<String>(headers);
-        var response = new RestTemplate().exchange(getUrl() + "/v2/access/plots", HttpMethod.GET, httpEntity, Plot[].class);
+        var response = restTemplate.exchange(getUrl() + "/v2/access/plots", HttpMethod.GET, httpEntity, Plot[].class);
         if (response.getStatusCode() != HttpStatus.OK) {
             log.error("Could not fetch metadata from the API. Response code was {}.", response.getStatusCode());
             throw new BusinessException(ErrorMessage.builder()

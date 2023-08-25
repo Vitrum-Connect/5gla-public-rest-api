@@ -63,7 +63,7 @@ app:
       url: https://api-prod.weenat.com/api
       username: ${WEENAT_USERNAME}
       password: ${WEENAT_PASSWORD}
-    scheduledDataImportCron: "0 */15 * * * *" # every 15 minutes
+  scheduledDataImportCron: "0 */15 * * * *" # every 15 minutes
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}
 logging:

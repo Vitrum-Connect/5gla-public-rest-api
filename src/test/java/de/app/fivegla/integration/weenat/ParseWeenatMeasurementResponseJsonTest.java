@@ -218,10 +218,10 @@ class ParseWeenatMeasurementResponseJsonTest {
         assertThat(mapOfMeasurementEntries).isNotEmpty();
         assertThat(mapOfMeasurementEntries).hasSize(24);
         assertThat(mapOfMeasurementEntries.get(1692882000L)).isNotNull();
-        assertThat(mapOfMeasurementEntries.get(1692882000L).getTemperature()).isEqualTo("27.8");
-        assertThat(mapOfMeasurementEntries.get(1692882000L).getRelativeHumidity()).isEqualTo("40");
-        assertThat(mapOfMeasurementEntries.get(1692882000L).getCumulativeRainfall()).isEqualTo("0");
-        assertThat(mapOfMeasurementEntries.get(1692882000L).getWindSpeed()).isEqualTo("4.5");
+        assertThat(mapOfMeasurementEntries.get(1692882000L).getTemperature()).isEqualTo(27.8);
+        assertThat(mapOfMeasurementEntries.get(1692882000L).getRelativeHumidity()).isEqualTo(40);
+        assertThat(mapOfMeasurementEntries.get(1692882000L).getCumulativeRainfall()).isEqualTo(0);
+        assertThat(mapOfMeasurementEntries.get(1692882000L).getWindSpeed()).isEqualTo(4.5);
         assertThat(mapOfMeasurementEntries.get(1692882000L).getWindGustSpeed()).isNull();
         assertThat(mapOfMeasurementEntries.get(1692882000L).getSoilTemperature15()).isNull();
     }

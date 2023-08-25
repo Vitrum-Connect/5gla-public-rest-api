@@ -30,6 +30,7 @@ public class ApplicationConfiguration {
             case MICA_SENSE -> sensors.micasense().enabled();
             case AGVOLUTION -> sensors.agvolution().enabled();
             case SENTEK -> sensors.sentek().enabled();
+            case WEENAT -> sensors.weenat().enabled();
         };
     }
 }

@@ -55,6 +55,14 @@ app:
       enabled: true
       url: https://www.irrimaxlive.com/api
       apiToken: ${SENTEK_API_TOKEN}
+    weenat:
+      manufacturer: WEENAT
+      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:weenat:"
+      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:weenat:"
+      enabled: true
+      url: https://api-prod.weenat.com/api
+      username: ${WEENAT_USERNAME}
+      password: ${WEENAT_PASSWORD}
     (scheduledDataImportCron: "0 */15 * * * *" # every 15 minutes
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}

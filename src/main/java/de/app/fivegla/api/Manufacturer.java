@@ -10,5 +10,6 @@ public enum Manufacturer {
     MICA_SENSE,
     AGVOLUTION,
     SENSOTERRA,
-    SENTEK
+    SENTEK,
+    WEENAT
 }

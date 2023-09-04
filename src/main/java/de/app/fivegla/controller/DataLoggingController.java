@@ -3,8 +3,11 @@ package de.app.fivegla.controller;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.controller.api.BaseMappings;
+import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.SentekDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.WeenatDataLoggingRequest;
+import de.app.fivegla.integration.agvolution.AgvolutionFiwareIntegrationServiceWrapper;
+import de.app.fivegla.integration.agvolution.AgvolutionSensorIntegrationService;
 import de.app.fivegla.integration.sentek.SentekFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.sentek.SentekSensorIntegrationService;
 import de.app.fivegla.integration.weenat.WeenatFiwareIntegrationServiceWrapper;
@@ -28,15 +31,21 @@ public class DataLoggingController {
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;
     private final WeenatPlotIntegrationService weenatPlotIntegrationService;
     private final WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper;
+    private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
+    private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
 
     public DataLoggingController(SentekSensorIntegrationService sentekSensorIntegrationService,
                                  SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
                                  WeenatPlotIntegrationService weenatPlotIntegrationService,
-                                 WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper) {
+                                 WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper,
+                                 AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
+                                 AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper) {
         this.sentekSensorIntegrationService = sentekSensorIntegrationService;
         this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
         this.weenatPlotIntegrationService = weenatPlotIntegrationService;
         this.weenatFiwareIntegrationServiceWrapper = weenatFiwareIntegrationServiceWrapper;
+        this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
+        this.agvolutionFiwareIntegrationServiceWrapper = agvolutionFiwareIntegrationServiceWrapper;
     }
 
     /**
@@ -92,6 +101,35 @@ public class DataLoggingController {
                     .body(ErrorMessage.builder()
                             .error(Error.WEENAT_COULD_NOT_FIND_SENSOR_FOR_ID)
                             .message("No plot found for id " + plotId)
+                            .build()
+                            .asDetail());
+        }
+    }
+
+    /**
+     * This method logs the Agvolution data for a specific device.
+     *
+     * @param deviceId The ID of the device
+     * @param request  The AgvolutionDataLoggingRequest object containing the data measurements
+     * @return The ResponseEntity object indicating the success or failure of the data logging
+     */
+    @PostMapping(value = "/agvolution/{deviceId}")
+    public ResponseEntity<String> agvolution(@PathVariable String deviceId, @RequestBody AgvolutionDataLoggingRequest request) {
+        AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
+        agvolutionSensorIntegrationService.fetchAll().stream().filter(device -> device.getId().equals(deviceId)).findFirst().ifPresentOrElse(plot -> {
+            log.info("Persisting {} measurements for device {}.", request.seriesEntry().getTimeSeriesEntries().size(), deviceId);
+            agvolutionFiwareIntegrationServiceWrapper.persist(request.seriesEntry());
+            dataHasBeenLogged.set(true);
+        }, () -> log.error("No device found for id {}.", deviceId));
+
+        if (dataHasBeenLogged.get()) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity
+                    .badRequest()
+                    .body(ErrorMessage.builder()
+                            .error(Error.AGVOLUTION_COULD_NOT_FIND_SENSOR_FOR_ID)
+                            .message("No device found for id " + deviceId)
                             .build()
                             .asDetail());
         }

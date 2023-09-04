@@ -30,7 +30,8 @@ public enum Error {
     WEENAT_COULD_NOT_FETCH_PLOTS(errorOf(20)),
     WEENAT_COULD_NOT_FETCH_MEASURES(errorOf(21)),
     SENTEK_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(22)),
-    WEENAT_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(23));
+    WEENAT_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(23)),
+    AGVOLUTION_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(24));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

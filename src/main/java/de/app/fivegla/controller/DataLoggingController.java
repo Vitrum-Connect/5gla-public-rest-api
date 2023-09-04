@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * The DataLoggingController class handles the logging of Sentek data for a specific sensor.
+ */
 @Slf4j
 @RestController
 @RequestMapping(BaseMappings.DATA_LOGGING)
@@ -26,6 +29,13 @@ public class DataLoggingController {
         this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
     }
 
+    /**
+     * This method logs the Sentek data for a specific sensor.
+     *
+     * @param sensorId The ID of the sensor
+     * @param request The SentekDataLoggingRequest object containing the data readings
+     * @return The ResponseEntity object indicating the success or failure of the data logging
+     */
     @PostMapping(value = "/sentek/{sensorId}")
     public ResponseEntity<String> sentek(@PathVariable int sensorId, @RequestBody SentekDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);

@@ -1,5 +1,6 @@
 app:
   version: '@project.version@'
+  api-key: super_secret_api_key
   sensors:
     farm21:
       manufacturer: FARM21

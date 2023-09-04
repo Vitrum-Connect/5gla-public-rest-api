@@ -28,7 +28,8 @@ public enum Error {
     SENTEK_COULD_NOT_FETCH_SENSOR_DATA(errorOf(18)),
     WEENAT_COULD_NOT_LOGIN_AGAINST_API(errorOf(19)),
     WEENAT_COULD_NOT_FETCH_PLOTS(errorOf(20)),
-    WEENAT_COULD_NOT_FETCH_MEASURES(errorOf(21));
+    WEENAT_COULD_NOT_FETCH_MEASURES(errorOf(21)),
+    SENTEK_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(22));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

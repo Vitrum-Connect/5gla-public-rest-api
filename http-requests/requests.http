@@ -1,8 +1,11 @@
 ### Get version
 GET {{base-url}}/info/version
+X-Api-Key: {{api-key}}
 
 ### Get last run
 GET {{base-url}}/info/last-run
+X-Api-Key: {{api-key}}
 
 ### Start import for sensor data manually
 POST {{base-url}}/manual-import/import/run
+X-Api-Key: {{api-key}}

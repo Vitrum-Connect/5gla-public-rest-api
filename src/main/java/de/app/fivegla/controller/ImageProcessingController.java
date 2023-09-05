@@ -62,6 +62,22 @@ public class ImageProcessingController {
                 .build());
     }
 
+    /**
+     * Ends the image processing for the transaction.
+     *
+     * @param transactionId the ID of the transaction to end the image processing for
+     * @return HTTP status 200 if the image processing was ended successfully
+     */
+    @Operation(
+            operationId = "images.end-image-processing",
+            description = "Ends the image processing for the transaction.",
+            tags = OperationTags.MICA_SENSE
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The image processing was ended."
+    )
+    @PostMapping(value = "/{transactionId}/end")
     public ResponseEntity<Void> endImageProcessing(@PathVariable String transactionId) {
         log.debug("Ending image processing for the transaction: {}.", transactionId);
         micaSenseIntegrationService.endImageProcessing(transactionId);

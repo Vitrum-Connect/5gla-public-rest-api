@@ -62,6 +62,12 @@ public class ImageProcessingController {
                 .build());
     }
 
+    public ResponseEntity<Void> endImageProcessing(@PathVariable String transactionId) {
+        log.debug("Ending image processing for the transaction: {}.", transactionId);
+        micaSenseIntegrationService.endImageProcessing(transactionId);
+        return ResponseEntity.ok().build();
+    }
+
     /**
      * Return image as stream.
      */

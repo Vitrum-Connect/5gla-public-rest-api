@@ -14,6 +14,9 @@ import java.util.Map;
 @Component
 public class ActiveMicaSenseTransactions {
 
+    /**
+     * The active transactions.
+     */
     private final Map<String, ActiveTransaction> activeTransactions;
 
     public ActiveMicaSenseTransactions() {
@@ -26,8 +29,8 @@ public class ActiveMicaSenseTransactions {
      * and added to the map. Then the oid is added to the imageOids list of the corresponding ActiveTransaction object.
      *
      * @param transactionId the id of the transaction
-     * @param droneId the id of the drone
-     * @param oid the id of the image
+     * @param droneId       the id of the drone
+     * @param oid           the id of the image
      */
     public void add(String transactionId, String droneId, String oid) {
         if (!activeTransactions.containsKey(transactionId)) {

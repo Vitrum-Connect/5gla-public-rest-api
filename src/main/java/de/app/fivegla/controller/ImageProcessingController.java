@@ -34,7 +34,7 @@ public class ImageProcessingController {
     /**
      * Processes one or multiple images from the mica sense camera.
      *
-     * @return 200 if image was processed successfully.
+     * @return HTTP status 200 if image was processed successfully.
      */
     @Operation(
             operationId = "images.process-image",

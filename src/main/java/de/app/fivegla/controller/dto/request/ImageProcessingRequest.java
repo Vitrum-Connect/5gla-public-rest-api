@@ -16,6 +16,13 @@ import java.util.List;
 public class ImageProcessingRequest {
 
     /**
+     * The transaction id.
+     */
+    @NotBlank
+    @Schema(description = "The transaction id.")
+    private String transactionId;
+
+    /**
      * The id of the drone.
      */
     @NotBlank

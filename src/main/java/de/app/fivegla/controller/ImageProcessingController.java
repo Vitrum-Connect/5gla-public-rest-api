@@ -1,9 +1,9 @@
 package de.app.fivegla.controller;
 
 import de.app.fivegla.controller.api.BaseMappings;
+import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,7 +34,7 @@ public class ImageProcessingController {
     /**
      * Processes one or multiple images from the mica sense camera.
      *
-     * @return 200 if image was processed successfully.
+     * @return HTTP status 200 if image was processed successfully.
      */
     @Operation(
             operationId = "images.process-image",
@@ -54,12 +54,34 @@ public class ImageProcessingController {
         log.debug("Processing image for the drone: {}.", request.getDroneId());
         var oids = new ArrayList<String>();
         request.getImages().forEach(droneImage -> {
-            var oid = micaSenseIntegrationService.processImage(request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
+            var oid = micaSenseIntegrationService.processImage(request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
             oids.add(oid);
         });
         return ResponseEntity.ok(ImageProcessingResponse.builder()
                 .oids(oids)
                 .build());
+    }
+
+    /**
+     * Ends the image processing for the transaction.
+     *
+     * @param transactionId the ID of the transaction to end the image processing for
+     * @return HTTP status 200 if the image processing was ended successfully
+     */
+    @Operation(
+            operationId = "images.end-image-processing",
+            description = "Ends the image processing for the transaction.",
+            tags = OperationTags.MICA_SENSE
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The image processing was ended."
+    )
+    @PostMapping(value = "/{transactionId}/end")
+    public ResponseEntity<Void> endImageProcessing(@PathVariable String transactionId) {
+        log.debug("Ending image processing for the transaction: {}.", transactionId);
+        micaSenseIntegrationService.endImageProcessing(transactionId);
+        return ResponseEntity.ok().build();
     }
 
     /**

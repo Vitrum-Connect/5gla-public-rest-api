@@ -1,9 +1,9 @@
 package de.app.fivegla.controller;
 
 import de.app.fivegla.controller.api.BaseMappings;
+import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -54,7 +54,7 @@ public class ImageProcessingController {
         log.debug("Processing image for the drone: {}.", request.getDroneId());
         var oids = new ArrayList<String>();
         request.getImages().forEach(droneImage -> {
-            var oid = micaSenseIntegrationService.processImage(request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
+            var oid = micaSenseIntegrationService.processImage(request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
             oids.add(oid);
         });
         return ResponseEntity.ok(ImageProcessingResponse.builder()

@@ -2,6 +2,7 @@ package de.app.fivegla.integration.micasense;
 
 import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.integration.micasense.transactions.ActiveMicaSenseTransactions;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,22 +22,26 @@ public class MicaSenseIntegrationService {
     private final ExifDataIntegrationService exifDataIntegrationService;
     private final MicaSenseFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final ApplicationDataRepository applicationDataRepository;
+    private final ActiveMicaSenseTransactions activeMicaSenseTransactions;
 
     public MicaSenseIntegrationService(ExifDataIntegrationService exifDataIntegrationService,
                                        MicaSenseFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper,
-                                       ApplicationDataRepository applicationDataRepository) {
+                                       ApplicationDataRepository applicationDataRepository,
+                                       ActiveMicaSenseTransactions activeMicaSenseTransactions) {
         this.exifDataIntegrationService = exifDataIntegrationService;
         this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;
         this.applicationDataRepository = applicationDataRepository;
+        this.activeMicaSenseTransactions = activeMicaSenseTransactions;
     }
 
     /**
      * Processes an image from the mica sense camera.
      *
+     * @param transactionId    The transaction id.
      * @param micaSenseChannel The channel the image was taken with.
      * @param base64Image      The base64 encoded tiff image.
      */
-    public String processImage(String droneId, MicaSenseChannel micaSenseChannel, String base64Image) {
+    public String processImage(String transactionId, String droneId, MicaSenseChannel micaSenseChannel, String base64Image) {
         fiwareIntegrationServiceWrapper.createOrUpdateDevice(droneId);
         var image = Base64.getDecoder().decode(base64Image);
         var location = exifDataIntegrationService.readLocation(image);
@@ -52,6 +57,7 @@ public class MicaSenseIntegrationService {
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
         fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(micaSenseImage);
+        activeMicaSenseTransactions.add(transactionId, droneId, micaSenseImage.getOid());
         return micaSenseImage.getOid();
     }
 

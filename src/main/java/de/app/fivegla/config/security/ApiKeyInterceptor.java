@@ -1,7 +1,9 @@
 package de.app.fivegla.config.security;
 
+import de.app.fivegla.controller.api.BaseMappings;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
  * or does not match the configured key, an UNAUTHORIZED response
  * is sent to the client.
  */
+@Slf4j
 public class ApiKeyInterceptor implements HandlerInterceptor {
 
     @Value("${app.api-key}")
@@ -20,11 +23,16 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
     @Override
     @SuppressWarnings("NullableProblems")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        var apiKeyHeader = request.getHeader("X-Api-Key");
-        if (apiKeyHeader == null || !apiKeyHeader.equals(configuredApiKey)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please provide a valid API key. See the documentation for more information.");
-            return false;
+        if (!request.getRequestURI().contains(BaseMappings.API_V1)) {
+            log.info("No part of the API is being accessed. No API key is required.");
+            return true;
+        } else {
+            var apiKeyHeader = request.getHeader("X-Api-Key");
+            if (apiKeyHeader == null || !apiKeyHeader.equals(configuredApiKey)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please provide a valid API key. See the documentation for more information.");
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 }

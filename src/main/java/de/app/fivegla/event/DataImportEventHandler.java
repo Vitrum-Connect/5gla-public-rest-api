@@ -1,5 +1,7 @@
 package de.app.fivegla.event;
 
+import de.app.fivegla.fiware.SubscriptionService;
+import de.app.fivegla.fiware.model.enums.Type;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
@@ -8,6 +10,7 @@ import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
 import de.app.fivegla.integration.weenat.WeenatMeasurementImport;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +28,10 @@ public class DataImportEventHandler {
     private final SensoterraMeasurementImport sensoterraMeasurementImport;
     private final SentekMeasurementImport sentekMeasurementImport;
     private final WeenatMeasurementImport weenatMeasurementImport;
+    private final SubscriptionService subscriptionService;
+
+    @Value("${app.fiware.subscriptions.enabled}")
+    private boolean subscriptionsEnabled;
 
     public DataImportEventHandler(SoilScoutMeasurementImport soilScoutMeasurementImport,
                                   AgranimoMeasurementImport agranimoMeasurementImport,
@@ -32,7 +39,8 @@ public class DataImportEventHandler {
                                   Farm21MeasurementImport farm21MeasurementImport,
                                   SensoterraMeasurementImport sensoterraMeasurementImport,
                                   SentekMeasurementImport sentekMeasurementImport,
-                                  WeenatMeasurementImport weenatMeasurementImport1) {
+                                  WeenatMeasurementImport weenatMeasurementImport1,
+                                  SubscriptionService subscriptionService) {
         this.soilScoutScheduledMeasurementImport = soilScoutMeasurementImport;
         this.agranimoMeasurementImport = agranimoMeasurementImport;
         this.agvolutionMeasurementImport = agvolutionMeasurementImport;
@@ -40,10 +48,18 @@ public class DataImportEventHandler {
         this.sensoterraMeasurementImport = sensoterraMeasurementImport;
         this.sentekMeasurementImport = sentekMeasurementImport;
         this.weenatMeasurementImport = weenatMeasurementImport1;
+        this.subscriptionService = subscriptionService;
     }
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
+        log.info("Handling data import event for manufacturer {}.", dataImportEvent.manufacturer());
+        if (subscriptionsEnabled) {
+            subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
+            log.info("Subscribed to device measurement notifications.");
+        } else {
+            log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
+        }
         switch (dataImportEvent.manufacturer()) {
             case SOILSCOUT -> soilScoutScheduledMeasurementImport.run();
             case AGVOLUTION -> agvolutionMeasurementImport.run();

@@ -1,9 +1,6 @@
 package de.app.fivegla;
 
-import de.app.fivegla.fiware.DeviceIntegrationService;
-import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.StatusService;
+import de.app.fivegla.fiware.*;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.modelmapper.ModelMapper;
@@ -33,6 +30,9 @@ public class Application {
 
     @Value("${app.fiware.contextBrokerUrl}")
     private String contextBrokerUrl;
+
+    @Value("${app.fiware.subscriptions.notificationUrl}")
+    private String notificationUrl;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -86,6 +86,16 @@ public class Application {
     @Bean
     public StatusService statusService() {
         return new StatusService(contextBrokerUrl);
+    }
+
+    /**
+     * Dependency injection for the subscription service.
+     *
+     * @return The SubscriptionService instance.
+     */
+    @Bean
+    public SubscriptionService subscriptionService() {
+        return new SubscriptionService(contextBrokerUrl, notificationUrl);
     }
 
     /**

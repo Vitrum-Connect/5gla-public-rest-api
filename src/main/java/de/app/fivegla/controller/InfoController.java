@@ -2,14 +2,17 @@ package de.app.fivegla.controller;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.controller.api.swagger.OperationTags;
+import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.LastRunResponse;
 import de.app.fivegla.controller.dto.response.VersionResponse;
+import de.app.fivegla.fiware.StatusService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +33,12 @@ public class InfoController {
     private String applicationVersion;
 
     private final ApplicationDataRepository applicationDataRepository;
+    private final StatusService statusService;
 
-    public InfoController(ApplicationDataRepository applicationDataRepository) {
+    public InfoController(ApplicationDataRepository applicationDataRepository,
+                          StatusService statusService) {
         this.applicationDataRepository = applicationDataRepository;
+        this.statusService = statusService;
     }
 
     /**
@@ -56,6 +62,33 @@ public class InfoController {
     @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VersionResponse> getVersion() {
         return ResponseEntity.ok(VersionResponse.builder().version(applicationVersion).build());
+    }
+
+    /**
+     * Returns the status of the fiware connection.
+     *
+     * @return the status of the fiware connection
+     */
+    @Operation(
+            operationId = "info.fiware",
+            description = "Fetch the status of the fiware connection.",
+            tags = OperationTags.INFO
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The status of the fiware connection.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = FiwareStatusResponse.class)
+            )
+    )
+    @GetMapping(value = "/fiware", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<FiwareStatusResponse> getFiwareStatus() {
+        var version = statusService.getVersion();
+        return ResponseEntity.ok(FiwareStatusResponse.builder()
+                .fiwareStatus(HttpStatus.OK)
+                .fiwareVersion(version)
+                .build());
     }
 
 

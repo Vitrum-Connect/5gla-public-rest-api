@@ -2,6 +2,10 @@
 GET {{base-url}}/info/version
 X-Api-Key: {{api-key}}
 
+### Get FIWARE status
+GET {{base-url}}/info/fiware
+X-Api-Key: {{api-key}}
+
 ### Get last run
 GET {{base-url}}/info/last-run
 X-Api-Key: {{api-key}}

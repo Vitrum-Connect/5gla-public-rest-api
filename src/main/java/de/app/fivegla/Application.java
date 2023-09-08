@@ -31,7 +31,7 @@ public class Application {
     @Value("${app.fiware.contextBrokerUrl}")
     private String contextBrokerUrl;
 
-    @Value("${app.fiware.notificationUrl}")
+    @Value("${app.fiware.subscriptions.notificationUrl}")
     private String notificationUrl;
 
     public static void main(String[] args) {

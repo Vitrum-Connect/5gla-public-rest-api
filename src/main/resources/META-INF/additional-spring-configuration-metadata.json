@@ -279,6 +279,16 @@
       "name": "app.sensors.weenat.password",
       "type": "java.lang.String",
       "description": "The password to access the API sensor manufacturer."
+    },
+    {
+      "name": "app.fiware.subscriptions.enabled",
+      "type": "java.lang.String",
+      "description": "Whether the subscriptions to FIWARE are enabled or not."
+    },
+    {
+      "name": "app.fiware.subscriptions.notificationUrl",
+      "type": "java.lang.String",
+      "description": "The URL to receive notifications from FIWARE."
     }
   ]
 }

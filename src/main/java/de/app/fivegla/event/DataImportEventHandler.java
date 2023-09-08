@@ -10,6 +10,7 @@ import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
 import de.app.fivegla.integration.weenat.WeenatMeasurementImport;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,9 @@ public class DataImportEventHandler {
     private final SentekMeasurementImport sentekMeasurementImport;
     private final WeenatMeasurementImport weenatMeasurementImport;
     private final SubscriptionService subscriptionService;
+
+    @Value("${app.fiware.subscriptions.enabled}")
+    private boolean subscriptionsEnabled;
 
     public DataImportEventHandler(SoilScoutMeasurementImport soilScoutMeasurementImport,
                                   AgranimoMeasurementImport agranimoMeasurementImport,
@@ -50,8 +54,12 @@ public class DataImportEventHandler {
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
         log.info("Handling data import event for manufacturer {}.", dataImportEvent.manufacturer());
-        subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
-        log.info("Subscribed to device measurement notifications.");
+        if (subscriptionsEnabled) {
+            subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
+            log.info("Subscribed to device measurement notifications.");
+        } else {
+            log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
+        }
         switch (dataImportEvent.manufacturer()) {
             case SOILSCOUT -> soilScoutScheduledMeasurementImport.run();
             case AGVOLUTION -> agvolutionMeasurementImport.run();

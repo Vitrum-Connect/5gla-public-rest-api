@@ -67,6 +67,7 @@ app:
   scheduledDataImportCron: "0 */15 * * * *" # every 15 minutes
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}
+    notificationUrl: ${NOTIFICATION_URL}
 logging:
   level:
     root: info

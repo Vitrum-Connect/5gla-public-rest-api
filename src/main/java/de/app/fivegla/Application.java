@@ -3,6 +3,7 @@ package de.app.fivegla;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.StatusService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.modelmapper.ModelMapper;
@@ -75,6 +76,16 @@ public class Application {
     @Bean
     public DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService() {
         return new DroneDeviceMeasurementIntegrationService(contextBrokerUrl);
+    }
+
+    /**
+     * Dependency injection for the status service.
+     *
+     * @return -
+     */
+    @Bean
+    public StatusService statusService() {
+        return new StatusService(contextBrokerUrl);
     }
 
     /**

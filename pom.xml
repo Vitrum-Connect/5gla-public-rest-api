@@ -14,7 +14,7 @@
 
     <groupId>de.app.5gla</groupId>
     <artifactId>sensor-integration-services</artifactId>
-    <version>6.1.0</version>
+    <version>6.2.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>de.app.5gla</groupId>
             <artifactId>fiware-integration-layer</artifactId>
-            <version>4.4.0</version>
+            <version>5.2.0</version>
             <exclusions>
                 <!-- SLF4J NOP -->
                 <exclusion>

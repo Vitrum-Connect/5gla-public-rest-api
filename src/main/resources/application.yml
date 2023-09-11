@@ -68,7 +68,7 @@ app:
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}
     subscriptions:
-      enabled: false
+      enabled: true
       notificationUrl: ${NOTIFICATION_URL}
 logging:
   level:

@@ -6,7 +6,7 @@ app:
       manufacturer: FARM21
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:farm21:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:farm21:"
-      enabled: false
+      enabled: true
       url: https://app.farm21.tech/api/v2/public
       username: ${FARM21_USERNAME}
       password: ${FARM21_PASSWORD}
@@ -15,7 +15,7 @@ app:
       manufacturer: SOIL_SCOUT
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:soilscout:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:soilscout:"
-      enabled: false
+      enabled: true
       url: https://soilscouts.fi/api/v1
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
@@ -23,7 +23,7 @@ app:
       manufacturer: AGRANIMO
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agranimo:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agranimo:"
-      enabled: false
+      enabled: true
       url: https://public-staging.agranimo.com
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
@@ -31,7 +31,7 @@ app:
       manufacturer: AGVOLUTION
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agvolution:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agvolution:"
-      enabled: false
+      enabled: true
       url: https://api.agvolution.com
       username: ${AGVOLUTION_USERNAME}
       password: ${AGVOLUTION_PASSWORD}
@@ -39,7 +39,7 @@ app:
       manufacturer: SENSOTERRA
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:sensoterra:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:sensoterra:"
-      enabled: false
+      enabled: true
       url: https://monitor.sensoterra.com/api/v3
       username: ${SENSOTERRA_USERNAME}
       password: ${SENSOTERRA_PASSWORD}
@@ -47,7 +47,7 @@ app:
       manufacturer: MICASENSE
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:micasense:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:micasense:"
-      enabled: false
+      enabled: true
       imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
     sentek:
       manufacturer: SENTEK
@@ -64,7 +64,9 @@ app:
       url: https://api-prod.weenat.com/api
       username: ${WEENAT_USERNAME}
       password: ${WEENAT_PASSWORD}
-  scheduledDataImportCron: "0 */15 * * * *" # every 15 minutes
+  scheduled:
+    cron: "0 */15 * * * *" # every 15 minutes
+    daysInThePastForInitialImport: 7 # import data from the last 7 days
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}
     subscriptions:

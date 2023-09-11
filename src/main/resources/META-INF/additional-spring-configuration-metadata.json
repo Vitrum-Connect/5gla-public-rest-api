@@ -289,6 +289,16 @@
       "name": "app.fiware.subscriptions.notificationUrl",
       "type": "java.lang.String",
       "description": "The URL to receive notifications from FIWARE."
+    },
+    {
+      "name": "app.scheduled.cron",
+      "type": "java.lang.String",
+      "description": "The cron expression to schedule the data import."
+    },
+    {
+      "name": "app.scheduled.daysInThePastForInitialImport",
+      "type": "java.lang.String",
+      "description": "The number of days in the past to import data for the first time."
     }
   ]
 }

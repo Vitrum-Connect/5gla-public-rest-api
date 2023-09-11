@@ -4,6 +4,7 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,6 +21,9 @@ public class Farm21MeasurementImport {
     private final ApplicationDataRepository applicationDataRepository;
     private final Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
+
+    @Value("${app..daysBack}")
+    private int daysBack = 14;
 
     public Farm21MeasurementImport(Farm21SensorDataIntegrationService farm21SensorDataIntegrationService,
                                    ApplicationDataRepository applicationDataRepository,

@@ -4,6 +4,7 @@ import de.app.fivegla.SpringBootIntegrationTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
@@ -16,6 +17,9 @@ class SentekSensorDataIntegrationServiceIT extends SpringBootIntegrationTestBase
 
     @Autowired
     private SentekSensorDataIntegrationService sentekSensorDataIntegrationService;
+
+    @Value("${app.scheduled.daysInThePastForInitialImport}")
+    private int daysInThePastForInitialImport;
 
     @Test
     void givenValidCsvInputFileWhenParsingThenTheResultShouldBeValid() {
@@ -55,7 +59,7 @@ class SentekSensorDataIntegrationServiceIT extends SpringBootIntegrationTestBase
 
     @Test
     void givenValidApiTokenWhenAccessingTheApiThenTheResultShouldBeValid() {
-        var readings = sentekSensorDataIntegrationService.fetchAll("Ostfalia001", Instant.now().minus(14, ChronoUnit.DAYS));
+        var readings = sentekSensorDataIntegrationService.fetchAll("Ostfalia001", Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
         assertThat(readings).isNotNull();
         assertThat(readings).isNotEmpty();
     }

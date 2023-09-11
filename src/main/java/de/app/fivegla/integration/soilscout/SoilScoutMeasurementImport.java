@@ -4,6 +4,7 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,6 +21,9 @@ public class SoilScoutMeasurementImport {
     private final ApplicationDataRepository applicationDataRepository;
     private final SoilScoutFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
+
+    @Value("${app.scheduled.daysInThePastForInitialImport}")
+    private int daysInThePastForInitialImport;
 
     public SoilScoutMeasurementImport(SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService,
                                       ApplicationDataRepository applicationDataRepository,
@@ -46,7 +50,7 @@ public class SoilScoutMeasurementImport {
             fiwareIntegrationServiceWrapper.persist(measurements);
         } else {
             log.info("Running initial data import from Soil Scout API, this may take a while");
-            var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
+            var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
             jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SOILSCOUT);
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());

@@ -29,7 +29,7 @@ public class DataImportScheduler {
     /**
      * Schedule data import for all manufacturer.
      */
-    @Scheduled(cron = "${app.scheduled.data-import.cron}")
+    @Scheduled(cron = "${app.scheduled.cron}")
     public void scheduleDataImport() {
         Arrays.stream(Manufacturer.values())
                 .forEach(manufacturer -> {

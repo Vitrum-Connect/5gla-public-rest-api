@@ -3,6 +3,7 @@ package de.app.fivegla.integration.soilscout;
 import de.app.fivegla.SpringBootIntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
@@ -16,9 +17,12 @@ public class SoilScoutSoilScoutMeasurementIntegrationServiceIT extends SpringBoo
     @Autowired
     private SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
 
+    @Value("${app.scheduled.daysInThePastForInitialImport}")
+    private int daysInThePastForInitialImport;
+
     @Test
     void givenTimeRangeOf14DaysWhenFetchingSensorDataTheServiceShouldReturnMeasurements() {
-        var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
+        var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
         assertThat(measurements).isNotNull();
         assertThat(measurements).isNotEmpty();
     }

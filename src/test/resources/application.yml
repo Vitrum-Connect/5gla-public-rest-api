@@ -65,8 +65,8 @@ app:
       username: ${WEENAT_USERNAME}
       password: ${WEENAT_PASSWORD}
   scheduled:
-    cron: "0 */15 * * * *" # every 15 minutes
-    daysInThePastForInitialImport: 7 # import data from the last 7 days
+    cron: "0 0 */1 * * *" # every hour
+    daysInThePastForInitialImport: 1
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}
     subscriptions:

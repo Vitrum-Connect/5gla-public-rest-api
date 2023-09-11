@@ -22,8 +22,8 @@ public class Farm21MeasurementImport {
     private final Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
-    @Value("${app..daysBack}")
-    private int daysBack = 14;
+    @Value("${app.scheduled.daysInThePastForInitialImport}")
+    private int daysInThePastForInitialImport;
 
     public Farm21MeasurementImport(Farm21SensorDataIntegrationService farm21SensorDataIntegrationService,
                                    ApplicationDataRepository applicationDataRepository,
@@ -50,7 +50,7 @@ public class Farm21MeasurementImport {
             measurements.forEach(farm21FiwareIntegrationServiceWrapper::persist);
         } else {
             log.info("Running initial data import from Farm21 API, this may take a while");
-            var measurements = farm21SensorDataIntegrationService.fetchAll(Instant.now().minus(14, ChronoUnit.DAYS), Instant.now());
+            var measurements = farm21SensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
             jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.FARM21);

@@ -4,6 +4,7 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,6 +21,9 @@ public class AgvolutionMeasurementImport {
     private final ApplicationDataRepository applicationDataRepository;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
+
+    @Value("${app.scheduled.daysInThePastForInitialImport}")
+    private int daysInThePastForInitialImport;
 
     public AgvolutionMeasurementImport(AgvolutionSensorDataIntegrationService agvolutionSensorDataIntegrationService,
                                        ApplicationDataRepository applicationDataRepository,
@@ -46,7 +50,7 @@ public class AgvolutionMeasurementImport {
             seriesEntries.forEach(agvolutionFiwareIntegrationServiceWrapper::persist);
         } else {
             log.info("Running initial data import from Farm21 API, this may take a while");
-            var measurements = agvolutionSensorDataIntegrationService.fetchAll(Instant.now().minus(14, ChronoUnit.DAYS));
+            var measurements = agvolutionSensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
             log.info("Found {} measurements", measurements.size());
             log.info("Persisting {} measurements", measurements.size());
             jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.AGVOLUTION);

@@ -4,6 +4,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
+import de.app.fivegla.controller.security.SecuredApiAccess;
 import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 @RestController
 @RequestMapping(BaseMappings.MICA_SENSE + "/images")
-public class ImageProcessingController {
+public class ImageProcessingController implements SecuredApiAccess {
 
     private final MicaSenseIntegrationService micaSenseIntegrationService;
 

@@ -6,6 +6,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.SentekDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.WeenatDataLoggingRequest;
+import de.app.fivegla.controller.security.SecuredApiAccess;
 import de.app.fivegla.integration.agvolution.AgvolutionFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.agvolution.AgvolutionSensorIntegrationService;
 import de.app.fivegla.integration.sentek.SentekFiwareIntegrationServiceWrapper;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 @RestController
 @RequestMapping(BaseMappings.DATA_LOGGING)
-public class DataLoggingController {
+public class DataLoggingController implements SecuredApiAccess {
 
     private final SentekSensorIntegrationService sentekSensorIntegrationService;
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;

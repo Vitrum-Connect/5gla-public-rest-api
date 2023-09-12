@@ -2,6 +2,7 @@ package de.app.fivegla.controller;
 
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
+import de.app.fivegla.controller.security.SecuredApiAccess;
 import de.app.fivegla.scheduled.DataImportScheduler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(BaseMappings.MANUAL_IMPORT + "/import")
 @Profile("manual-import-allowed")
-public class SensorDataImportController {
+public class SensorDataImportController implements SecuredApiAccess {
 
     private final DataImportScheduler dataImportScheduler;
 

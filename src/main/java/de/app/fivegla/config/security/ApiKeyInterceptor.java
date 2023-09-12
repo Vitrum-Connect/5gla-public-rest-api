@@ -17,6 +17,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 public class ApiKeyInterceptor implements HandlerInterceptor {
 
+    public static final String API_KEY_HEADER = "X-Api-Key";
+
     @Value("${app.api-key}")
     private String configuredApiKey;
 
@@ -27,7 +29,7 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
             log.info("No part of the API is being accessed. No API key is required.");
             return true;
         } else {
-            var apiKeyHeader = request.getHeader("X-Api-Key");
+            var apiKeyHeader = request.getHeader(API_KEY_HEADER);
             if (apiKeyHeader == null || !apiKeyHeader.equals(configuredApiKey)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please provide a valid API key. See the documentation for more information.");
                 return false;

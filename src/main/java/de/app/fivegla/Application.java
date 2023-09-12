@@ -1,8 +1,14 @@
 package de.app.fivegla;
 
+import de.app.fivegla.config.security.ApiKeyInterceptor;
 import de.app.fivegla.fiware.*;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -23,9 +29,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @OpenAPIDefinition(
         info = @Info(
-                title = "5GLA Sensor Integration Services",
+                title = "5GLA Integration Services",
                 version = "${app.version:unknown}",
-                description = "This service provides the integration of multiple sensors with the 5GLA platform."
+                description = "This service provides the integration of multiple sensors with the 5GLA platform. " +
+                        "It is part of the 5GLA project, which is funded by the German Federal Ministry of Transport and Digital Infrastructure (BMVI). " +
+                        "The website of the project is https://www.5gla.de/, you can find all additional information there. If you are interested in the source code, " +
+                        "you can find it on GitHub: https://github.com/vitrum-connect/5gla-sensor-integration-services",
+                license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0"),
+                contact = @Contact(
+                        name = "5GLA Team",
+                        url = "https://www.5gla.de/"),
+                termsOfService = "https://www.5gla.de/"
         )
 )
 public class Application {

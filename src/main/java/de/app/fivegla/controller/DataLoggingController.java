@@ -3,6 +3,7 @@ package de.app.fivegla.controller;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.controller.api.BaseMappings;
+import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.SentekDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.WeenatDataLoggingRequest;
@@ -14,6 +15,8 @@ import de.app.fivegla.integration.sentek.SentekSensorIntegrationService;
 import de.app.fivegla.integration.weenat.WeenatFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.weenat.WeenatPlotIntegrationService;
 import de.app.fivegla.integration.weenat.model.Measurements;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +59,19 @@ public class DataLoggingController implements SecuredApiAccess {
      * @param request  The SentekDataLoggingRequest object containing the data readings
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
+    @Operation(
+            operationId = "data-logging.sentek",
+            description = "Logs the Sentek data for a specific sensor.",
+            tags = OperationTags.DATA_LOGGING
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The Sentek data was logged successfully."
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid."
+    )
     @PostMapping(value = "/sentek/{sensorId}")
     public ResponseEntity<String> sentek(@PathVariable int sensorId, @RequestBody SentekDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
@@ -85,6 +101,19 @@ public class DataLoggingController implements SecuredApiAccess {
      * @param request The WeenatDataLoggingRequest object containing the data measurements
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
+    @Operation(
+            operationId = "data-logging.weenat",
+            description = "Logs the Weenat data for a specific plot.",
+            tags = OperationTags.DATA_LOGGING
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The Weenat data was logged successfully."
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid."
+    )
     @PostMapping(value = "/weenat/{plotId}")
     public ResponseEntity<String> weenat(@PathVariable int plotId, @RequestBody WeenatDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
@@ -114,6 +143,19 @@ public class DataLoggingController implements SecuredApiAccess {
      * @param request  The AgvolutionDataLoggingRequest object containing the data measurements
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
+    @Operation(
+            operationId = "data-logging.agvolution",
+            description = "Logs the Agvolution data for a specific device.",
+            tags = OperationTags.DATA_LOGGING
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The Agvolution data was logged successfully."
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid."
+    )
     @PostMapping(value = "/agvolution/{deviceId}")
     public ResponseEntity<String> agvolution(@PathVariable String deviceId, @RequestBody AgvolutionDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);

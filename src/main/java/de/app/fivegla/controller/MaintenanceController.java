@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The MaintenanceController class handles maintenance-related operations.
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Slf4j
 @Profile("maintenance")
+@RestController
 @RequestMapping(BaseMappings.MAINTENANCE)
 public class MaintenanceController implements SecuredApiAccess {
 

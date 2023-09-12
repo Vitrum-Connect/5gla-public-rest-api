@@ -1,6 +1,7 @@
 package de.app.fivegla.controller;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.LastRunResponse;
@@ -26,7 +27,7 @@ import java.util.HashMap;
  * Controller for information purpose.
  */
 @RestController
-@RequestMapping("/info")
+@RequestMapping(BaseMappings.INFO)
 public class InfoController {
 
     @Value("${app.version:unknown}")

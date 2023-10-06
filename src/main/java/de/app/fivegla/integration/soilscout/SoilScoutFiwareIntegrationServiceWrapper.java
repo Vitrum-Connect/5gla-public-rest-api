@@ -9,6 +9,7 @@ import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -106,8 +107,8 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
             log.info("Persisting waterBalance measurement: {}", waterBalance);
             deviceMeasurementIntegrationService.persist(waterBalance);
             fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOILSCOUT);
-        } catch (BusinessException e) {
-            log.error("Could not fetch sensor with id {} in Soil Scout API.", sensorData.getDevice());
+        } catch (BusinessException | FiwareIntegrationLayerException e) {
+            log.error("Could not fetch sensor with id {} in Soil Scout API.", sensorData.getDevice(), e);
         }
     }
 

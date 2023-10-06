@@ -9,6 +9,7 @@ import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.SensoterraConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -43,13 +44,17 @@ public class SensoterraFiwareIntegrationServiceWrapper {
     }
 
     public void persist(Probe probe, List<ProbeData> probeData) {
-        persist(probe);
-        probeData.forEach(probeDataEntry -> {
-            log.info("Persisting measurement for probe: {}", probe);
-            var deviceMeasurement = createDeviceMeasurement(probe, probeDataEntry);
-            deviceMeasurementIntegrationService.persist(deviceMeasurement);
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENSOTERRA);
-        });
+        try {
+            persist(probe);
+            probeData.forEach(probeDataEntry -> {
+                log.info("Persisting measurement for probe: {}", probe);
+                var deviceMeasurement = createDeviceMeasurement(probe, probeDataEntry);
+                deviceMeasurementIntegrationService.persist(deviceMeasurement);
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENSOTERRA);
+            });
+        } catch (FiwareIntegrationLayerException e) {
+            log.error("Error while persisting probe data: {}", e.getMessage());
+        }
     }
 
     private void persist(Probe probe) {

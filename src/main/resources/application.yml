@@ -80,7 +80,7 @@ logging:
     de.app.fivegla: trace
 one:
   microstream:
-    storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}
+    storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY} 1
     channel-count: 2
 
 management:
@@ -90,4 +90,4 @@ management:
         include: health,info,prometheus
 server:
   servlet:
-    context-path: /5gla-sis
+    context-path: ${CONTEXT_PATH}

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -36,7 +37,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                         name = "5GLA Team",
                         url = "https://www.5gla.de/"),
                 termsOfService = "https://www.5gla.de/"
-        )
+        ),
+        servers = {
+                @Server(
+                        description = "Production",
+                        url = "https://app.5gla.de"
+                ),
+                @Server(
+                        description = "Local Development",
+                        url = "http://fuf.me:8080"
+                )
+        }
 )
 public class Application {
 

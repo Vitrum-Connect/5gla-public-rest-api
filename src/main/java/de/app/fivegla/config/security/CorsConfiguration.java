@@ -21,6 +21,7 @@ public class CorsConfiguration {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
+            @SuppressWarnings("NullableProblems")
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping(API_V1 + "/**")
                         .allowedOrigins(allowedOrigins);

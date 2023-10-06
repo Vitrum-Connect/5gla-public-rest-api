@@ -9,6 +9,7 @@ import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -43,149 +44,152 @@ public class SentekFiwareIntegrationServiceWrapper {
     }
 
     public void persist(Logger logger, List<Reading> readings) {
-        log.debug("Persisting {} readings for logger {}", readings.size(), logger.getName());
-        persist(logger);
-        readings.forEach(reading -> {
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("V1")
-                    .unit("V")
-                    .numValue(reading.getV1())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+        try {
+            persist(logger);
+            readings.forEach(reading -> {
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("V1")
+                        .unit("V")
+                        .numValue(reading.getV1())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("V2")
-                    .unit("V")
-                    .numValue(reading.getV2())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("V2")
+                        .unit("V")
+                        .numValue(reading.getV2())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A1")
-                    .unit("mm")
-                    .numValue(reading.getA1())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A1")
+                        .unit("mm")
+                        .numValue(reading.getA1())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T1")
-                    .unit("°C")
-                    .numValue(reading.getT1())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T1")
+                        .unit("°C")
+                        .numValue(reading.getT1())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A2")
-                    .unit("mm")
-                    .numValue(reading.getA2())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A2")
+                        .unit("mm")
+                        .numValue(reading.getA2())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T2")
-                    .unit("°C")
-                    .numValue(reading.getT2())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T2")
+                        .unit("°C")
+                        .numValue(reading.getT2())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A3")
-                    .unit("mm")
-                    .numValue(reading.getA3())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A3")
+                        .unit("mm")
+                        .numValue(reading.getA3())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T3")
-                    .unit("°C")
-                    .numValue(reading.getT3())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T3")
+                        .unit("°C")
+                        .numValue(reading.getT3())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A4")
-                    .unit("mm")
-                    .numValue(reading.getA4())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A4")
+                        .unit("mm")
+                        .numValue(reading.getA4())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T4")
-                    .unit("°C")
-                    .numValue(reading.getT4())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T4")
+                        .unit("°C")
+                        .numValue(reading.getT4())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A5")
-                    .unit("mm")
-                    .numValue(reading.getA5())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A5")
+                        .unit("mm")
+                        .numValue(reading.getA5())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T5")
-                    .unit("°C")
-                    .numValue(reading.getT5())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T5")
+                        .unit("°C")
+                        .numValue(reading.getT5())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A6")
-                    .unit("mm")
-                    .numValue(reading.getA6())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A6")
+                        .unit("mm")
+                        .numValue(reading.getA6())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T6")
-                    .unit("°C")
-                    .numValue(reading.getT6())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T6")
+                        .unit("°C")
+                        .numValue(reading.getT6())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A7")
-                    .unit("mm")
-                    .numValue(reading.getA7())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A7")
+                        .unit("mm")
+                        .numValue(reading.getA7())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T7")
-                    .unit("°C")
-                    .numValue(reading.getT7())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T7")
+                        .unit("°C")
+                        .numValue(reading.getT7())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A8")
-                    .unit("mm")
-                    .numValue(reading.getA8())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A8")
+                        .unit("mm")
+                        .numValue(reading.getA8())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T8")
-                    .unit("°C")
-                    .numValue(reading.getT8())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T8")
+                        .unit("°C")
+                        .numValue(reading.getT8())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("A9")
-                    .unit("mm")
-                    .numValue(reading.getA9())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("A9")
+                        .unit("mm")
+                        .numValue(reading.getA9())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
 
-            deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
-                    .controlledProperty("T9")
-                    .unit("°C")
-                    .numValue(reading.getT9())
-                    .build());
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
-        });
+                deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
+                        .controlledProperty("T9")
+                        .unit("°C")
+                        .numValue(reading.getT9())
+                        .build());
+                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
+            });
+        } catch (FiwareIntegrationLayerException e) {
+            log.error("Error while persisting data for logger: {}", logger.getId(), e);
+        }
     }
 
     private void persist(Logger logger) {

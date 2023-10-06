@@ -9,6 +9,7 @@ import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -45,16 +46,20 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
     }
 
     public void persist(SeriesEntry seriesEntry) {
-        persist(seriesEntry.getDeviceId());
-        seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
-            var deviceMeasurements = createDeviceMeasurements(seriesEntry, timeSeriesEntry);
-            log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
-            deviceMeasurements.forEach(deviceMeasurement -> {
-                log.info("Persisting measurement: {}", deviceMeasurement);
-                deviceMeasurementIntegrationService.persist(deviceMeasurement);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.AGVOLUTION);
+        try {
+            persist(seriesEntry.getDeviceId());
+            seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
+                var deviceMeasurements = createDeviceMeasurements(seriesEntry, timeSeriesEntry);
+                log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
+                deviceMeasurements.forEach(deviceMeasurement -> {
+                    log.info("Persisting measurement: {}", deviceMeasurement);
+                    deviceMeasurementIntegrationService.persist(deviceMeasurement);
+                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.AGVOLUTION);
+                });
             });
-        });
+        } catch (FiwareIntegrationLayerException e) {
+            log.error("Error while persisting data for device: {}", seriesEntry.getDeviceId(), e);
+        }
     }
 
     private void persist(String deviceId) {

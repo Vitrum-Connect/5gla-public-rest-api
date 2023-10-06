@@ -52,7 +52,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
                 deviceMeasurementIntegrationService.persist(deviceMeasurement);
                 fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENSOTERRA);
             });
-        } catch (FiwareIntegrationLayerException e) {
+        } catch (RuntimeException e) {
             log.error("Error while persisting probe data: {}", e.getMessage());
         }
     }

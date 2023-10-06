@@ -187,7 +187,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                         .build());
                 fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
             });
-        } catch (FiwareIntegrationLayerException e) {
+        } catch (RuntimeException e) {
             log.error("Error while persisting data for logger: {}", logger.getId(), e);
         }
     }

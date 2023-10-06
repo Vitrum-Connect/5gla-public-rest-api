@@ -245,7 +245,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
             });
-        } catch (FiwareIntegrationLayerException e) {
+        } catch (RuntimeException e) {
             log.error("Error while persisting probe data '{}'.", plot.getId(), e);
         }
     }

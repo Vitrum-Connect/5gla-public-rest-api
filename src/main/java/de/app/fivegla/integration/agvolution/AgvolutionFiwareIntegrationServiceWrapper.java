@@ -57,7 +57,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
                     fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.AGVOLUTION);
                 });
             });
-        } catch (FiwareIntegrationLayerException e) {
+        } catch (RuntimeException e) {
             log.error("Error while persisting data for device: {}", seriesEntry.getDeviceId(), e);
         }
     }

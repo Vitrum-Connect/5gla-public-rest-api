@@ -9,7 +9,6 @@ import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -125,7 +124,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                 fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
 
             });
-        } catch (FiwareIntegrationLayerException e) {
+        } catch (RuntimeException e) {
             log.error("Error while persisting data for sensor: {}", sensor, e);
         }
     }

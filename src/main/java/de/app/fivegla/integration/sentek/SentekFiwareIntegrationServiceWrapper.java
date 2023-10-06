@@ -9,7 +9,6 @@ import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -187,7 +186,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                         .build());
                 fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SENTEK);
             });
-        } catch (FiwareIntegrationLayerException e) {
+        } catch (RuntimeException e) {
             log.error("Error while persisting data for logger: {}", logger.getId(), e);
         }
     }

@@ -1,6 +1,7 @@
 package de.app.fivegla.event;
 
 import de.app.fivegla.fiware.SubscriptionService;
+import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.enums.Type;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
@@ -55,8 +56,12 @@ public class DataImportEventHandler {
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
         log.info("Handling data import event for manufacturer {}.", dataImportEvent.manufacturer());
         if (subscriptionsEnabled) {
-            subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
-            log.info("Subscribed to device measurement notifications.");
+            try {
+                subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
+                log.info("Subscribed to device measurement notifications.");
+            } catch (FiwareIntegrationLayerException e) {
+                log.error("Error subscribing to device measurement notifications.", e);
+            }
         } else {
             log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
         }

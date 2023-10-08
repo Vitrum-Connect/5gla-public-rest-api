@@ -1,37 +1,226 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "5GLA Soil Scout Integration Service",
-    "description": "This service provides the integration of the Soil Scout API with the 5GLA platform.",
-    "version": "4.0.0"
+    "title": "5gLa API",
+    "description": "This service provides the integration of multiple sensors with the 5gLa platform. It is part of the 5GLA project, which is funded by the German Federal Ministry of Transport and Digital Infrastructure (BMVI). The website of the project is https://www.5gla.de/, you can find all additional information there. If you are interested in the source code, you can find it on GitHub: https://github.com/vitrum-connect/5gla-sensor-integration-services",
+    "termsOfService": "https://www.5gla.de/",
+    "contact": {
+      "name": "5GLA Team",
+      "url": "https://www.5gla.de/"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "version": "8.0.0"
   },
+  "servers": [
+    {
+      "url": "https://app.5gla.de/api",
+      "description": "Production"
+    },
+    {
+      "url": "http://fuf.me:8080",
+      "description": "Local Development"
+    }
+  ],
   "paths": {
-    "/sensor-data-import/run": {
+    "/api/v1/mica-sense/images/{transactionId}/end": {
       "post": {
         "tags": [
-          "sensor-data-import-controller"
+          "Mica Sense"
         ],
-        "description": "Run the import manually.",
-        "operationId": "sensor-data-import.run",
+        "description": "Ends the image processing for the transaction.",
+        "operationId": "images.end-image-processing",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "The import was started."
+            "description": "The image processing was ended."
           }
-        }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
       }
     },
-    "/csv-sensor-data-import/": {
+    "/api/v1/mica-sense/images/": {
       "post": {
         "tags": [
-          "csv-sensor-data-import-controller"
+          "Mica Sense"
         ],
-        "description": "Import sensor data from CSV.",
-        "operationId": "csv-sensor-data-import.import",
+        "description": "Processes one or multiple images from the mica sense camera.",
+        "operationId": "images.process-image",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CsvSensorDataImportRequest"
+                "$ref": "#/components/schemas/ImageProcessingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "The request is invalid.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageProcessingResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Images were processed successfully.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageProcessingResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/api/v1/maintenance/send-subscription": {
+      "post": {
+        "tags": [
+          "Maintenance (enabled by profile)"
+        ],
+        "description": "Sends a subscription for device measurement notifications.",
+        "operationId": "maintenance.send-subscription",
+        "responses": {
+          "200": {
+            "description": "The subscription was sent successfully."
+          },
+          "400": {
+            "description": "The request is invalid since the subscriptions are disabled."
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/api/v1/maintenance/run": {
+      "post": {
+        "tags": [
+          "Maintenance (enabled by profile)"
+        ],
+        "description": "Run the import manually.",
+        "operationId": "manual.import.run",
+        "responses": {
+          "200": {
+            "description": "The import has been started asynchronously."
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/api/v1/data-logging/weenat/{plotId}": {
+      "post": {
+        "tags": [
+          "Data Logging"
+        ],
+        "description": "Logs the Weenat data for a specific plot.",
+        "operationId": "data-logging.weenat",
+        "parameters": [
+          {
+            "name": "plotId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeenatDataLoggingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "The request is invalid.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The Weenat data was logged successfully.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/api/v1/data-logging/sentek/{sensorId}": {
+      "post": {
+        "tags": [
+          "Data Logging"
+        ],
+        "description": "Logs the Sentek data for a specific sensor.",
+        "operationId": "data-logging.sentek",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SentekDataLoggingRequest"
               }
             }
           },
@@ -39,15 +228,133 @@
         },
         "responses": {
           "200": {
-            "description": "The import has been started."
+            "description": "The Sentek data was logged successfully.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is invalid.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
       }
     },
-    "/info/version": {
+    "/api/v1/data-logging/agvolution/{deviceId}": {
+      "post": {
+        "tags": [
+          "Data Logging"
+        ],
+        "description": "Logs the Agvolution data for a specific device.",
+        "operationId": "data-logging.agvolution",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgvolutionDataLoggingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The Agvolution data was logged successfully.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is invalid.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/api/v1/mica-sense/images/{oid}": {
       "get": {
         "tags": [
-          "info-controller"
+          "Mica Sense"
+        ],
+        "description": "Returns an image from the mica sense camera stored in the database.",
+        "operationId": "images.get-image",
+        "parameters": [
+          {
+            "name": "oid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The image was found and returned.",
+            "content": {
+              "image/tiff": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "byte"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/api/v1/info/version": {
+      "get": {
+        "tags": [
+          "Info"
         ],
         "description": "Fetch the version of the application.",
         "operationId": "info.version",
@@ -62,13 +369,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
       }
     },
-    "/info/last-run": {
+    "/api/v1/info/last-run": {
       "get": {
         "tags": [
-          "info-controller"
+          "Info"
         ],
         "description": "Fetch the last run of the import.",
         "operationId": "info.last-rum",
@@ -83,24 +395,396 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/api/v1/info/fiware": {
+      "get": {
+        "tags": [
+          "Info"
+        ],
+        "description": "Fetch the status of the fiware connection.",
+        "operationId": "info.fiware",
+        "responses": {
+          "200": {
+            "description": "The status of the fiware connection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FiwareStatusResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "CsvSensorDataImportRequest": {
+      "DroneImage": {
+        "required": [
+          "base64Image"
+        ],
         "type": "object",
         "properties": {
-          "base64EncodedCsvData": {
+          "micaSenseChannel": {
             "type": "string",
-            "description": "The base64 encoded CSV data."
+            "description": "The channel of the image.",
+            "enum": [
+              "BLUE",
+              "GREEN",
+              "RED",
+              "RED_EDGE",
+              "NIR"
+            ]
           },
-          "decodedCsvData": {
-            "type": "string"
+          "base64Image": {
+            "type": "string",
+            "description": "The base64 encoded tiff image."
           }
         },
-        "description": "CSV data import request."
+        "description": "A single image to process."
+      },
+      "ImageProcessingRequest": {
+        "required": [
+          "droneId",
+          "transactionId"
+        ],
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "The transaction id."
+          },
+          "droneId": {
+            "type": "string",
+            "description": "The id of the drone."
+          },
+          "images": {
+            "type": "array",
+            "description": "The images to process.",
+            "items": {
+              "$ref": "#/components/schemas/DroneImage"
+            }
+          }
+        },
+        "description": "Request for image processing."
+      },
+      "ImageProcessingResponse": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "The timestamp of the response."
+          },
+          "oids": {
+            "type": "array",
+            "description": "The oids of the images.",
+            "items": {
+              "type": "string",
+              "description": "The oids of the images."
+            }
+          }
+        },
+        "description": "Response for image processing."
+      },
+      "Measurement": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "measurementValues": {
+            "$ref": "#/components/schemas/MeasurementValues"
+          }
+        }
+      },
+      "MeasurementValues": {
+        "type": "object",
+        "properties": {
+          "T": {
+            "type": "number",
+            "format": "double"
+          },
+          "U": {
+            "type": "number",
+            "format": "double"
+          },
+          "RR": {
+            "type": "number",
+            "format": "double"
+          },
+          "FF": {
+            "type": "number",
+            "format": "double"
+          },
+          "FXY": {
+            "type": "number",
+            "format": "double"
+          },
+          "T_15": {
+            "type": "number",
+            "format": "double"
+          },
+          "T_30": {
+            "type": "number",
+            "format": "double"
+          },
+          "T_60": {
+            "type": "number",
+            "format": "double"
+          },
+          "WHYD_15": {
+            "type": "number",
+            "format": "double"
+          },
+          "WHYD_30": {
+            "type": "number",
+            "format": "double"
+          },
+          "WHYD_60": {
+            "type": "number",
+            "format": "double"
+          },
+          "T_DRY": {
+            "type": "number",
+            "format": "double"
+          },
+          "T_WET": {
+            "type": "number",
+            "format": "double"
+          },
+          "LW_DRY": {
+            "type": "number",
+            "format": "double"
+          },
+          "LW_V": {
+            "type": "number",
+            "format": "double"
+          },
+          "T_SOIL": {
+            "type": "number",
+            "format": "double"
+          },
+          "SSI": {
+            "type": "number",
+            "format": "double"
+          },
+          "SSI_MIN": {
+            "type": "number",
+            "format": "double"
+          },
+          "SSI_MAX": {
+            "type": "number",
+            "format": "double"
+          },
+          "PPFD": {
+            "type": "number",
+            "format": "double"
+          },
+          "PPFD_MIN": {
+            "type": "number",
+            "format": "double"
+          },
+          "PPFD_MAX": {
+            "type": "number",
+            "format": "double"
+          },
+          "T_DEW": {
+            "type": "number",
+            "format": "double"
+          },
+          "ETP": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "WeenatDataLoggingRequest": {
+        "type": "object",
+        "properties": {
+          "measurements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Measurement"
+            }
+          }
+        }
+      },
+      "Reading": {
+        "type": "object",
+        "properties": {
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "v1": {
+            "type": "number",
+            "format": "double"
+          },
+          "v2": {
+            "type": "number",
+            "format": "double"
+          },
+          "a1": {
+            "type": "number",
+            "format": "double"
+          },
+          "t1": {
+            "type": "number",
+            "format": "double"
+          },
+          "a2": {
+            "type": "number",
+            "format": "double"
+          },
+          "t2": {
+            "type": "number",
+            "format": "double"
+          },
+          "a3": {
+            "type": "number",
+            "format": "double"
+          },
+          "t3": {
+            "type": "number",
+            "format": "double"
+          },
+          "a4": {
+            "type": "number",
+            "format": "double"
+          },
+          "t4": {
+            "type": "number",
+            "format": "double"
+          },
+          "a5": {
+            "type": "number",
+            "format": "double"
+          },
+          "t5": {
+            "type": "number",
+            "format": "double"
+          },
+          "a6": {
+            "type": "number",
+            "format": "double"
+          },
+          "t6": {
+            "type": "number",
+            "format": "double"
+          },
+          "a7": {
+            "type": "number",
+            "format": "double"
+          },
+          "t7": {
+            "type": "number",
+            "format": "double"
+          },
+          "a8": {
+            "type": "number",
+            "format": "double"
+          },
+          "t8": {
+            "type": "number",
+            "format": "double"
+          },
+          "a9": {
+            "type": "number",
+            "format": "double"
+          },
+          "t9": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "SentekDataLoggingRequest": {
+        "type": "object",
+        "properties": {
+          "readings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Reading"
+            }
+          }
+        }
+      },
+      "AgvolutionDataLoggingRequest": {
+        "type": "object",
+        "properties": {
+          "seriesEntry": {
+            "$ref": "#/components/schemas/SeriesEntry"
+          }
+        }
+      },
+      "SeriesEntry": {
+        "type": "object",
+        "properties": {
+          "device": {
+            "type": "string"
+          },
+          "lon": {
+            "type": "number",
+            "format": "double"
+          },
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeseries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSeriesEntry"
+            }
+          }
+        }
+      },
+      "TimeSeriesEntry": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "aggregate": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSeriesValue"
+            }
+          }
+        }
+      },
+      "TimeSeriesValue": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        }
       },
       "VersionResponse": {
         "type": "object",
@@ -123,12 +807,140 @@
             "type": "string",
             "description": "The timestamp of the response."
           },
-          "lastRun": {
-            "type": "string",
-            "description": "The last run."
+          "lastRuns": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "description": "The last run for each manufacturer."
+            },
+            "description": "The last run for each manufacturer."
           }
         },
         "description": "Response wrapper."
+      },
+      "FiwareStatusResponse": {
+        "type": "object",
+        "properties": {
+          "fiwareStatus": {
+            "type": "string",
+            "description": "The status of the fiware connection.",
+            "enum": [
+              "100 CONTINUE",
+              "101 SWITCHING_PROTOCOLS",
+              "102 PROCESSING",
+              "103 CHECKPOINT",
+              "200 OK",
+              "201 CREATED",
+              "202 ACCEPTED",
+              "203 NON_AUTHORITATIVE_INFORMATION",
+              "204 NO_CONTENT",
+              "205 RESET_CONTENT",
+              "206 PARTIAL_CONTENT",
+              "207 MULTI_STATUS",
+              "208 ALREADY_REPORTED",
+              "226 IM_USED",
+              "300 MULTIPLE_CHOICES",
+              "301 MOVED_PERMANENTLY",
+              "302 FOUND",
+              "302 MOVED_TEMPORARILY",
+              "303 SEE_OTHER",
+              "304 NOT_MODIFIED",
+              "305 USE_PROXY",
+              "307 TEMPORARY_REDIRECT",
+              "308 PERMANENT_REDIRECT",
+              "400 BAD_REQUEST",
+              "401 UNAUTHORIZED",
+              "402 PAYMENT_REQUIRED",
+              "403 FORBIDDEN",
+              "404 NOT_FOUND",
+              "405 METHOD_NOT_ALLOWED",
+              "406 NOT_ACCEPTABLE",
+              "407 PROXY_AUTHENTICATION_REQUIRED",
+              "408 REQUEST_TIMEOUT",
+              "409 CONFLICT",
+              "410 GONE",
+              "411 LENGTH_REQUIRED",
+              "412 PRECONDITION_FAILED",
+              "413 PAYLOAD_TOO_LARGE",
+              "413 REQUEST_ENTITY_TOO_LARGE",
+              "414 URI_TOO_LONG",
+              "414 REQUEST_URI_TOO_LONG",
+              "415 UNSUPPORTED_MEDIA_TYPE",
+              "416 REQUESTED_RANGE_NOT_SATISFIABLE",
+              "417 EXPECTATION_FAILED",
+              "418 I_AM_A_TEAPOT",
+              "419 INSUFFICIENT_SPACE_ON_RESOURCE",
+              "420 METHOD_FAILURE",
+              "421 DESTINATION_LOCKED",
+              "422 UNPROCESSABLE_ENTITY",
+              "423 LOCKED",
+              "424 FAILED_DEPENDENCY",
+              "425 TOO_EARLY",
+              "426 UPGRADE_REQUIRED",
+              "428 PRECONDITION_REQUIRED",
+              "429 TOO_MANY_REQUESTS",
+              "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
+              "451 UNAVAILABLE_FOR_LEGAL_REASONS",
+              "500 INTERNAL_SERVER_ERROR",
+              "501 NOT_IMPLEMENTED",
+              "502 BAD_GATEWAY",
+              "503 SERVICE_UNAVAILABLE",
+              "504 GATEWAY_TIMEOUT",
+              "505 HTTP_VERSION_NOT_SUPPORTED",
+              "506 VARIANT_ALSO_NEGOTIATES",
+              "507 INSUFFICIENT_STORAGE",
+              "508 LOOP_DETECTED",
+              "509 BANDWIDTH_LIMIT_EXCEEDED",
+              "510 NOT_EXTENDED",
+              "511 NETWORK_AUTHENTICATION_REQUIRED"
+            ]
+          },
+          "fiwareVersion": {
+            "$ref": "#/components/schemas/Version"
+          }
+        },
+        "description": "Response wrapper."
+      },
+      "Version": {
+        "type": "object",
+        "properties": {
+          "orionLdVersion": {
+            "type": "string"
+          },
+          "orionVersion": {
+            "type": "string"
+          },
+          "uptime": {
+            "type": "string"
+          },
+          "doc": {
+            "type": "string"
+          },
+          "git_hash": {
+            "type": "string"
+          },
+          "compile_time": {
+            "type": "string"
+          },
+          "compiled_by": {
+            "type": "string"
+          },
+          "compiled_in": {
+            "type": "string"
+          },
+          "release_date": {
+            "type": "string"
+          }
+        },
+        "description": "The version of the fiware connection."
+      }
+    },
+    "securitySchemes": {
+      "X-Api-Key": {
+        "type": "apiKey",
+        "description": "Please provide a valid API key. See the documentation for more information.",
+        "name": "X-Api-Key",
+        "in": "header"
       }
     }
   }

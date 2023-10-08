@@ -32,7 +32,8 @@ public enum Error {
     SENTEK_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(22)),
     WEENAT_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(23)),
     AGVOLUTION_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(24)),
-    FIWARE_INTEGRATION_LAYER_ERROR(errorOf(25));
+    FIWARE_INTEGRATION_LAYER_ERROR(errorOf(25)),
+    FARM21_COULD_NOT_FETCH_DEVICE_DATA(errorOf(26));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

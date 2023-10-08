@@ -44,20 +44,27 @@ public class Farm21SensorDataIntegrationService extends AbstractIntegrationServi
      * @return Map of sensors with sensor data.
      */
     public Map<Sensor, List<SensorData>> fetchAll(Instant since, Instant until) {
-        var sensors = farm21SensorIntegrationService.fetchAll();
-        log.debug("Found {} sensors", sensors.size());
-        Map<Sensor, List<SensorData>> sensorsWithSensorData = new HashMap<>();
-        sensors.forEach(sensor -> {
-            log.debug("Processing sensor {}", sensor.getId());
-            var sensorData = fetchAllForSensor(sensor.getId(), since, until);
-            log.debug("Found {} sensor data for sensor {}", sensorData.size(), sensor.getId());
-            if (!sensorData.isEmpty()) {
-                sensorsWithSensorData.put(sensor, sensorData);
-            } else {
-                log.warn("No sensor data found for sensor {}", sensor.getId());
-            }
-        });
-        return sensorsWithSensorData;
+        try {
+            var sensors = farm21SensorIntegrationService.fetchAll();
+            log.debug("Found {} sensors", sensors.size());
+            Map<Sensor, List<SensorData>> sensorsWithSensorData = new HashMap<>();
+            sensors.forEach(sensor -> {
+                log.debug("Processing sensor {}", sensor.getId());
+                var sensorData = fetchAllForSensor(sensor.getId(), since, until);
+                log.debug("Found {} sensor data for sensor {}", sensorData.size(), sensor.getId());
+                if (!sensorData.isEmpty()) {
+                    sensorsWithSensorData.put(sensor, sensorData);
+                } else {
+                    log.warn("No sensor data found for sensor {}", sensor.getId());
+                }
+            });
+            return sensorsWithSensorData;
+        } catch (RuntimeException e) {
+            var errorMessage = ErrorMessage.builder().error(Error.FARM21_COULD_NOT_FETCH_DEVICE_DATA).message("Could not fetch devices for Farm21 API.").build();
+            log.error(errorMessage.asDetail());
+        }
+        log.warn("Could not fetch devices for Farm21 API, therefore returning empty map of device data.");
+        return Collections.emptyMap();
     }
 
     private List<SensorData> fetchAllForSensor(int sensorId, Instant since, Instant until) {

@@ -2,7 +2,6 @@ package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
-import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -35,17 +34,21 @@ public class Farm21SensorIntegrationService extends AbstractIntegrationService {
      * @return List of sensors.
      */
     public List<Sensor> fetchAll() {
-        var headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(getAccessToken());
-        var httpEntity = new HttpEntity<String>(headers);
-        var response = restTemplate.exchange(url + "/organisation/sensors", HttpMethod.GET, httpEntity, Sensor[].class);
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return List.of(Objects.requireNonNull(response.getBody()));
-        } else {
+        try {
+            var headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.setBearerAuth(getAccessToken());
+            var httpEntity = new HttpEntity<String>(headers);
+            var response = restTemplate.exchange(url + "/organisation/sensors", HttpMethod.GET, httpEntity, Sensor[].class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return List.of(Objects.requireNonNull(response.getBody()));
+            }
+        } catch (RuntimeException e) {
             var errorMessage = ErrorMessage.builder().error(Error.FARM21_COULD_NOT_FETCH_DEVICES).message("Could not fetch devices for Farm21 API.").build();
-            throw new BusinessException(errorMessage);
+            log.error(errorMessage.asDetail());
         }
+        log.warn("Could not fetch devices for Farm21 API, therefore returning empty list of devices.");
+        return Collections.emptyList();
     }
 
 }

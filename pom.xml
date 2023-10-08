@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.app.5gla</groupId>
-    <artifactId>sensor-integration-services</artifactId>
+    <artifactId>api</artifactId>
     <version>7.0.5</version>
 
     <properties>

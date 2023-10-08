@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   5gla-soilscout-integration-service:
-    image: ghcr.io/vitrum-connect/5gla-sensor-integration-services:latest
+    image: ghcr.io/vitrum-connect/5gla-api:latest
     environment:
       # Spring
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}

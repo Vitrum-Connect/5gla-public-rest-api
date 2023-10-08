@@ -41,7 +41,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         servers = {
                 @Server(
                         description = "Production",
-                        url = "https://app.5gla.de/5gla-sis"
+                        url = "https://app.5gla.de/api"
                 ),
                 @Server(
                         description = "Local Development",

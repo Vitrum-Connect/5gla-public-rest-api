@@ -26,9 +26,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @OpenAPIDefinition(
         info = @Info(
-                title = "5GLA Integration Services",
+                title = "5gLa API",
                 version = "${app.version:unknown}",
-                description = "This service provides the integration of multiple sensors with the 5GLA platform. " +
+                description = "This service provides the integration of multiple sensors with the 5gLa platform. " +
                         "It is part of the 5GLA project, which is funded by the German Federal Ministry of Transport and Digital Infrastructure (BMVI). " +
                         "The website of the project is https://www.5gla.de/, you can find all additional information there. If you are interested in the source code, " +
                         "you can find it on GitHub: https://github.com/vitrum-connect/5gla-sensor-integration-services",

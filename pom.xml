@@ -14,7 +14,7 @@
 
     <groupId>de.app.5gla</groupId>
     <artifactId>api</artifactId>
-    <version>9.0.0</version>
+    <version>9.1.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

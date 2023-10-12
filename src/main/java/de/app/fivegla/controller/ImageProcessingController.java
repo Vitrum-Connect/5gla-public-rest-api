@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +59,7 @@ public class ImageProcessingController implements SecuredApiAccess {
             var oid = micaSenseIntegrationService.processImage(request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
             oids.add(oid);
         });
-        return ResponseEntity.ok(ImageProcessingResponse.builder()
+        return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
                 .oids(oids)
                 .build());
     }
@@ -82,7 +83,7 @@ public class ImageProcessingController implements SecuredApiAccess {
     public ResponseEntity<Void> endImageProcessing(@PathVariable String transactionId) {
         log.debug("Ending image processing for the transaction: {}.", transactionId);
         micaSenseIntegrationService.endImageProcessing(transactionId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**

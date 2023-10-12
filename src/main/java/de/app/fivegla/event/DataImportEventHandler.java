@@ -60,7 +60,7 @@ public class DataImportEventHandler {
                 subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
                 log.info("Subscribed to device measurement notifications.");
             } catch (FiwareIntegrationLayerException e) {
-                log.error("Error subscribing to device measurement notifications.", e);
+                log.error("Could not subscribe to device measurement notifications.");
             }
         } else {
             log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");

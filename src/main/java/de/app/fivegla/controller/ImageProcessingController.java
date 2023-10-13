@@ -44,7 +44,7 @@ public class ImageProcessingController implements SecuredApiAccess {
             tags = OperationTags.MICA_SENSE
     )
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "Images were processed successfully."
     )
     @ApiResponse(
@@ -76,7 +76,7 @@ public class ImageProcessingController implements SecuredApiAccess {
             tags = OperationTags.MICA_SENSE
     )
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "The image processing was ended."
     )
     @PostMapping(value = "/{transactionId}/end")

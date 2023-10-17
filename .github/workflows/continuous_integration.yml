@@ -20,9 +20,11 @@ env:
   AGVOLUTION_PASSWORD: ${{ secrets.AGVOLUTION_PASSWORD }}
   SENSOTERRA_USERNAME: ${{ secrets.SENSOTERRA_USERNAME }}
   SENSOTERRA_PASSWORD: ${{ secrets.SENSOTERRA_PASSWORD }}
+  API_KEY: ${{ secrets.API_KEY }}
+  WEENAT_USERNAME: ${{ secrets.WEENAT_USERNAME }}
+  WEENAT_PASSWORD: ${{ secrets.WEENAT_PASSWORD }}
   MICROSTREAM_STORAGE_DIRECTORY: ./microstream-integration-test
   IMAGE_PATH_BASE_URL: localhost:8080/images
-  API_KEY: ${{ secrets.API_KEY }}
 
 jobs:
   build_jdk_17:

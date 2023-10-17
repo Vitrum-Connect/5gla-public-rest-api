@@ -67,6 +67,7 @@ public class ImageProcessingController implements SecuredApiAccess {
     /**
      * Ends the image processing for the transaction.
      *
+     * @param droneId       the ID of the drone to end the image processing for
      * @param transactionId the ID of the transaction to end the image processing for
      * @return HTTP status 200 if the image processing was ended successfully
      */
@@ -79,10 +80,10 @@ public class ImageProcessingController implements SecuredApiAccess {
             responseCode = "201",
             description = "The image processing was ended."
     )
-    @PostMapping(value = "/{transactionId}/end")
-    public ResponseEntity<Void> endImageProcessing(@PathVariable String transactionId) {
+    @PostMapping(value = "/{droneId}/{transactionId}/end")
+    public ResponseEntity<Void> endImageProcessing(@PathVariable String droneId, @PathVariable String transactionId) {
         log.debug("Ending image processing for the transaction: {}.", transactionId);
-        micaSenseIntegrationService.endImageProcessing(transactionId);
+        micaSenseIntegrationService.endImageProcessing(droneId, transactionId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

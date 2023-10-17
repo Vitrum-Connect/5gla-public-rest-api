@@ -84,9 +84,10 @@ public class MicaSenseIntegrationService {
     /**
      * Ends the image processing for a transaction.
      *
+     * @param droneId       The ID of the drone.
      * @param transactionId The ID of the transaction.
      */
-    public void endImageProcessing(String transactionId) {
-        applicationEventPublisher.publishEvent(new ImageProcessingFinishedEvent(this, transactionId));
+    public void endImageProcessing(String droneId, String transactionId) {
+        applicationEventPublisher.publishEvent(new ImageProcessingFinishedEvent(this, droneId, transactionId));
     }
 }

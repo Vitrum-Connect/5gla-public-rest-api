@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Objects;
+
 @SpringBootTest
 class ImageProcessingIntegrationTest extends SpringBootIntegrationTestBase {
 
@@ -23,7 +25,7 @@ class ImageProcessingIntegrationTest extends SpringBootIntegrationTestBase {
     }
 
     private String readBase64Image(String fileName) throws Throwable {
-        return new String(this.getClass().getClassLoader().getResourceAsStream("micasense/encoded_image_set/" + fileName).readAllBytes());
+        return new String(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("micasense/encoded_image_set/" + fileName)).readAllBytes());
     }
 
 }

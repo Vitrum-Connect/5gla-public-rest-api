@@ -12,11 +12,11 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0"
     },
-    "version": "8.0.0"
+    "version": "9.1.1"
   },
   "servers": [
     {
-      "url": "https://app.5gla.de/api",
+      "url": "https://api.5gla.de/api",
       "description": "Production"
     },
     {
@@ -25,7 +25,7 @@
     }
   ],
   "paths": {
-    "/api/v1/mica-sense/images/{transactionId}/end": {
+    "/v1/mica-sense/images/{droneId}/{transactionId}/end": {
       "post": {
         "tags": [
           "Mica Sense"
@@ -33,6 +33,14 @@
         "description": "Ends the image processing for the transaction.",
         "operationId": "images.end-image-processing",
         "parameters": [
+          {
+            "name": "droneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "transactionId",
             "in": "path",
@@ -43,7 +51,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "The image processing was ended."
           }
         },
@@ -54,7 +62,7 @@
         ]
       }
     },
-    "/api/v1/mica-sense/images/": {
+    "/v1/mica-sense/images/": {
       "post": {
         "tags": [
           "Mica Sense"
@@ -82,7 +90,7 @@
               }
             }
           },
-          "200": {
+          "201": {
             "description": "Images were processed successfully.",
             "content": {
               "*/*": {
@@ -100,7 +108,7 @@
         ]
       }
     },
-    "/api/v1/maintenance/send-subscription": {
+    "/v1/maintenance/send-subscription": {
       "post": {
         "tags": [
           "Maintenance (enabled by profile)"
@@ -122,7 +130,7 @@
         ]
       }
     },
-    "/api/v1/maintenance/run": {
+    "/v1/maintenance/run": {
       "post": {
         "tags": [
           "Maintenance (enabled by profile)"
@@ -141,7 +149,7 @@
         ]
       }
     },
-    "/api/v1/data-logging/weenat/{plotId}": {
+    "/v1/data-logging/weenat/{plotId}": {
       "post": {
         "tags": [
           "Data Logging"
@@ -198,7 +206,7 @@
         ]
       }
     },
-    "/api/v1/data-logging/sentek/{sensorId}": {
+    "/v1/data-logging/sentek/{sensorId}": {
       "post": {
         "tags": [
           "Data Logging"
@@ -255,7 +263,7 @@
         ]
       }
     },
-    "/api/v1/data-logging/agvolution/{deviceId}": {
+    "/v1/data-logging/agvolution/{deviceId}": {
       "post": {
         "tags": [
           "Data Logging"
@@ -311,7 +319,43 @@
         ]
       }
     },
-    "/api/v1/mica-sense/images/{oid}": {
+    "/v1/mica-sense/images/{transactionId}/oids": {
+      "get": {
+        "tags": [
+          "Mica Sense"
+        ],
+        "description": "Returns the image Object IDs (Oids) associated with a specific transaction.",
+        "operationId": "images.get-image-oids-for-transaction",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OIDs for the images were found and returned.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidsForTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/v1/mica-sense/images/{oid}": {
       "get": {
         "tags": [
           "Mica Sense"
@@ -351,7 +395,7 @@
         ]
       }
     },
-    "/api/v1/info/version": {
+    "/v1/info/version": {
       "get": {
         "tags": [
           "Info"
@@ -377,7 +421,7 @@
         ]
       }
     },
-    "/api/v1/info/last-run": {
+    "/v1/info/last-run": {
       "get": {
         "tags": [
           "Info"
@@ -403,7 +447,7 @@
         ]
       }
     },
-    "/api/v1/info/fiware": {
+    "/v1/info/fiware": {
       "get": {
         "tags": [
           "Info"
@@ -785,6 +829,24 @@
             "format": "double"
           }
         }
+      },
+      "OidsForTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "The transaction id."
+          },
+          "oids": {
+            "type": "array",
+            "description": "The OIDs for the images.",
+            "items": {
+              "type": "string",
+              "description": "The OIDs for the images."
+            }
+          }
+        },
+        "description": "Response wrapper."
       },
       "VersionResponse": {
         "type": "object",

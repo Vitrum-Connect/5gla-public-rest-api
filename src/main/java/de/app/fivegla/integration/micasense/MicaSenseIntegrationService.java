@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -56,6 +57,7 @@ public class MicaSenseIntegrationService {
                 .oid(UUID.randomUUID().toString())
                 .channel(micaSenseChannel)
                 .droneId(droneId)
+                .transactionId(transactionId)
                 .base64Image(base64Image)
                 .location(exifDataIntegrationService.readLocation(image))
                 .measuredAt(exifDataIntegrationService.readMeasuredAt(image))
@@ -72,11 +74,11 @@ public class MicaSenseIntegrationService {
      * @param oid The oid of the image.
      * @return The image with the given oid.
      */
-    public Optional<byte[]> getImage(String oid) {
-        AtomicReference<Optional<byte[]>> result = new AtomicReference<>(Optional.empty());
+    public Optional<MicaSenseImage> getImage(String oid) {
+        AtomicReference<Optional<MicaSenseImage>> result = new AtomicReference<>(Optional.empty());
         applicationDataRepository.getImage(oid).ifPresent(image -> {
             log.debug("Image with oid {} found.", oid);
-            result.set(Optional.of(Base64.getDecoder().decode(image.getBase64Image())));
+            result.set(Optional.of(image));
         });
         return result.get();
     }
@@ -89,5 +91,9 @@ public class MicaSenseIntegrationService {
      */
     public void endImageProcessing(String droneId, String transactionId) {
         applicationEventPublisher.publishEvent(new ImageProcessingFinishedEvent(this, droneId, transactionId));
+    }
+
+    public List<String> getImageOidsForTransaction(String transactionId) {
+        return applicationDataRepository.getImageOidsForTransaction(transactionId);
     }
 }

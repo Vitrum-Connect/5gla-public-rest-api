@@ -4,6 +4,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
+import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
 import de.app.fivegla.controller.security.SecuredApiAccess;
 import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -107,11 +109,36 @@ public class ImageProcessingController implements SecuredApiAccess {
         AtomicReference<ResponseEntity<byte[]>> responseEntity = new AtomicReference<>(ResponseEntity.notFound().build());
         micaSenseImage.ifPresent(
                 image -> {
-                    headers.setContentLength(image.length);
-                    responseEntity.set(ResponseEntity.ok().headers(headers).body(image));
+                    byte[] decodedImage = Base64.getDecoder().decode(image.getBase64Image());
+                    headers.setContentLength(decodedImage.length);
+                    responseEntity.set(ResponseEntity.ok().headers(headers).body(decodedImage));
                 }
         );
         return responseEntity.get();
+    }
+
+    /**
+     * Return the image Object IDs (Oids) associated with a specific transaction.
+     *
+     * @param transactionId The ID of the transaction
+     * @return The ResponseEntity with the OIDs for the images
+     */
+    @Operation(
+            operationId = "images.get-image-oids-for-transaction",
+            description = "Returns the image Object IDs (Oids) associated with a specific transaction.",
+            tags = OperationTags.MICA_SENSE
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The OIDs for the images were found and returned."
+    )
+    @GetMapping(value = "/{transactionId}/oids")
+    public ResponseEntity<OidsForTransactionResponse> getImageOidsForTransaction(@PathVariable String transactionId) {
+        var oids = micaSenseIntegrationService.getImageOidsForTransaction(transactionId);
+        return ResponseEntity.ok(OidsForTransactionResponse.builder()
+                .transactionId(transactionId)
+                .oids(oids)
+                .build());
     }
 
 }

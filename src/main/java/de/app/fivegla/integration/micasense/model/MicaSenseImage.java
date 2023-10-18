@@ -26,6 +26,11 @@ public class MicaSenseImage {
     private String droneId;
 
     /**
+     * The transaction id.
+     */
+    private String transactionId;
+
+    /**
      * The channel of the image since the value can not be read from the EXIF.
      */
     private MicaSenseChannel channel;

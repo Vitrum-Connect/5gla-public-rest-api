@@ -5,6 +5,7 @@ import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -65,5 +66,18 @@ public class ApplicationDataRepository {
      */
     public MicaSenseImage addMicaSenseImage(MicaSenseImage micaSenseImage) {
         return applicationData.addMicaSenseImage(micaSenseImage);
+    }
+
+    /**
+     * Retrieves the image Object IDs (Oids) associated with a specific transaction.
+     *
+     * @param transactionId The ID of the transaction.
+     * @return A list of image Object IDs (Oids) associated with the specified transaction.
+     */
+    public List<String> getImageOidsForTransaction(String transactionId) {
+        return applicationData.getMicaSenseImages().stream()
+                .map(MicaSenseImage::getTransactionId)
+                .filter(id -> id.equals(transactionId))
+                .toList();
     }
 }

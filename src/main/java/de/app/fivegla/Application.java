@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.Collections;
+import java.util.List;
 
 /**
  * The main class of the application.
@@ -56,8 +56,8 @@ public class Application {
     @Value("${app.fiware.contextBrokerUrl}")
     private String contextBrokerUrl;
 
-    @Value("${app.fiware.subscriptions.notificationUrl}")
-    private String notificationUrl;
+    @Value("${app.fiware.subscriptions.notificationUrls}")
+    private String[] notificationUrls;
 
     @Value("${app.fiware.tenant}")
     private String tenant;
@@ -123,7 +123,7 @@ public class Application {
      */
     @Bean
     public SubscriptionService subscriptionService() {
-        return new SubscriptionService(contextBrokerUrl, tenant, Collections.singletonList(notificationUrl));
+        return new SubscriptionService(contextBrokerUrl, tenant, List.of(notificationUrls));
     }
 
     /**

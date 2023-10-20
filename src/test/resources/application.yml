@@ -71,7 +71,7 @@ app:
     contextBrokerUrl: https://orion.5gla.de
     subscriptions:
       enabled: false
-      notificationUrl: https://cygnus.5gla.de
+      notificationUrls: https://cygnus1.5gla.de, https://cygnus2.5gla.de
     tenant: default
   cors:
     allowed-origins: "http://localhost:8080,https://app.5gla.de/"

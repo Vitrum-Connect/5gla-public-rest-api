@@ -304,6 +304,11 @@
       "name": "app.cors.allowed-origins",
       "type": "java.lang.String",
       "description": "The allowed origins for CORS."
+    },
+    {
+      "name": "app.fiware.tenant",
+      "type": "java.lang.String",
+      "description": "The FIWARE tenant."
     }
   ]
 }

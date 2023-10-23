@@ -18,6 +18,7 @@ import de.app.fivegla.integration.weenat.model.Measurements;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,7 +66,7 @@ public class DataLoggingController implements SecuredApiAccess {
             tags = OperationTags.DATA_LOGGING
     )
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "The Sentek data was logged successfully."
     )
     @ApiResponse(
@@ -82,7 +83,7 @@ public class DataLoggingController implements SecuredApiAccess {
         }, () -> log.error("No sensor found for id {}.", sensorId));
 
         if (dataHasBeenLogged.get()) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity
                     .badRequest()
@@ -107,7 +108,7 @@ public class DataLoggingController implements SecuredApiAccess {
             tags = OperationTags.DATA_LOGGING
     )
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "The Weenat data was logged successfully."
     )
     @ApiResponse(
@@ -124,7 +125,7 @@ public class DataLoggingController implements SecuredApiAccess {
         }, () -> log.error("No plot found for id {}.", plotId));
 
         if (dataHasBeenLogged.get()) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity
                     .badRequest()
@@ -149,7 +150,7 @@ public class DataLoggingController implements SecuredApiAccess {
             tags = OperationTags.DATA_LOGGING
     )
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "The Agvolution data was logged successfully."
     )
     @ApiResponse(
@@ -166,7 +167,7 @@ public class DataLoggingController implements SecuredApiAccess {
         }, () -> log.error("No device found for id {}.", deviceId));
 
         if (dataHasBeenLogged.get()) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity
                     .badRequest()

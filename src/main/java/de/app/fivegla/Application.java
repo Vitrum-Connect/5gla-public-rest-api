@@ -17,6 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.Collections;
+
 /**
  * The main class of the application.
  */
@@ -57,6 +59,9 @@ public class Application {
     @Value("${app.fiware.subscriptions.notificationUrl}")
     private String notificationUrl;
 
+    @Value("${app.fiware.tenant}")
+    private String tenant;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -78,7 +83,7 @@ public class Application {
      */
     @Bean
     public DeviceIntegrationService deviceIntegrationService() {
-        return new DeviceIntegrationService(contextBrokerUrl);
+        return new DeviceIntegrationService(contextBrokerUrl, tenant);
     }
 
     /**
@@ -88,7 +93,7 @@ public class Application {
      */
     @Bean
     public DeviceMeasurementIntegrationService deviceMeasurementIntegrationService() {
-        return new DeviceMeasurementIntegrationService(contextBrokerUrl);
+        return new DeviceMeasurementIntegrationService(contextBrokerUrl, tenant);
     }
 
     /**
@@ -98,7 +103,7 @@ public class Application {
      */
     @Bean
     public DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService() {
-        return new DroneDeviceMeasurementIntegrationService(contextBrokerUrl);
+        return new DroneDeviceMeasurementIntegrationService(contextBrokerUrl, tenant);
     }
 
     /**
@@ -108,7 +113,7 @@ public class Application {
      */
     @Bean
     public StatusService statusService() {
-        return new StatusService(contextBrokerUrl);
+        return new StatusService(contextBrokerUrl, tenant);
     }
 
     /**
@@ -118,7 +123,7 @@ public class Application {
      */
     @Bean
     public SubscriptionService subscriptionService() {
-        return new SubscriptionService(contextBrokerUrl, notificationUrl);
+        return new SubscriptionService(contextBrokerUrl, tenant, Collections.singletonList(notificationUrl));
     }
 
     /**

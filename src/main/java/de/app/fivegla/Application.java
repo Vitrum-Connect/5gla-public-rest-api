@@ -62,9 +62,6 @@ public class Application {
     @Value("${app.fiware.tenant}")
     private String tenant;
 
-    @Value("${app.fiware.tenant}")
-    private String tenant;
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

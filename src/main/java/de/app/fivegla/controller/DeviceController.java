@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
  * It provides RESTful endpoints for device registration.
  */
 @RestController
-@RequestMapping(BaseMappings.DEVICE_REGISTRATION)
-public class DeviceRegistrationController {
+@RequestMapping(BaseMappings.DEVICE)
+public class DeviceController {
 
     private final GenericDeviceIntegrationService genericDeviceIntegrationService;
 
-    public DeviceRegistrationController(GenericDeviceIntegrationService genericDeviceIntegrationService) {
+    public DeviceController(GenericDeviceIntegrationService genericDeviceIntegrationService) {
         this.genericDeviceIntegrationService = genericDeviceIntegrationService;
     }
 
     @Operation(
-            operationId = "device-registration.register",
-            description = "Registers a device in the system in case the device is not connected to a manufacturer's cloud.",
-            tags = OperationTags.DEVICE_REGISTRATION
+            operationId = "device.persist",
+            description = "Registers a device in the system.",
+            tags = OperationTags.DEVICE
     )
     @ApiResponse(
             responseCode = "201",
@@ -42,7 +42,7 @@ public class DeviceRegistrationController {
     )
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody DeviceRegistrationRequest request) {
-        genericDeviceIntegrationService.register(request.getManufacturer(), request.getId(), request.getLatitude(), request.getLongitude());
+        genericDeviceIntegrationService.persist(request.getManufacturer(), request.getId(), request.getLatitude(), request.getLongitude());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

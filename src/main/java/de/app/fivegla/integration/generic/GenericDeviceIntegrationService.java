@@ -44,7 +44,7 @@ public class GenericDeviceIntegrationService {
      * @param latitude     The latitude coordinate of the device's location.
      * @param longitude    The longitude coordinate of the device's location.
      */
-    public void register(Manufacturer manufacturer, String id, double latitude, double longitude) {
+    public void persist(Manufacturer manufacturer, String id, double latitude, double longitude) {
         var manufacturerConfiguration = getManufacturerConfiguration(manufacturer);
         var location = Location.builder()
                 .coordinates(List.of(latitude, longitude))

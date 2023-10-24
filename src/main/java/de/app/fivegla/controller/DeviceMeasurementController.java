@@ -29,8 +29,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 @RestController
-@RequestMapping(BaseMappings.DATA_LOGGING)
-public class DataLoggingController implements SecuredApiAccess {
+@RequestMapping(BaseMappings.DEVICE_MEASUREMENT)
+public class DeviceMeasurementController implements SecuredApiAccess {
 
     private final SentekSensorIntegrationService sentekSensorIntegrationService;
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;
@@ -39,12 +39,12 @@ public class DataLoggingController implements SecuredApiAccess {
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
 
-    public DataLoggingController(SentekSensorIntegrationService sentekSensorIntegrationService,
-                                 SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
-                                 WeenatPlotIntegrationService weenatPlotIntegrationService,
-                                 WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper,
-                                 AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
-                                 AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper) {
+    public DeviceMeasurementController(SentekSensorIntegrationService sentekSensorIntegrationService,
+                                       SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
+                                       WeenatPlotIntegrationService weenatPlotIntegrationService,
+                                       WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper,
+                                       AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
+                                       AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper) {
         this.sentekSensorIntegrationService = sentekSensorIntegrationService;
         this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
         this.weenatPlotIntegrationService = weenatPlotIntegrationService;
@@ -61,9 +61,9 @@ public class DataLoggingController implements SecuredApiAccess {
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
     @Operation(
-            operationId = "data-logging.sentek",
+            operationId = "device-measurement.sentek",
             description = "Logs the Sentek data for a specific sensor.",
-            tags = OperationTags.DATA_LOGGING
+            tags = OperationTags.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",
@@ -103,9 +103,9 @@ public class DataLoggingController implements SecuredApiAccess {
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
     @Operation(
-            operationId = "data-logging.weenat",
+            operationId = "device-measurement.weenat",
             description = "Logs the Weenat data for a specific plot.",
-            tags = OperationTags.DATA_LOGGING
+            tags = OperationTags.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",
@@ -145,9 +145,9 @@ public class DataLoggingController implements SecuredApiAccess {
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
     @Operation(
-            operationId = "data-logging.agvolution",
+            operationId = "device-measurement.agvolution",
             description = "Logs the Agvolution data for a specific device.",
-            tags = OperationTags.DATA_LOGGING
+            tags = OperationTags.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",

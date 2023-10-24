@@ -8,4 +8,5 @@ public class BaseMappings {
     public static final String MAINTENANCE = API_V1 + "/maintenance";
     public static final String INFO = API_V1 + "/info";
 
+    public static final String DEVICE_REGISTRATION = API_V1 + "/device-registration";
 }

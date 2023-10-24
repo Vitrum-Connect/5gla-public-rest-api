@@ -6,4 +6,5 @@ public interface OperationTags {
     String INFO = "Info";
     String MAINTENANCE = "Maintenance (enabled by profile)";
     String DATA_LOGGING = "Data Logging";
+    String DEVICE_REGISTRATION = "Device Registration";
 }

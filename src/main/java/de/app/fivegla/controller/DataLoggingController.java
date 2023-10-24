@@ -77,8 +77,8 @@ public class DataLoggingController implements SecuredApiAccess {
     public ResponseEntity<String> sentek(@PathVariable int sensorId, @RequestBody SentekDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         sentekSensorIntegrationService.fetchAll().stream().filter(sensor -> sensor.getId() == sensorId).findFirst().ifPresentOrElse(sensor -> {
-            log.info("Persisting {} measurements for sensor {}.", request.readings().size(), sensorId);
-            sentekFiwareIntegrationServiceWrapper.persist(sensor, request.readings());
+            log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
+            sentekFiwareIntegrationServiceWrapper.persist(sensor, request.getReadings());
             dataHasBeenLogged.set(true);
         }, () -> log.error("No sensor found for id {}.", sensorId));
 
@@ -119,8 +119,8 @@ public class DataLoggingController implements SecuredApiAccess {
     public ResponseEntity<String> weenat(@PathVariable int plotId, @RequestBody WeenatDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         weenatPlotIntegrationService.fetchAll().stream().filter(plot -> plot.getId() == plotId).findFirst().ifPresentOrElse(plot -> {
-            log.info("Persisting {} measurements for plot {}.", request.measurements().size(), plotId);
-            weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder().measurements(request.measurements()).plot(plot).build());
+            log.info("Persisting {} measurements for plot {}.", request.getMeasurements().size(), plotId);
+            weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder().measurements(request.getMeasurements()).plot(plot).build());
             dataHasBeenLogged.set(true);
         }, () -> log.error("No plot found for id {}.", plotId));
 
@@ -161,8 +161,8 @@ public class DataLoggingController implements SecuredApiAccess {
     public ResponseEntity<String> agvolution(@PathVariable String deviceId, @RequestBody AgvolutionDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         agvolutionSensorIntegrationService.fetchAll().stream().filter(device -> device.getId().equals(deviceId)).findFirst().ifPresentOrElse(plot -> {
-            log.info("Persisting {} measurements for device {}.", request.seriesEntry().getTimeSeriesEntries().size(), deviceId);
-            agvolutionFiwareIntegrationServiceWrapper.persist(request.seriesEntry());
+            log.info("Persisting {} measurements for device {}.", request.getSeriesEntry().getTimeSeriesEntries().size(), deviceId);
+            agvolutionFiwareIntegrationServiceWrapper.persist(request.getSeriesEntry());
             dataHasBeenLogged.set(true);
         }, () -> log.error("No device found for id {}.", deviceId));
 

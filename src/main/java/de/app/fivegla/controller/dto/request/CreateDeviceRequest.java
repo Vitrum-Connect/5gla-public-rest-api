@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Represents a request for device registration.")
-public class DeviceRegistrationRequest {
+public class CreateDeviceRequest {
 
     /**
      * The manufacturer of the device.

@@ -16,9 +16,11 @@ import de.app.fivegla.integration.weenat.WeenatFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.weenat.WeenatPlotIntegrationService;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,8 +75,9 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             responseCode = "400",
             description = "The request is invalid."
     )
-    @PostMapping(value = "/sentek/{sensorId}")
-    public ResponseEntity<String> sentek(@PathVariable int sensorId, @RequestBody SentekDataLoggingRequest request) {
+    @PostMapping(value = "/sentek/{sensorId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> sentek(@PathVariable @Parameter(description = "The ID of the sensor.", required = true) int sensorId,
+                                         @Parameter(description = "The logging request.", required = true) @RequestBody SentekDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         sentekSensorIntegrationService.fetchAll().stream().filter(sensor -> sensor.getId() == sensorId).findFirst().ifPresentOrElse(sensor -> {
             log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
@@ -115,8 +118,9 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             responseCode = "400",
             description = "The request is invalid."
     )
-    @PostMapping(value = "/weenat/{plotId}")
-    public ResponseEntity<String> weenat(@PathVariable int plotId, @RequestBody WeenatDataLoggingRequest request) {
+    @PostMapping(value = "/weenat/{plotId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> weenat(@PathVariable @Parameter(description = "The ID of the plot.", required = true) int plotId,
+                                         @RequestBody @Parameter(description = "The logging request.", required = true) WeenatDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         weenatPlotIntegrationService.fetchAll().stream().filter(plot -> plot.getId() == plotId).findFirst().ifPresentOrElse(plot -> {
             log.info("Persisting {} measurements for plot {}.", request.getMeasurements().size(), plotId);
@@ -157,8 +161,9 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             responseCode = "400",
             description = "The request is invalid."
     )
-    @PostMapping(value = "/agvolution/{deviceId}")
-    public ResponseEntity<String> agvolution(@PathVariable String deviceId, @RequestBody AgvolutionDataLoggingRequest request) {
+    @PostMapping(value = "/agvolution/{deviceId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> agvolution(@PathVariable @Parameter(description = "The ID of the device.", required = true) String deviceId,
+                                             @RequestBody @Parameter(description = "The logging request.", required = true) AgvolutionDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         agvolutionSensorIntegrationService.fetchAll().stream().filter(device -> device.getId().equals(deviceId)).findFirst().ifPresentOrElse(plot -> {
             log.info("Persisting {} measurements for device {}.", request.getSeriesEntry().getTimeSeriesEntries().size(), deviceId);

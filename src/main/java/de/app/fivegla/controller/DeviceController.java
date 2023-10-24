@@ -2,9 +2,10 @@ package de.app.fivegla.controller;
 
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
-import de.app.fivegla.controller.dto.request.DeviceRegistrationRequest;
+import de.app.fivegla.controller.dto.request.CreateDeviceRequest;
 import de.app.fivegla.integration.generic.GenericDeviceIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class DeviceController {
             description = "The request is invalid."
     )
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody DeviceRegistrationRequest request) {
+    public ResponseEntity<Void> create(@RequestBody @Parameter(description = "The request to create a device.") CreateDeviceRequest request) {
         genericDeviceIntegrationService.persist(request.getManufacturer(), request.getId(), request.getLatitude(), request.getLongitude());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -74,7 +75,7 @@ public class DeviceController {
             description = "The request is invalid."
     )
     @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestParam String id) {
+    public ResponseEntity<Void> delete(@RequestParam @Parameter(description = "The id of the device.", required = true) String id) {
         genericDeviceIntegrationService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

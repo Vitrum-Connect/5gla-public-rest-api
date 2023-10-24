@@ -12,11 +12,11 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0"
     },
-    "version": "8.0.0"
+    "version": "10.0.0"
   },
   "servers": [
     {
-      "url": "https://app.5gla.de/api",
+      "url": "https://api.5gla.de/api",
       "description": "Production"
     },
     {
@@ -25,7 +25,7 @@
     }
   ],
   "paths": {
-    "/api/v1/mica-sense/images/{transactionId}/end": {
+    "/v1/mica-sense/images/{droneId}/{transactionId}/end": {
       "post": {
         "tags": [
           "Mica Sense"
@@ -34,8 +34,18 @@
         "operationId": "images.end-image-processing",
         "parameters": [
           {
+            "name": "droneId",
+            "in": "path",
+            "description": "The drone ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "transactionId",
             "in": "path",
+            "description": "The transaction ID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -43,7 +53,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "The image processing was ended."
           }
         },
@@ -54,7 +64,7 @@
         ]
       }
     },
-    "/api/v1/mica-sense/images/": {
+    "/v1/mica-sense/images/": {
       "post": {
         "tags": [
           "Mica Sense"
@@ -75,17 +85,17 @@
           "400": {
             "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ImageProcessingResponse"
                 }
               }
             }
           },
-          "200": {
+          "201": {
             "description": "Images were processed successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ImageProcessingResponse"
                 }
@@ -100,7 +110,7 @@
         ]
       }
     },
-    "/api/v1/maintenance/send-subscription": {
+    "/v1/maintenance/send-subscription": {
       "post": {
         "tags": [
           "Maintenance (enabled by profile)"
@@ -122,7 +132,7 @@
         ]
       }
     },
-    "/api/v1/maintenance/run": {
+    "/v1/maintenance/run": {
       "post": {
         "tags": [
           "Maintenance (enabled by profile)"
@@ -141,17 +151,71 @@
         ]
       }
     },
-    "/api/v1/data-logging/weenat/{plotId}": {
+    "/v1/device": {
       "post": {
         "tags": [
-          "Data Logging"
+          "Device"
+        ],
+        "description": "Registers a device in the system.",
+        "operationId": "device.create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDeviceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "The request is invalid."
+          },
+          "201": {
+            "description": "The device has been registered successfully."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Device"
+        ],
+        "description": "Deletes a device from the system.",
+        "operationId": "device.delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "The id of the device.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "The request is invalid."
+          },
+          "204": {
+            "description": "The device has been deleted successfully."
+          }
+        }
+      }
+    },
+    "/v1/device-measurement/weenat/{plotId}": {
+      "post": {
+        "tags": [
+          "Device Measurement"
         ],
         "description": "Logs the Weenat data for a specific plot.",
-        "operationId": "data-logging.weenat",
+        "operationId": "device-measurement.weenat",
         "parameters": [
           {
             "name": "plotId",
             "in": "path",
+            "description": "The ID of the plot.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -170,20 +234,20 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "The request is invalid.",
+          "201": {
+            "description": "The Weenat data was logged successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
             }
           },
-          "200": {
-            "description": "The Weenat data was logged successfully.",
+          "400": {
+            "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -198,17 +262,18 @@
         ]
       }
     },
-    "/api/v1/data-logging/sentek/{sensorId}": {
+    "/v1/device-measurement/sentek/{sensorId}": {
       "post": {
         "tags": [
-          "Data Logging"
+          "Device Measurement"
         ],
         "description": "Logs the Sentek data for a specific sensor.",
-        "operationId": "data-logging.sentek",
+        "operationId": "device-measurement.sentek",
         "parameters": [
           {
             "name": "sensorId",
             "in": "path",
+            "description": "The ID of the sensor.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -227,10 +292,10 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "The Sentek data was logged successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -240,7 +305,7 @@
           "400": {
             "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -255,17 +320,18 @@
         ]
       }
     },
-    "/api/v1/data-logging/agvolution/{deviceId}": {
+    "/v1/device-measurement/agvolution/{deviceId}": {
       "post": {
         "tags": [
-          "Data Logging"
+          "Device Measurement"
         ],
         "description": "Logs the Agvolution data for a specific device.",
-        "operationId": "data-logging.agvolution",
+        "operationId": "device-measurement.agvolution",
         "parameters": [
           {
             "name": "deviceId",
             "in": "path",
+            "description": "The ID of the device.",
             "required": true,
             "schema": {
               "type": "string"
@@ -283,10 +349,10 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "The Agvolution data was logged successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -296,7 +362,7 @@
           "400": {
             "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -311,7 +377,43 @@
         ]
       }
     },
-    "/api/v1/mica-sense/images/{oid}": {
+    "/v1/mica-sense/images/{transactionId}/oids": {
+      "get": {
+        "tags": [
+          "Mica Sense"
+        ],
+        "description": "Returns the image Object IDs (Oids) associated with a specific transaction.",
+        "operationId": "images.get-image-oids-for-transaction",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OIDs for the images were found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidsForTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/v1/mica-sense/images/{oid}": {
       "get": {
         "tags": [
           "Mica Sense"
@@ -351,7 +453,7 @@
         ]
       }
     },
-    "/api/v1/info/version": {
+    "/v1/info/version": {
       "get": {
         "tags": [
           "Info"
@@ -377,7 +479,7 @@
         ]
       }
     },
-    "/api/v1/info/last-run": {
+    "/v1/info/last-run": {
       "get": {
         "tags": [
           "Info"
@@ -403,7 +505,7 @@
         ]
       }
     },
-    "/api/v1/info/fiware": {
+    "/v1/info/fiware": {
       "get": {
         "tags": [
           "Info"
@@ -479,7 +581,7 @@
             }
           }
         },
-        "description": "Request for image processing."
+        "description": "The image processing request."
       },
       "ImageProcessingResponse": {
         "type": "object",
@@ -499,6 +601,40 @@
         },
         "description": "Response for image processing."
       },
+      "CreateDeviceRequest": {
+        "type": "object",
+        "properties": {
+          "manufacturer": {
+            "type": "string",
+            "description": "The manufacturer of the device.",
+            "enum": [
+              "SOILSCOUT",
+              "AGRANIMO",
+              "FARM21",
+              "MICA_SENSE",
+              "AGVOLUTION",
+              "SENSOTERRA",
+              "SENTEK",
+              "WEENAT"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the device."
+          },
+          "latitude": {
+            "type": "number",
+            "description": "The latitude of the device.",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "description": "The longitude of the device.",
+            "format": "double"
+          }
+        },
+        "description": "The request to create a device."
+      },
       "Measurement": {
         "type": "object",
         "properties": {
@@ -509,7 +645,8 @@
           "measurementValues": {
             "$ref": "#/components/schemas/MeasurementValues"
           }
-        }
+        },
+        "description": "The measurements to log."
       },
       "MeasurementValues": {
         "type": "object",
@@ -617,11 +754,13 @@
         "properties": {
           "measurements": {
             "type": "array",
+            "description": "The measurements to log.",
             "items": {
               "$ref": "#/components/schemas/Measurement"
             }
           }
-        }
+        },
+        "description": "The logging request."
       },
       "Reading": {
         "type": "object",
@@ -710,18 +849,21 @@
             "type": "number",
             "format": "double"
           }
-        }
+        },
+        "description": "The readings to log."
       },
       "SentekDataLoggingRequest": {
         "type": "object",
         "properties": {
           "readings": {
             "type": "array",
+            "description": "The readings to log.",
             "items": {
               "$ref": "#/components/schemas/Reading"
             }
           }
-        }
+        },
+        "description": "The logging request."
       },
       "AgvolutionDataLoggingRequest": {
         "type": "object",
@@ -729,7 +871,8 @@
           "seriesEntry": {
             "$ref": "#/components/schemas/SeriesEntry"
           }
-        }
+        },
+        "description": "The logging request."
       },
       "SeriesEntry": {
         "type": "object",
@@ -751,7 +894,8 @@
               "$ref": "#/components/schemas/TimeSeriesEntry"
             }
           }
-        }
+        },
+        "description": "Represents a series entry in a schema."
       },
       "TimeSeriesEntry": {
         "type": "object",
@@ -785,6 +929,24 @@
             "format": "double"
           }
         }
+      },
+      "OidsForTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "The transaction id."
+          },
+          "oids": {
+            "type": "array",
+            "description": "The OIDs for the images.",
+            "items": {
+              "type": "string",
+              "description": "The OIDs for the images."
+            }
+          }
+        },
+        "description": "Response wrapper."
       },
       "VersionResponse": {
         "type": "object",

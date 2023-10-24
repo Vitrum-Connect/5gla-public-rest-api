@@ -73,4 +73,12 @@ public class GenericDeviceIntegrationService {
         };
     }
 
+    /**
+     * Deletes a device with the specified ID.
+     *
+     * @param id The ID of the device to be deleted.
+     */
+    public void delete(String id) {
+        deviceIntegrationService.delete(id);
+    }
 }

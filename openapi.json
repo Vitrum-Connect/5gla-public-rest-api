@@ -12,7 +12,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0"
     },
-    "version": "9.1.1"
+    "version": "10.0.0"
   },
   "servers": [
     {
@@ -36,6 +36,7 @@
           {
             "name": "droneId",
             "in": "path",
+            "description": "The drone ID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -44,6 +45,7 @@
           {
             "name": "transactionId",
             "in": "path",
+            "description": "The transaction ID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -83,7 +85,7 @@
           "400": {
             "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ImageProcessingResponse"
                 }
@@ -93,7 +95,7 @@
           "201": {
             "description": "Images were processed successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ImageProcessingResponse"
                 }
@@ -149,17 +151,71 @@
         ]
       }
     },
-    "/v1/data-logging/weenat/{plotId}": {
+    "/v1/device": {
       "post": {
         "tags": [
-          "Data Logging"
+          "Device"
+        ],
+        "description": "Registers a device in the system.",
+        "operationId": "device.create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDeviceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "The request is invalid."
+          },
+          "201": {
+            "description": "The device has been registered successfully."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Device"
+        ],
+        "description": "Deletes a device from the system.",
+        "operationId": "device.delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "The id of the device.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "The request is invalid."
+          },
+          "204": {
+            "description": "The device has been deleted successfully."
+          }
+        }
+      }
+    },
+    "/v1/device-measurement/weenat/{plotId}": {
+      "post": {
+        "tags": [
+          "Device Measurement"
         ],
         "description": "Logs the Weenat data for a specific plot.",
-        "operationId": "data-logging.weenat",
+        "operationId": "device-measurement.weenat",
         "parameters": [
           {
             "name": "plotId",
             "in": "path",
+            "description": "The ID of the plot.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -178,20 +234,20 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "The request is invalid.",
+          "201": {
+            "description": "The Weenat data was logged successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
             }
           },
-          "200": {
-            "description": "The Weenat data was logged successfully.",
+          "400": {
+            "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -206,17 +262,18 @@
         ]
       }
     },
-    "/v1/data-logging/sentek/{sensorId}": {
+    "/v1/device-measurement/sentek/{sensorId}": {
       "post": {
         "tags": [
-          "Data Logging"
+          "Device Measurement"
         ],
         "description": "Logs the Sentek data for a specific sensor.",
-        "operationId": "data-logging.sentek",
+        "operationId": "device-measurement.sentek",
         "parameters": [
           {
             "name": "sensorId",
             "in": "path",
+            "description": "The ID of the sensor.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -235,10 +292,10 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "The Sentek data was logged successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -248,7 +305,7 @@
           "400": {
             "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -263,17 +320,18 @@
         ]
       }
     },
-    "/v1/data-logging/agvolution/{deviceId}": {
+    "/v1/device-measurement/agvolution/{deviceId}": {
       "post": {
         "tags": [
-          "Data Logging"
+          "Device Measurement"
         ],
         "description": "Logs the Agvolution data for a specific device.",
-        "operationId": "data-logging.agvolution",
+        "operationId": "device-measurement.agvolution",
         "parameters": [
           {
             "name": "deviceId",
             "in": "path",
+            "description": "The ID of the device.",
             "required": true,
             "schema": {
               "type": "string"
@@ -291,10 +349,10 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "The Agvolution data was logged successfully.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -304,7 +362,7 @@
           "400": {
             "description": "The request is invalid.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -340,7 +398,7 @@
           "200": {
             "description": "The OIDs for the images were found and returned.",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/OidsForTransactionResponse"
                 }
@@ -523,7 +581,7 @@
             }
           }
         },
-        "description": "Request for image processing."
+        "description": "The image processing request."
       },
       "ImageProcessingResponse": {
         "type": "object",
@@ -543,6 +601,40 @@
         },
         "description": "Response for image processing."
       },
+      "CreateDeviceRequest": {
+        "type": "object",
+        "properties": {
+          "manufacturer": {
+            "type": "string",
+            "description": "The manufacturer of the device.",
+            "enum": [
+              "SOILSCOUT",
+              "AGRANIMO",
+              "FARM21",
+              "MICA_SENSE",
+              "AGVOLUTION",
+              "SENSOTERRA",
+              "SENTEK",
+              "WEENAT"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the device."
+          },
+          "latitude": {
+            "type": "number",
+            "description": "The latitude of the device.",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "description": "The longitude of the device.",
+            "format": "double"
+          }
+        },
+        "description": "The request to create a device."
+      },
       "Measurement": {
         "type": "object",
         "properties": {
@@ -553,7 +645,8 @@
           "measurementValues": {
             "$ref": "#/components/schemas/MeasurementValues"
           }
-        }
+        },
+        "description": "The measurements to log."
       },
       "MeasurementValues": {
         "type": "object",
@@ -661,11 +754,13 @@
         "properties": {
           "measurements": {
             "type": "array",
+            "description": "The measurements to log.",
             "items": {
               "$ref": "#/components/schemas/Measurement"
             }
           }
-        }
+        },
+        "description": "The logging request."
       },
       "Reading": {
         "type": "object",
@@ -754,18 +849,21 @@
             "type": "number",
             "format": "double"
           }
-        }
+        },
+        "description": "The readings to log."
       },
       "SentekDataLoggingRequest": {
         "type": "object",
         "properties": {
           "readings": {
             "type": "array",
+            "description": "The readings to log.",
             "items": {
               "$ref": "#/components/schemas/Reading"
             }
           }
-        }
+        },
+        "description": "The logging request."
       },
       "AgvolutionDataLoggingRequest": {
         "type": "object",
@@ -773,7 +871,8 @@
           "seriesEntry": {
             "$ref": "#/components/schemas/SeriesEntry"
           }
-        }
+        },
+        "description": "The logging request."
       },
       "SeriesEntry": {
         "type": "object",
@@ -795,7 +894,8 @@
               "$ref": "#/components/schemas/TimeSeriesEntry"
             }
           }
-        }
+        },
+        "description": "Represents a series entry in a schema."
       },
       "TimeSeriesEntry": {
         "type": "object",

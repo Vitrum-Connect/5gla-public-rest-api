@@ -16,9 +16,11 @@ import de.app.fivegla.integration.weenat.WeenatFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.weenat.WeenatPlotIntegrationService;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +31,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 @RestController
-@RequestMapping(BaseMappings.DATA_LOGGING)
-public class DataLoggingController implements SecuredApiAccess {
+@RequestMapping(BaseMappings.DEVICE_MEASUREMENT)
+public class DeviceMeasurementController implements SecuredApiAccess {
 
     private final SentekSensorIntegrationService sentekSensorIntegrationService;
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;
@@ -39,12 +41,12 @@ public class DataLoggingController implements SecuredApiAccess {
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
 
-    public DataLoggingController(SentekSensorIntegrationService sentekSensorIntegrationService,
-                                 SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
-                                 WeenatPlotIntegrationService weenatPlotIntegrationService,
-                                 WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper,
-                                 AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
-                                 AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper) {
+    public DeviceMeasurementController(SentekSensorIntegrationService sentekSensorIntegrationService,
+                                       SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
+                                       WeenatPlotIntegrationService weenatPlotIntegrationService,
+                                       WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper,
+                                       AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
+                                       AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper) {
         this.sentekSensorIntegrationService = sentekSensorIntegrationService;
         this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
         this.weenatPlotIntegrationService = weenatPlotIntegrationService;
@@ -61,9 +63,9 @@ public class DataLoggingController implements SecuredApiAccess {
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
     @Operation(
-            operationId = "data-logging.sentek",
+            operationId = "device-measurement.sentek",
             description = "Logs the Sentek data for a specific sensor.",
-            tags = OperationTags.DATA_LOGGING
+            tags = OperationTags.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",
@@ -73,12 +75,13 @@ public class DataLoggingController implements SecuredApiAccess {
             responseCode = "400",
             description = "The request is invalid."
     )
-    @PostMapping(value = "/sentek/{sensorId}")
-    public ResponseEntity<String> sentek(@PathVariable int sensorId, @RequestBody SentekDataLoggingRequest request) {
+    @PostMapping(value = "/sentek/{sensorId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> sentek(@PathVariable @Parameter(description = "The ID of the sensor.", required = true) int sensorId,
+                                         @Parameter(description = "The logging request.", required = true) @RequestBody SentekDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         sentekSensorIntegrationService.fetchAll().stream().filter(sensor -> sensor.getId() == sensorId).findFirst().ifPresentOrElse(sensor -> {
-            log.info("Persisting {} measurements for sensor {}.", request.readings().size(), sensorId);
-            sentekFiwareIntegrationServiceWrapper.persist(sensor, request.readings());
+            log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
+            sentekFiwareIntegrationServiceWrapper.persist(sensor, request.getReadings());
             dataHasBeenLogged.set(true);
         }, () -> log.error("No sensor found for id {}.", sensorId));
 
@@ -103,9 +106,9 @@ public class DataLoggingController implements SecuredApiAccess {
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
     @Operation(
-            operationId = "data-logging.weenat",
+            operationId = "device-measurement.weenat",
             description = "Logs the Weenat data for a specific plot.",
-            tags = OperationTags.DATA_LOGGING
+            tags = OperationTags.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",
@@ -115,12 +118,13 @@ public class DataLoggingController implements SecuredApiAccess {
             responseCode = "400",
             description = "The request is invalid."
     )
-    @PostMapping(value = "/weenat/{plotId}")
-    public ResponseEntity<String> weenat(@PathVariable int plotId, @RequestBody WeenatDataLoggingRequest request) {
+    @PostMapping(value = "/weenat/{plotId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> weenat(@PathVariable @Parameter(description = "The ID of the plot.", required = true) int plotId,
+                                         @RequestBody @Parameter(description = "The logging request.", required = true) WeenatDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         weenatPlotIntegrationService.fetchAll().stream().filter(plot -> plot.getId() == plotId).findFirst().ifPresentOrElse(plot -> {
-            log.info("Persisting {} measurements for plot {}.", request.measurements().size(), plotId);
-            weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder().measurements(request.measurements()).plot(plot).build());
+            log.info("Persisting {} measurements for plot {}.", request.getMeasurements().size(), plotId);
+            weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder().measurements(request.getMeasurements()).plot(plot).build());
             dataHasBeenLogged.set(true);
         }, () -> log.error("No plot found for id {}.", plotId));
 
@@ -145,9 +149,9 @@ public class DataLoggingController implements SecuredApiAccess {
      * @return The ResponseEntity object indicating the success or failure of the data logging
      */
     @Operation(
-            operationId = "data-logging.agvolution",
+            operationId = "device-measurement.agvolution",
             description = "Logs the Agvolution data for a specific device.",
-            tags = OperationTags.DATA_LOGGING
+            tags = OperationTags.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",
@@ -157,12 +161,13 @@ public class DataLoggingController implements SecuredApiAccess {
             responseCode = "400",
             description = "The request is invalid."
     )
-    @PostMapping(value = "/agvolution/{deviceId}")
-    public ResponseEntity<String> agvolution(@PathVariable String deviceId, @RequestBody AgvolutionDataLoggingRequest request) {
+    @PostMapping(value = "/agvolution/{deviceId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> agvolution(@PathVariable @Parameter(description = "The ID of the device.", required = true) String deviceId,
+                                             @RequestBody @Parameter(description = "The logging request.", required = true) AgvolutionDataLoggingRequest request) {
         AtomicBoolean dataHasBeenLogged = new AtomicBoolean(false);
         agvolutionSensorIntegrationService.fetchAll().stream().filter(device -> device.getId().equals(deviceId)).findFirst().ifPresentOrElse(plot -> {
-            log.info("Persisting {} measurements for device {}.", request.seriesEntry().getTimeSeriesEntries().size(), deviceId);
-            agvolutionFiwareIntegrationServiceWrapper.persist(request.seriesEntry());
+            log.info("Persisting {} measurements for device {}.", request.getSeriesEntry().getTimeSeriesEntries().size(), deviceId);
+            agvolutionFiwareIntegrationServiceWrapper.persist(request.getSeriesEntry());
             dataHasBeenLogged.set(true);
         }, () -> log.error("No device found for id {}.", deviceId));
 

@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,7 +81,7 @@ public class MaintenanceController implements SecuredApiAccess {
             responseCode = "200",
             description = "The import has been started asynchronously."
     )
-    @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/run")
     public ResponseEntity<Void> runAllImports() {
         dataImportScheduler.scheduleDataImport();
         return ResponseEntity.ok().build();

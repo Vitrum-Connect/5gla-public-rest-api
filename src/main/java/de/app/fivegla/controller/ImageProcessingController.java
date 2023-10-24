@@ -8,13 +8,11 @@ import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
 import de.app.fivegla.controller.security.SecuredApiAccess;
 import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -53,8 +51,8 @@ public class ImageProcessingController implements SecuredApiAccess {
             responseCode = "400",
             description = "The request is invalid."
     )
-    @PostMapping(value = "/", consumes = "application/json")
-    public ResponseEntity<ImageProcessingResponse> processImage(@Valid @RequestBody ImageProcessingRequest request) {
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ImageProcessingResponse> processImage(@Valid @RequestBody @Parameter(description = "The image processing request.", required = true) ImageProcessingRequest request) {
         log.debug("Processing image for the drone: {}.", request.getDroneId());
         var oids = new ArrayList<String>();
         request.getImages().forEach(droneImage -> {
@@ -82,8 +80,9 @@ public class ImageProcessingController implements SecuredApiAccess {
             responseCode = "201",
             description = "The image processing was ended."
     )
-    @PostMapping(value = "/{droneId}/{transactionId}/end")
-    public ResponseEntity<Void> endImageProcessing(@PathVariable String droneId, @PathVariable String transactionId) {
+    @PostMapping(value = "/{droneId}/{transactionId}/end", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> endImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
+                                                   @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
         log.debug("Ending image processing for the transaction: {}.", transactionId);
         micaSenseIntegrationService.endImageProcessing(droneId, transactionId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -132,7 +131,7 @@ public class ImageProcessingController implements SecuredApiAccess {
             responseCode = "200",
             description = "The OIDs for the images were found and returned."
     )
-    @GetMapping(value = "/{transactionId}/oids")
+    @GetMapping(value = "/{transactionId}/oids", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OidsForTransactionResponse> getImageOidsForTransaction(@PathVariable String transactionId) {
         var oids = micaSenseIntegrationService.getImageOidsForTransaction(transactionId);
         return ResponseEntity.ok(OidsForTransactionResponse.builder()

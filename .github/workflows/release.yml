@@ -31,6 +31,21 @@ jobs:
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FARM21_API_TOKEN: ${{ secrets.FARM21_API_TOKEN }}
+          SOILSCOUT_USERNAME: ${{ secrets.SOILSCOUT_USERNAME }}
+          SOILSCOUT_PASSWORD: ${{ secrets.SOILSCOUT_PASSWORD }}
+          AGRANIMO_USERNAME: ${{ secrets.AGRANIMO_USERNAME }}
+          AGRANIMO_PASSWORD: ${{ secrets.AGRANIMO_PASSWORD }}
+          SENTEK_API_TOKEN: ${{ secrets.SENTEK_API_TOKEN }}
+          AGVOLUTION_USERNAME: ${{ secrets.AGVOLUTION_USERNAME }}
+          AGVOLUTION_PASSWORD: ${{ secrets.AGVOLUTION_PASSWORD }}
+          SENSOTERRA_USERNAME: ${{ secrets.SENSOTERRA_USERNAME }}
+          SENSOTERRA_PASSWORD: ${{ secrets.SENSOTERRA_PASSWORD }}
+          API_KEY: ${{ secrets.API_KEY }}
+          WEENAT_USERNAME: ${{ secrets.WEENAT_USERNAME }}
+          WEENAT_PASSWORD: ${{ secrets.WEENAT_PASSWORD }}
+          MICROSTREAM_STORAGE_DIRECTORY: ./microstream-integration-test
+          IMAGE_PATH_BASE_URL: localhost:8080/images
         run: mvn -B verify --file pom.xml --settings .github/settings.xml
 
       - name: Login to GitHub Container Registry

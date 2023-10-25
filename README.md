@@ -30,7 +30,7 @@ following template and replace the values with your own ones:
   WEENAT_PASSWORD=___CHANGE_ME___;
   WEENAT_USERNAME=___CHANGE_ME___;
   API_KEY=___CHANGE_ME___;
-  NOTIFICATION_URL=https://localhost:5050/notify;
+  NOTIFICATION_URLS=https://localhost:5050/notify;
   SPRING_PROFILES_ACTIVE=maintenance;
   CORS_ALLOWED_ORIGINS=http://localhost:8080;
   CONTEXT_PATH=/api;
@@ -56,7 +56,7 @@ The following table describes the environment variables:
 | WEENAT_PASSWORD               | The password of the Weenat account.                     |
 | WEENAT_USERNAME               | The username of the Weenat account.                     |
 | API_KEY                       | The API key of the application.                         |
-| NOTIFICATION_URL              | The URL of the notification service.                    |
+| NOTIFICATION_URLS             | The URL of the notification service.                    |
 | SPRING_PROFILES_ACTIVE        | The active Spring profile.                              |
 | CORS_ALLOWED_ORIGINS          | The allowed origins for CORS.                           |
 | CONTEXT_PATH                  | The context path of the application.                    |

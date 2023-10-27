@@ -46,7 +46,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
 
     public void persist(SeriesEntry seriesEntry) {
         try {
-            persist(seriesEntry.getDeviceId());
+            persist(seriesEntry.getDeviceId(), seriesEntry.getLatitude(), seriesEntry.getLongitude());
             seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
                 var deviceMeasurements = createDeviceMeasurements(seriesEntry, timeSeriesEntry);
                 log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
@@ -61,11 +61,15 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         }
     }
 
-    private void persist(String deviceId) {
+    private void persist(String deviceId, double latitude, double longitude) {
         var device = Device.builder()
                 .id(FiwareDeviceId.create(getManufacturerConfiguration(), deviceId))
+                .manufacturerSpecificId(deviceId)
                 .deviceCategory(DeviceCategory.builder()
                         .value(List.of(getManufacturerConfiguration().getKey()))
+                        .build())
+                .location(Location.builder()
+                        .coordinates(List.of(latitude, longitude))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
@@ -95,5 +99,15 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
 
     private CommonManufacturerConfiguration getManufacturerConfiguration() {
         return applicationConfiguration.getSensors().agvolution();
+    }
+
+    /**
+     * Retrieves the unique device ID of the specified device.
+     *
+     * @param deviceId The unique identifier of the device.
+     * @return The device ID.
+     */
+    public String deviceIdOf(String deviceId) {
+        return FiwareDeviceId.create(getManufacturerConfiguration(), deviceId);
     }
 }

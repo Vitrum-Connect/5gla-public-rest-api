@@ -88,7 +88,7 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             sentekFiwareIntegrationServiceWrapper.persist(sensor, request.getReadings());
             dataHasBeenLogged.set(true);
         }, () -> {
-            log.warn("No sentek sensor found for id {}.", sensorId);
+            log.warn("No sensor found for id {}.", sensorId);
             log.info("Now looking for a generic sensor for id {}.", sensorId);
             deviceIntegrationService.read(sentekFiwareIntegrationServiceWrapper.deviceIdOf(sensorId)).ifPresentOrElse(device -> {
                 log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
@@ -138,8 +138,19 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             log.info("Persisting {} measurements for plot {}.", request.getMeasurements().size(), plotId);
             weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder().measurements(request.getMeasurements()).plot(plot).build());
             dataHasBeenLogged.set(true);
-        }, () -> log.error("No plot found for id {}.", plotId));
-
+        }, () -> {
+            log.warn("No sensor found for id {}.", plotId);
+            log.info("Now looking for a generic sensor for id {}.", plotId);
+            deviceIntegrationService.read(weenatFiwareIntegrationServiceWrapper.deviceIdOf(plotId)).ifPresentOrElse(device -> {
+                log.info("Persisting {} measurements for plot {}.", request.getMeasurements().size(), plotId);
+                var plot = weenatPlotIntegrationService.plotFromDevice(device);
+                weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder()
+                        .measurements(request.getMeasurements())
+                        .plot(plot).build());
+                dataHasBeenLogged.set(true);
+                dataHasBeenLogged.set(true);
+            }, () -> log.error("No sensor found for id {}.", plotId));
+        });
         if (dataHasBeenLogged.get()) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
@@ -182,10 +193,10 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             agvolutionFiwareIntegrationServiceWrapper.persist(request.getSeriesEntry());
             dataHasBeenLogged.set(true);
         }, () -> {
-            log.warn("No sentek sensor found for id {}.", deviceId);
+            log.warn("No sensor found for id {}.", deviceId);
             log.info("Now looking for a generic sensor for id {}.", deviceId);
             deviceIntegrationService.read(agvolutionFiwareIntegrationServiceWrapper.deviceIdOf(deviceId)).ifPresentOrElse(device -> {
-                log.info("Persisting {} measurements for device {}.", request.getSeriesEntry().getTimeSeriesEntries().size(), deviceId);
+                log.info("Persisting {} series entries for device {}.", request.getSeriesEntry().getTimeSeriesEntries().size(), deviceId);
                 agvolutionFiwareIntegrationServiceWrapper.persist(request.getSeriesEntry());
                 dataHasBeenLogged.set(true);
             }, () -> log.error("No sensor found for id {}.", deviceId));

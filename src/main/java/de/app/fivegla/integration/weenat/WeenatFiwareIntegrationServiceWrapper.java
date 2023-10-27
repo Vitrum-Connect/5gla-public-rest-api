@@ -180,7 +180,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
-                var solarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getSolarIrridiance())
+                var solarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getSolarIrradiance())
                         .unit("W/m²")
                         .build();
                 if (solarIrridiance != null) {
@@ -188,7 +188,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
-                var minimumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMinimumSolarIrridiance())
+                var minimumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMinSolarIrradiance())
                         .unit("W/m²")
                         .build();
                 if (minimumSolarIrridiance != null) {
@@ -196,7 +196,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
-                var maximumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMaximumSolarIrridiance())
+                var maximumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMaxSolarIrradiance())
                         .unit("W/m²")
                         .build();
                 if (maximumSolarIrridiance != null) {
@@ -252,8 +252,12 @@ public class WeenatFiwareIntegrationServiceWrapper {
     private void persist(Plot plot) {
         var device = Device.builder()
                 .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plot.getId())))
+                .manufacturerSpecificId(String.valueOf(plot.getId()))
                 .deviceCategory(DeviceCategory.builder()
                         .value(List.of(getManufacturerConfiguration().getKey()))
+                        .build())
+                .location(Location.builder()
+                        .coordinates(List.of(plot.getLatitude(), plot.getLongitude()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
@@ -275,5 +279,15 @@ public class WeenatFiwareIntegrationServiceWrapper {
 
     private WeenatConfiguration getManufacturerConfiguration() {
         return applicationConfiguration.getSensors().weenat();
+    }
+
+    /**
+     * Returns the device ID for a given plot ID.
+     *
+     * @param plotId the ID of the plot
+     * @return the device ID
+     */
+    public String deviceIdOf(int plotId) {
+        return FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plotId));
     }
 }

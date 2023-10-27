@@ -194,8 +194,12 @@ public class SentekFiwareIntegrationServiceWrapper {
     private void persist(Logger logger) {
         var device = Device.builder()
                 .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(logger.getId())))
+                .manufacturerSpecificId(String.valueOf(logger.getId()))
                 .deviceCategory(DeviceCategory.builder()
                         .value(List.of(getManufacturerConfiguration().getKey()))
+                        .build())
+                .location(Location.builder()
+                        .coordinates(List.of(logger.getLatitude(), logger.getLongitude()))
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
@@ -218,4 +222,27 @@ public class SentekFiwareIntegrationServiceWrapper {
         return applicationConfiguration.getSensors().sentek();
     }
 
+    /**
+     * Persist the device readings to the logger.
+     *
+     * @param device   The device object containing the ID and location coordinates.
+     * @param readings The list of readings to persist.
+     */
+    public void persist(Device device, List<Reading> readings) {
+        var logger = new Logger();
+        logger.setId(Integer.parseInt(device.getManufacturerSpecificId()));
+        logger.setLatitude(device.getLocation().getCoordinates().get(0));
+        logger.setLongitude(device.getLocation().getCoordinates().get(1));
+        persist(logger, readings);
+    }
+
+    /**
+     * Retrieves the device ID for a given sensor ID.
+     *
+     * @param sensorId the ID of the sensor
+     * @return the device ID associated with the sensor ID
+     */
+    public String deviceIdOf(int sensorId) {
+        return FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensorId));
+    }
 }

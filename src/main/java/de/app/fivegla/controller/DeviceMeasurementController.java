@@ -8,6 +8,7 @@ import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.SentekDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.WeenatDataLoggingRequest;
 import de.app.fivegla.controller.security.SecuredApiAccess;
+import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.integration.agvolution.AgvolutionFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.agvolution.AgvolutionSensorIntegrationService;
 import de.app.fivegla.integration.sentek.SentekFiwareIntegrationServiceWrapper;
@@ -41,18 +42,21 @@ public class DeviceMeasurementController implements SecuredApiAccess {
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
 
+    private final DeviceIntegrationService deviceIntegrationService;
+
     public DeviceMeasurementController(SentekSensorIntegrationService sentekSensorIntegrationService,
                                        SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
                                        WeenatPlotIntegrationService weenatPlotIntegrationService,
                                        WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper,
                                        AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
-                                       AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper) {
+                                       AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper, DeviceIntegrationService deviceIntegrationService) {
         this.sentekSensorIntegrationService = sentekSensorIntegrationService;
         this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
         this.weenatPlotIntegrationService = weenatPlotIntegrationService;
         this.weenatFiwareIntegrationServiceWrapper = weenatFiwareIntegrationServiceWrapper;
         this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
         this.agvolutionFiwareIntegrationServiceWrapper = agvolutionFiwareIntegrationServiceWrapper;
+        this.deviceIntegrationService = deviceIntegrationService;
     }
 
     /**
@@ -83,7 +87,15 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
             sentekFiwareIntegrationServiceWrapper.persist(sensor, request.getReadings());
             dataHasBeenLogged.set(true);
-        }, () -> log.error("No sensor found for id {}.", sensorId));
+        }, () -> {
+            log.warn("No sentek sensor found for id {}.", sensorId);
+            log.info("Now looking for a generic sensor for id {}.", sensorId);
+            deviceIntegrationService.read(sentekFiwareIntegrationServiceWrapper.deviceIdOf(sensorId)).ifPresentOrElse(device -> {
+                log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
+                sentekFiwareIntegrationServiceWrapper.persist(device, request.getReadings());
+                dataHasBeenLogged.set(true);
+            }, () -> log.error("No sensor found for id {}.", sensorId));
+        });
 
         if (dataHasBeenLogged.get()) {
             return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -8,10 +8,7 @@ import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.api.InstantFormatter;
-import de.app.fivegla.fiware.model.Device;
-import de.app.fivegla.fiware.model.DeviceCategory;
-import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.DroneDeviceMeasurement;
+import de.app.fivegla.fiware.model.*;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.monitoring.FiwareEntityMonitor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,10 +50,18 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
                 .deviceCategory(DeviceCategory.builder()
                         .value(List.of(getManufacturerConfiguration().getKey()))
                         .build())
+                .location(fakeLocation())
+                .manufacturerSpecificId(droneId)
                 .id(fiwareId)
                 .build();
         deviceIntegrationService.persist(device);
         fiwareEntityMonitor.sensorsSavedOrUpdated(getManufacturerConfiguration().manufacturer());
+    }
+
+    private Location fakeLocation() {
+        return Location.builder()
+                .coordinates(List.of(0.0, 0.0))
+                .build();
     }
 
     /**

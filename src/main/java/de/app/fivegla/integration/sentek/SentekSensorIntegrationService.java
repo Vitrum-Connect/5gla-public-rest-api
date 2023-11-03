@@ -42,22 +42,22 @@ public class SentekSensorIntegrationService extends AbstractIntegrationService {
      */
     public List<Logger> fetchAll() {
         var headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));
-        var httpEntity = new HttpEntity<String>(headers);
-        var uri = UriComponentsBuilder.fromHttpUrl(url + "/?cmd=getloggers&key={apiToken}")
-                .encode()
-                .toUriString();
-        log.debug("Fetching sensor data from URI: {}", uri);
-        var uriVariables = Map.of("apiToken", getApiToken());
-        var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return parse(response.getBody()).getLoggers();
-        } else {
-            var errorMessage = ErrorMessage.builder()
-                    .error(Error.SENTEK_COULD_NOT_FETCH_SENSORS)
-                    .message("Could not fetch sensors from Sentek API.")
-                    .build();
-            throw new BusinessException(errorMessage);
+            headers.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));
+            var httpEntity = new HttpEntity<String>(headers);
+            var uri = UriComponentsBuilder.fromHttpUrl(url + "/?cmd=getloggers&key={apiToken}")
+                    .encode()
+                    .toUriString();
+            log.debug("Fetching sensor data from URI: {}", uri);
+            var uriVariables = Map.of("apiToken", getApiToken());
+            var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return parse(response.getBody()).getLoggers();
+            } else {
+                var errorMessage = ErrorMessage.builder()
+                        .error(Error.SENTEK_COULD_NOT_FETCH_SENSORS)
+                        .message("Could not fetch sensors from Sentek API.")
+                        .build();
+                throw new BusinessException(errorMessage);
         }
     }
 

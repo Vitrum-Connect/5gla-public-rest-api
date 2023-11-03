@@ -51,6 +51,7 @@ public class GenericDeviceIntegrationService {
                 .build();
         var device = Device.builder()
                 .id(FiwareDeviceId.create(manufacturerConfiguration, id))
+                .manufacturerSpecificId(id)
                 .deviceCategory(DeviceCategory.builder()
                         .value(List.of(manufacturerConfiguration.getKey()))
                         .build())

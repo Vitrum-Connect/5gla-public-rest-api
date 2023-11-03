@@ -8,6 +8,7 @@ import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.SentekDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.WeenatDataLoggingRequest;
 import de.app.fivegla.controller.security.SecuredApiAccess;
+import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.integration.agvolution.AgvolutionFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.agvolution.AgvolutionSensorIntegrationService;
 import de.app.fivegla.integration.sentek.SentekFiwareIntegrationServiceWrapper;
@@ -41,18 +42,21 @@ public class DeviceMeasurementController implements SecuredApiAccess {
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
 
+    private final DeviceIntegrationService deviceIntegrationService;
+
     public DeviceMeasurementController(SentekSensorIntegrationService sentekSensorIntegrationService,
                                        SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
                                        WeenatPlotIntegrationService weenatPlotIntegrationService,
                                        WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper,
                                        AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
-                                       AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper) {
+                                       AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper, DeviceIntegrationService deviceIntegrationService) {
         this.sentekSensorIntegrationService = sentekSensorIntegrationService;
         this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
         this.weenatPlotIntegrationService = weenatPlotIntegrationService;
         this.weenatFiwareIntegrationServiceWrapper = weenatFiwareIntegrationServiceWrapper;
         this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
         this.agvolutionFiwareIntegrationServiceWrapper = agvolutionFiwareIntegrationServiceWrapper;
+        this.deviceIntegrationService = deviceIntegrationService;
     }
 
     /**
@@ -83,7 +87,15 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
             sentekFiwareIntegrationServiceWrapper.persist(sensor, request.getReadings());
             dataHasBeenLogged.set(true);
-        }, () -> log.error("No sensor found for id {}.", sensorId));
+        }, () -> {
+            log.warn("No sensor found for id {}.", sensorId);
+            log.info("Now looking for a generic sensor for id {}.", sensorId);
+            deviceIntegrationService.read(sentekFiwareIntegrationServiceWrapper.deviceIdOf(sensorId)).ifPresentOrElse(device -> {
+                log.info("Persisting {} measurements for sensor {}.", request.getReadings().size(), sensorId);
+                sentekFiwareIntegrationServiceWrapper.persist(device, request.getReadings());
+                dataHasBeenLogged.set(true);
+            }, () -> log.error("No sensor found for id {}.", sensorId));
+        });
 
         if (dataHasBeenLogged.get()) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -126,8 +138,19 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             log.info("Persisting {} measurements for plot {}.", request.getMeasurements().size(), plotId);
             weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder().measurements(request.getMeasurements()).plot(plot).build());
             dataHasBeenLogged.set(true);
-        }, () -> log.error("No plot found for id {}.", plotId));
-
+        }, () -> {
+            log.warn("No sensor found for id {}.", plotId);
+            log.info("Now looking for a generic sensor for id {}.", plotId);
+            deviceIntegrationService.read(weenatFiwareIntegrationServiceWrapper.deviceIdOf(plotId)).ifPresentOrElse(device -> {
+                log.info("Persisting {} measurements for plot {}.", request.getMeasurements().size(), plotId);
+                var plot = weenatPlotIntegrationService.plotFromDevice(device);
+                weenatFiwareIntegrationServiceWrapper.persist(plot, Measurements.builder()
+                        .measurements(request.getMeasurements())
+                        .plot(plot).build());
+                dataHasBeenLogged.set(true);
+                dataHasBeenLogged.set(true);
+            }, () -> log.error("No sensor found for id {}.", plotId));
+        });
         if (dataHasBeenLogged.get()) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
@@ -169,7 +192,15 @@ public class DeviceMeasurementController implements SecuredApiAccess {
             log.info("Persisting {} measurements for device {}.", request.getSeriesEntry().getTimeSeriesEntries().size(), deviceId);
             agvolutionFiwareIntegrationServiceWrapper.persist(request.getSeriesEntry());
             dataHasBeenLogged.set(true);
-        }, () -> log.error("No device found for id {}.", deviceId));
+        }, () -> {
+            log.warn("No sensor found for id {}.", deviceId);
+            log.info("Now looking for a generic sensor for id {}.", deviceId);
+            deviceIntegrationService.read(agvolutionFiwareIntegrationServiceWrapper.deviceIdOf(deviceId)).ifPresentOrElse(device -> {
+                log.info("Persisting {} series entries for device {}.", request.getSeriesEntry().getTimeSeriesEntries().size(), deviceId);
+                agvolutionFiwareIntegrationServiceWrapper.persist(request.getSeriesEntry());
+                dataHasBeenLogged.set(true);
+            }, () -> log.error("No sensor found for id {}.", deviceId));
+        });
 
         if (dataHasBeenLogged.get()) {
             return ResponseEntity.status(HttpStatus.CREATED).build();

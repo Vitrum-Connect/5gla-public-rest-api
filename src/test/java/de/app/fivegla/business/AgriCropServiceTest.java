@@ -13,6 +13,7 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
     @Autowired
     private AgriCropService agriCropService;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String feature = "{\n" +
             "    \"type\": \"Feature\",\n" +
             "    \"properties\": {\n" +

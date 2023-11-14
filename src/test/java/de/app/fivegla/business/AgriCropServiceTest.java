@@ -28,7 +28,7 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
 
     @Test
     void givenValidFeatureWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
-        var parsedFeature = agriCropService.parse(feature);
+        var parsedFeature = agriCropService.parseFeature(feature);
         assertThat(parsedFeature).isNotNull();
         assertThat(parsedFeature.getAttribute("name")).isEqualTo("Coors Field");
         assertThat(parsedFeature.getAttribute("amenity")).isEqualTo("Baseball Stadium");

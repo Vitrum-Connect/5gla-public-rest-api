@@ -16,7 +16,7 @@ public class AgriCropService {
     /**
      * Parses the GeoJSON file containing the agri-crop data.
      */
-    public SimpleFeature parse(String geoJson) {
+    public SimpleFeature parseFeature(String geoJson) {
         try {
             var featureHandler = new FeatureHandler();
             return GeoJSONUtil.parse(featureHandler, geoJson, true);

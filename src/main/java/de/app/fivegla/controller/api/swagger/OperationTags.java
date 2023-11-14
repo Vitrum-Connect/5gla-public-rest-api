@@ -7,4 +7,5 @@ public interface OperationTags {
     String MAINTENANCE = "Maintenance (enabled by profile)";
     String DEVICE_MEASUREMENT = "Device Measurement";
     String DEVICE = "Device";
+    String AGRI_CROP = "Agri Crop";
 }

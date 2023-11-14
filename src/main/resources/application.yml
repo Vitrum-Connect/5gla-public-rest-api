@@ -81,7 +81,7 @@ logging:
     de.app.fivegla: trace
 one:
   microstream:
-    storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY} 1
+    storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}
     channel-count: 2
 
 management:

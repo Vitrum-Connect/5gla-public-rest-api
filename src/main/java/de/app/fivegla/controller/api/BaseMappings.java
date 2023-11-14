@@ -9,4 +9,5 @@ public class BaseMappings {
     public static final String INFO = API_V1 + "/info";
 
     public static final String DEVICE = API_V1 + "/device";
+    public static final String AGRI_CROP = API_V1 + "/agri-crop";
 }

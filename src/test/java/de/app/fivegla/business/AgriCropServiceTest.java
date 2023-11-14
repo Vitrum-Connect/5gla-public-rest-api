@@ -14,18 +14,19 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
     private AgriCropService agriCropService;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final String feature = "{\n" +
-            "    \"type\": \"Feature\",\n" +
-            "    \"properties\": {\n" +
-            "        \"name\": \"Coors Field\",\n" +
-            "        \"amenity\": \"Baseball Stadium\",\n" +
-            "        \"popupContent\": \"This is where the Rockies play!\"\n" +
-            "    },\n" +
-            "    \"geometry\": {\n" +
-            "        \"type\": \"Point\",\n" +
-            "        \"coordinates\": [-104.99404, 39.75621]\n" +
-            "    }\n" +
-            "}";
+    private final String feature = """
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Coors Field",
+                    "amenity": "Baseball Stadium",
+                    "popupContent": "This is where the Rockies play!"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-104.99404, 39.75621]
+                }
+            }""";
 
     @Test
     void givenValidFeatureWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {

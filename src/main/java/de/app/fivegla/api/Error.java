@@ -34,7 +34,8 @@ public enum Error {
     AGVOLUTION_COULD_NOT_FIND_SENSOR_FOR_ID(errorOf(24)),
     FIWARE_INTEGRATION_LAYER_ERROR(errorOf(25)),
     FARM21_COULD_NOT_FETCH_DEVICE_DATA(errorOf(26)),
-    COULD_NOT_PARSE_GEO_JSON(errorOf(27));
+    COULD_NOT_PARSE_GEO_JSON(errorOf(27)),
+    COULD_NOT_PARSE_CSV(errorOf(28));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

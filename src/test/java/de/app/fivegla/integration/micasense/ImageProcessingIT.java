@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Objects;
 
 @SpringBootTest
-class ImageProcessingIntegrationTest extends SpringBootIntegrationTestBase {
+class ImageProcessingIT extends SpringBootIntegrationTestBase {
 
     @Autowired
     private MicaSenseIntegrationService micaSenseIntegrationService;

@@ -56,6 +56,7 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
                 ]
               }""";
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String csv = """
                             10.443273285881673,52.88334609790465
                             10.437440177134079,52.87646841445812

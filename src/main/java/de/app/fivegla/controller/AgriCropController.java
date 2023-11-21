@@ -26,12 +26,12 @@ public class AgriCropController implements SecuredApiAccess {
 
     @Operation(
             operationId = "agri-crop.import-geojson",
-            description = "Imports the GeoJSON file containing the agri-crop data.",
+            description = "Imports the GeoJSON containing the agri-crop data.",
             tags = OperationTags.AGRI_CROP
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The GeoJSON file was imported successfully."
+            description = "The CSV was imported successfully."
     )
     @ApiResponse(
             responseCode = "400",
@@ -40,6 +40,26 @@ public class AgriCropController implements SecuredApiAccess {
     @PostMapping("/geo-json/feature")
     public ResponseEntity<Void> importGeoJson(@RequestBody @Parameter(description = "The crop, represented as GeoJSON (RFC 7946).") String geoJson) {
         var feature = agriCropService.parseFeature(geoJson);
+        log.debug("Parsed feature: {}.", feature);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(
+            operationId = "agri-crop.import-csv",
+            description = "Imports the CSV containing the agri-crop data.",
+            tags = OperationTags.AGRI_CROP
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "The CSV was imported successfully."
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid."
+    )
+    @PostMapping("/csv/feature")
+    public ResponseEntity<Void> importCsv(@RequestBody @Parameter(description = "The crop, represented as CSV") String csv) {
+        var feature = agriCropService.createFeatureFromCsv(csv);
         log.debug("Parsed feature: {}.", feature);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

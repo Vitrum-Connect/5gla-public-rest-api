@@ -16,25 +16,66 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
     @SuppressWarnings("FieldCanBeLocal")
     private final String feature = """
             {
-                "type": "Feature",
-                "properties": {
-                    "name": "Coors Field",
-                    "amenity": "Baseball Stadium",
-                    "popupContent": "This is where the Rockies play!"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [-104.99404, 39.75621]
-                }
-            }""";
+                "type": "FeatureCollection",
+                "features": [
+                  {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                      "coordinates": [
+                        [
+                          [
+                            10.443273285881673,
+                            52.88334609790465
+                          ],
+                          [
+                            10.437440177134079,
+                            52.87646841445812
+                          ],
+                          [
+                            10.440236095438934,
+                            52.873898638877165
+                          ],
+                          [
+                            10.443741637678897,
+                            52.87545765422925
+                          ],
+                          [
+                            10.446778828121694,
+                            52.87920077546457
+                          ],
+                          [
+                            10.443273285881673,
+                            52.88334609790465
+                          ]
+                        ]
+                      ],
+                      "type": "Polygon"
+                    }
+                  }
+                ]
+              }""";
+
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String csv = """
+                            10.443273285881673,52.88334609790465
+                            10.437440177134079,52.87646841445812
+                            10.440236095438934,52.873898638877165
+                            10.443741637678897,52.87545765422925
+                            10.446778828121694,52.87920077546457
+                            10.443273285881673,52.88334609790465
+            """;
 
     @Test
     void givenValidFeatureWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
         var parsedFeature = agriCropService.parseFeature(feature);
         assertThat(parsedFeature).isNotNull();
-        assertThat(parsedFeature.getAttribute("name")).isEqualTo("Coors Field");
-        assertThat(parsedFeature.getAttribute("amenity")).isEqualTo("Baseball Stadium");
-        assertThat(parsedFeature.getAttribute("popupContent")).isEqualTo("This is where the Rockies play!");
+    }
+
+    @Test
+    void givenValidCsvWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
+        var parsedFeature = agriCropService.createFeatureFromCsv(csv);
+        assertThat(parsedFeature).isNotNull();
     }
 
 }

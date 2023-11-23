@@ -1,0 +1,72 @@
+name: Publish DEV Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  create-docker-image:
+    name: Create Docker Image
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: microsoft
+
+      - name: Build with Maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FARM21_API_TOKEN: ${{ secrets.FARM21_API_TOKEN }}
+          SOILSCOUT_USERNAME: ${{ secrets.SOILSCOUT_USERNAME }}
+          SOILSCOUT_PASSWORD: ${{ secrets.SOILSCOUT_PASSWORD }}
+          AGRANIMO_USERNAME: ${{ secrets.AGRANIMO_USERNAME }}
+          AGRANIMO_PASSWORD: ${{ secrets.AGRANIMO_PASSWORD }}
+          SENTEK_API_TOKEN: ${{ secrets.SENTEK_API_TOKEN }}
+          AGVOLUTION_USERNAME: ${{ secrets.AGVOLUTION_USERNAME }}
+          AGVOLUTION_PASSWORD: ${{ secrets.AGVOLUTION_PASSWORD }}
+          SENSOTERRA_USERNAME: ${{ secrets.SENSOTERRA_USERNAME }}
+          SENSOTERRA_PASSWORD: ${{ secrets.SENSOTERRA_PASSWORD }}
+          API_KEY: ${{ secrets.API_KEY }}
+          WEENAT_USERNAME: ${{ secrets.WEENAT_USERNAME }}
+          WEENAT_PASSWORD: ${{ secrets.WEENAT_PASSWORD }}
+          MICROSTREAM_STORAGE_DIRECTORY: ./microstream-integration-test
+          IMAGE_PATH_BASE_URL: localhost:8080/images
+        run: mvn -B verify --file pom.xml --settings .github/settings.xml
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: develop, latest
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: ${{ github.ref_type == 'tag' }}
+          file: .github/dockerfile
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

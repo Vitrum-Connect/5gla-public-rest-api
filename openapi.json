@@ -12,12 +12,20 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0"
     },
-    "version": "10.0.0"
+    "version": "10.1.0"
   },
   "servers": [
     {
       "url": "https://api.5gla.de/api",
-      "description": "Production"
+      "description": "PROD | n.a. at the moment"
+    },
+    {
+      "url": "https://api.qa.5gla.de/api",
+      "description": "QA"
+    },
+    {
+      "url": "https://api.dev.5gla.de/api",
+      "description": "DEV"
     },
     {
       "url": "http://fuf.me:8080",
@@ -377,6 +385,72 @@
         ]
       }
     },
+    "/v1/agri-crop/geo-json/feature": {
+      "post": {
+        "tags": [
+          "Agri Crop"
+        ],
+        "description": "Imports the GeoJSON containing the agri-crop data.",
+        "operationId": "agri-crop.import-geojson",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "description": "The crop, represented as GeoJSON (RFC 7946)."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "The request is invalid."
+          },
+          "201": {
+            "description": "The CSV was imported successfully."
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
+    "/v1/agri-crop/csv/feature": {
+      "post": {
+        "tags": [
+          "Agri Crop"
+        ],
+        "description": "Imports the CSV containing the agri-crop data.",
+        "operationId": "agri-crop.import-csv",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "description": "The crop, represented as CSV"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "The request is invalid."
+          },
+          "201": {
+            "description": "The CSV was imported successfully."
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ]
+      }
+    },
     "/v1/mica-sense/images/{transactionId}/oids": {
       "get": {
         "tags": [
@@ -640,114 +714,140 @@
         "properties": {
           "timestamp": {
             "type": "string",
+            "description": "The time of the value in the time series.",
             "format": "date-time"
           },
           "measurementValues": {
             "$ref": "#/components/schemas/MeasurementValues"
           }
         },
-        "description": "The measurements to log."
+        "description": "Represents a value for a specific time in a time series."
       },
       "MeasurementValues": {
         "type": "object",
         "properties": {
           "T": {
             "type": "number",
+            "description": "The temperature of the measurement.",
             "format": "double"
           },
           "U": {
             "type": "number",
+            "description": "The relative humidity of the measurement.",
             "format": "double"
           },
           "RR": {
             "type": "number",
+            "description": "The cumulative rainfall of the measurement.",
             "format": "double"
           },
           "FF": {
             "type": "number",
+            "description": "The wind speed of the measurement.",
             "format": "double"
           },
           "FXY": {
             "type": "number",
+            "description": "The wind gust speed of the measurement.",
             "format": "double"
           },
           "T_15": {
             "type": "number",
+            "description": "The soil temperature in 15 cm of the measurement.",
             "format": "double"
           },
           "T_30": {
             "type": "number",
+            "description": "The soil temperature in 30 cm of the measurement.",
             "format": "double"
           },
           "T_60": {
             "type": "number",
+            "description": "The soil temperature in 50 cm of the measurement.",
             "format": "double"
           },
           "WHYD_15": {
             "type": "number",
+            "description": "The soil water potential in 15 cm of the measurement.",
             "format": "double"
           },
           "WHYD_30": {
             "type": "number",
+            "description": "The soil water potential in 30 cm of the measurement.",
             "format": "double"
           },
           "WHYD_60": {
             "type": "number",
+            "description": "The soil water potential in 60 cm of the measurement.",
             "format": "double"
           },
           "T_DRY": {
             "type": "number",
+            "description": "The dry temperature of the measurement.",
             "format": "double"
           },
           "T_WET": {
             "type": "number",
+            "description": "The wet temperature of the measurement.",
             "format": "double"
           },
           "LW_DRY": {
             "type": "number",
+            "description": "The leaf wetness duration of the measurement.",
             "format": "double"
           },
           "LW_V": {
             "type": "number",
+            "description": "The leaf wetness voltage of the measurement.",
             "format": "double"
           },
           "T_SOIL": {
             "type": "number",
+            "description": "The soil temperature of the measurement.",
             "format": "double"
           },
           "SSI": {
             "type": "number",
+            "description": "The solar irradiance of the measurement.",
             "format": "double"
           },
           "SSI_MIN": {
             "type": "number",
+            "description": "The minimum solar irradiance  of the measurement.",
             "format": "double"
           },
           "SSI_MAX": {
             "type": "number",
+            "description": "The maximum solar irradiance  of the measurement.",
             "format": "double"
           },
           "PPFD": {
             "type": "number",
+            "description": "The photosynthetically active radiation of the measurement.",
             "format": "double"
           },
           "PPFD_MIN": {
             "type": "number",
+            "description": "The minimum photosynthetically active radiation of the measurement.",
             "format": "double"
           },
           "PPFD_MAX": {
             "type": "number",
+            "description": "The maximum photosynthetically active radiation of the measurement.",
             "format": "double"
           },
           "T_DEW": {
             "type": "number",
+            "description": "The dew point of the measurement.",
             "format": "double"
           },
           "ETP": {
             "type": "number",
+            "description": "The potential evapotranspiration of the measurement.",
             "format": "double"
           }
-        }
+        },
+        "description": "Represents a single measurement entry with various weather-related properties."
       },
       "WeenatDataLoggingRequest": {
         "type": "object",
@@ -878,57 +978,69 @@
         "type": "object",
         "properties": {
           "device": {
-            "type": "string"
+            "type": "string",
+            "description": "The device ID."
           },
           "lon": {
             "type": "number",
+            "description": "The device type.",
             "format": "double"
           },
           "lat": {
             "type": "number",
+            "description": "The device type.",
             "format": "double"
           },
           "timeseries": {
             "type": "array",
+            "description": "The device type.",
             "items": {
               "$ref": "#/components/schemas/TimeSeriesEntry"
             }
           }
         },
-        "description": "Represents a series entry in a schema."
+        "description": "Represents a device time-series entry."
       },
       "TimeSeriesEntry": {
         "type": "object",
         "properties": {
           "key": {
-            "type": "string"
+            "type": "string",
+            "description": "The key of the entry."
           },
           "unit": {
-            "type": "string"
+            "type": "string",
+            "description": "The unit of the entry."
           },
           "aggregate": {
-            "type": "string"
+            "type": "string",
+            "description": "The aggregate of the entry."
           },
           "values": {
             "type": "array",
+            "description": "The values of the entry.",
             "items": {
               "$ref": "#/components/schemas/TimeSeriesValue"
             }
           }
-        }
+        },
+        "description": "Represents an entry in a time series."
       },
       "TimeSeriesValue": {
         "type": "object",
         "properties": {
           "time": {
             "type": "string",
+            "description": "The time of the value in the time series.",
             "format": "date-time"
           },
           "value": {
             "type": "number",
+            "description": "The value of the value in the time series.",
             "format": "double"
           }
-        }
+        },
+        "description": "Represents a value for a specific time in a time series."
       },
       "OidsForTransactionResponse": {
         "type": "object",

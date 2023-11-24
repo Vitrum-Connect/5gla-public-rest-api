@@ -42,8 +42,16 @@ import java.util.List;
         ),
         servers = {
                 @Server(
-                        description = "Production",
+                        description = "PROD | n.a. at the moment",
                         url = "https://api.5gla.de/api"
+                ),
+                @Server(
+                        description = "QA",
+                        url = "https://api.qa.5gla.de/api"
+                ),
+                @Server(
+                        description = "DEV",
+                        url = "https://api.dev.5gla.de/api"
                 ),
                 @Server(
                         description = "Local Development",

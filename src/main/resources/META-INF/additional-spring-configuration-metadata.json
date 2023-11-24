@@ -309,6 +309,16 @@
       "name": "app.fiware.tenant",
       "type": "java.lang.String",
       "description": "The FIWARE tenant."
+    },
+    {
+      "name": "app.scheduled.data-import.initial-delay",
+      "type": "java.lang.String",
+      "description": "The initial delay for the scheduled data import."
+    },
+    {
+      "name": "app.scheduled.data-import.delay",
+      "type": "java.lang.String",
+      "description": "The delay for the scheduled data import."
     }
   ]
 }

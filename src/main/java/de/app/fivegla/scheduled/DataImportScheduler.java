@@ -29,7 +29,7 @@ public class DataImportScheduler {
     /**
      * Schedule data import for all manufacturer.
      */
-    @Scheduled(cron = "${app.scheduled.cron}")
+    @Scheduled(initialDelayString = "${app.scheduled.data-import.initial-delay}", fixedDelayString = "${app.scheduled.data-import.delay}")
     public void scheduleDataImport() {
         Arrays.stream(Manufacturer.values())
                 .forEach(manufacturer -> {

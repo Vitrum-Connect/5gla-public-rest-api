@@ -65,7 +65,10 @@ app:
       username: ${WEENAT_USERNAME}
       password: ${WEENAT_PASSWORD}
   scheduled:
-    cron: "0 0 */1 * * *" # every hour
+    data-import:
+      # Spring Boot uses ISO-8601 durations, https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html#parse(java.lang.CharSequence)
+      initial-delay: PT10S # 10 seconds
+      delay: PT30M # 30 minutes
     daysInThePastForInitialImport: 3
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}

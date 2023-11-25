@@ -60,13 +60,13 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: develop, latest
+          tags: develop
 
       - name: Build Docker Image
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: ${{ github.ref_type == 'tag' }}
+          push: true
           file: .github/dockerfile
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

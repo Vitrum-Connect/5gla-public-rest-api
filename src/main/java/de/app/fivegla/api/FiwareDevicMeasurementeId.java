@@ -1,8 +1,7 @@
 package de.app.fivegla.api;
 
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
-
-import java.util.UUID;
+import de.app.fivegla.fiware.api.FiwareIdGenerator;
 
 /**
  * Generates FIWARE device measurement IDs.
@@ -16,7 +15,7 @@ public class FiwareDevicMeasurementeId {
      * @return The FIWARE device measurement ID.
      */
     public static String create(CommonManufacturerConfiguration commonManufacturerConfiguration) {
-        return create(commonManufacturerConfiguration, UUID.randomUUID().toString());
+        return create(commonManufacturerConfiguration, "");
     }
 
     /**
@@ -27,7 +26,7 @@ public class FiwareDevicMeasurementeId {
      * @return The FIWARE device measurement ID.
      */
     public static String create(CommonManufacturerConfiguration commonManufacturerConfiguration, String id) {
-        return commonManufacturerConfiguration.fiwareDeviceMeasurementIdPrefix() + id;
+        return FiwareIdGenerator.id(commonManufacturerConfiguration.fiwareDeviceIdPrefix() + id);
     }
 
 

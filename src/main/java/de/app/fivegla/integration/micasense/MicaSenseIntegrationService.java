@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.micasense;
 
+import de.app.fivegla.fiware.api.FiwareIdGenerator;
 import de.app.fivegla.integration.micasense.events.ImageProcessingFinishedEvent;
 import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -54,7 +54,7 @@ public class MicaSenseIntegrationService {
         log.debug("Channel for the image: {}.", micaSenseChannel);
         log.debug("Location for the image: {}.", location.getCoordinates());
         var micaSenseImage = applicationDataRepository.addMicaSenseImage(MicaSenseImage.builder()
-                .oid(UUID.randomUUID().toString())
+                .oid(FiwareIdGenerator.id())
                 .channel(micaSenseChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)

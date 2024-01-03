@@ -3,6 +3,8 @@ package de.app.fivegla.scheduled;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.event.DataImportEvent;
+import de.app.fivegla.persistence.ApplicationDataRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,16 +17,12 @@ import java.util.Arrays;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DataImportScheduler {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public DataImportScheduler(ApplicationEventPublisher applicationEventPublisher,
-                               ApplicationConfiguration applicationConfiguration) {
-        this.applicationEventPublisher = applicationEventPublisher;
-        this.applicationConfiguration = applicationConfiguration;
-    }
+    private final ApplicationDataRepository applicationDataRepository;
 
     /**
      * Schedule data import for all manufacturer.
@@ -33,9 +31,11 @@ public class DataImportScheduler {
     public void scheduleDataImport() {
         Arrays.stream(Manufacturer.values())
                 .forEach(manufacturer -> {
-                    if (applicationConfiguration.isEnabled(manufacturer))
+                    if (applicationConfiguration.isEnabled(manufacturer) && applicationDataRepository.isTheJobEnabled(manufacturer)) {
                         applicationEventPublisher.publishEvent(new DataImportEvent(manufacturer));
-                    else log.warn("Skipping data import for manufacturer: {}", manufacturer);
+                    } else {
+                        log.warn("Skipping data import for manufacturer since the job is enabled by configuration or manually: {}", manufacturer);
+                    }
                 })
         ;
     }

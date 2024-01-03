@@ -8,4 +8,5 @@ public interface OperationTags {
     String DEVICE_MEASUREMENT = "Device Measurement";
     String DEVICE = "Device";
     String AGRI_CROP = "Agri Crop";
+    String JOB = "Job";
 }

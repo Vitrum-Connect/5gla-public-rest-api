@@ -94,6 +94,7 @@ public class ApplicationData {
         }
         var disabledJob = new DisabledJob();
         disabledJob.setDisabledAt(Instant.now());
+        disabledJob.setDisabledManufacturers(manufacturer);
         disabledJobs.add(disabledJob);
         storageManager.store(this);
     }

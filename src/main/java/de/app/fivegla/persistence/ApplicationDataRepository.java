@@ -100,13 +100,13 @@ public class ApplicationDataRepository {
     }
 
     /**
-     * Checks if the specified job is disabled for the given manufacturer.
+     * Checks if the specified job is enabled for the given manufacturer.
      *
      * @param manufacturer The manufacturer for which to check the job status.
-     * @return True if the job is disabled for the manufacturer, false otherwise.
+     * @return True if the job is enabled for the manufacturer, false otherwise.
      * @see Manufacturer
      */
-    public boolean isTheJobDisabled(Manufacturer manufacturer) {
-        return applicationData.isTheJobDisabled(manufacturer);
+    public boolean isTheJobEnabled(Manufacturer manufacturer) {
+        return !applicationData.isTheJobDisabled(manufacturer);
     }
 }

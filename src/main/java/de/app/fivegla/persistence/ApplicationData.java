@@ -2,9 +2,11 @@ package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.persistence.entity.DisabledJob;
 import lombok.Getter;
 import one.microstream.integrations.spring.boot.types.Storage;
 import one.microstream.storage.types.StorageManager;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
@@ -24,6 +26,8 @@ public class ApplicationData {
     private Map<Manufacturer, Instant> lastRuns;
 
     private List<MicaSenseImage> micaSenseImages;
+
+    private List<DisabledJob> disabledJobs;
 
     /**
      * Update the last run.
@@ -77,4 +81,36 @@ public class ApplicationData {
         return micaSenseImages;
     }
 
+    /**
+     * Adds a disabled job for a specific manufacturer.
+     *
+     * @param manufacturer The manufacturer for which the job is disabled.
+     * @see Manufacturer
+     * @see DisabledJob
+     */
+    protected void disableJob(Manufacturer manufacturer) {
+        if (null == disabledJobs) {
+            disabledJobs = new ArrayList<>();
+        }
+        var disabledJob = new DisabledJob();
+        disabledJob.setDisabledAt(Instant.now());
+        disabledJobs.add(disabledJob);
+        storageManager.store(this);
+    }
+
+    /**
+     * Checks if the specified job is disabled for the given manufacturer.
+     *
+     * @param manufacturer The manufacturer for which to check the job status.
+     * @return True if the job is disabled for the manufacturer, false otherwise.
+     * @see Manufacturer
+     */
+    public boolean isTheJobDisabled(Manufacturer manufacturer) {
+        if (CollectionUtils.isEmpty(disabledJobs)) {
+            return false;
+        } else {
+            return disabledJobs.stream()
+                    .anyMatch(disabledJob -> disabledJob.getDisabledManufacturers().equals(manufacturer));
+        }
+    }
 }

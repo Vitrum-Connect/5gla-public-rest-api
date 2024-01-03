@@ -80,4 +80,33 @@ public class ApplicationDataRepository {
                 .filter(id -> id.equals(transactionId))
                 .toList();
     }
+
+    /**
+     * Disables a job for a specific manufacturer.
+     *
+     * @param manufacturer The manufacturer for which the job is disabled.
+     *                     Possible values are:
+     *                     - SOILSCOUT
+     *                     - AGRANIMO
+     *                     - FARM21
+     *                     - MICA_SENSE
+     *                     - AGVOLUTION
+     *                     - SENSOTERRA
+     *                     - SENTEK
+     *                     - WEENAT
+     */
+    public void disableJob(Manufacturer manufacturer) {
+        applicationData.disableJob(manufacturer);
+    }
+
+    /**
+     * Checks if the specified job is disabled for the given manufacturer.
+     *
+     * @param manufacturer The manufacturer for which to check the job status.
+     * @return True if the job is disabled for the manufacturer, false otherwise.
+     * @see Manufacturer
+     */
+    public boolean isTheJobDisabled(Manufacturer manufacturer) {
+        return applicationData.isTheJobDisabled(manufacturer);
+    }
 }

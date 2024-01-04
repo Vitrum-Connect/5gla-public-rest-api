@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.micasense.events;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
 
 /**

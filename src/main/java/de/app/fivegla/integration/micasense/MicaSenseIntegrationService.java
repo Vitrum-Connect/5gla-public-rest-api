@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.micasense;
 
+import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.fiware.api.FiwareIdGenerator;
 import de.app.fivegla.integration.micasense.events.ImageProcessingFinishedEvent;
 import de.app.fivegla.integration.micasense.events.ImageProcessingStartedEvent;
@@ -100,8 +101,8 @@ public class MicaSenseIntegrationService {
      * @param transactionId the ID of the transaction
      * @return a list of image OIDs associated with the transaction
      */
-    public List<String> getImageOidsForTransaction(String transactionId) {
-        return applicationDataRepository.getImageOidsForTransaction(transactionId);
+    public List<SortableImageOids> getImageOidsForTransaction(String transactionId) {
+        return applicationDataRepository.getImageOidsForTransaction(transactionId).stream().sorted().toList();
     }
 
     /**

@@ -1,6 +1,7 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import org.springframework.stereotype.Component;
 
@@ -74,10 +75,10 @@ public class ApplicationDataRepository {
      * @param transactionId The ID of the transaction.
      * @return A list of image Object IDs (Oids) associated with the specified transaction.
      */
-    public List<String> getImageOidsForTransaction(String transactionId) {
+    public List<SortableImageOids> getImageOidsForTransaction(String transactionId) {
         return applicationData.getMicaSenseImages().stream()
-                .map(MicaSenseImage::getTransactionId)
-                .filter(id -> id.equals(transactionId))
+                .filter(micaSenseImage -> micaSenseImage.getTransactionId().equals(transactionId))
+                .map(micaSenseImage -> new SortableImageOids(micaSenseImage.getOid(), micaSenseImage.getMeasuredAt()))
                 .toList();
     }
 

@@ -23,8 +23,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AgranimoMonitoring {
 
-    private final LoginIntegrationService loginIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
+    private final ZoneService zoneService;
 
     @ReadOperation
     public Health read() {
@@ -33,8 +33,8 @@ public class AgranimoMonitoring {
             return null;
         } else {
             try {
-                var accessToken = loginIntegrationService.forceFetchAccessToken();
-                if (StringUtils.isNotBlank(accessToken)) {
+                var zones = zoneService.fetchZones();
+                if (zones != null && !zones.isEmpty()) {
                     return Health
                             .up()
                             .build();

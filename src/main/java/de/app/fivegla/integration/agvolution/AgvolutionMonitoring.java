@@ -7,7 +7,6 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.config.ApplicationConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.health.Health;
@@ -25,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class AgvolutionMonitoring {
 
     private final ApplicationConfiguration applicationConfiguration;
-    private final AccessTokenIntegrationService accessTokenIntegrationService;
+    private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
 
     @ReadOperation
     public Health read() {
@@ -34,8 +33,8 @@ public class AgvolutionMonitoring {
             return null;
         } else {
             try {
-                var accessToken = accessTokenIntegrationService.fetchAccessToken();
-                if (StringUtils.isNotBlank(accessToken)) {
+                var sensors = agvolutionSensorIntegrationService.fetchAll();
+                if (sensors != null && !sensors.isEmpty()) {
                     return Health
                             .up()
                             .build();

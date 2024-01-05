@@ -7,7 +7,6 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.config.ApplicationConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.health.Health;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class SensoterraMonitoring {
 
     private final ApplicationConfiguration applicationConfiguration;
-    private final ApiKeyIntegrationService apiKeyIntegrationService;
+    private final LocationIntegrationService locationIntegrationService;
 
     @ReadOperation
     public Health read() {
@@ -32,8 +31,8 @@ public class SensoterraMonitoring {
             return null;
         } else {
             try {
-                var apiKey = apiKeyIntegrationService.fetchApiKey();
-                if (StringUtils.isNotBlank(apiKey)) {
+                var locations = locationIntegrationService.fetchAll();
+                if (locations != null && !locations.isEmpty()) {
                     return Health
                             .up()
                             .build();

@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.agranimo;
+package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
@@ -14,26 +14,27 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 /**
- * This class represents a third-party monitoring service that checks the health status of the system.
- * It uses a LoginIntegrationService to fetch the access token from an API and performs a health check based on the availability of the token.
+ * The AgvolutionMonitoring class is responsible for performing health checks on the Agvolution API.
+ * It checks if the Agvolution sensor is enabled and retrieves an access token from the API.
+ * If the sensor is disabled or the API call fails, it throws a BusinessException with the corresponding error message.
  */
 @Slf4j
 @Component
-@Endpoint(id = "agranimo")
+@Endpoint(id = "agvolution")
 @RequiredArgsConstructor
-public class AgranimoMonitoring {
+public class AgvolutionMonitoring {
 
-    private final LoginIntegrationService loginIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
+    private final AccessTokenIntegrationService accessTokenIntegrationService;
 
     @ReadOperation
     public Health read() {
-        if (!applicationConfiguration.isEnabled(Manufacturer.AGRANIMO)) {
-            log.debug("Agranimo is disabled. Skipping health check.");
+        if (!applicationConfiguration.isEnabled(Manufacturer.AGVOLUTION)) {
+            log.debug("Agvolution is disabled. Skipping health check.");
             return null;
         } else {
             try {
-                var accessToken = loginIntegrationService.forceFetchAccessToken();
+                var accessToken = accessTokenIntegrationService.fetchAccessToken();
                 if (StringUtils.isNotBlank(accessToken)) {
                     return Health
                             .up()
@@ -45,7 +46,7 @@ public class AgranimoMonitoring {
             throw new BusinessException(ErrorMessage
                     .builder()
                     .error(Error.THIRD_PARTY_SERVICE_UNAVAILABLE)
-                    .message("Agranimo API is currently not available or did not return any access token.")
+                    .message("Agvolution API is currently not available or did not return any access token.")
                     .build());
         }
     }

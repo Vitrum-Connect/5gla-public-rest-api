@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.sentek;
+package de.app.fivegla.integration.soilscout;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
@@ -13,25 +13,26 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 /**
- * Class that represents the SentekMonitoring component for monitoring Sentek API access.
+ * SoilScoutMonitoring class is responsible for monitoring the health and status
+ * of SoilScout sensors.
  */
 @Slf4j
 @Component
-@Endpoint(id = "sentek")
+@Endpoint(id = "soilscout")
 @RequiredArgsConstructor
-public class SentekMonitoring {
+public class SoilScoutMonitoring {
 
     private final ApplicationConfiguration applicationConfiguration;
-    private final SentekSensorIntegrationService sentekSensorIntegrationService;
+    private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
 
     @ReadOperation
     public Health read() {
-        if (!applicationConfiguration.isEnabled(Manufacturer.SENTEK)) {
-            log.debug("Sentek is disabled. Skipping health check.");
+        if (!applicationConfiguration.isEnabled(Manufacturer.SOILSCOUT)) {
+            log.debug("SoilScout is disabled. Skipping health check.");
             return null;
         } else {
             try {
-                var sensors = sentekSensorIntegrationService.fetchAll();
+                var sensors = soilScoutSensorIntegrationService.fetchAll();
                 if (sensors != null && !sensors.isEmpty()) {
                     return Health
                             .up()
@@ -43,7 +44,7 @@ public class SentekMonitoring {
             throw new BusinessException(ErrorMessage
                     .builder()
                     .error(Error.THIRD_PARTY_SERVICE_UNAVAILABLE)
-                    .message("Sentek API is currently not available or did not return any sensors.")
+                    .message("SoilScout API is currently not available or did not return any sensors.")
                     .build());
         }
     }

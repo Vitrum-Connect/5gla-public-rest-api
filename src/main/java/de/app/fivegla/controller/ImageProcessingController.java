@@ -65,6 +65,30 @@ public class ImageProcessingController implements SecuredApiAccess {
     }
 
     /**
+     * Begins the image processing for the transaction.
+     *
+     * @param droneId       The drone ID. (required)
+     * @param transactionId The transaction ID. (required)
+     * @return A ResponseEntity object with a status of 201.
+     */
+    @Operation(
+            operationId = "images.begin-image-processing",
+            description = "Begins the image processing for the transaction.",
+            tags = OperationTags.MICA_SENSE
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "The image processing was begun."
+    )
+    @PostMapping(value = "/{droneId}/{transactionId}/begin", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> beginImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
+                                                     @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
+        log.debug("Beginning image processing for the transaction: {}.", transactionId);
+        micaSenseIntegrationService.beginImageProcessing(droneId, transactionId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
      * Ends the image processing for the transaction.
      *
      * @param droneId       the ID of the drone to end the image processing for

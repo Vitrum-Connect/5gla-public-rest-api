@@ -1,7 +1,9 @@
 package de.app.fivegla.integration.micasense;
 
+import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.fiware.api.FiwareIdGenerator;
 import de.app.fivegla.integration.micasense.events.ImageProcessingFinishedEvent;
+import de.app.fivegla.integration.micasense.events.ImageProcessingStartedEvent;
 import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.integration.micasense.transactions.ActiveMicaSenseTransactions;
@@ -64,7 +66,7 @@ public class MicaSenseIntegrationService {
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
         fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(micaSenseImage);
-        activeMicaSenseTransactions.add(transactionId, droneId, micaSenseImage.getOid());
+        activeMicaSenseTransactions.add(transactionId, micaSenseImage.getOid());
         return micaSenseImage.getOid();
     }
 
@@ -93,7 +95,23 @@ public class MicaSenseIntegrationService {
         applicationEventPublisher.publishEvent(new ImageProcessingFinishedEvent(this, droneId, transactionId));
     }
 
-    public List<String> getImageOidsForTransaction(String transactionId) {
-        return applicationDataRepository.getImageOidsForTransaction(transactionId);
+    /**
+     * Retrieves the image OIDs for a given transaction.
+     *
+     * @param transactionId the ID of the transaction
+     * @return a list of image OIDs associated with the transaction
+     */
+    public List<SortableImageOids> getImageOidsForTransaction(String transactionId) {
+        return applicationDataRepository.getImageOidsForTransaction(transactionId).stream().sorted().toList();
+    }
+
+    /**
+     * Begins image processing for a specific drone and transaction.
+     *
+     * @param droneId       The ID of the drone for which the image processing is starting.
+     * @param transactionId The ID of the transaction associated with the image processing.
+     */
+    public void beginImageProcessing(String droneId, String transactionId) {
+        applicationEventPublisher.publishEvent(new ImageProcessingStartedEvent(this, droneId, transactionId));
     }
 }

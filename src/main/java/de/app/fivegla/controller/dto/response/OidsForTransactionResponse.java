@@ -1,5 +1,6 @@
 package de.app.fivegla.controller.dto.response;
 
+import de.app.fivegla.api.dto.SortableImageOids;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,6 @@ public class OidsForTransactionResponse {
      * The OIDs for the images.
      */
     @Schema(description = "The OIDs for the images.")
-    private List<String> oids;
+    private List<SortableImageOids> oids;
 
 }

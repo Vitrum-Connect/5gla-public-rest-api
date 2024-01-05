@@ -45,37 +45,58 @@ public class LoginIntegrationService {
      */
     public String fetchAccessToken() {
         if (userDataCache.isExpired()) {
-            try {
-                var response = restTemplate.postForEntity(url + "/auth/login", new LoginRequest(username, password), Credentials.class);
-                if (response.getStatusCode() != HttpStatus.CREATED) {
-                    log.error("Error while login against the API. Status code: {}", response.getStatusCode());
-                    throw new BusinessException(ErrorMessage.builder()
-                            .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
-                            .message("Could not login against the API.")
-                            .build());
-                } else {
-                    log.info("Successfully logged in against the API.");
-                    var credentials = response.getBody();
-                    if (null == credentials) {
-                        throw new BusinessException(ErrorMessage.builder()
-                                .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
-                                .message("Could not login against the API. Response was empty.")
-                                .build());
-                    } else {
-                        log.info("Access token found after successful: {}", credentials.getAccessToken());
-                        userDataCache.setCredentials(credentials);
-                        return credentials.getAccessToken();
-                    }
-                }
-            } catch (Exception e) {
-                log.error("Error while login against the API.", e);
+            return getAccessTokenFromApi();
+        } else {
+            return userDataCache.getAccessToken();
+        }
+    }
+
+    /**
+     * Fetches the access token from the API forcefully.
+     * <p>
+     * This method is used to fetch the access token from the API, regardless of any existing tokens in the cache.
+     *
+     * @return The access token fetched from the API.
+     */
+    public String forceFetchAccessToken() {
+        return getAccessTokenFromApi();
+    }
+
+    /**
+     * Retrieves the access token from the API by performing a login request with the provided credentials.
+     *
+     * @return The access token retrieved from the API.
+     * @throws BusinessException If an error occurs while logging in against the API.
+     */
+    private String getAccessTokenFromApi() {
+        try {
+            var response = restTemplate.postForEntity(url + "/auth/login", new LoginRequest(username, password), Credentials.class);
+            if (response.getStatusCode() != HttpStatus.CREATED) {
+                log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()
                         .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
                         .message("Could not login against the API.")
                         .build());
+            } else {
+                log.info("Successfully logged in against the API.");
+                var credentials = response.getBody();
+                if (null == credentials) {
+                    throw new BusinessException(ErrorMessage.builder()
+                            .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
+                            .message("Could not login against the API. Response was empty.")
+                            .build());
+                } else {
+                    log.info("Access token found after successful: {}", credentials.getAccessToken());
+                    userDataCache.setCredentials(credentials);
+                    return credentials.getAccessToken();
+                }
             }
-        } else {
-            return userDataCache.getAccessToken();
+        } catch (Exception e) {
+            log.error("Error while login against the API.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .error(Error.AGRANIMO_COULD_NOT_LOGIN_AGAINST_API)
+                    .message("Could not login against the API.")
+                    .build());
         }
     }
 

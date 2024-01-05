@@ -49,3 +49,6 @@ microstream-*
 .github/settings.local.xml
 *.env
 *.5gla-*
+
+# LOCAL UPTIME KUMA #
+uptime-kuma-data

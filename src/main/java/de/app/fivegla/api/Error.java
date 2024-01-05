@@ -36,7 +36,8 @@ public enum Error {
     FARM21_COULD_NOT_FETCH_DEVICE_DATA(errorOf(26)),
     COULD_NOT_PARSE_GEO_JSON(errorOf(27)),
     COULD_NOT_PARSE_CSV(errorOf(28)),
-    THIRD_PARTY_SERVICE_UNAVAILABLE(errorOf(29));
+    THIRD_PARTY_SERVICE_UNAVAILABLE(errorOf(29)),
+    MICASENSE_TX_NOT_FOUND(errorOf(30));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

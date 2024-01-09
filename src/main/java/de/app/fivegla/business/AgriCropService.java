@@ -5,6 +5,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.constants.JSONObjectTypes;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.geotools.api.feature.simple.SimpleFeature;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AgriCropService {
 
     /**

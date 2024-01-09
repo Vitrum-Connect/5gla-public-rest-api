@@ -15,6 +15,7 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.soilscout.model.Sensor;
 import de.app.fivegla.integration.soilscout.model.SensorData;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,22 +26,13 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SoilScoutFiwareIntegrationServiceWrapper {
 
     private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public SoilScoutFiwareIntegrationServiceWrapper(SoilScoutSensorIntegrationService soilScoutSensorIntegrationService,
-                                                    DeviceIntegrationService deviceIntegrationService,
-                                                    DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                    ApplicationConfiguration applicationConfiguration) {
-        this.soilScoutSensorIntegrationService = soilScoutSensorIntegrationService;
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
 
     /**

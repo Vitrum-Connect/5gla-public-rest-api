@@ -8,6 +8,7 @@ import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.Location;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class GenericDeviceIntegrationService {
 
     private final DeviceIntegrationService deviceIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public GenericDeviceIntegrationService(DeviceIntegrationService deviceIntegrationService,
-                                           ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     /**
      * Registers a device for a specific manufacturer with the given ID and coordinates.

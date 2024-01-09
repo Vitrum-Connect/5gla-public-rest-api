@@ -9,6 +9,7 @@ import de.app.fivegla.integration.agvolution.dto.response.DeviceTimeseriesDataRe
 import de.app.fivegla.integration.agvolution.dto.response.inner.DeviceTimeSeriesEntry;
 import de.app.fivegla.integration.agvolution.model.Device;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

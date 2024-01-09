@@ -15,6 +15,7 @@ import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.weenat.model.Measurement;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +26,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class WeenatFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public WeenatFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                 DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                 ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     public void persist(Plot plot, Measurements measurements) {
         try {

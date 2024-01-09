@@ -14,6 +14,7 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +25,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SensoterraFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public SensoterraFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                     DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                     ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     public void persist(Probe probe, List<ProbeData> probeData) {
         try {

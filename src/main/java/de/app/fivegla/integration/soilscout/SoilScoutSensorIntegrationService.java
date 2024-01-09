@@ -5,6 +5,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.soilscout.cache.SoilScoutSensorCache;
 import de.app.fivegla.integration.soilscout.model.Sensor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,13 +24,10 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SoilScoutSensorIntegrationService extends AbstractIntegrationService {
 
     private final SoilScoutSensorCache soilScoutSensorCache;
-
-    public SoilScoutSensorIntegrationService(SoilScoutSensorCache soilScoutSensorCache) {
-        this.soilScoutSensorCache = soilScoutSensorCache;
-    }
 
     /**
      * Fetches all sensors from the SoilScout API.

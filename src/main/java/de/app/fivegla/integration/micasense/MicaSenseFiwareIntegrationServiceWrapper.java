@@ -10,6 +10,7 @@ import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.api.InstantFormatter;
 import de.app.fivegla.fiware.model.*;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MicaSenseFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService;
@@ -28,14 +30,6 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
 
     @Value("${app.sensors.micasense.imagePathBaseUrl}")
     private String imagePathBaseUrl;
-
-    public MicaSenseFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                    DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService,
-                                                    ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.droneDeviceMeasurementIntegrationService = droneDeviceMeasurementIntegrationService;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     /**
      * Create a new device in FIWARE.

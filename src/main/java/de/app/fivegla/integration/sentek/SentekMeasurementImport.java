@@ -3,6 +3,7 @@ package de.app.fivegla.integration.sentek;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SentekMeasurementImport {
 
     private final SentekSensorDataIntegrationService sentekSensorDataIntegrationService;
@@ -24,16 +26,6 @@ public class SentekMeasurementImport {
 
     @Value("${app.scheduled.daysInThePastForInitialImport}")
     private int daysInThePastForInitialImport;
-
-    public SentekMeasurementImport(SentekSensorDataIntegrationService sentekSensorDataIntegrationService,
-                                   ApplicationDataRepository applicationDataRepository,
-                                   SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
-                                   JobMonitor jobMonitor) {
-        this.sentekSensorDataIntegrationService = sentekSensorDataIntegrationService;
-        this.applicationDataRepository = applicationDataRepository;
-        this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
-        this.jobMonitor = jobMonitor;
-    }
 
     /**
      * Run scheduled data import.

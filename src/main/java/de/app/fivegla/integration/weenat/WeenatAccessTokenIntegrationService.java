@@ -6,6 +6,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.weenat.cache.WeenatUserDataCache;
 import de.app.fivegla.integration.weenat.request.LoginRequest;
 import de.app.fivegla.integration.weenat.response.AccessTokenResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -17,19 +18,11 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class WeenatAccessTokenIntegrationService extends AbstractIntegrationService {
 
     private final WeenatUserDataCache userDataCache;
     private final RestTemplate restTemplate;
-
-    /**
-     * Service for integration with Agranimo.
-     */
-    public WeenatAccessTokenIntegrationService(WeenatUserDataCache userDataCache,
-                                               RestTemplate restTemplate) {
-        this.userDataCache = userDataCache;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Retrieves the access token from Agranimo API for authentication.

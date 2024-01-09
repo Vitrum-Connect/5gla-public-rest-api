@@ -6,6 +6,7 @@ import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

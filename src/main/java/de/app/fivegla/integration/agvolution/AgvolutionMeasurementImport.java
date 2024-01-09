@@ -3,6 +3,7 @@ package de.app.fivegla.integration.agvolution;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AgvolutionMeasurementImport {
 
     private final AgvolutionSensorDataIntegrationService agvolutionSensorDataIntegrationService;
@@ -24,16 +26,6 @@ public class AgvolutionMeasurementImport {
 
     @Value("${app.scheduled.daysInThePastForInitialImport}")
     private int daysInThePastForInitialImport;
-
-    public AgvolutionMeasurementImport(AgvolutionSensorDataIntegrationService agvolutionSensorDataIntegrationService,
-                                       ApplicationDataRepository applicationDataRepository,
-                                       AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper,
-                                       JobMonitor jobMonitor) {
-        this.agvolutionSensorDataIntegrationService = agvolutionSensorDataIntegrationService;
-        this.applicationDataRepository = applicationDataRepository;
-        this.agvolutionFiwareIntegrationServiceWrapper = agvolutionFiwareIntegrationServiceWrapper;
-        this.jobMonitor = jobMonitor;
-    }
 
     /**
      * Run scheduled data import.

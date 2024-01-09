@@ -8,6 +8,7 @@ import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.integration.micasense.transactions.ActiveMicaSenseTransactions;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MicaSenseIntegrationService {
 
     private final ExifDataIntegrationService exifDataIntegrationService;
@@ -29,18 +31,6 @@ public class MicaSenseIntegrationService {
     private final ApplicationDataRepository applicationDataRepository;
     private final ActiveMicaSenseTransactions activeMicaSenseTransactions;
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    public MicaSenseIntegrationService(ExifDataIntegrationService exifDataIntegrationService,
-                                       MicaSenseFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper,
-                                       ApplicationDataRepository applicationDataRepository,
-                                       ActiveMicaSenseTransactions activeMicaSenseTransactions,
-                                       ApplicationEventPublisher applicationEventPublisher) {
-        this.exifDataIntegrationService = exifDataIntegrationService;
-        this.fiwareIntegrationServiceWrapper = fiwareIntegrationServiceWrapper;
-        this.applicationDataRepository = applicationDataRepository;
-        this.activeMicaSenseTransactions = activeMicaSenseTransactions;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     /**
      * Processes an image from the mica sense camera.

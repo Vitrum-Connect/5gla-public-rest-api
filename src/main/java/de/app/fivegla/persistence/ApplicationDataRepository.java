@@ -3,6 +3,7 @@ package de.app.fivegla.persistence;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -11,13 +12,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class ApplicationDataRepository {
 
     private final ApplicationData applicationData;
-
-    public ApplicationDataRepository(ApplicationData applicationData) {
-        this.applicationData = applicationData;
-    }
 
     /**
      * Gets last runs.

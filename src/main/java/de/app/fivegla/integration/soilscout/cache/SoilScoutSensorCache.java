@@ -2,6 +2,7 @@ package de.app.fivegla.integration.soilscout.cache;
 
 import de.app.fivegla.integration.soilscout.model.Sensor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class SoilScoutSensorCache {
 
     private static final Map<Integer, SensorCacheEntry> CACHE = new HashMap<>();

@@ -9,6 +9,7 @@ import de.app.fivegla.integration.weenat.model.Measurement;
 import de.app.fivegla.integration.weenat.model.MeasurementValues;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -20,21 +21,13 @@ import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class WeenatMeasuresIntegrationService extends AbstractIntegrationService {
 
     private final WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService;
     private final WeenatPlotIntegrationService weenatPlotIntegrationService;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-
-    public WeenatMeasuresIntegrationService(WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService,
-                                            WeenatPlotIntegrationService weenatPlotIntegrationService,
-                                            RestTemplate restTemplate) {
-        this.weenatAccessTokenIntegrationService = weenatAccessTokenIntegrationService;
-        this.weenatPlotIntegrationService = weenatPlotIntegrationService;
-        this.restTemplate = restTemplate;
-        objectMapper = new ObjectMapper();
-    }
 
     public Map<Plot, Measurements> fetchAll(Instant start) {
         Map<Plot, Measurements> plotsWithMeasurements = new HashMap<>();

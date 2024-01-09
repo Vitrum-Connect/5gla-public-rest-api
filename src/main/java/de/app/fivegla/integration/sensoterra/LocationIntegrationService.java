@@ -4,6 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.model.Location;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

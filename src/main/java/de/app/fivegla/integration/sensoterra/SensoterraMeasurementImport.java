@@ -3,6 +3,7 @@ package de.app.fivegla.integration.sensoterra;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SensoterraMeasurementImport {
 
     private final ProbeDataIntegrationService probeDataIntegrationService;
@@ -24,16 +26,6 @@ public class SensoterraMeasurementImport {
 
     @Value("${app.scheduled.daysInThePastForInitialImport}")
     private int daysInThePastForInitialImport;
-
-    public SensoterraMeasurementImport(ProbeDataIntegrationService probeDataIntegrationService,
-                                       ApplicationDataRepository applicationDataRepository,
-                                       SensoterraFiwareIntegrationServiceWrapper sensoterraFiwareIntegrationServiceWrapper,
-                                       JobMonitor jobMonitor) {
-        this.probeDataIntegrationService = probeDataIntegrationService;
-        this.applicationDataRepository = applicationDataRepository;
-        this.sensoterraFiwareIntegrationServiceWrapper = sensoterraFiwareIntegrationServiceWrapper;
-        this.jobMonitor = jobMonitor;
-    }
 
     /**
      * Run scheduled data import.

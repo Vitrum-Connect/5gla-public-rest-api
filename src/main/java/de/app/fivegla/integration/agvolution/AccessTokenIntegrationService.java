@@ -6,6 +6,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agvolution.cache.AccessTokenCache;
 import de.app.fivegla.integration.agvolution.dto.Credentials;
 import de.app.fivegla.integration.agvolution.dto.request.LoginRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AccessTokenIntegrationService {
 
     @Value("${app.sensors.agvolution.url}")
@@ -30,15 +32,6 @@ public class AccessTokenIntegrationService {
 
     private final AccessTokenCache accessTokenCache;
     private final RestTemplate restTemplate;
-
-    /**
-     * Service for integration with Agvolution.
-     */
-    public AccessTokenIntegrationService(AccessTokenCache accessTokenCache,
-                                         RestTemplate restTemplate) {
-        this.accessTokenCache = accessTokenCache;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetch the access token from the API.

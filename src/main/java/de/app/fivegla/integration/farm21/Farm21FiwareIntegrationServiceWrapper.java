@@ -14,6 +14,7 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +25,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Farm21FiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public Farm21FiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                 DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                 ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     /**
      * Create Farm21 sensor data in FIWARE.

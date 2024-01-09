@@ -3,6 +3,7 @@ package de.app.fivegla.integration.agranimo.cache;
 import de.app.fivegla.integration.agranimo.dto.Credentials;
 import de.app.fivegla.integration.agranimo.dto.Zone;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Slf4j
 @Getter
 @Component
+@RequiredArgsConstructor
 public class UserDataCache {
 
     public static final int TTL = 60;

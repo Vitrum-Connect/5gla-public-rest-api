@@ -3,6 +3,7 @@ package de.app.fivegla.integration.farm21;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.time.temporal.ChronoUnit;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Farm21MeasurementImport {
 
     private final Farm21SensorDataIntegrationService farm21SensorDataIntegrationService;
@@ -24,16 +26,6 @@ public class Farm21MeasurementImport {
 
     @Value("${app.scheduled.daysInThePastForInitialImport}")
     private int daysInThePastForInitialImport;
-
-    public Farm21MeasurementImport(Farm21SensorDataIntegrationService farm21SensorDataIntegrationService,
-                                   ApplicationDataRepository applicationDataRepository,
-                                   Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper,
-                                   JobMonitor jobMonitor) {
-        this.farm21SensorDataIntegrationService = farm21SensorDataIntegrationService;
-        this.applicationDataRepository = applicationDataRepository;
-        this.farm21FiwareIntegrationServiceWrapper = farm21FiwareIntegrationServiceWrapper;
-        this.jobMonitor = jobMonitor;
-    }
 
     /**
      * Run scheduled data import.

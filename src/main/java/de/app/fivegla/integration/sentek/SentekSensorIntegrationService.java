@@ -7,6 +7,7 @@ import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.integration.sentek.model.xml.User;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,13 +27,10 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SentekSensorIntegrationService extends AbstractIntegrationService {
 
     private final RestTemplate restTemplate;
-
-    public SentekSensorIntegrationService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetches all logger data from the Sentek API.

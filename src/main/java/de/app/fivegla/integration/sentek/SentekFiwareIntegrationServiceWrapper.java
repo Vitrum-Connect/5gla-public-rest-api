@@ -14,6 +14,7 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +25,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SentekFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public SentekFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                 DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                 ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     public void persist(Logger logger, List<Reading> readings) {
         try {

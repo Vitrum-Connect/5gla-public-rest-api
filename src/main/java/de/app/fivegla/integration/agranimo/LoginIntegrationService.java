@@ -45,17 +45,6 @@ public class LoginIntegrationService {
     }
 
     /**
-     * Fetches the access token from the API forcefully.
-     * <p>
-     * This method is used to fetch the access token from the API, regardless of any existing tokens in the cache.
-     *
-     * @return The access token fetched from the API.
-     */
-    public String forceFetchAccessToken() {
-        return getAccessTokenFromApi();
-    }
-
-    /**
      * Retrieves the access token from the API by performing a login request with the provided credentials.
      *
      * @return The access token retrieved from the API.

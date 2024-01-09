@@ -3,6 +3,7 @@ package de.app.fivegla.monitoring;
 import de.app.fivegla.api.Manufacturer;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Histogram;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JobMonitor {
 
     private final Map<Manufacturer, Histogram> fetchedEntities = new HashMap<>();
+    private final Map<Manufacturer, Histogram> errorsDuringJobExecution = new HashMap<>();
 
     public JobMonitor(CollectorRegistry registry) {
         Arrays.stream(Manufacturer.values())
@@ -26,6 +29,11 @@ public class JobMonitor {
                                     "Number of entities fetched from " + manufacturer.name())
                             .register(registry);
                     fetchedEntities.put(manufacturer, entityHistogram);
+
+                    var errorHistogram = Histogram.build(Metrics.ERRORS_DURING_JOB_EXECUTION_PREFIX + manufacturer.name().toLowerCase(),
+                                    "Number of errors during job execution for " + manufacturer.name())
+                            .register(registry);
+                    errorsDuringJobExecution.put(manufacturer, errorHistogram);
                 });
     }
 

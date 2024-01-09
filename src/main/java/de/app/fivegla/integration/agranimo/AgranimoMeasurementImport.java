@@ -21,12 +21,18 @@ public class AgranimoMeasurementImport {
     private final JobMonitor jobMonitor;
 
     public void run() {
-        if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
-            jobMonitor.nrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
-        } else {
-            jobMonitor.nrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
+        try {
+            if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
+                // FIXME
+                jobMonitor.logNrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
+            } else {
+                jobMonitor.logNrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
+            }
+            applicationDataRepository.updateLastRun(Manufacturer.AGRANIMO);
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Agranimo API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);
         }
-        applicationDataRepository.updateLastRun(Manufacturer.AGRANIMO);
     }
 
 }

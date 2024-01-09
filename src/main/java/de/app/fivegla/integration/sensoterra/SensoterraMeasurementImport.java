@@ -1,6 +1,8 @@
 package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.integration.sensoterra.model.Probe;
+import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Scheduled data import from Agvolution API.
@@ -33,21 +37,32 @@ public class SensoterraMeasurementImport {
     public void run() {
         var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENSOTERRA);
         if (lastRun.isPresent()) {
-            log.info("Running scheduled data import from Farm21 API");
+            log.info("Running scheduled data import from Sensoterra API");
             var seriesEntries = probeDataIntegrationService.fetchAll(lastRun.get());
-            jobMonitor.nrOfEntitiesFetched(seriesEntries.size(), Manufacturer.SENSOTERRA);
+            jobMonitor.logNrOfEntitiesFetched(seriesEntries.size(), Manufacturer.SENSOTERRA);
             log.info("Found {} seriesEntries", seriesEntries.size());
             log.info("Persisting {} seriesEntries", seriesEntries.size());
-            seriesEntries.forEach(sensoterraFiwareIntegrationServiceWrapper::persist);
+            seriesEntries.entrySet().forEach(this::persistDataWithinFiware);
         } else {
-            log.info("Running initial data import from Farm21 API, this may take a while");
-            var measurements = probeDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
-            log.info("Found {} measurements", measurements.size());
-            log.info("Persisting {} measurements", measurements.size());
-            jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SENSOTERRA);
-            measurements.forEach(sensoterraFiwareIntegrationServiceWrapper::persist);
+            log.info("Running initial data import from Sensoterra API, this may take a while");
+            var seriesEntries = probeDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
+            log.info("Found {} seriesEntries", seriesEntries.size());
+            log.info("Persisting {} seriesEntries", seriesEntries.size());
+            jobMonitor.logNrOfEntitiesFetched(seriesEntries.size(), Manufacturer.SENSOTERRA);
+            seriesEntries.entrySet().forEach(this::persistDataWithinFiware);
         }
         applicationDataRepository.updateLastRun(Manufacturer.SENSOTERRA);
+    }
+
+    private void persistDataWithinFiware(Map.Entry<Probe, List<ProbeData>> entry) {
+        try {
+            Probe key = entry.getKey();
+            List<ProbeData> value = entry.getValue();
+            sensoterraFiwareIntegrationServiceWrapper.persist(key, value);
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Sensoterra API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.SENSOTERRA);
+        }
     }
 
 }

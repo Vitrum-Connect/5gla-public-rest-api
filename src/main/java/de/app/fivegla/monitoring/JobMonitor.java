@@ -43,13 +43,30 @@ public class JobMonitor {
      * @param nrOfEntities number of entities.
      * @param manufacturer manufacturer.
      */
-    public void nrOfEntitiesFetched(int nrOfEntities, Manufacturer manufacturer) {
+    public void logNrOfEntitiesFetched(int nrOfEntities, Manufacturer manufacturer) {
         log.info("Fetched {} entities from {}", nrOfEntities, manufacturer);
         var histogram = fetchedEntities.get(manufacturer);
         if (histogram == null) {
             log.warn("No histogram found for manufacturer {}", manufacturer);
         } else {
             histogram.observe(nrOfEntities);
+        }
+    }
+
+    /**
+     * Logs an error that occurred during execution for a specific manufacturer.
+     * If a histogram is found for the manufacturer, the error count is incremented by 1.
+     * Otherwise, a warning message is logged.
+     *
+     * @param manufacturer the manufacturer of the sensor
+     */
+    public void logErrorDuringExecution(Manufacturer manufacturer) {
+        log.info("Error during execution for {}", manufacturer);
+        var histogram = errorsDuringJobExecution.get(manufacturer);
+        if (histogram == null) {
+            log.warn("No histogram found for manufacturer {}", manufacturer);
+        } else {
+            histogram.observe(1);
         }
     }
 

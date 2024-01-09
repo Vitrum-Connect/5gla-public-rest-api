@@ -16,7 +16,6 @@ import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.weenat.model.Measurement;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
-import de.app.fivegla.monitoring.FiwareEntityMonitor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +29,13 @@ import java.util.List;
 public class WeenatFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
-    private final FiwareEntityMonitor fiwareEntityMonitor;
     private final ApplicationConfiguration applicationConfiguration;
 
     public WeenatFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
                                                  DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                 FiwareEntityMonitor fiwareEntityMonitor,
                                                  ApplicationConfiguration applicationConfiguration) {
         this.deviceIntegrationService = deviceIntegrationService;
         this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.fiwareEntityMonitor = fiwareEntityMonitor;
         this.applicationConfiguration = applicationConfiguration;
     }
 
@@ -57,7 +53,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     log.info("Skipping measurement");
                 } else {
                     deviceMeasurementIntegrationService.persist(temperature);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var relativeHumidity = deviceMeasurement.numValue(measurement.getMeasurementValues().getRelativeHumidity())
@@ -65,7 +60,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (relativeHumidity != null) {
                     deviceMeasurementIntegrationService.persist(relativeHumidity);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var cumulativeRainfall = deviceMeasurement.numValue(measurement.getMeasurementValues().getCumulativeRainfall())
@@ -73,7 +67,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (cumulativeRainfall != null) {
                     deviceMeasurementIntegrationService.persist(cumulativeRainfall);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var windSpeed = deviceMeasurement.numValue(measurement.getMeasurementValues().getWindSpeed())
@@ -81,7 +74,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (windSpeed != null) {
                     deviceMeasurementIntegrationService.persist(windSpeed);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var windGustSpeed = deviceMeasurement.numValue(measurement.getMeasurementValues().getWindGustSpeed())
@@ -89,7 +81,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (windGustSpeed != null) {
                     deviceMeasurementIntegrationService.persist(windGustSpeed);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var soiltemperature = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature())
@@ -97,7 +88,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (soiltemperature != null) {
                     deviceMeasurementIntegrationService.persist(soiltemperature);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var soiltemperature15 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature15())
@@ -105,7 +95,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (soiltemperature15 != null) {
                     deviceMeasurementIntegrationService.persist(soiltemperature15);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var soiltemperature30 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature30())
@@ -113,7 +102,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (soiltemperature30 != null) {
                     deviceMeasurementIntegrationService.persist(soiltemperature30);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var soiltemperature60 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature60())
@@ -121,7 +109,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (soiltemperature60 != null) {
                     deviceMeasurementIntegrationService.persist(soiltemperature60);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var soilWaterPotential15 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilWaterPotential15())
@@ -129,7 +116,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (soilWaterPotential15 != null) {
                     deviceMeasurementIntegrationService.persist(soilWaterPotential15);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var soilWaterPotential30 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilWaterPotential30())
@@ -137,7 +123,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (soilWaterPotential30 != null) {
                     deviceMeasurementIntegrationService.persist(soilWaterPotential30);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var soilWaterPotential60 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilWaterPotential60())
@@ -145,7 +130,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (soilWaterPotential60 != null) {
                     deviceMeasurementIntegrationService.persist(soilWaterPotential60);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var dryTemperature = deviceMeasurement.numValue(measurement.getMeasurementValues().getDryTemperature())
@@ -153,7 +137,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (dryTemperature != null) {
                     deviceMeasurementIntegrationService.persist(dryTemperature);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var wetTemperature = deviceMeasurement.numValue(measurement.getMeasurementValues().getWetTemperature())
@@ -161,7 +144,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (wetTemperature != null) {
                     deviceMeasurementIntegrationService.persist(wetTemperature);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var leafWetnessDuration = deviceMeasurement.numValue(measurement.getMeasurementValues().getLeafWetnessDuration())
@@ -169,7 +151,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (leafWetnessDuration != null) {
                     deviceMeasurementIntegrationService.persist(leafWetnessDuration);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var leafWetnessVoltage = deviceMeasurement.numValue(measurement.getMeasurementValues().getLeafWetnessVoltage())
@@ -177,7 +158,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (leafWetnessVoltage != null) {
                     deviceMeasurementIntegrationService.persist(leafWetnessVoltage);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var solarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getSolarIrradiance())
@@ -185,7 +165,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (solarIrridiance != null) {
                     deviceMeasurementIntegrationService.persist(solarIrridiance);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var minimumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMinSolarIrradiance())
@@ -193,7 +172,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (minimumSolarIrridiance != null) {
                     deviceMeasurementIntegrationService.persist(minimumSolarIrridiance);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var maximumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMaxSolarIrradiance())
@@ -201,7 +179,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (maximumSolarIrridiance != null) {
                     deviceMeasurementIntegrationService.persist(maximumSolarIrridiance);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var photosyntheticallyActiveRadiation = deviceMeasurement.numValue(measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation())
@@ -209,7 +186,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (photosyntheticallyActiveRadiation != null) {
                     deviceMeasurementIntegrationService.persist(photosyntheticallyActiveRadiation);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var minimumPhotosyntheticallyActiveRadiation = deviceMeasurement.numValue(measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation())
@@ -217,7 +193,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (minimumPhotosyntheticallyActiveRadiation != null) {
                     deviceMeasurementIntegrationService.persist(minimumPhotosyntheticallyActiveRadiation);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var maximumPhotosyntheticallyActiveRadiation = deviceMeasurement.numValue(measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation())
@@ -225,7 +200,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (maximumPhotosyntheticallyActiveRadiation != null) {
                     deviceMeasurementIntegrationService.persist(maximumPhotosyntheticallyActiveRadiation);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var dewPoint = deviceMeasurement.numValue(measurement.getMeasurementValues().getDewPoint())
@@ -233,7 +207,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (dewPoint != null) {
                     deviceMeasurementIntegrationService.persist(dewPoint);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
 
                 var potentialEvapotranspiration = deviceMeasurement.numValue(measurement.getMeasurementValues().getPotentialEvapotranspiration())
@@ -241,7 +214,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build();
                 if (potentialEvapotranspiration != null) {
                     deviceMeasurementIntegrationService.persist(potentialEvapotranspiration);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.WEENAT);
                 }
             });
         } catch (RuntimeException e) {
@@ -261,7 +233,6 @@ public class WeenatFiwareIntegrationServiceWrapper {
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
-        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.WEENAT);
     }
 
     private DeviceMeasurement.DeviceMeasurementBuilder createDeviceMeasurement(Plot plot, Measurement measurement) {

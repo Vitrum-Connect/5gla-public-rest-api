@@ -39,7 +39,6 @@ public class AgvolutionMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.FARM21);
         var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGVOLUTION);
         if (lastRun.isPresent()) {
             log.info("Running scheduled data import from Farm21 API");

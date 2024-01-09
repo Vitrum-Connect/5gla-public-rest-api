@@ -4,7 +4,6 @@ package de.app.fivegla.integration.agvolution;
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.Format;
-import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
@@ -15,7 +14,7 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.model.TimeSeriesEntry;
-import de.app.fivegla.monitoring.FiwareEntityMonitor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,22 +26,12 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class AgvolutionFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
-    private final FiwareEntityMonitor fiwareEntityMonitor;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public AgvolutionFiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                     DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                     FiwareEntityMonitor fiwareEntityMonitor,
-                                                     ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.fiwareEntityMonitor = fiwareEntityMonitor;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     public void persist(SeriesEntry seriesEntry) {
         try {
@@ -53,7 +42,6 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
                 deviceMeasurements.forEach(deviceMeasurement -> {
                     log.info("Persisting measurement: {}", deviceMeasurement);
                     deviceMeasurementIntegrationService.persist(deviceMeasurement);
-                    fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.AGVOLUTION);
                 });
             });
         } catch (RuntimeException e) {
@@ -73,7 +61,6 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
-        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.AGVOLUTION);
     }
 
     private List<DeviceMeasurement> createDeviceMeasurements(SeriesEntry seriesEntry, TimeSeriesEntry timeSeriesEntry) {

@@ -39,7 +39,6 @@ public class SensoterraMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.SENSOTERRA);
         var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENSOTERRA);
         if (lastRun.isPresent()) {
             log.info("Running scheduled data import from Farm21 API");

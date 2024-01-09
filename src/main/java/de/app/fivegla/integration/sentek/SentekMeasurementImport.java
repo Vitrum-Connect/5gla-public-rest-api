@@ -39,7 +39,6 @@ public class SentekMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.SENTEK);
         if (applicationDataRepository.getLastRun(Manufacturer.SENTEK).isPresent()) {
             log.info("Running scheduled data import from Farm21 API");
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENTEK).get();

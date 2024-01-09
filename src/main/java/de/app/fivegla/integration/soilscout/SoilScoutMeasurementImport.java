@@ -39,7 +39,6 @@ public class SoilScoutMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.SOILSCOUT);
         if (applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {
             log.info("Running scheduled data import from Soil Scout API");
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).get();

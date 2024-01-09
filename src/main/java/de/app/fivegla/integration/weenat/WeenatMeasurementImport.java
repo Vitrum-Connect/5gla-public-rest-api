@@ -39,7 +39,6 @@ public class WeenatMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.WEENAT);
         if (applicationDataRepository.getLastRun(Manufacturer.WEENAT).isPresent()) {
             log.info("Running scheduled data import from Farm21 API");
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.WEENAT).get();

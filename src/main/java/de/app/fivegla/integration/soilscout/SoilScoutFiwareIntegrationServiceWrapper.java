@@ -3,7 +3,6 @@ package de.app.fivegla.integration.soilscout;
 
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
-import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
@@ -16,7 +15,6 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.soilscout.model.Sensor;
 import de.app.fivegla.integration.soilscout.model.SensorData;
-import de.app.fivegla.monitoring.FiwareEntityMonitor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +30,15 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
     private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
-    private final FiwareEntityMonitor fiwareEntityMonitor;
     private final ApplicationConfiguration applicationConfiguration;
 
     public SoilScoutFiwareIntegrationServiceWrapper(SoilScoutSensorIntegrationService soilScoutSensorIntegrationService,
                                                     DeviceIntegrationService deviceIntegrationService,
                                                     DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                    FiwareEntityMonitor fiwareEntityMonitor,
                                                     ApplicationConfiguration applicationConfiguration) {
         this.soilScoutSensorIntegrationService = soilScoutSensorIntegrationService;
         this.deviceIntegrationService = deviceIntegrationService;
         this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.fiwareEntityMonitor = fiwareEntityMonitor;
         this.applicationConfiguration = applicationConfiguration;
     }
 
@@ -74,7 +69,6 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                     .build();
             log.info("Persisting temperature measurement: {}", temperature);
             deviceMeasurementIntegrationService.persist(temperature);
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOILSCOUT);
 
             var moisture = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
                     .controlledProperty("moisture")
@@ -82,7 +76,6 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                     .build();
             log.info("Persisting moisture measurement: {}", moisture);
             deviceMeasurementIntegrationService.persist(moisture);
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOILSCOUT);
 
             var conductivity = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
                     .controlledProperty("conductivity")
@@ -90,7 +83,6 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                     .build();
             log.info("Persisting conductivity measurement: {}", conductivity);
             deviceMeasurementIntegrationService.persist(conductivity);
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOILSCOUT);
 
             var salinity = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
                     .controlledProperty("salinity")
@@ -98,7 +90,6 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                     .build();
             log.info("Persisting salinity measurement: {}", salinity);
             deviceMeasurementIntegrationService.persist(salinity);
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOILSCOUT);
 
             var waterBalance = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
                     .controlledProperty("waterBalance")
@@ -106,7 +97,6 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                     .build();
             log.info("Persisting waterBalance measurement: {}", waterBalance);
             deviceMeasurementIntegrationService.persist(waterBalance);
-            fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.SOILSCOUT);
         } catch (BusinessException | FiwareIntegrationLayerException e) {
             log.error("Could not fetch sensor with id {} in Soil Scout API.", sensorData.getDevice(), e);
         }
@@ -120,7 +110,6 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
-        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.SOILSCOUT);
     }
 
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(SensorData sensorData, Sensor sensor) {

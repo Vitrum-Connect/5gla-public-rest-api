@@ -39,7 +39,6 @@ public class Farm21MeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.FARM21);
         if (applicationDataRepository.getLastRun(Manufacturer.FARM21).isPresent()) {
             log.info("Running scheduled data import from Farm21 API");
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.FARM21).get();

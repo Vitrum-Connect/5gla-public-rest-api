@@ -27,7 +27,6 @@ public class AgranimoMeasurementImport {
     }
 
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.AGRANIMO);
         if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
             jobMonitor.nrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
         } else {

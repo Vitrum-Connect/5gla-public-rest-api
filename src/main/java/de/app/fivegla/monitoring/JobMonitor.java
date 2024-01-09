@@ -2,7 +2,7 @@ package de.app.fivegla.monitoring;
 
 import de.app.fivegla.api.Manufacturer;
 import io.prometheus.client.CollectorRegistry;
-import io.prometheus.client.Counter;
+import io.prometheus.client.Histogram;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,52 +17,31 @@ import java.util.Map;
 @Service
 public class JobMonitor {
 
-    private final Map<Manufacturer, Counter> counters = new HashMap<>();
-    private final Map<Manufacturer, Counter> runs = new HashMap<>();
+    private final Map<Manufacturer, Histogram> fetchedEntities = new HashMap<>();
 
     public JobMonitor(CollectorRegistry registry) {
         Arrays.stream(Manufacturer.values())
                 .forEach(manufacturer -> {
-                    var entityCounter = Counter.build(Metrics.ENTITIES_FETCHED_PREFIX + manufacturer.name().toLowerCase(),
+                    var entityHistogram = Histogram.build(Metrics.ENTITIES_FETCHED_PREFIX + manufacturer.name().toLowerCase(),
                                     "Number of entities fetched from " + manufacturer.name())
                             .register(registry);
-                    counters.put(manufacturer, entityCounter);
-
-                    var runCounter = Counter.build(Metrics.NR_OF_JOB_RUNS + manufacturer.name().toLowerCase(),
-                                    "Number of runs for " + manufacturer.name())
-                            .register(registry);
-                    runs.put(manufacturer, runCounter);
+                    fetchedEntities.put(manufacturer, entityHistogram);
                 });
     }
 
     /**
-     * Monitor number of entities fetched.
+     * Monitor the number of entities fetched.
      *
      * @param nrOfEntities number of entities.
      * @param manufacturer manufacturer.
      */
     public void nrOfEntitiesFetched(int nrOfEntities, Manufacturer manufacturer) {
         log.info("Fetched {} entities from {}", nrOfEntities, manufacturer);
-        var counter = counters.get(manufacturer);
-        if (counter == null) {
-            log.warn("No counter found for manufacturer {}", manufacturer);
+        var histogram = fetchedEntities.get(manufacturer);
+        if (histogram == null) {
+            log.warn("No histogram found for manufacturer {}", manufacturer);
         } else {
-            counter.inc(nrOfEntities);
-        }
-    }
-
-    /**
-     * Increment number of runs.
-     *
-     * @param manufacturer manufacturer.
-     */
-    public void incNrOfRuns(Manufacturer manufacturer) {
-        log.info("Incrementing number of runs for {}", manufacturer);
-        var counter = runs.get(manufacturer);
-        if (counter == null) {
-            log.warn("No counter found for manufacturer {}", manufacturer);
-        } else {
-            counter.inc();
+            histogram.observe(nrOfEntities);
         }
     }
 

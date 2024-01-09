@@ -8,7 +8,6 @@ import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.Location;
-import de.app.fivegla.monitoring.FiwareEntityMonitor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +21,11 @@ import java.util.List;
 public class GenericDeviceIntegrationService {
 
     private final DeviceIntegrationService deviceIntegrationService;
-    private final FiwareEntityMonitor fiwareEntityMonitor;
     private final ApplicationConfiguration applicationConfiguration;
 
     public GenericDeviceIntegrationService(DeviceIntegrationService deviceIntegrationService,
-                                           FiwareEntityMonitor fiwareEntityMonitor,
                                            ApplicationConfiguration applicationConfiguration) {
         this.deviceIntegrationService = deviceIntegrationService;
-        this.fiwareEntityMonitor = fiwareEntityMonitor;
         this.applicationConfiguration = applicationConfiguration;
     }
 
@@ -58,7 +54,6 @@ public class GenericDeviceIntegrationService {
                 .location(location)
                 .build();
         deviceIntegrationService.persist(device);
-        fiwareEntityMonitor.deviceRegistered(manufacturer, 1);
     }
 
     private CommonManufacturerConfiguration getManufacturerConfiguration(Manufacturer manufacturer) {

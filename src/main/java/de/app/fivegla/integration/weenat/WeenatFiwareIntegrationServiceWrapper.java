@@ -4,7 +4,6 @@ package de.app.fivegla.integration.weenat;
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.Format;
-import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.WeenatConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;

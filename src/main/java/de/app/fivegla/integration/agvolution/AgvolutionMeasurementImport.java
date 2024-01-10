@@ -32,6 +32,7 @@ public class AgvolutionMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
+        var begin = Instant.now();
         try {
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGVOLUTION);
             if (lastRun.isPresent()) {
@@ -53,6 +54,10 @@ public class AgvolutionMeasurementImport {
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agvolution API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGVOLUTION);
+        } finally {
+            log.info("Finished scheduled data import from Agvolution API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.AGVOLUTION, begin.until(end, ChronoUnit.SECONDS));
         }
     }
 

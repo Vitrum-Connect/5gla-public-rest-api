@@ -32,6 +32,7 @@ public class SoilScoutMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
+        var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {
                 log.info("Running scheduled data import from Soil Scout API");
@@ -53,6 +54,10 @@ public class SoilScoutMeasurementImport {
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Soil Scout API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SOILSCOUT);
+        } finally {
+            log.info("Finished scheduled data import from Soil Scout API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.SOILSCOUT, begin.until(end, ChronoUnit.SECONDS));
         }
     }
 

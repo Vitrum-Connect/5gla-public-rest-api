@@ -35,4 +35,20 @@ public interface Metrics {
      * @see Metrics
      */
     String ERRORS_DURING_JOB_EXECUTION_PREFIX = "app_5gla_errors_during_job_execution_";
+
+    /**
+     * Represents the prefix for the metric keys related to job execution time.
+     * <p>
+     * The JOB_EXECUTION_TIME_PREFIX is used to construct metric keys for tracking the execution time
+     * of a job. The prefix is followed by a specific identifier that indicates the type or context of the job.
+     * This allows for better categorization and analysis of the job execution time.
+     * <p>
+     * The JOB_EXECUTION_TIME_PREFIX is defined within the {@link Metrics} interface,
+     * which is a part of the custom metrics module. This prefix is used for metrics tracking
+     * purposes and should not be modified or reassigned.
+     * </p>
+     *
+     * @see Metrics
+     */
+    String JOB_EXECUTION_TIME_PREFIX = "app_5gla_job_execution_time_";
 }

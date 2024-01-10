@@ -34,6 +34,7 @@ public class WeenatMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
+        var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.WEENAT).isPresent()) {
                 log.info("Running scheduled data import from Weenat API");
@@ -55,6 +56,10 @@ public class WeenatMeasurementImport {
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Weenat API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.WEENAT);
+        } finally {
+            log.info("Finished scheduled data import from Weenat API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.WEENAT, begin.until(end, ChronoUnit.SECONDS));
         }
     }
 

@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 /**
  * Scheduled data import from Soil Scout API.
  */
@@ -21,6 +24,7 @@ public class AgranimoMeasurementImport {
     private final JobMonitor jobMonitor;
 
     public void run() {
+        var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
                 jobMonitor.logNrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
@@ -31,6 +35,10 @@ public class AgranimoMeasurementImport {
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);
+        } finally {
+            log.info("Finished scheduled data import from Agranimo API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.AGRANIMO, begin.until(end, ChronoUnit.SECONDS));
         }
     }
 

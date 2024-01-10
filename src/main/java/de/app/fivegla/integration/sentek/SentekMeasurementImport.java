@@ -35,6 +35,7 @@ public class SentekMeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
+        var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.SENTEK).isPresent()) {
                 log.info("Running scheduled data import from Sentek API");
@@ -56,6 +57,10 @@ public class SentekMeasurementImport {
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Sentek API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);
+        } finally {
+            log.info("Finished scheduled data import from Sentek API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.SENTEK, begin.until(end, ChronoUnit.SECONDS));
         }
     }
 

@@ -35,6 +35,7 @@ public class Farm21MeasurementImport {
      * Run scheduled data import.
      */
     public void run() {
+        var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.FARM21).isPresent()) {
                 log.info("Running scheduled data import from Farm21 API");
@@ -56,6 +57,10 @@ public class Farm21MeasurementImport {
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Farm21 API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.FARM21);
+        } finally {
+            log.info("Finished scheduled data import from Farm21 API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.FARM21, begin.until(end, ChronoUnit.SECONDS));
         }
     }
 

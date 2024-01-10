@@ -41,7 +41,7 @@ public class SentekMeasurementImport {
                 log.info("Running scheduled data import from Sentek API");
                 var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENTEK).get();
                 var measurements = sentekSensorDataIntegrationService.fetchAll(lastRun);
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.SENTEK);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(this::persistDataWithinFiware);
@@ -50,7 +50,7 @@ public class SentekMeasurementImport {
                 var measurements = sentekSensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.SENTEK);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 measurements.entrySet().forEach(this::persistDataWithinFiware);
             }
             applicationDataRepository.updateLastRun(Manufacturer.SENTEK);

@@ -38,14 +38,14 @@ public class SoilScoutMeasurementImport {
                 log.info("Running scheduled data import from Soil Scout API");
                 var lastRun = applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).get();
                 var measurements = soilScoutMeasurementIntegrationService.fetchAll(lastRun, Instant.now());
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.SOILSCOUT);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.forEach(this::persistDataWithinFiware);
             } else {
                 log.info("Running initial data import from Soil Scout API, this may take a while");
                 var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.SOILSCOUT);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.forEach(this::persistDataWithinFiware);

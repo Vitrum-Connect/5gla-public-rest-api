@@ -40,14 +40,14 @@ public class WeenatMeasurementImport {
                 log.info("Running scheduled data import from Weenat API");
                 var lastRun = applicationDataRepository.getLastRun(Manufacturer.WEENAT).get();
                 var measurements = weenatMeasuresIntegrationService.fetchAll(lastRun);
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.WEENAT);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.WEENAT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(this::persistDataWithinFiware);
             } else {
                 log.info("Running initial data import from Weenat API, this may take a while");
                 var measurements = weenatMeasuresIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.WEENAT);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.WEENAT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(this::persistDataWithinFiware);

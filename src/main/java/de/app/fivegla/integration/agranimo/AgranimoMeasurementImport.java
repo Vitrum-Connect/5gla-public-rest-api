@@ -27,9 +27,9 @@ public class AgranimoMeasurementImport {
         var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
-                jobMonitor.logNrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, 0);
             } else {
-                jobMonitor.logNrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, 0);
             }
             applicationDataRepository.updateLastRun(Manufacturer.AGRANIMO);
         } catch (Exception e) {

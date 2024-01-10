@@ -41,7 +41,7 @@ public class Farm21MeasurementImport {
                 log.info("Running scheduled data import from Farm21 API");
                 var lastRun = applicationDataRepository.getLastRun(Manufacturer.FARM21).get();
                 var measurements = farm21SensorDataIntegrationService.fetchAll(lastRun, Instant.now());
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.FARM21);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(this::persistDataWithinFiware);
@@ -50,7 +50,7 @@ public class Farm21MeasurementImport {
                 var measurements = farm21SensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                jobMonitor.logNrOfEntitiesFetched(measurements.size(), Manufacturer.FARM21);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 measurements.entrySet().forEach(this::persistDataWithinFiware);
             }
             applicationDataRepository.updateLastRun(Manufacturer.FARM21);

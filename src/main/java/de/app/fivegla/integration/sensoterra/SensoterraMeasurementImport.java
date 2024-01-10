@@ -41,7 +41,7 @@ public class SensoterraMeasurementImport {
             if (lastRun.isPresent()) {
                 log.info("Running scheduled data import from Sensoterra API");
                 var seriesEntries = probeDataIntegrationService.fetchAll(lastRun.get());
-                jobMonitor.logNrOfEntitiesFetched(seriesEntries.size(), Manufacturer.SENSOTERRA);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
                 seriesEntries.entrySet().forEach(this::persistDataWithinFiware);
@@ -50,7 +50,7 @@ public class SensoterraMeasurementImport {
                 var seriesEntries = probeDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
-                jobMonitor.logNrOfEntitiesFetched(seriesEntries.size(), Manufacturer.SENSOTERRA);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());
                 seriesEntries.entrySet().forEach(this::persistDataWithinFiware);
             }
             applicationDataRepository.updateLastRun(Manufacturer.SENSOTERRA);

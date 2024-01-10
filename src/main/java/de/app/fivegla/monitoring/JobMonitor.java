@@ -43,10 +43,10 @@ public class JobMonitor {
     /**
      * Monitor the number of entities fetched.
      *
-     * @param nrOfEntities number of entities.
      * @param manufacturer manufacturer.
+     * @param nrOfEntities number of entities.
      */
-    public void logNrOfEntitiesFetched(int nrOfEntities, Manufacturer manufacturer) {
+    public void logNrOfEntitiesFetched(Manufacturer manufacturer, int nrOfEntities) {
         log.info("Fetched {} entities from {}", nrOfEntities, manufacturer);
         var histogram = fetchedEntities.get(manufacturer);
         if (histogram == null) {

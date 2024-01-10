@@ -38,7 +38,7 @@ public class AgvolutionMeasurementImport {
             if (lastRun.isPresent()) {
                 log.info("Running scheduled data import from Agvolution API");
                 var seriesEntries = agvolutionSensorDataIntegrationService.fetchAll(lastRun.get());
-                jobMonitor.logNrOfEntitiesFetched(seriesEntries.size(), Manufacturer.AGVOLUTION);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGVOLUTION, seriesEntries.size());
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
                 seriesEntries.forEach(this::persistDataWithinFiware);
@@ -47,7 +47,7 @@ public class AgvolutionMeasurementImport {
                 var seriesEntries = agvolutionSensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
-                jobMonitor.logNrOfEntitiesFetched(seriesEntries.size(), Manufacturer.AGVOLUTION);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGVOLUTION, seriesEntries.size());
                 seriesEntries.forEach(this::persistDataWithinFiware);
             }
             applicationDataRepository.updateLastRun(Manufacturer.AGVOLUTION);

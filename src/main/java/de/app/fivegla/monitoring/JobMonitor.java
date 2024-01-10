@@ -3,7 +3,6 @@ package de.app.fivegla.monitoring;
 import de.app.fivegla.api.Manufacturer;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Histogram;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

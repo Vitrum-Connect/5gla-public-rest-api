@@ -4,7 +4,6 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
-import jakarta.validation.constraints.AssertTrue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

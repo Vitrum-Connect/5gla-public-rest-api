@@ -8,6 +8,7 @@ import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -34,6 +35,7 @@ public class Farm21MeasurementImport {
     /**
      * Run scheduled data import.
      */
+    @Async
     public void run() {
         var begin = Instant.now();
         try {

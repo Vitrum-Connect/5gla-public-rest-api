@@ -5,6 +5,7 @@ import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,6 +24,7 @@ public class AgranimoMeasurementImport {
     private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
+    @Async
     public void run() {
         var begin = Instant.now();
         try {

@@ -16,7 +16,6 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class JobMonitor {
 
     private final Map<Manufacturer, Histogram> fetchedEntities = new HashMap<>();

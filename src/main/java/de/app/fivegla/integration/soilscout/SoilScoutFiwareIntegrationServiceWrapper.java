@@ -3,12 +3,10 @@ package de.app.fivegla.integration.soilscout;
 
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
-import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
@@ -40,48 +38,44 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
      * @param sensorData the sensor data to create
      */
     public void persist(SensorData sensorData) {
-        try {
-            var soilScoutSensor = soilScoutSensorIntegrationService.fetch(sensorData.getDevice());
-            log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
-            persist(soilScoutSensor);
+        var soilScoutSensor = soilScoutSensorIntegrationService.fetch(sensorData.getDevice());
+        log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
+        persist(soilScoutSensor);
 
-            var temperature = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
-                    .controlledProperty("temperature")
-                    .numValue(sensorData.getTemperature())
-                    .build();
-            log.info("Persisting temperature measurement: {}", temperature);
-            deviceMeasurementIntegrationService.persist(temperature);
+        var temperature = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
+                .controlledProperty("temperature")
+                .numValue(sensorData.getTemperature())
+                .build();
+        log.info("Persisting temperature measurement: {}", temperature);
+        deviceMeasurementIntegrationService.persist(temperature);
 
-            var moisture = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
-                    .controlledProperty("moisture")
-                    .numValue(sensorData.getMoisture())
-                    .build();
-            log.info("Persisting moisture measurement: {}", moisture);
-            deviceMeasurementIntegrationService.persist(moisture);
+        var moisture = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
+                .controlledProperty("moisture")
+                .numValue(sensorData.getMoisture())
+                .build();
+        log.info("Persisting moisture measurement: {}", moisture);
+        deviceMeasurementIntegrationService.persist(moisture);
 
-            var conductivity = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
-                    .controlledProperty("conductivity")
-                    .numValue(sensorData.getConductivity())
-                    .build();
-            log.info("Persisting conductivity measurement: {}", conductivity);
-            deviceMeasurementIntegrationService.persist(conductivity);
+        var conductivity = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
+                .controlledProperty("conductivity")
+                .numValue(sensorData.getConductivity())
+                .build();
+        log.info("Persisting conductivity measurement: {}", conductivity);
+        deviceMeasurementIntegrationService.persist(conductivity);
 
-            var salinity = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
-                    .controlledProperty("salinity")
-                    .numValue(sensorData.getSalinity())
-                    .build();
-            log.info("Persisting salinity measurement: {}", salinity);
-            deviceMeasurementIntegrationService.persist(salinity);
+        var salinity = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
+                .controlledProperty("salinity")
+                .numValue(sensorData.getSalinity())
+                .build();
+        log.info("Persisting salinity measurement: {}", salinity);
+        deviceMeasurementIntegrationService.persist(salinity);
 
-            var waterBalance = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
-                    .controlledProperty("waterBalance")
-                    .numValue(sensorData.getWaterBalance())
-                    .build();
-            log.info("Persisting waterBalance measurement: {}", waterBalance);
-            deviceMeasurementIntegrationService.persist(waterBalance);
-        } catch (BusinessException | FiwareIntegrationLayerException e) {
-            log.error("Could not fetch sensor with id {} in Soil Scout API.", sensorData.getDevice(), e);
-        }
+        var waterBalance = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
+                .controlledProperty("waterBalance")
+                .numValue(sensorData.getWaterBalance())
+                .build();
+        log.info("Persisting waterBalance measurement: {}", waterBalance);
+        deviceMeasurementIntegrationService.persist(waterBalance);
     }
 
     private void persist(Sensor sensor) {

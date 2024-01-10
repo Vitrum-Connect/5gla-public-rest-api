@@ -23,7 +23,6 @@ public class AgranimoMeasurementImport {
     public void run() {
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
-                // FIXME
                 jobMonitor.logNrOfEntitiesFetched(0, Manufacturer.AGRANIMO);
             } else {
                 jobMonitor.logNrOfEntitiesFetched(0, Manufacturer.AGRANIMO);

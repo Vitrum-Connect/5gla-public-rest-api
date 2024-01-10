@@ -34,19 +34,15 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
     private final ApplicationConfiguration applicationConfiguration;
 
     public void persist(SeriesEntry seriesEntry) {
-        try {
-            persist(seriesEntry.getDeviceId(), seriesEntry.getLatitude(), seriesEntry.getLongitude());
-            seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
-                var deviceMeasurements = createDeviceMeasurements(seriesEntry, timeSeriesEntry);
-                log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
-                deviceMeasurements.forEach(deviceMeasurement -> {
-                    log.info("Persisting measurement: {}", deviceMeasurement);
-                    deviceMeasurementIntegrationService.persist(deviceMeasurement);
-                });
+        persist(seriesEntry.getDeviceId(), seriesEntry.getLatitude(), seriesEntry.getLongitude());
+        seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
+            var deviceMeasurements = createDeviceMeasurements(seriesEntry, timeSeriesEntry);
+            log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
+            deviceMeasurements.forEach(deviceMeasurement -> {
+                log.info("Persisting measurement: {}", deviceMeasurement);
+                deviceMeasurementIntegrationService.persist(deviceMeasurement);
             });
-        } catch (RuntimeException e) {
-            log.error("Error while persisting data for device: {}", seriesEntry.getDeviceId(), e);
-        }
+        });
     }
 
     private void persist(String deviceId, double latitude, double longitude) {

@@ -49,6 +49,7 @@ public class DataImportEventHandler {
         } else {
             log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
         }
+        // FIXME Use ThreadPoolTaskExecutor / Async
         switch (dataImportEvent.manufacturer()) {
             case SOILSCOUT -> soilScoutScheduledMeasurementImport.run();
             case AGVOLUTION -> agvolutionMeasurementImport.run();

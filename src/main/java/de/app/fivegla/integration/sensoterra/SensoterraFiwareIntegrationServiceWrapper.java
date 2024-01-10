@@ -32,21 +32,21 @@ public class SensoterraFiwareIntegrationServiceWrapper {
     private final ApplicationConfiguration applicationConfiguration;
 
     public void persist(Probe probe, List<ProbeData> probeData) {
-        try {
-            persist(probe);
-            probeData.forEach(probeDataEntry -> {
-                log.info("Persisting measurement for probe: {}", probe);
-                var deviceMeasurement = createDeviceMeasurement(probe, probeDataEntry);
-                deviceMeasurementIntegrationService.persist(deviceMeasurement);
-            });
-        } catch (RuntimeException e) {
-            log.error("Error while persisting probe data: {}", e.getMessage());
-        }
+        persist(probe);
+        probeData.forEach(probeDataEntry -> {
+            log.info("Persisting measurement for probe: {}", probe);
+            var deviceMeasurement = createDeviceMeasurement(probe, probeDataEntry);
+            deviceMeasurementIntegrationService.persist(deviceMeasurement);
+        });
     }
 
     private void persist(Probe probe) {
         var device = Device.builder()
                 .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(probe.getId())))
+                .manufacturerSpecificId(String.valueOf(probe.getId()))
+                .location(Location.builder()
+                        .coordinates(List.of(probe.getLatitude(), probe.getLongitude()))
+                        .build())
                 .deviceCategory(DeviceCategory.builder()
                         .value(List.of(getManufacturerConfiguration().getKey()))
                         .build())

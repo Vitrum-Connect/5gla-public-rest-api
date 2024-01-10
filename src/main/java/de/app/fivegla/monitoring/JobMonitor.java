@@ -19,7 +19,7 @@ public class JobMonitor {
 
     private final Map<Manufacturer, Histogram> fetchedEntities = new HashMap<>();
     private final Map<Manufacturer, Histogram> errorsDuringJobExecution = new HashMap<>();
-    private final Map<Manufacturer,Histogram> jobExecutionTimes = new HashMap<>();
+    private final Map<Manufacturer, Histogram> jobExecutionTimes = new HashMap<>();
 
     public JobMonitor(CollectorRegistry registry) {
         Arrays.stream(Manufacturer.values())
@@ -37,6 +37,7 @@ public class JobMonitor {
                     var jobExecutionTimeHistogram = Histogram.build(Metrics.JOB_EXECUTION_TIME_PREFIX + manufacturer.name().toLowerCase(),
                                     "Time taken to execute job for " + manufacturer.name())
                             .register(registry);
+                    jobExecutionTimes.put(manufacturer, jobExecutionTimeHistogram);
                 });
     }
 
@@ -77,7 +78,7 @@ public class JobMonitor {
      * Logs the execution time of a job for a specific manufacturer.
      *
      * @param manufacturer The manufacturer of the job.
-     * @param time The execution time of the job in milliseconds.
+     * @param time         The execution time of the job in milliseconds.
      */
     public void logJobExecutionTime(Manufacturer manufacturer, long time) {
         log.info("Job execution time for {} was {} ms", manufacturer, time);

@@ -6,6 +6,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.cache.ApiKeyWithSettingsCache;
 import de.app.fivegla.integration.sensoterra.dto.ApiKeyWithSettings;
 import de.app.fivegla.integration.sensoterra.dto.request.LoginRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ApiKeyIntegrationService {
 
     private final ApiKeyWithSettingsCache apiKeyWithSettingsCache;
@@ -31,12 +33,6 @@ public class ApiKeyIntegrationService {
     private String password;
 
     private final RestTemplate restTemplate;
-
-    public ApiKeyIntegrationService(ApiKeyWithSettingsCache apiKeyWithSettingsCache,
-                                    RestTemplate restTemplate) {
-        this.apiKeyWithSettingsCache = apiKeyWithSettingsCache;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetch the API key from the API.

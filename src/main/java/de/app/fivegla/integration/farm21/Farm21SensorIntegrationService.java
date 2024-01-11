@@ -3,6 +3,7 @@ package de.app.fivegla.integration.farm21;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.integration.farm21.model.Sensor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,13 +21,10 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Farm21SensorIntegrationService extends AbstractIntegrationService {
 
     private final RestTemplate restTemplate;
-
-    Farm21SensorIntegrationService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetches all sensors from the SoilScout API.

@@ -6,6 +6,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.integration.weenat.model.Plot;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -19,16 +20,11 @@ import java.util.List;
 @Getter
 @Setter
 @Service
+@RequiredArgsConstructor
 public class WeenatPlotIntegrationService extends AbstractIntegrationService {
 
     private final WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService;
     private final RestTemplate restTemplate;
-
-    public WeenatPlotIntegrationService(WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService,
-                                        RestTemplate restTemplate) {
-        this.weenatAccessTokenIntegrationService = weenatAccessTokenIntegrationService;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetches all metadata from the API.

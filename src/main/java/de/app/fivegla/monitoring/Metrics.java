@@ -6,45 +6,49 @@ package de.app.fivegla.monitoring;
 public interface Metrics {
 
     /**
-     * Prefix for the manufacturer-specific entity counter.
+     * Prefix for the metric keys related to entities fetched.
+     * <p>
+     * The ENTITIES_FETCHED_PREFIX is used to construct metric keys for tracking the number of entities fetched.
+     * The prefix is followed by a specific identifier that indicates the type or context of the entity.
+     * This allows for better categorization and analysis of the fetched entities.
+     * <p>
+     * The ENTITIES_FETCHED_PREFIX is defined within the Metrics interface, which is a part of the custom metrics module.
+     * This prefix is used for metrics tracking purposes and should not be modified or reassigned.
+     *
+     * @see Metrics
      */
     String ENTITIES_FETCHED_PREFIX = "app_5gla_entities_fetched_";
 
     /**
-     * Prefix for the manufacturer-specific job runs.
+     * Represents the prefix for the metric keys related to errors during job execution.
+     * <p>
+     * The ERRORS_DURING_JOB_EXECUTION_PREFIX is used to construct metric keys for capturing
+     * errors that occurred during the execution of a job. The prefix is followed by a specific
+     * identifier that indicates the type or context of the error. This allows for better
+     * categorization and analysis of the errors.
+     * <p>
+     * The ERRORS_DURING_JOB_EXECUTION_PREFIX is defined within the {@link Metrics} interface,
+     * which is a part of the custom metrics module. This prefix is used for metrics tracking
+     * purposes and should not be modified or reassigned.
+     * </p>
+     *
+     * @see Metrics
      */
-    String NR_OF_JOB_RUNS = "app_5gla_number_of_job_runs_";
+    String ERRORS_DURING_JOB_EXECUTION_PREFIX = "app_5gla_errors_during_job_execution_";
 
     /**
-     * Number of entities saved to FIWARE.
+     * Represents the prefix for the metric keys related to job execution time.
+     * <p>
+     * The JOB_EXECUTION_TIME_PREFIX is used to construct metric keys for tracking the execution time
+     * of a job. The prefix is followed by a specific identifier that indicates the type or context of the job.
+     * This allows for better categorization and analysis of the job execution time.
+     * <p>
+     * The JOB_EXECUTION_TIME_PREFIX is defined within the {@link Metrics} interface,
+     * which is a part of the custom metrics module. This prefix is used for metrics tracking
+     * purposes and should not be modified or reassigned.
+     * </p>
+     *
+     * @see Metrics
      */
-    String FIWARE_SAVED_ENTITIES = "app_5gla_fiware_entities_saved";
-
-    /**
-     * Prefix for the manufacturer-specific entity counter.
-     */
-    String FIWARE_SAVED_ENTITIES_PREFIX = FIWARE_SAVED_ENTITIES + "_";
-
-
-    /**
-     * Number of sensors saved to FIWARE.
-     */
-    String FIWARE_SAVED_SENSORS = "app_5gla_fiware_sensors_saved";
-
-    /**
-     * Prefix for the manufacturer-specific entity counter.
-     */
-    String FIWARE_SAVED_SENSORS_PREFIX = FIWARE_SAVED_SENSORS + "_";
-
-    /**
-     * This variable represents the name of the FIWARE registered devices.
-     * The value is set to "app_5gla_fiware_devices_registered".
-     */
-    String FIWARE_REGISTERED_DEVICES = "app_5gla_fiware_devices_registered";
-
-    /**
-     * Prefix used for registering devices in the FIWARE platform.
-     * The prefix is appended to the device ID to create a unique registration key.
-     */
-    String FIWARE_REGISTERED_DEVICES_PREFIX = FIWARE_REGISTERED_DEVICES + "_";
+    String JOB_EXECUTION_TIME_PREFIX = "app_5gla_job_execution_time_";
 }

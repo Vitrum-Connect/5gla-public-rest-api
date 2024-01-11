@@ -4,6 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.fiware.model.Location;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.formats.tiff.TiffField;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ExifDataIntegrationService {
 
     /**

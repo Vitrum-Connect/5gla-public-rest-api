@@ -50,5 +50,9 @@ microstream-*
 *.env
 *.5gla-*
 
+# LOCAL DATA #
+.uptime-kuma-data
+.grafana-data
+
 # LOCAL UPTIME KUMA #
 uptime-kuma-data

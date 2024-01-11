@@ -6,6 +6,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.micasense.events.ImageProcessingFinishedEvent;
 import de.app.fivegla.integration.micasense.events.ImageProcessingStartedEvent;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Component
+@RequiredArgsConstructor
 public class ActiveMicaSenseTransactions {
 
     /**

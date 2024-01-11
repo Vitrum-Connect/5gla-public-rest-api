@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.weenat.cache;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Component
+@RequiredArgsConstructor
 public class WeenatUserDataCache {
 
     public static final int TTL = 60;

@@ -5,6 +5,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.soilscout.dto.response.MeasurementResponse;
 import de.app.fivegla.integration.soilscout.model.SensorData;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ import java.util.*;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SoilScoutMeasurementIntegrationService extends AbstractIntegrationService {
 
     /**

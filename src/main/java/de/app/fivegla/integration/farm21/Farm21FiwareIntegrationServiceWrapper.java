@@ -4,7 +4,6 @@ package de.app.fivegla.integration.farm21;
 import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.Format;
-import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceIntegrationService;
@@ -15,7 +14,7 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
-import de.app.fivegla.monitoring.FiwareEntityMonitor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,21 +25,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Farm21FiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
-    private final FiwareEntityMonitor fiwareEntityMonitor;
     private final ApplicationConfiguration applicationConfiguration;
-
-    public Farm21FiwareIntegrationServiceWrapper(DeviceIntegrationService deviceIntegrationService,
-                                                 DeviceMeasurementIntegrationService deviceMeasurementIntegrationService,
-                                                 FiwareEntityMonitor fiwareEntityMonitor,
-                                                 ApplicationConfiguration applicationConfiguration) {
-        this.deviceIntegrationService = deviceIntegrationService;
-        this.deviceMeasurementIntegrationService = deviceMeasurementIntegrationService;
-        this.fiwareEntityMonitor = fiwareEntityMonitor;
-        this.applicationConfiguration = applicationConfiguration;
-    }
 
     /**
      * Create Farm21 sensor data in FIWARE.
@@ -49,84 +38,71 @@ public class Farm21FiwareIntegrationServiceWrapper {
      * @param sensorData the sensor data to create
      */
     public void persist(Sensor sensor, List<SensorData> sensorData) {
-        try {
-            persist(sensor);
-            fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.FARM21);
-            sensorData.forEach(sd -> {
-                var soilMoisture10 = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("soilMoisture10")
-                        .numValue(sd.getSoilMoisture10())
-                        .build();
-                log.info("Persisting soil moisture 10: {}", soilMoisture10);
-                deviceMeasurementIntegrationService.persist(soilMoisture10);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+        persist(sensor);
+        sensorData.forEach(sd -> {
+            var soilMoisture10 = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("soilMoisture10")
+                    .numValue(sd.getSoilMoisture10())
+                    .build();
+            log.info("Persisting soil moisture 10: {}", soilMoisture10);
+            deviceMeasurementIntegrationService.persist(soilMoisture10);
 
-                var soilMoisture20 = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("soilMoisture20")
-                        .numValue(sd.getSoilMoisture20())
-                        .build();
-                log.info("Persisting soil moisture 20: {}", soilMoisture20);
-                deviceMeasurementIntegrationService.persist(soilMoisture20);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+            var soilMoisture20 = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("soilMoisture20")
+                    .numValue(sd.getSoilMoisture20())
+                    .build();
+            log.info("Persisting soil moisture 20: {}", soilMoisture20);
+            deviceMeasurementIntegrationService.persist(soilMoisture20);
 
-                var soilMoisture30 = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("soilMoisture30")
-                        .numValue(sd.getSoilMoisture30())
-                        .build();
-                log.info("Persisting soil moisture 30: {}", soilMoisture30);
-                deviceMeasurementIntegrationService.persist(soilMoisture30);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+            var soilMoisture30 = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("soilMoisture30")
+                    .numValue(sd.getSoilMoisture30())
+                    .build();
+            log.info("Persisting soil moisture 30: {}", soilMoisture30);
+            deviceMeasurementIntegrationService.persist(soilMoisture30);
 
-                var tempNeg10 = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("tempNeg10")
-                        .numValue(sd.getTempNeg10())
-                        .build();
-                log.info("Persisting temp neg 10: {}", tempNeg10);
-                deviceMeasurementIntegrationService.persist(tempNeg10);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+            var tempNeg10 = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("tempNeg10")
+                    .numValue(sd.getTempNeg10())
+                    .build();
+            log.info("Persisting temp neg 10: {}", tempNeg10);
+            deviceMeasurementIntegrationService.persist(tempNeg10);
 
-                var humidity = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("humidity")
-                        .numValue(sd.getHumidity())
-                        .build();
-                log.info("Persisting humidity: {}", humidity);
+            var humidity = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("humidity")
+                    .numValue(sd.getHumidity())
+                    .build();
+            log.info("Persisting humidity: {}", humidity);
 
-                var tempPos10 = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("tempPos10")
-                        .numValue(sd.getTempPos10())
-                        .build();
-                log.info("Persisting temp pos 10: {}", tempPos10);
-                deviceMeasurementIntegrationService.persist(tempPos10);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+            var tempPos10 = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("tempPos10")
+                    .numValue(sd.getTempPos10())
+                    .build();
+            log.info("Persisting temp pos 10: {}", tempPos10);
+            deviceMeasurementIntegrationService.persist(tempPos10);
 
-                var battery = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("battery")
-                        .numValue(sd.getBattery())
-                        .build();
-                log.info("Persisting battery: {}", battery);
-                deviceMeasurementIntegrationService.persist(battery);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+            var battery = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("battery")
+                    .numValue(sd.getBattery())
+                    .build();
+            log.info("Persisting battery: {}", battery);
+            deviceMeasurementIntegrationService.persist(battery);
 
-                var soilTemperature = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("soilTemperature")
-                        .numValue(sd.getSoilTemperature())
-                        .build();
-                log.info("Persisting soil temperature: {}", soilTemperature);
-                deviceMeasurementIntegrationService.persist(soilTemperature);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+            var soilTemperature = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("soilTemperature")
+                    .numValue(sd.getSoilTemperature())
+                    .build();
+            log.info("Persisting soil temperature: {}", soilTemperature);
+            deviceMeasurementIntegrationService.persist(soilTemperature);
 
-                var airTemperature = createDefaultDeviceMeasurement(sensor, sd)
-                        .controlledProperty("airTemperature")
-                        .numValue(sd.getAirTemperature())
-                        .build();
-                log.info("Persisting air temperature: {}", airTemperature);
-                deviceMeasurementIntegrationService.persist(airTemperature);
-                fiwareEntityMonitor.entitiesSavedOrUpdated(Manufacturer.FARM21);
+            var airTemperature = createDefaultDeviceMeasurement(sensor, sd)
+                    .controlledProperty("airTemperature")
+                    .numValue(sd.getAirTemperature())
+                    .build();
+            log.info("Persisting air temperature: {}", airTemperature);
+            deviceMeasurementIntegrationService.persist(airTemperature);
 
-            });
-        } catch (RuntimeException e) {
-            log.error("Error while persisting data for sensor: {}", sensor, e);
-        }
+        });
     }
 
     private void persist(Sensor sensor) {
@@ -137,7 +113,6 @@ public class Farm21FiwareIntegrationServiceWrapper {
                         .build())
                 .build();
         deviceIntegrationService.persist(device);
-        fiwareEntityMonitor.sensorsSavedOrUpdated(Manufacturer.FARM21);
     }
 
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(Sensor sensor, SensorData sensorData) {

@@ -5,6 +5,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agranimo.cache.UserDataCache;
 import de.app.fivegla.integration.agranimo.dto.Zone;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ZoneService {
 
     @Value("${app.sensors.agranimo.url}")
@@ -28,14 +30,6 @@ public class ZoneService {
     private final LoginIntegrationService loginService;
     private final UserDataCache userDataCache;
     private final RestTemplate restTemplate;
-
-    public ZoneService(LoginIntegrationService loginService,
-                       UserDataCache userDataCache,
-                       RestTemplate restTemplate) {
-        this.loginService = loginService;
-        this.userDataCache = userDataCache;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Login against the API.

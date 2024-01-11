@@ -7,6 +7,7 @@ import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,16 +29,11 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SentekSensorDataIntegrationService extends AbstractIntegrationService {
 
     private final RestTemplate restTemplate;
     private final SentekSensorIntegrationService sentekSensorIntegrationService;
-
-    public SentekSensorDataIntegrationService(RestTemplate restTemplate,
-                                              SentekSensorIntegrationService sentekSensorIntegrationService) {
-        this.restTemplate = restTemplate;
-        this.sentekSensorIntegrationService = sentekSensorIntegrationService;
-    }
 
     /**
      * Fetches all readings for a given timestamp from all sensors.

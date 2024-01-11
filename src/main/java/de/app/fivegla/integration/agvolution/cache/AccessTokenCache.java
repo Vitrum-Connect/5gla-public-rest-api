@@ -2,6 +2,7 @@ package de.app.fivegla.integration.agvolution.cache;
 
 import de.app.fivegla.integration.agvolution.dto.Credentials;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 @Slf4j
 @Getter
 @Component
+@RequiredArgsConstructor
 public class AccessTokenCache {
 
     private Credentials credentials;

@@ -10,6 +10,7 @@ import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
 import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
 import de.app.fivegla.integration.weenat.WeenatMeasurementImport;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DataImportEventHandler {
 
     private final SoilScoutMeasurementImport soilScoutScheduledMeasurementImport;
@@ -33,24 +35,6 @@ public class DataImportEventHandler {
 
     @Value("${app.fiware.subscriptions.enabled}")
     private boolean subscriptionsEnabled;
-
-    public DataImportEventHandler(SoilScoutMeasurementImport soilScoutMeasurementImport,
-                                  AgranimoMeasurementImport agranimoMeasurementImport,
-                                  AgvolutionMeasurementImport agvolutionMeasurementImport,
-                                  Farm21MeasurementImport farm21MeasurementImport,
-                                  SensoterraMeasurementImport sensoterraMeasurementImport,
-                                  SentekMeasurementImport sentekMeasurementImport,
-                                  WeenatMeasurementImport weenatMeasurementImport1,
-                                  SubscriptionService subscriptionService) {
-        this.soilScoutScheduledMeasurementImport = soilScoutMeasurementImport;
-        this.agranimoMeasurementImport = agranimoMeasurementImport;
-        this.agvolutionMeasurementImport = agvolutionMeasurementImport;
-        this.farm21MeasurementImport = farm21MeasurementImport;
-        this.sensoterraMeasurementImport = sensoterraMeasurementImport;
-        this.sentekMeasurementImport = sentekMeasurementImport;
-        this.weenatMeasurementImport = weenatMeasurementImport1;
-        this.subscriptionService = subscriptionService;
-    }
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {

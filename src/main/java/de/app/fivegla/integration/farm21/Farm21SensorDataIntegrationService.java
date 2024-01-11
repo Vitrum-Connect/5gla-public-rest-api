@@ -7,6 +7,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.farm21.dto.response.SensorDataResponse;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,16 +26,11 @@ import java.util.*;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Farm21SensorDataIntegrationService extends AbstractIntegrationService {
 
     private final Farm21SensorIntegrationService farm21SensorIntegrationService;
     private final RestTemplate restTemplate;
-
-    public Farm21SensorDataIntegrationService(Farm21SensorIntegrationService farm21SensorIntegrationService,
-                                              RestTemplate restTemplate) {
-        this.farm21SensorIntegrationService = farm21SensorIntegrationService;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetches all sensor data for all sensors from the Farm21 API.

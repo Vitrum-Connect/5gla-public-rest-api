@@ -1,20 +1,27 @@
 package de.app.fivegla.integration.sentek;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.integration.sentek.model.csv.Reading;
+import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Scheduled data import from Sentek API.
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SentekMeasurementImport {
 
     private final SentekSensorDataIntegrationService sentekSensorDataIntegrationService;
@@ -25,38 +32,49 @@ public class SentekMeasurementImport {
     @Value("${app.scheduled.daysInThePastForInitialImport}")
     private int daysInThePastForInitialImport;
 
-    public SentekMeasurementImport(SentekSensorDataIntegrationService sentekSensorDataIntegrationService,
-                                   ApplicationDataRepository applicationDataRepository,
-                                   SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper,
-                                   JobMonitor jobMonitor) {
-        this.sentekSensorDataIntegrationService = sentekSensorDataIntegrationService;
-        this.applicationDataRepository = applicationDataRepository;
-        this.sentekFiwareIntegrationServiceWrapper = sentekFiwareIntegrationServiceWrapper;
-        this.jobMonitor = jobMonitor;
-    }
-
     /**
      * Run scheduled data import.
      */
+    @Async
     public void run() {
-        jobMonitor.incNrOfRuns(Manufacturer.SENTEK);
-        if (applicationDataRepository.getLastRun(Manufacturer.SENTEK).isPresent()) {
-            log.info("Running scheduled data import from Farm21 API");
-            var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENTEK).get();
-            var measurements = sentekSensorDataIntegrationService.fetchAll(lastRun);
-            jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SENTEK);
-            log.info("Found {} measurements", measurements.size());
-            log.info("Persisting {} measurements", measurements.size());
-            measurements.forEach(sentekFiwareIntegrationServiceWrapper::persist);
-        } else {
-            log.info("Running initial data import from Farm21 API, this may take a while");
-            var measurements = sentekSensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
-            log.info("Found {} measurements", measurements.size());
-            log.info("Persisting {} measurements", measurements.size());
-            jobMonitor.nrOfEntitiesFetched(measurements.size(), Manufacturer.SENTEK);
-            measurements.forEach(sentekFiwareIntegrationServiceWrapper::persist);
+        var begin = Instant.now();
+        try {
+            if (applicationDataRepository.getLastRun(Manufacturer.SENTEK).isPresent()) {
+                log.info("Running scheduled data import from Sentek API");
+                var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENTEK).get();
+                var measurements = sentekSensorDataIntegrationService.fetchAll(lastRun);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
+                log.info("Found {} measurements", measurements.size());
+                log.info("Persisting {} measurements", measurements.size());
+                measurements.entrySet().forEach(this::persistDataWithinFiware);
+            } else {
+                log.info("Running initial data import from Sentek API, this may take a while");
+                var measurements = sentekSensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
+                log.info("Found {} measurements", measurements.size());
+                log.info("Persisting {} measurements", measurements.size());
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
+                measurements.entrySet().forEach(this::persistDataWithinFiware);
+            }
+            applicationDataRepository.updateLastRun(Manufacturer.SENTEK);
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Sentek API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);
+        } finally {
+            log.info("Finished scheduled data import from Sentek API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.SENTEK, begin.until(end, ChronoUnit.SECONDS));
         }
-        applicationDataRepository.updateLastRun(Manufacturer.SENTEK);
+    }
+
+    private void persistDataWithinFiware(Map.Entry<Logger, List<Reading>> entry) {
+        try {
+            Logger key = entry.getKey();
+            List<Reading> value = entry.getValue();
+            sentekFiwareIntegrationServiceWrapper.persist(key, value);
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Sentek API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);
+        }
     }
 
 }

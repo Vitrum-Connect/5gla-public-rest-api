@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.integration.agranimo.model.SoilMoistureType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -17,6 +18,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AgranimoSoilMoistureIntegrationService {
 
     @Value("${app.sensors.agranimo.url}")
@@ -25,14 +27,6 @@ public class AgranimoSoilMoistureIntegrationService {
     private final ZoneService zoneService;
     private final LoginIntegrationService loginService;
     private final RestTemplate restTemplate;
-
-    public AgranimoSoilMoistureIntegrationService(ZoneService zoneService,
-                                                  LoginIntegrationService loginService,
-                                                  RestTemplate restTemplate) {
-        this.zoneService = zoneService;
-        this.loginService = loginService;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetch the water content from the API.

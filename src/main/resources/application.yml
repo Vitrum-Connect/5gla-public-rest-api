@@ -24,7 +24,7 @@ app:
       fiwareDeviceIdPrefix: "urn:5gla:dev:agr:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:data:agr:"
       enabled: true
-      url: https://public-staging.agranimo.com
+      url: https://public.agranimo.com/
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
     agvolution:

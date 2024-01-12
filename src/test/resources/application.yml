@@ -24,7 +24,7 @@ app:
       fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agranimo:"
       fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agranimo:"
       enabled: true
-      url: https://public-staging.agranimo.com
+      url: https://public.agranimo.com/
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
     agvolution:
@@ -87,3 +87,7 @@ one:
   microstream:
     storage-directory: .microstream-integration-test
     channel-count: 2
+spring:
+  batch:
+    job:
+      enabled: false

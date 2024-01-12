@@ -3,6 +3,7 @@ package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
     private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
 
-    public void persist(List<SensorData> measurements) {
+    public void persist(SoilMoisture soilMoisture) {
         log.error("Not implemented yet");
     }
 }

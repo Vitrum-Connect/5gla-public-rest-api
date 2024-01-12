@@ -19,14 +19,14 @@ class AgranimoSoilMoistureServiceIT extends SpringBootIntegrationTestBase {
     @Autowired
     private AgranimoZoneService agranimoZoneService;
 
-    private final Instant until = Instant.ofEpochSecond(1662617200);
+    private final Instant since = Instant.ofEpochSecond(1662617200);
 
     @Test
     void givenValidCredentialsWhenFetchingWaterContentThenThereShouldBeEntriesForTheZone() {
         List<Zone> zones = agranimoZoneService.fetchZones();
         zones.forEach(zone ->
         {
-            var soilMoistures = soilMoistureService.fetchWaterContent(zone, until);
+            var soilMoistures = soilMoistureService.fetchWaterContent(zone, since);
             assertThat(soilMoistures).isNotEmpty();
             assertThat(soilMoistures.size()).isGreaterThan(0);
         });

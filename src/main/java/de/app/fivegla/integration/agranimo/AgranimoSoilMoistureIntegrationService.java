@@ -41,13 +41,13 @@ public class AgranimoSoilMoistureIntegrationService {
      * @return The water content.
      */
     public List<SoilMoisture> fetchWaterContent(Zone zone, Instant since) {
-        return fetchAll(zone, since, SoilMoistureType.WATER_CONTENT);
+        return fetchAll(zone, since);
     }
 
     /**
      * Fetch the soil moisture from the API.
      */
-    private List<SoilMoisture> fetchAll(Zone zone, Instant since, SoilMoistureType soilMoistureType) {
+    private List<SoilMoisture> fetchAll(Zone zone, Instant since) {
         var until = Instant.now();
         log.info("Fetching soil moisture data for zone {}.", zone.getName());
         log.debug("Fetching soil moisture data for zone {} from {} to {}.", zone.getId(), since, until);
@@ -67,7 +67,7 @@ public class AgranimoSoilMoistureIntegrationService {
                     "until",
                     until.getEpochSecond(),
                     "type",
-                    soilMoistureType.getKey());
+                    SoilMoistureType.WATER_CONTENT.getKey());
             log.debug("Calling API with URI {} and variables {}.", uri, uriVariables);
             var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, SoilMoisture[].class, uriVariables);
 

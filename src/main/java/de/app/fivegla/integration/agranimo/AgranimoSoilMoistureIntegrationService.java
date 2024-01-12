@@ -30,7 +30,7 @@ public class AgranimoSoilMoistureIntegrationService {
     @Value("${app.sensors.agranimo.url}")
     private String url;
 
-    private final LoginIntegrationService loginService;
+    private final AgranimoLoginIntegrationService loginService;
     private final RestTemplate restTemplate;
 
     /**

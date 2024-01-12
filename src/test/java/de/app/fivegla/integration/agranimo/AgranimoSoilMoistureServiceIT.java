@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Instant;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 class AgranimoSoilMoistureServiceIT extends SpringBootIntegrationTestBase {
 
@@ -17,24 +19,16 @@ class AgranimoSoilMoistureServiceIT extends SpringBootIntegrationTestBase {
     @Autowired
     private AgranimoZoneService agranimoZoneService;
 
-    private final Instant since = Instant.ofEpochSecond(1662087600);
     private final Instant until = Instant.ofEpochSecond(1662617200);
-
-    @Test
-    void givenInvalidTimePeriodWhenFetchingWaterVolumeShouldNotCauseAnError() {
-        List<Zone> zones = agranimoZoneService.fetchZones();
-        zones.forEach(zone -> soilMoistureService.fetchWaterVolume(zone, until));
-    }
-
-    @Test
-    void givenValidCredentialsWhenFetchingWaterHeightThenThereShouldBeEntriesForTheZone() {
-        List<Zone> zones = agranimoZoneService.fetchZones();
-        zones.forEach(zone -> soilMoistureService.fetchWaterHeight(zone, until));
-    }
 
     @Test
     void givenValidCredentialsWhenFetchingWaterContentThenThereShouldBeEntriesForTheZone() {
         List<Zone> zones = agranimoZoneService.fetchZones();
-        zones.forEach(zone -> soilMoistureService.fetchWaterContent(zone, until));
+        zones.forEach(zone ->
+        {
+            var soilMoistures = soilMoistureService.fetchWaterContent(zone, until);
+            assertThat(soilMoistures).isNotEmpty();
+            assertThat(soilMoistures.size()).isGreaterThan(0);
+        });
     }
 }

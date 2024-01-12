@@ -27,7 +27,7 @@ public class AgranimoZoneService {
     @Value("${app.sensors.agranimo.url}")
     private String url;
 
-    private final LoginIntegrationService loginService;
+    private final AgranimoLoginIntegrationService loginService;
     private final UserDataCache userDataCache;
     private final RestTemplate restTemplate;
 

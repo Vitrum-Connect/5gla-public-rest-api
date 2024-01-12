@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LoginIntegrationService {
+public class AgranimoLoginIntegrationService {
 
     @Value("${app.sensors.agranimo.url}")
     private String url;

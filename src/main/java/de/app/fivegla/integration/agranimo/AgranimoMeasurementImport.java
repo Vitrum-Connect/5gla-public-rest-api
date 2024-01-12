@@ -2,6 +2,7 @@ package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
+import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,9 @@ public class AgranimoMeasurementImport {
                     jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, waterContent.size());
                     log.info("Found {} water content entries", waterContent.size());
                     log.info("Persisting {} water content entries", waterContent.size());
-                    waterContent.forEach(this::persistDataWithinFiware);
+                    waterContent.forEach(
+                            soilMoisture -> persistDataWithinFiware(zone, soilMoisture)
+                    );
                 });
 
             } else {
@@ -52,7 +55,9 @@ public class AgranimoMeasurementImport {
                     jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, waterContent.size());
                     log.info("Found {} water content entries", waterContent.size());
                     log.info("Persisting {} water content entries", waterContent.size());
-                    waterContent.forEach(this::persistDataWithinFiware);
+                    waterContent.forEach(
+                            soilMoisture -> persistDataWithinFiware(zone, soilMoisture)
+                    );
                 });
             }
             applicationDataRepository.updateLastRun(Manufacturer.AGRANIMO);
@@ -66,9 +71,9 @@ public class AgranimoMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(SoilMoisture soilMoisture) {
+    private void persistDataWithinFiware(Zone zone, SoilMoisture soilMoisture) {
         try {
-            fiwareIntegrationServiceWrapper.persist(soilMoisture);
+            fiwareIntegrationServiceWrapper.persist(zone, soilMoisture);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);

@@ -8,14 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class ZoneServiceIT extends SpringBootIntegrationTestBase {
+class AgranimoZoneServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
-    private ZoneService zoneService;
+    private AgranimoZoneService agranimoZoneService;
 
     @Test
     void givenValidCredentialsWhenFetchingTheZonesThenThereShouldBeAtLeast4Zones() {
-        var zones = zoneService.fetchZones();
+        var zones = agranimoZoneService.fetchZones();
         assertThat(zones).isNotEmpty();
         assertThat(zones.size()).isEqualTo(4);
     }

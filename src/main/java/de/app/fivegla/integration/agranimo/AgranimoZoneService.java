@@ -4,7 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agranimo.cache.UserDataCache;
-import de.app.fivegla.integration.agranimo.dto.Zone;
+import de.app.fivegla.integration.agranimo.model.Zone;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,12 +22,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ZoneService {
+public class AgranimoZoneService {
 
     @Value("${app.sensors.agranimo.url}")
     private String url;
 
-    private final LoginIntegrationService loginService;
+    private final AgranimoLoginIntegrationService loginService;
     private final UserDataCache userDataCache;
     private final RestTemplate restTemplate;
 

@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.agranimo.dto;
+package de.app.fivegla.integration.agranimo.model;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;

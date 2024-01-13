@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class AgranimoMonitoring {
 
     private final ApplicationConfiguration applicationConfiguration;
-    private final ZoneService zoneService;
+    private final AgranimoZoneService agranimoZoneService;
 
     @ReadOperation
     public Health read() {
@@ -32,7 +32,7 @@ public class AgranimoMonitoring {
             return null;
         } else {
             try {
-                var zones = zoneService.fetchZones();
+                var zones = agranimoZoneService.fetchZones();
                 if (zones != null && !zones.isEmpty()) {
                     return Health
                             .up()

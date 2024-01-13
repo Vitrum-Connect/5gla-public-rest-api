@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AccessTokenIntegrationServiceIT extends SpringBootIntegrationTestBase {
 
     @Autowired
-    private LoginIntegrationService loginService;
+    private AgranimoLoginIntegrationService loginService;
 
     @Test
     void givenValidCredentialsWhenLoginThenTheRequestShouldBeAccepted() {

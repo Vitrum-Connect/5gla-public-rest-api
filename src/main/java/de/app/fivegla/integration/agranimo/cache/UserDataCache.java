@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.agranimo.cache;
 
-import de.app.fivegla.integration.agranimo.dto.Credentials;
-import de.app.fivegla.integration.agranimo.dto.Zone;
+import de.app.fivegla.integration.agranimo.model.Credentials;
+import de.app.fivegla.integration.agranimo.model.Zone;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

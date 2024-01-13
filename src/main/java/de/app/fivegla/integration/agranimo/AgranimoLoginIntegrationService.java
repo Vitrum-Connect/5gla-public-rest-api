@@ -4,7 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agranimo.cache.UserDataCache;
-import de.app.fivegla.integration.agranimo.dto.Credentials;
+import de.app.fivegla.integration.agranimo.model.Credentials;
 import de.app.fivegla.integration.agranimo.dto.request.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LoginIntegrationService {
+public class AgranimoLoginIntegrationService {
 
     @Value("${app.sensors.agranimo.url}")
     private String url;

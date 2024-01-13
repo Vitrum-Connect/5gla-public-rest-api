@@ -1,10 +1,13 @@
 package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.integration.agranimo.model.SoilMoisture;
+import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +23,42 @@ import java.time.temporal.ChronoUnit;
 public class AgranimoMeasurementImport {
 
     private final ApplicationDataRepository applicationDataRepository;
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
+    private final AgranimoSoilMoistureIntegrationService agranimoSoilMoistureIntegrationService;
+    private final AgranimoZoneService agranimoZoneService;
     private final JobMonitor jobMonitor;
+
+    @Value("${app.scheduled.daysInThePastForInitialImport}")
+    private int daysInThePastForInitialImport;
 
     @Async
     public void run() {
         var begin = Instant.now();
         try {
-            if (applicationDataRepository.getLastRun(Manufacturer.AGRANIMO).isPresent()) {
-                jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, 0);
+            var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGRANIMO);
+            if (lastRun.isPresent()) {
+                log.info("Running scheduled data import from Agranimo API");
+                agranimoZoneService.fetchZones().forEach(zone -> {
+                    var waterContent = agranimoSoilMoistureIntegrationService.fetchWaterContent(zone, lastRun.get());
+                    jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, waterContent.size());
+                    log.info("Found {} water content entries", waterContent.size());
+                    log.info("Persisting {} water content entries", waterContent.size());
+                    waterContent.forEach(
+                            soilMoisture -> persistDataWithinFiware(zone, soilMoisture)
+                    );
+                });
+
             } else {
-                jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, 0);
+                log.info("Running scheduled data import from Agranimo API");
+                agranimoZoneService.fetchZones().forEach(zone -> {
+                    var waterContent = agranimoSoilMoistureIntegrationService.fetchWaterContent(zone, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
+                    jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, waterContent.size());
+                    log.info("Found {} water content entries", waterContent.size());
+                    log.info("Persisting {} water content entries", waterContent.size());
+                    waterContent.forEach(
+                            soilMoisture -> persistDataWithinFiware(zone, soilMoisture)
+                    );
+                });
             }
             applicationDataRepository.updateLastRun(Manufacturer.AGRANIMO);
         } catch (Exception e) {
@@ -41,6 +68,15 @@ public class AgranimoMeasurementImport {
             log.info("Finished scheduled data import from Agranimo API");
             var end = Instant.now();
             jobMonitor.logJobExecutionTime(Manufacturer.AGRANIMO, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
+    private void persistDataWithinFiware(Zone zone, SoilMoisture soilMoisture) {
+        try {
+            fiwareIntegrationServiceWrapper.persist(zone, soilMoisture);
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Agranimo API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);
         }
     }
 

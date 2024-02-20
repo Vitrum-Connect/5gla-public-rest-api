@@ -1,15 +1,11 @@
 package de.app.fivegla.integration.weenat;
 
 
-import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.Format;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.WeenatConfiguration;
-import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.Device;
-import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.weenat.model.Measurement;
@@ -28,12 +24,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WeenatFiwareIntegrationServiceWrapper {
-    private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
 
     public void persist(Plot plot, Measurements measurements) {
-        persist(plot);
         measurements.getMeasurements().forEach(measurement -> {
             log.info("Persisting measurement for measurement: {}", measurement);
             var deviceMeasurement = createDeviceMeasurement(plot, measurement);
@@ -210,26 +204,12 @@ public class WeenatFiwareIntegrationServiceWrapper {
         });
     }
 
-    private void persist(Plot plot) {
-        var device = Device.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plot.getId())))
-                .manufacturerSpecificId(String.valueOf(plot.getId()))
-                .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(getManufacturerConfiguration().getKey()))
-                        .build())
-                .location(Location.builder()
-                        .coordinates(List.of(plot.getLatitude(), plot.getLongitude()))
-                        .build())
-                .build();
-        deviceIntegrationService.persist(device);
-    }
-
     private DeviceMeasurement.DeviceMeasurementBuilder createDeviceMeasurement(Plot plot, Measurement measurement) {
         log.debug("Persisting probe data for probe: {}", plot);
         log.debug("Persisting measurement data: {}", measurement);
         return DeviceMeasurement.builder()
-                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
-                .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plot.getId())))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plot.getId())))
+                .manufacturerSpecificId(String.valueOf(plot.getId()))
                 .dateObserved(Format.format(measurement.getTimestamp()))
                 .location(Location.builder()
                         .coordinates(List.of(plot.getLatitude(), plot.getLongitude()))
@@ -241,13 +221,4 @@ public class WeenatFiwareIntegrationServiceWrapper {
         return applicationConfiguration.getSensors().weenat();
     }
 
-    /**
-     * Returns the device ID for a given plot ID.
-     *
-     * @param plotId the ID of the plot
-     * @return the device ID
-     */
-    public String deviceIdOf(int plotId) {
-        return FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plotId));
-    }
 }

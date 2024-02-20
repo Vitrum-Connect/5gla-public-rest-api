@@ -1,15 +1,11 @@
 package de.app.fivegla.integration.sentek;
 
 
-import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.api.Format;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
-import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.Device;
-import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
@@ -27,12 +23,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SentekFiwareIntegrationServiceWrapper {
-    private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
 
     public void persist(Logger logger, List<Reading> readings) {
-        persist(logger);
         readings.forEach(reading -> {
             deviceMeasurementIntegrationService.persist(createDefaultDeviceMeasurement(logger, reading)
                     .controlledProperty("V1")
@@ -156,26 +150,12 @@ public class SentekFiwareIntegrationServiceWrapper {
         });
     }
 
-    private void persist(Logger logger) {
-        var device = Device.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(logger.getId())))
-                .manufacturerSpecificId(String.valueOf(logger.getId()))
-                .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(getManufacturerConfiguration().getKey()))
-                        .build())
-                .location(Location.builder()
-                        .coordinates(List.of(logger.getLatitude(), logger.getLongitude()))
-                        .build())
-                .build();
-        deviceIntegrationService.persist(device);
-    }
-
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(Logger logger, Reading reading) {
         log.debug("Persisting sensor data for logger: {}", logger);
         log.debug("Persisting sensor data: {}", reading);
         return DeviceMeasurement.builder()
-                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
-                .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(logger.getId())))
+                .id(deviceIdOf(logger.getId()))
+                .manufacturerSpecificId(String.valueOf(logger.getId()))
                 .dateObserved(Format.format(reading.getDateTime()))
                 .location(Location.builder()
                         .coordinates(List.of(logger.getLatitude(), logger.getLongitude()))
@@ -184,20 +164,6 @@ public class SentekFiwareIntegrationServiceWrapper {
 
     private CommonManufacturerConfiguration getManufacturerConfiguration() {
         return applicationConfiguration.getSensors().sentek();
-    }
-
-    /**
-     * Persist the device readings to the logger.
-     *
-     * @param device   The device object containing the ID and location coordinates.
-     * @param readings The list of readings to persist.
-     */
-    public void persist(Device device, List<Reading> readings) {
-        var logger = new Logger();
-        logger.setId(Integer.parseInt(device.getManufacturerSpecificId()));
-        logger.setLatitude(device.getLocation().getCoordinates().get(0));
-        logger.setLongitude(device.getLocation().getCoordinates().get(1));
-        persist(logger, readings);
     }
 
     /**

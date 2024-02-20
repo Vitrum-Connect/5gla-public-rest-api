@@ -87,16 +87,6 @@ public class Application {
     }
 
     /**
-     * Dependency injection for the device integration service.
-     *
-     * @return -
-     */
-    @Bean
-    public DeviceIntegrationService deviceIntegrationService() {
-        return new DeviceIntegrationService(contextBrokerUrl, tenant);
-    }
-
-    /**
      * Dependency injection for the device measurement integration service.
      *
      * @return -

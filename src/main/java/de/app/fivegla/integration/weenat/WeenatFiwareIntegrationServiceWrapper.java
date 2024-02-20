@@ -221,13 +221,4 @@ public class WeenatFiwareIntegrationServiceWrapper {
         return applicationConfiguration.getSensors().weenat();
     }
 
-    /**
-     * Returns the device ID for a given plot ID.
-     *
-     * @param plotId the ID of the plot
-     * @return the device ID
-     */
-    public String deviceIdOf(int plotId) {
-        return FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plotId));
-    }
 }

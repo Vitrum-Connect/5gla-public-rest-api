@@ -31,12 +31,6 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
     @Value("${app.sensors.micasense.imagePathBaseUrl}")
     private String imagePathBaseUrl;
 
-    private Location fakeLocation() {
-        return Location.builder()
-                .coordinates(List.of(0.0, 0.0))
-                .build();
-    }
-
     /**
      * Create a new drone device measurement in FIWARE.
      *

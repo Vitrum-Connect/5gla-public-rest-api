@@ -9,14 +9,11 @@ import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.api.InstantFormatter;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.DroneDeviceMeasurement;
-import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Service for integration with FIWARE.

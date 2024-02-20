@@ -40,7 +40,6 @@ public class MicaSenseIntegrationService {
      * @param base64Image      The base64 encoded tiff image.
      */
     public String processImage(String transactionId, String droneId, MicaSenseChannel micaSenseChannel, String base64Image) {
-        fiwareIntegrationServiceWrapper.createOrUpdateDevice(droneId);
         var image = Base64.getDecoder().decode(base64Image);
         var location = exifDataIntegrationService.readLocation(image);
         log.debug("Channel for the image: {}.", micaSenseChannel);
@@ -55,7 +54,7 @@ public class MicaSenseIntegrationService {
                 .measuredAt(exifDataIntegrationService.readMeasuredAt(image))
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(micaSenseImage);
+        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(droneId, micaSenseImage);
         activeMicaSenseTransactions.add(transactionId, micaSenseImage.getOid());
         return micaSenseImage.getOid();
     }

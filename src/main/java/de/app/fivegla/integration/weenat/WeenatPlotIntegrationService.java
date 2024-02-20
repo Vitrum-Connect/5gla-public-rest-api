@@ -3,7 +3,6 @@ package de.app.fivegla.integration.weenat;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.fiware.model.Device;
 import de.app.fivegla.integration.weenat.model.Plot;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -59,20 +58,4 @@ public class WeenatPlotIntegrationService extends AbstractIntegrationService {
         }
     }
 
-    /**
-     * Retrieves information from a device and creates a `Plot` object.
-     *
-     * @param device the device from which to extract the information
-     * @return the `Plot` object created from the device information
-     */
-    public Plot plotFromDevice(Device device) {
-        var plot = new Plot();
-        plot.setId(Long.valueOf(device.getManufacturerSpecificId()));
-        plot.setName("Plot " + device.getManufacturerSpecificId());
-        plot.setLatitude(device.getLocation().getCoordinates().get(0));
-        plot.setLongitude(device.getLocation().getCoordinates().get(1));
-        plot.setDeviceCount(1);
-        return plot;
-
-    }
 }

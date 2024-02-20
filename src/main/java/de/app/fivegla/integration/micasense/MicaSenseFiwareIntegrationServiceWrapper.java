@@ -5,17 +5,15 @@ import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
-import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.api.InstantFormatter;
-import de.app.fivegla.fiware.model.*;
+import de.app.fivegla.fiware.model.DeviceMeasurement;
+import de.app.fivegla.fiware.model.DroneDeviceMeasurement;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Service for integration with FIWARE.
@@ -24,7 +22,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MicaSenseFiwareIntegrationServiceWrapper {
-    private final DeviceIntegrationService deviceIntegrationService;
     private final DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
 
@@ -32,35 +29,13 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
     private String imagePathBaseUrl;
 
     /**
-     * Create a new device in FIWARE.
-     */
-    public void createOrUpdateDevice(String droneId) {
-        var fiwareId = FiwareDeviceId.create(getManufacturerConfiguration(), droneId);
-        var device = Device.builder()
-                .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(getManufacturerConfiguration().getKey()))
-                        .build())
-                .location(fakeLocation())
-                .manufacturerSpecificId(droneId)
-                .id(fiwareId)
-                .build();
-        deviceIntegrationService.persist(device);
-    }
-
-    private Location fakeLocation() {
-        return Location.builder()
-                .coordinates(List.of(0.0, 0.0))
-                .build();
-    }
-
-    /**
      * Create a new drone device measurement in FIWARE.
      *
      * @param image the image to create the measurement for
      */
-    public void createDroneDeviceMeasurement(MicaSenseImage image) {
+    public void createDroneDeviceMeasurement(String droneId, MicaSenseImage image) {
         var droneDeviceMeasurement = DroneDeviceMeasurement.builder()
-                .deviceMeasurement(createDefaultDeviceMeasurement(image)
+                .deviceMeasurement(createDefaultDeviceMeasurement(droneId, image)
                         .build())
                 .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration(), image.getOid()))
                 .channel(image.getChannel().name())
@@ -69,11 +44,10 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
         droneDeviceMeasurementIntegrationService.persist(droneDeviceMeasurement);
     }
 
-    private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(MicaSenseImage image) {
+    private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(String droneId, MicaSenseImage image) {
         log.debug("Persisting drone image for drone: {}", image.getDroneId());
         return DeviceMeasurement.builder()
-                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
-                .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), image.getDroneId()))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), droneId))
                 .dateObserved(InstantFormatter.format(image.getMeasuredAt()))
                 .location(image.getLocation());
     }

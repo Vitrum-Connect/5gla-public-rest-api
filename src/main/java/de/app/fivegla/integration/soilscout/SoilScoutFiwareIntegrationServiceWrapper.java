@@ -1,14 +1,10 @@
 package de.app.fivegla.integration.soilscout;
 
 
-import de.app.fivegla.api.FiwareDevicMeasurementeId;
 import de.app.fivegla.api.FiwareDeviceId;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
-import de.app.fivegla.fiware.DeviceIntegrationService;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.Device;
-import de.app.fivegla.fiware.model.DeviceCategory;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.Location;
 import de.app.fivegla.integration.soilscout.model.Sensor;
@@ -28,7 +24,6 @@ import java.util.List;
 public class SoilScoutFiwareIntegrationServiceWrapper {
 
     private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
-    private final DeviceIntegrationService deviceIntegrationService;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
     private final ApplicationConfiguration applicationConfiguration;
 
@@ -40,7 +35,6 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
     public void persist(SensorData sensorData) {
         var soilScoutSensor = soilScoutSensorIntegrationService.fetch(sensorData.getDevice());
         log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
-        persist(soilScoutSensor);
 
         var temperature = createDefaultDeviceMeasurement(sensorData, soilScoutSensor)
                 .controlledProperty("temperature")
@@ -78,20 +72,10 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         deviceMeasurementIntegrationService.persist(waterBalance);
     }
 
-    private void persist(Sensor sensor) {
-        var device = Device.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
-                .deviceCategory(DeviceCategory.builder()
-                        .value(List.of(getManufacturerConfiguration().getKey()))
-                        .build())
-                .build();
-        deviceIntegrationService.persist(device);
-    }
-
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(SensorData sensorData, Sensor sensor) {
         return DeviceMeasurement.builder()
-                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration()))
-                .refDevice(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensorData.getDevice())))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
+                .manufacturerSpecificId(String.valueOf(sensor.getId()))
                 .dateObserved(sensorData.getTimestamp().toString())
                 .location(Location.builder()
                         .coordinates(List.of(sensor.getLocation().getLatitude(), sensor.getLocation().getLongitude()))

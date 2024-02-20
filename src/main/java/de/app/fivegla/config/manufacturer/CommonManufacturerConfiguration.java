@@ -32,14 +32,6 @@ public interface CommonManufacturerConfiguration {
     String fiwareDeviceIdPrefix();
 
     /**
-     * Get the FIWARE device measurement ID prefix.
-     *
-     * @return the FIWARE device measurement ID prefix as a String
-     */
-    String fiwareDeviceMeasurementIdPrefix();
-
-
-    /**
      * Get the manufacturer of the device.
      *
      * @return the manufacturer as an instance of the Manufacturer enum

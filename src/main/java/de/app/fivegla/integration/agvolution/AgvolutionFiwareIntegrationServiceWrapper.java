@@ -45,7 +45,8 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         var deviceMeasurements = new ArrayList<DeviceMeasurement>();
         timeSeriesEntry.getValues().forEach(timeSeriesValue -> {
             var deviceMeasurement = DeviceMeasurement.builder()
-                    .id(deviceIdOf(seriesEntry.getDeviceId()))
+                    .id(FiwareDeviceId.create(getManufacturerConfiguration(), seriesEntry.getDeviceId()))
+                    .manufacturerSpecificId(seriesEntry.getDeviceId())
                     .dateObserved(Format.format(timeSeriesValue.getTime()))
                     .location(Location.builder()
                             .coordinates(List.of(seriesEntry.getLatitude(), seriesEntry.getLongitude()))
@@ -63,13 +64,4 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         return applicationConfiguration.getSensors().agvolution();
     }
 
-    /**
-     * Retrieves the unique device ID of the specified device.
-     *
-     * @param deviceId The unique identifier of the device.
-     * @return The device ID.
-     */
-    public String deviceIdOf(String deviceId) {
-        return FiwareDeviceId.create(getManufacturerConfiguration(), deviceId);
-    }
 }

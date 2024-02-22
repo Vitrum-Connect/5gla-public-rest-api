@@ -42,7 +42,8 @@ public class AgranimoFiwareIntegrationServiceWrapper {
     private DeviceMeasurement createDeviceMeasurements(Zone zone, SoilMoisture soilMoisture) {
         log.debug("Persisting data for zone: {}", zone.getId());
         return DeviceMeasurement.builder()
-                .id(deviceIdOf(soilMoisture.getDeviceId()))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), soilMoisture.getDeviceId()))
+                .manufacturerSpecificId(soilMoisture.getDeviceId())
                 .dateObserved(Format.format(soilMoisture.getTms()))
                 .location(Location.builder()
                         .coordinates(List.of(zone.getData().getPoint().getCoordinates()[0], zone.getData().getPoint().getCoordinates()[1]))
@@ -62,13 +63,4 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         return applicationConfiguration.getSensors().agranimo();
     }
 
-    /**
-     * Retrieves the unique device ID of the specified device.
-     *
-     * @param deviceId The unique identifier of the device.
-     * @return The device ID.
-     */
-    public String deviceIdOf(String deviceId) {
-        return FiwareDeviceId.create(getManufacturerConfiguration(), deviceId);
-    }
 }

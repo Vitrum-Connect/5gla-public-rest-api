@@ -154,7 +154,7 @@ public class SentekFiwareIntegrationServiceWrapper {
         log.debug("Persisting sensor data for logger: {}", logger);
         log.debug("Persisting sensor data: {}", reading);
         return DeviceMeasurement.builder()
-                .id(deviceIdOf(logger.getId()))
+                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(logger.getId())))
                 .manufacturerSpecificId(String.valueOf(logger.getId()))
                 .dateObserved(Format.format(reading.getDateTime()))
                 .location(Location.builder()
@@ -166,13 +166,4 @@ public class SentekFiwareIntegrationServiceWrapper {
         return applicationConfiguration.getSensors().sentek();
     }
 
-    /**
-     * Retrieves the device ID for a given sensor ID.
-     *
-     * @param sensorId the ID of the sensor
-     * @return the device ID associated with the sensor ID
-     */
-    public String deviceIdOf(int sensorId) {
-        return FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensorId));
-    }
 }

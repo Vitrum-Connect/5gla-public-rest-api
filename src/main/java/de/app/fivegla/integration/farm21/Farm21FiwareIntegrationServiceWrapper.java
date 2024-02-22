@@ -104,6 +104,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
         log.debug("Persisting sensor data: {}", sensorData);
         return DeviceMeasurement.builder()
                 .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
+                .manufacturerSpecificId(String.valueOf(sensor.getId()))
                 .dateObserved(Format.format(sensorData.getMeasuredAt()))
                 .location(Location.builder()
                         .coordinates(List.of(sensorData.getLatitude(), sensorData.getLongitude()))

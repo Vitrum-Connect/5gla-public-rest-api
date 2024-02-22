@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.farm21;
 
 
-import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.api.Format;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
@@ -103,7 +103,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
         log.debug("Persisting sensor data for sensor: {}", sensor);
         log.debug("Persisting sensor data: {}", sensorData);
         return DeviceMeasurement.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
                 .manufacturerSpecificId(String.valueOf(sensor.getId()))
                 .dateObserved(Format.format(sensorData.getMeasuredAt()))
                 .location(Location.builder()

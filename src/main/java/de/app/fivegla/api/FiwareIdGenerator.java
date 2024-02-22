@@ -1,12 +1,12 @@
 package de.app.fivegla.api;
 
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
-import de.app.fivegla.fiware.api.FiwareIdGenerator;
+import de.app.fivegla.fiware.api.FiwareIdChecker;
 
 /**
  * Generates FIWARE device IDs.
  */
-public class FiwareDeviceId {
+public class FiwareIdGenerator {
 
     /**
      * Creates a FIWARE device ID.
@@ -26,7 +26,9 @@ public class FiwareDeviceId {
      * @return The FIWARE device ID.
      */
     public static String create(CommonManufacturerConfiguration commonManufacturerConfiguration, String id) {
-        return FiwareIdGenerator.id(commonManufacturerConfiguration.fiwareDeviceIdPrefix() + id);
+        var fiwareId = commonManufacturerConfiguration.fiwareDeviceIdPrefix() + id;
+        FiwareIdChecker.check(fiwareId);
+        return fiwareId;
     }
 
 

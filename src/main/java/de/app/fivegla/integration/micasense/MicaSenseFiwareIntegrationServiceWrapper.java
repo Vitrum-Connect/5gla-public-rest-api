@@ -1,8 +1,7 @@
 package de.app.fivegla.integration.micasense;
 
 
-import de.app.fivegla.api.FiwareDevicMeasurementeId;
-import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DroneDeviceMeasurementIntegrationService;
@@ -37,7 +36,7 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
         var droneDeviceMeasurement = DroneDeviceMeasurement.builder()
                 .deviceMeasurement(createDefaultDeviceMeasurement(droneId, image)
                         .build())
-                .id(FiwareDevicMeasurementeId.create(getManufacturerConfiguration(), image.getOid()))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), image.getOid()))
                 .channel(image.getChannel().name())
                 .imagePath(imagePathBaseUrl + image.getOid())
                 .build();
@@ -47,7 +46,7 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(String droneId, MicaSenseImage image) {
         log.debug("Persisting drone image for drone: {}", image.getDroneId());
         return DeviceMeasurement.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), droneId))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), droneId))
                 .manufacturerSpecificId(droneId)
                 .dateObserved(InstantFormatter.format(image.getMeasuredAt()))
                 .location(image.getLocation());

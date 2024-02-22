@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.sentek;
 
 
-import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.api.Format;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
@@ -154,7 +154,7 @@ public class SentekFiwareIntegrationServiceWrapper {
         log.debug("Persisting sensor data for logger: {}", logger);
         log.debug("Persisting sensor data: {}", reading);
         return DeviceMeasurement.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(logger.getId())))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), String.valueOf(logger.getId())))
                 .manufacturerSpecificId(String.valueOf(logger.getId()))
                 .dateObserved(Format.format(reading.getDateTime()))
                 .location(Location.builder()

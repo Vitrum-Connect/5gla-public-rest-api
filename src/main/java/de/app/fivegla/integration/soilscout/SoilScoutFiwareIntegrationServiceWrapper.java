@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.soilscout;
 
 
-import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
@@ -74,7 +74,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
     private DeviceMeasurement.DeviceMeasurementBuilder createDefaultDeviceMeasurement(SensorData sensorData, Sensor sensor) {
         return DeviceMeasurement.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), String.valueOf(sensor.getId())))
                 .manufacturerSpecificId(String.valueOf(sensor.getId()))
                 .dateObserved(sensorData.getTimestamp().toString())
                 .location(Location.builder()

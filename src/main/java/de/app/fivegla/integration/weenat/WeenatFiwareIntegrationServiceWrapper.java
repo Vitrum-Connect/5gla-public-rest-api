@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.weenat;
 
 
-import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.api.Format;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.WeenatConfiguration;
@@ -208,7 +208,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
         log.debug("Persisting probe data for probe: {}", plot);
         log.debug("Persisting measurement data: {}", measurement);
         return DeviceMeasurement.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(plot.getId())))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), String.valueOf(plot.getId())))
                 .manufacturerSpecificId(String.valueOf(plot.getId()))
                 .dateObserved(Format.format(measurement.getTimestamp()))
                 .location(Location.builder()

@@ -5,7 +5,6 @@ app:
     farm21:
       manufacturer: FARM21
       fiwareDeviceIdPrefix: "urn:5gla:dev:f21:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:data:f21:"
       enabled: ${FARM21_ENABLED}
       url: https://app.farm21.tech/api/v2/public
       username: ${FARM21_USERNAME}

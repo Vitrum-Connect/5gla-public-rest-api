@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.agranimo;
 
 
-import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.api.Format;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
@@ -42,7 +42,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
     private DeviceMeasurement createDeviceMeasurements(Zone zone, SoilMoisture soilMoisture) {
         log.debug("Persisting data for zone: {}", zone.getId());
         return DeviceMeasurement.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), soilMoisture.getDeviceId()))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), soilMoisture.getDeviceId()))
                 .manufacturerSpecificId(soilMoisture.getDeviceId())
                 .dateObserved(Format.format(soilMoisture.getTms()))
                 .location(Location.builder()

@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.sensoterra;
 
 
-import de.app.fivegla.api.FiwareDeviceId;
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.api.Format;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.SensoterraConfiguration;
@@ -38,7 +38,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         log.debug("Persisting probe data for probe: {}", probe);
         log.debug("Persisting probe data: {}", probeData);
         return DeviceMeasurement.builder()
-                .id(FiwareDeviceId.create(getManufacturerConfiguration(), String.valueOf(probe.getId())))
+                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), String.valueOf(probe.getId())))
                 .manufacturerSpecificId(String.valueOf(probe.getId()))
                 .dateObserved(Format.format(probeData.getTimestamp()))
                 .location(Location.builder()

@@ -1,7 +1,9 @@
 package de.app.fivegla.integration.micasense;
 
+import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.fiware.api.FiwareIdGenerator;
+import de.app.fivegla.config.ApplicationConfiguration;
+import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.integration.micasense.events.ImageProcessingFinishedEvent;
 import de.app.fivegla.integration.micasense.events.ImageProcessingStartedEvent;
 import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
@@ -31,6 +33,7 @@ public class MicaSenseIntegrationService {
     private final ApplicationDataRepository applicationDataRepository;
     private final ActiveMicaSenseTransactions activeMicaSenseTransactions;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationConfiguration applicationConfiguration;
 
     /**
      * Processes an image from the mica sense camera.
@@ -45,7 +48,7 @@ public class MicaSenseIntegrationService {
         log.debug("Channel for the image: {}.", micaSenseChannel);
         log.debug("Location for the image: {}.", location.getCoordinates());
         var micaSenseImage = applicationDataRepository.addMicaSenseImage(MicaSenseImage.builder()
-                .oid(FiwareIdGenerator.id())
+                .oid(FiwareIdGenerator.create(getManufacturerConfiguration(), droneId))
                 .channel(micaSenseChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)
@@ -103,4 +106,9 @@ public class MicaSenseIntegrationService {
     public void beginImageProcessing(String droneId, String transactionId) {
         applicationEventPublisher.publishEvent(new ImageProcessingStartedEvent(this, droneId, transactionId));
     }
+
+    private CommonManufacturerConfiguration getManufacturerConfiguration() {
+        return applicationConfiguration.getSensors().micasense();
+    }
+
 }

@@ -1,6 +1,5 @@
 package de.app.fivegla.integration.micasense;
 
-import de.app.fivegla.api.FiwareIdGenerator;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
@@ -44,11 +43,9 @@ public class MicaSenseIntegrationService {
      */
     public String processImage(String transactionId, String droneId, MicaSenseChannel micaSenseChannel, String base64Image) {
         var image = Base64.getDecoder().decode(base64Image);
-        var location = exifDataIntegrationService.readLocation(image);
         log.debug("Channel for the image: {}.", micaSenseChannel);
-        log.debug("Location for the image: {}.", location.getCoordinates());
         var micaSenseImage = applicationDataRepository.addMicaSenseImage(MicaSenseImage.builder()
-                .oid(FiwareIdGenerator.create(getManufacturerConfiguration(), droneId))
+                .oid(getManufacturerConfiguration() + ":" + droneId)
                 .channel(micaSenseChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)

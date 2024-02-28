@@ -4,6 +4,7 @@ import de.app.fivegla.fiware.model.Location;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.locationtech.jts.geom.Point;
 
 import java.time.Instant;
 
@@ -48,5 +49,5 @@ public class MicaSenseImage {
     /**
      * The location of the image.
      */
-    private Location location;
+    private Point location;
 }

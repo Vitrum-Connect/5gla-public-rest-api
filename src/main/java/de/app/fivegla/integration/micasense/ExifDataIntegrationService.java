@@ -3,7 +3,6 @@ package de.app.fivegla.integration.micasense;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.fiware.model.Location;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.imaging.Imaging;
@@ -11,13 +10,15 @@ import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.TiffDirectoryType;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -34,11 +35,11 @@ public class ExifDataIntegrationService {
      * @param image The image to read exif data from.
      * @return exif data from image.
      */
-    public Location readLocation(byte[] image) {
+    public Point readLocation(byte[] image) {
         try {
             var metadata = (TiffImageMetadata) Imaging.getMetadata(image);
             var gps = metadata.getGPS();
-            return Location.builder().coordinates(Arrays.asList(gps.getLatitudeAsDegreesNorth(), gps.getLongitudeAsDegreesEast())).build();
+            return new GeometryFactory().createPoint(new Coordinate(gps.getLongitudeAsDegreesEast(), gps.getLatitudeAsDegreesNorth()));
         } catch (Exception e) {
             log.error("Could not read image metadata", e);
             var errorMessage = ErrorMessage.builder().error(Error.MICASENSE_COULD_NOT_READ_IMAGE_METADATA).message("Could not read image metadata, please see log for more details.").build();

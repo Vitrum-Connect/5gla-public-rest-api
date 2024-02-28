@@ -213,13 +213,9 @@ public class SentekFiwareIntegrationServiceWrapper {
         log.debug("Persisting sensor data for logger: {}", logger);
         log.debug("Persisting sensor data: {}", reading);
         var builder = new DeviceMeasurementBuilder();
-        return builder.withId(createFiwareId(logger))
+        return builder.withId(getManufacturerConfiguration().fiwareDeviceIdPrefix() + ":" + logger.getLoggerId())
                 .withType(MeasurementType.SENTEK_SENSOR.name())
                 .withLocation(logger.getLatitude(), logger.getLongitude());
-    }
-
-    public String createFiwareId(Logger logger) {
-        return getManufacturerConfiguration().fiwareDeviceIdPrefix() + ":" + logger.getLoggerId();
     }
 
     private CommonManufacturerConfiguration getManufacturerConfiguration() {

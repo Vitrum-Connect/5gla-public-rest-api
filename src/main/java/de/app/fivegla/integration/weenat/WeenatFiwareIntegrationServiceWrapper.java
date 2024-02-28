@@ -1,21 +1,18 @@
 package de.app.fivegla.integration.weenat;
 
 
-import de.app.fivegla.api.FiwareIdGenerator;
-import de.app.fivegla.api.Format;
+import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.WeenatConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.Location;
+import de.app.fivegla.fiware.api.FiwareTypes;
+import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.weenat.model.Measurement;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Service for integration with FIWARE.
@@ -30,191 +27,232 @@ public class WeenatFiwareIntegrationServiceWrapper {
     public void persist(Plot plot, Measurements measurements) {
         measurements.getMeasurements().forEach(measurement -> {
             log.info("Persisting measurement for measurement: {}", measurement);
-            var deviceMeasurement = createDeviceMeasurement(plot, measurement);
 
-            var temperature = deviceMeasurement.numValue(measurement.getMeasurementValues().getTemperature())
-                    .unit("°C")
+            var temperature = defaultMeasurement(plot, measurement)
+                    .withMeasurement("temperature",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getTemperature()),
+                            measurement.getTimestamp(),
+                            "temperature")
                     .build();
-            if (temperature != null) {
-                log.info("Skipping measurement");
-            } else {
-                deviceMeasurementIntegrationService.persist(temperature);
-            }
+            deviceMeasurementIntegrationService.persist(temperature);
 
-            var relativeHumidity = deviceMeasurement.numValue(measurement.getMeasurementValues().getRelativeHumidity())
-                    .unit("%")
+            var relativeHumidity = defaultMeasurement(plot, measurement)
+                    .withMeasurement("relativeHumidity",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getRelativeHumidity()),
+                            measurement.getTimestamp(),
+                            "relativeHumidity")
                     .build();
-            if (relativeHumidity != null) {
-                deviceMeasurementIntegrationService.persist(relativeHumidity);
-            }
+            deviceMeasurementIntegrationService.persist(relativeHumidity);
 
-            var cumulativeRainfall = deviceMeasurement.numValue(measurement.getMeasurementValues().getCumulativeRainfall())
-                    .unit("mm")
+            var cumulativeRainfall = defaultMeasurement(plot, measurement)
+                    .withMeasurement("cumulativeRainfall",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getCumulativeRainfall()),
+                            measurement.getTimestamp(),
+                            "cumulativeRainfall")
                     .build();
-            if (cumulativeRainfall != null) {
-                deviceMeasurementIntegrationService.persist(cumulativeRainfall);
-            }
+            deviceMeasurementIntegrationService.persist(cumulativeRainfall);
 
-            var windSpeed = deviceMeasurement.numValue(measurement.getMeasurementValues().getWindSpeed())
-                    .unit("km/h")
+            var windSpeed = defaultMeasurement(plot, measurement)
+                    .withMeasurement("windSpeed",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getWindSpeed()),
+                            measurement.getTimestamp(),
+                            "windSpeed")
                     .build();
-            if (windSpeed != null) {
-                deviceMeasurementIntegrationService.persist(windSpeed);
-            }
+            deviceMeasurementIntegrationService.persist(windSpeed);
 
-            var windGustSpeed = deviceMeasurement.numValue(measurement.getMeasurementValues().getWindGustSpeed())
-                    .unit("km/h")
+            var windGustSpeed = defaultMeasurement(plot, measurement)
+                    .withMeasurement("windGustSpeed",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getWindGustSpeed()),
+                            measurement.getTimestamp(),
+                            "windGustSpeed")
                     .build();
-            if (windGustSpeed != null) {
-                deviceMeasurementIntegrationService.persist(windGustSpeed);
-            }
+            deviceMeasurementIntegrationService.persist(windGustSpeed);
 
-            var soiltemperature = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature())
-                    .unit("°C")
+            var soilTemperature = defaultMeasurement(plot, measurement)
+                    .withMeasurement("soilTemperature",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature()),
+                            measurement.getTimestamp(),
+                            "soilTemperature")
                     .build();
-            if (soiltemperature != null) {
-                deviceMeasurementIntegrationService.persist(soiltemperature);
-            }
+            deviceMeasurementIntegrationService.persist(soilTemperature);
 
-            var soiltemperature15 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature15())
-                    .unit("°C")
+            var soilTemperature15 = defaultMeasurement(plot, measurement)
+                    .withMeasurement("soilTemperature15",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature15()),
+                            measurement.getTimestamp(),
+                            "soilTemperature15")
                     .build();
-            if (soiltemperature15 != null) {
-                deviceMeasurementIntegrationService.persist(soiltemperature15);
-            }
+            deviceMeasurementIntegrationService.persist(soilTemperature15);
 
-            var soiltemperature30 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature30())
-                    .unit("°C")
+            var soilTemperature30 = defaultMeasurement(plot, measurement)
+                    .withMeasurement("soilTemperature30",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature30()),
+                            measurement.getTimestamp(),
+                            "soilTemperature30")
                     .build();
-            if (soiltemperature30 != null) {
-                deviceMeasurementIntegrationService.persist(soiltemperature30);
-            }
+            deviceMeasurementIntegrationService.persist(soilTemperature30);
 
-            var soiltemperature60 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilTemperature60())
-                    .unit("°C")
+            var soilTemperature60 = defaultMeasurement(plot, measurement)
+                    .withMeasurement("soilTemperature60",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature60()),
+                            measurement.getTimestamp(),
+                            "soilTemperature60")
                     .build();
-            if (soiltemperature60 != null) {
-                deviceMeasurementIntegrationService.persist(soiltemperature60);
-            }
+            deviceMeasurementIntegrationService.persist(soilTemperature60);
 
-            var soilWaterPotential15 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilWaterPotential15())
-                    .unit("kPa")
+            var soilWaterPotential15 = defaultMeasurement(plot, measurement)
+                    .withMeasurement("soilWaterPotential15",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential15()),
+                            measurement.getTimestamp(),
+                            "soilWaterPotential15")
                     .build();
-            if (soilWaterPotential15 != null) {
-                deviceMeasurementIntegrationService.persist(soilWaterPotential15);
-            }
+            deviceMeasurementIntegrationService.persist(soilWaterPotential15);
 
-            var soilWaterPotential30 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilWaterPotential30())
-                    .unit("kPa")
+            var soilWaterPotential30 = defaultMeasurement(plot, measurement)
+                    .withMeasurement("soilWaterPotential30",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential30()),
+                            measurement.getTimestamp(),
+                            "soilWaterPotential30")
                     .build();
-            if (soilWaterPotential30 != null) {
-                deviceMeasurementIntegrationService.persist(soilWaterPotential30);
-            }
+            deviceMeasurementIntegrationService.persist(soilWaterPotential30);
 
-            var soilWaterPotential60 = deviceMeasurement.numValue(measurement.getMeasurementValues().getSoilWaterPotential60())
-                    .unit("kPa")
+            var soilWaterPotential60 = defaultMeasurement(plot, measurement)
+                    .withMeasurement("soilWaterPotential60",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential60()),
+                            measurement.getTimestamp(),
+                            "soilWaterPotential60")
                     .build();
-            if (soilWaterPotential60 != null) {
-                deviceMeasurementIntegrationService.persist(soilWaterPotential60);
-            }
+            deviceMeasurementIntegrationService.persist(soilWaterPotential60);
 
-            var dryTemperature = deviceMeasurement.numValue(measurement.getMeasurementValues().getDryTemperature())
-                    .unit("°C")
+            var dryTemperature = defaultMeasurement(plot, measurement)
+                    .withMeasurement("dryTemperature",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getDryTemperature()),
+                            measurement.getTimestamp(),
+                            "dryTemperature")
                     .build();
-            if (dryTemperature != null) {
-                deviceMeasurementIntegrationService.persist(dryTemperature);
-            }
+            deviceMeasurementIntegrationService.persist(dryTemperature);
 
-            var wetTemperature = deviceMeasurement.numValue(measurement.getMeasurementValues().getWetTemperature())
-                    .unit("°C")
+            var wetTemperature = defaultMeasurement(plot, measurement)
+                    .withMeasurement("wetTemperature",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getWetTemperature()),
+                            measurement.getTimestamp(),
+                            "wetTemperature")
                     .build();
-            if (wetTemperature != null) {
-                deviceMeasurementIntegrationService.persist(wetTemperature);
-            }
+            deviceMeasurementIntegrationService.persist(wetTemperature);
 
-            var leafWetnessDuration = deviceMeasurement.numValue(measurement.getMeasurementValues().getLeafWetnessDuration())
-                    .unit("s")
+            var leafWetnessDuration = defaultMeasurement(plot, measurement)
+                    .withMeasurement("leafWetnessDuration",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getLeafWetnessDuration()),
+                            measurement.getTimestamp(),
+                            "leafWetnessDuration")
                     .build();
-            if (leafWetnessDuration != null) {
-                deviceMeasurementIntegrationService.persist(leafWetnessDuration);
-            }
+            deviceMeasurementIntegrationService.persist(leafWetnessDuration);
 
-            var leafWetnessVoltage = deviceMeasurement.numValue(measurement.getMeasurementValues().getLeafWetnessVoltage())
-                    .unit("V")
+            var leafWetnessVoltage = defaultMeasurement(plot, measurement)
+                    .withMeasurement("leafWetnessVoltage",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getLeafWetnessVoltage()),
+                            measurement.getTimestamp(),
+                            "leafWetnessVoltage")
                     .build();
-            if (leafWetnessVoltage != null) {
-                deviceMeasurementIntegrationService.persist(leafWetnessVoltage);
-            }
+            deviceMeasurementIntegrationService.persist(leafWetnessVoltage);
 
-            var solarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getSolarIrradiance())
-                    .unit("W/m²")
+            var solarIrridiance = defaultMeasurement(plot, measurement)
+                    .withMeasurement("solarIrridiance",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getSolarIrradiance()),
+                            measurement.getTimestamp(),
+                            "solarIrridiance")
                     .build();
-            if (solarIrridiance != null) {
-                deviceMeasurementIntegrationService.persist(solarIrridiance);
-            }
+            deviceMeasurementIntegrationService.persist(solarIrridiance);
 
-            var minimumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMinSolarIrradiance())
-                    .unit("W/m²")
+            var minimumSolarIrridiance = defaultMeasurement(plot, measurement)
+                    .withMeasurement("minimumSolarIrridiance",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getMinSolarIrradiance()),
+                            measurement.getTimestamp(),
+                            "minimumSolarIrridiance")
                     .build();
-            if (minimumSolarIrridiance != null) {
-                deviceMeasurementIntegrationService.persist(minimumSolarIrridiance);
-            }
+            deviceMeasurementIntegrationService.persist(minimumSolarIrridiance);
 
-            var maximumSolarIrridiance = deviceMeasurement.numValue(measurement.getMeasurementValues().getMaxSolarIrradiance())
-                    .unit("W/m²")
+            var maximumSolarIrridiance = defaultMeasurement(plot, measurement)
+                    .withMeasurement("maximumSolarIrridiance",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getMaxSolarIrradiance()),
+                            measurement.getTimestamp(),
+                            "maximumSolarIrridiance")
                     .build();
-            if (maximumSolarIrridiance != null) {
-                deviceMeasurementIntegrationService.persist(maximumSolarIrridiance);
-            }
+            deviceMeasurementIntegrationService.persist(maximumSolarIrridiance);
 
-            var photosyntheticallyActiveRadiation = deviceMeasurement.numValue(measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation())
-                    .unit("µmol/s/m²")
+            var photosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
+                    .withMeasurement("photosyntheticallyActiveRadiation",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation()),
+                            measurement.getTimestamp(),
+                            "photosyntheticallyActiveRadiation")
                     .build();
-            if (photosyntheticallyActiveRadiation != null) {
-                deviceMeasurementIntegrationService.persist(photosyntheticallyActiveRadiation);
-            }
+            deviceMeasurementIntegrationService.persist(photosyntheticallyActiveRadiation);
 
-            var minimumPhotosyntheticallyActiveRadiation = deviceMeasurement.numValue(measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation())
-                    .unit("µmol/s/m²")
+            var minimumPhotosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
+                    .withMeasurement("minimumPhotosyntheticallyActiveRadiation",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation()),
+                            measurement.getTimestamp(),
+                            "minimumPhotosyntheticallyActiveRadiation")
                     .build();
-            if (minimumPhotosyntheticallyActiveRadiation != null) {
-                deviceMeasurementIntegrationService.persist(minimumPhotosyntheticallyActiveRadiation);
-            }
+            deviceMeasurementIntegrationService.persist(minimumPhotosyntheticallyActiveRadiation);
 
-            var maximumPhotosyntheticallyActiveRadiation = deviceMeasurement.numValue(measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation())
-                    .unit("µmol/s/m²")
+            var maximumPhotosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
+                    .withMeasurement("maximumPhotosyntheticallyActiveRadiation",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation()),
+                            measurement.getTimestamp(),
+                            "maximumPhotosyntheticallyActiveRadiation")
                     .build();
-            if (maximumPhotosyntheticallyActiveRadiation != null) {
-                deviceMeasurementIntegrationService.persist(maximumPhotosyntheticallyActiveRadiation);
-            }
+            deviceMeasurementIntegrationService.persist(maximumPhotosyntheticallyActiveRadiation);
 
-            var dewPoint = deviceMeasurement.numValue(measurement.getMeasurementValues().getDewPoint())
-                    .unit("°C")
+            var dewPoint = defaultMeasurement(plot, measurement)
+                    .withMeasurement("dewPoint",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getDewPoint()),
+                            measurement.getTimestamp(),
+                            "dewPoint")
                     .build();
-            if (dewPoint != null) {
-                deviceMeasurementIntegrationService.persist(dewPoint);
-            }
+            deviceMeasurementIntegrationService.persist(dewPoint);
 
-            var potentialEvapotranspiration = deviceMeasurement.numValue(measurement.getMeasurementValues().getPotentialEvapotranspiration())
-                    .unit("mm")
+            var potentialEvapotranspiration = defaultMeasurement(plot, measurement)
+                    .withMeasurement("potentialEvapotranspiration",
+                            FiwareTypes.TEXT.getKey(),
+                            String.valueOf(measurement.getMeasurementValues().getPotentialEvapotranspiration()),
+                            measurement.getTimestamp(),
+                            "potentialEvapotranspiration")
                     .build();
-            if (potentialEvapotranspiration != null) {
-                deviceMeasurementIntegrationService.persist(potentialEvapotranspiration);
-            }
+            deviceMeasurementIntegrationService.persist(potentialEvapotranspiration);
         });
     }
 
-    private DeviceMeasurement.DeviceMeasurementBuilder createDeviceMeasurement(Plot plot, Measurement measurement) {
+    private DeviceMeasurementBuilder defaultMeasurement(Plot plot, Measurement measurement) {
         log.debug("Persisting probe data for probe: {}", plot);
         log.debug("Persisting measurement data: {}", measurement);
-        return DeviceMeasurement.builder()
-                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), String.valueOf(plot.getId())))
-                .manufacturerSpecificId(String.valueOf(plot.getId()))
-                .dateObserved(Format.format(measurement.getTimestamp()))
-                .location(Location.builder()
-                        .coordinates(List.of(plot.getLatitude(), plot.getLongitude()))
-                        .build())
-                .controlledProperty("value");
+        return new DeviceMeasurementBuilder()
+                .withId(getManufacturerConfiguration() + ":" + plot.getId())
+                .withType(MeasurementType.WEENAT_SENSOR.name())
+                .withLocation(plot.getLatitude(), plot.getLongitude());
     }
 
     private WeenatConfiguration getManufacturerConfiguration() {

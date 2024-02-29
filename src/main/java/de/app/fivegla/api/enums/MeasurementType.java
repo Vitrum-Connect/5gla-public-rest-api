@@ -6,5 +6,7 @@ public enum MeasurementType {
     AGVOLUTION_SENSOR,
     MICASENSE_IMAGE,
     SENSOTERRA_SENSOR,
+    FARM21_SENSOR,
+    AGRANIMO_SENSOR,
     UNKNOWN
 }

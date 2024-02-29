@@ -1,8 +1,9 @@
 package de.app.fivegla.event;
 
+import de.app.fivegla.api.SubscriptionStatus;
+import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.fiware.SubscriptionService;
 import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
-import de.app.fivegla.fiware.model.enums.Type;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
@@ -12,9 +13,10 @@ import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
 import de.app.fivegla.integration.weenat.WeenatMeasurementImport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
  * Event handler for data import events.
@@ -32,17 +34,16 @@ public class DataImportEventHandler {
     private final SentekMeasurementImport sentekMeasurementImport;
     private final WeenatMeasurementImport weenatMeasurementImport;
     private final SubscriptionService subscriptionService;
-
-    @Value("${app.fiware.subscriptions.enabled}")
-    private boolean subscriptionsEnabled;
+    private final SubscriptionStatus subscriptionStatus;
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
         log.info("Handling data import event for manufacturer {}.", dataImportEvent.manufacturer());
-        if (subscriptionsEnabled) {
+        if (subscriptionStatus.sendOutSubscriptions()) {
             try {
-                subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
+                Arrays.stream(MeasurementType.values()).forEach(type -> subscriptionService.subscribeAndReset(type.name()));
                 log.info("Subscribed to device measurement notifications.");
+                subscriptionStatus.setSubscriptionsSent(true);
             } catch (FiwareIntegrationLayerException e) {
                 log.error("Could not subscribe to device measurement notifications.");
             }

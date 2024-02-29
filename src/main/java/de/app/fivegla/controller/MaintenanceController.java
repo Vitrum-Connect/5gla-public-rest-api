@@ -1,11 +1,11 @@
 package de.app.fivegla.controller;
 
 
+import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.security.SecuredApiAccess;
 import de.app.fivegla.fiware.SubscriptionService;
-import de.app.fivegla.fiware.model.enums.Type;
 import de.app.fivegla.scheduled.DataImportScheduler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 
 /**
  * The MaintenanceController class handles maintenance-related operations.
@@ -61,7 +63,7 @@ public class MaintenanceController implements SecuredApiAccess {
     @PostMapping("/send-subscription")
     public ResponseEntity<Void> sendSubscription() {
         if (subscriptionsEnabled) {
-            subscriptionService.subscribeAndReset(Type.DeviceMeasurement);
+            Arrays.stream(MeasurementType.values()).forEach(type -> subscriptionService.subscribeAndReset(type.name()));
             return ResponseEntity.ok().build();
         } else {
             log.warn("Subscriptions are disabled. Not subscribing to device measurement notifications.");

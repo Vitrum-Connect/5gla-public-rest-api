@@ -1,6 +1,5 @@
 package de.app.fivegla.integration.micasense.model;
 
-import de.app.fivegla.fiware.model.Location;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,13 +1,13 @@
 package de.app.fivegla.integration.sensoterra;
 
 
-import de.app.fivegla.api.FiwareIdGenerator;
-import de.app.fivegla.api.Format;
+import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.SensoterraConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareTypes;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.Location;
+import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +37,11 @@ public class SensoterraFiwareIntegrationServiceWrapper {
     private DeviceMeasurement createDeviceMeasurement(Probe probe, ProbeData probeData) {
         log.debug("Persisting probe data for probe: {}", probe);
         log.debug("Persisting probe data: {}", probeData);
-        return DeviceMeasurement.builder()
-                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), String.valueOf(probe.getId())))
-                .manufacturerSpecificId(String.valueOf(probe.getId()))
-                .dateObserved(Format.format(probeData.getTimestamp()))
-                .location(Location.builder()
-                        .coordinates(List.of(probe.getLatitude(), probe.getLongitude()))
-                        .build())
-                .controlledProperty("value")
-                .numValue(probeData.getValue())
-                .unit(probeData.getUnit())
+        return new DeviceMeasurementBuilder()
+                .withId(getManufacturerConfiguration() + ":" + probe.getId())
+                .withType(MeasurementType.SENSOTERRA_SENSOR.name())
+                .withLocation(probe.getLatitude(), probe.getLongitude())
+                .withMeasurement("value", FiwareTypes.TEXT.getKey(), String.valueOf(probeData.getValue()), probeData.getTimestamp())
                 .build();
     }
 

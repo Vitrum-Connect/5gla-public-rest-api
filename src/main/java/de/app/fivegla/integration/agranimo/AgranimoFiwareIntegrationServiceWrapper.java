@@ -1,20 +1,17 @@
 package de.app.fivegla.integration.agranimo;
 
 
-import de.app.fivegla.api.FiwareIdGenerator;
-import de.app.fivegla.api.Format;
+import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.Location;
+import de.app.fivegla.fiware.api.FiwareTypes;
+import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Service for integration with FIWARE.
@@ -34,29 +31,61 @@ public class AgranimoFiwareIntegrationServiceWrapper {
      * @param soilMoisture the soil moisture measurement to persist
      */
     public void persist(Zone zone, SoilMoisture soilMoisture) {
-        var deviceMeasurement = createDeviceMeasurements(zone, soilMoisture);
-        log.info("Persisting measurement for device: {}", soilMoisture.getDeviceId());
-        deviceMeasurementIntegrationService.persist(deviceMeasurement);
+        var smo1 = defaultDeviceMeasurement(zone, soilMoisture)
+                .withMeasurement("smo1",
+                        FiwareTypes.TEXT.getKey(),
+                        String.valueOf(soilMoisture.getSmo1()),
+                        soilMoisture.getTms(),
+                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                FiwareTypes.TEXT.getKey(),
+                                "smo1"))
+                .build();
+        log.info("Persisting soil moisture 10: {}", smo1);
+        deviceMeasurementIntegrationService.persist(smo1);
+
+        var smo2 = defaultDeviceMeasurement(zone, soilMoisture)
+                .withMeasurement("smo2",
+                        FiwareTypes.TEXT.getKey(),
+                        String.valueOf(soilMoisture.getSmo2()),
+                        soilMoisture.getTms(),
+                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                FiwareTypes.TEXT.getKey(),
+                                "smo2"))
+                .build();
+        log.info("Persisting soil moisture 20: {}", smo2);
+        deviceMeasurementIntegrationService.persist(smo2);
+
+        var smo3 = defaultDeviceMeasurement(zone, soilMoisture)
+                .withMeasurement("smo3",
+                        FiwareTypes.TEXT.getKey(),
+                        String.valueOf(soilMoisture.getSmo3()),
+                        soilMoisture.getTms(),
+                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                FiwareTypes.TEXT.getKey(),
+                                "smo3"))
+                .build();
+        log.info("Persisting soil moisture 30: {}", smo3);
+        deviceMeasurementIntegrationService.persist(smo3);
+
+        var smo4 = defaultDeviceMeasurement(zone, soilMoisture)
+                .withMeasurement("smo4",
+                        FiwareTypes.TEXT.getKey(),
+                        String.valueOf(soilMoisture.getSmo4()),
+                        soilMoisture.getTms(),
+                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                FiwareTypes.TEXT.getKey(),
+                                "smo4"))
+                .build();
+        log.info("Persisting soil moisture 40: {}", smo4);
+        deviceMeasurementIntegrationService.persist(smo4);
     }
 
-    private DeviceMeasurement createDeviceMeasurements(Zone zone, SoilMoisture soilMoisture) {
+    private DeviceMeasurementBuilder defaultDeviceMeasurement(Zone zone, SoilMoisture soilMoisture) {
         log.debug("Persisting data for zone: {}", zone.getId());
-        return DeviceMeasurement.builder()
-                .id(FiwareIdGenerator.create(getManufacturerConfiguration(), soilMoisture.getDeviceId()))
-                .manufacturerSpecificId(soilMoisture.getDeviceId())
-                .dateObserved(Format.format(soilMoisture.getTms()))
-                .location(Location.builder()
-                        .coordinates(List.of(zone.getData().getPoint().getCoordinates()[0], zone.getData().getPoint().getCoordinates()[1]))
-                        .build())
-                .controlledProperty("smo1")
-                .numValue(soilMoisture.getSmo1())
-                .controlledProperty("smo2")
-                .numValue(soilMoisture.getSmo2())
-                .controlledProperty("smo3")
-                .numValue(soilMoisture.getSmo3())
-                .controlledProperty("smo4")
-                .numValue(soilMoisture.getSmo4())
-                .build();
+        return new DeviceMeasurementBuilder()
+                .withId(getManufacturerConfiguration() + ":" + soilMoisture.getDeviceId())
+                .withType(MeasurementType.AGRANIMO_SENSOR.name())
+                .withLocation(zone.getData().getPoint().getCoordinates()[0], zone.getData().getPoint().getCoordinates()[1]);
     }
 
     private CommonManufacturerConfiguration getManufacturerConfiguration() {

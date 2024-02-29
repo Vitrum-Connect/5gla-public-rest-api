@@ -97,16 +97,6 @@ public class Application {
     }
 
     /**
-     * Dependency injection for the device measurement integration service.
-     *
-     * @return -
-     */
-    @Bean
-    public DroneDeviceMeasurementIntegrationService droneDeviceMeasurementIntegrationService() {
-        return new DroneDeviceMeasurementIntegrationService(contextBrokerUrl, tenant);
-    }
-
-    /**
      * Dependency injection for the status service.
      *
      * @return -

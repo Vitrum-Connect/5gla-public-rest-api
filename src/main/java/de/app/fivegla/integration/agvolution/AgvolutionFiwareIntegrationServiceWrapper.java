@@ -52,7 +52,9 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(timeSeriesValue.getValue()),
                             timeSeriesValue.getTime(),
-                            timeSeriesEntry.getKey())
+                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    FiwareTypes.TEXT.getKey(),
+                                    timeSeriesEntry.getKey()))
                     .build();
             deviceMeasurements.add(deviceMeasurement);
         });

@@ -5,8 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareMetadataTypes;
-import de.app.fivegla.fiware.api.FiwareTypes;
+import de.app.fivegla.fiware.api.FiwareType;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
@@ -48,14 +47,12 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
             var deviceMeasurement = new DeviceMeasurementBuilder()
                     .withId(getManufacturerConfiguration().fiwarePrefix() + seriesEntry.getDeviceId())
                     .withType(MeasurementType.AGVOLUTION_SENSOR.name())
-                    .withLocation(seriesEntry.getLatitude(), seriesEntry.getLongitude())
                     .withMeasurement(timeSeriesEntry.getKey(),
-                            FiwareTypes.TEXT.getKey(),
+                            FiwareType.TEXT,
                             String.valueOf(timeSeriesValue.getValue()),
                             timeSeriesValue.getTime(),
-                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
-                                    FiwareTypes.TEXT.getKey(),
-                                    timeSeriesEntry.getKey()))
+                            seriesEntry.getLatitude(),
+                            seriesEntry.getLongitude())
                     .build();
             deviceMeasurements.add(deviceMeasurement);
         });

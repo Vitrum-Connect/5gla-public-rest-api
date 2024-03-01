@@ -5,6 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareMetadataTypes;
 import de.app.fivegla.fiware.api.FiwareTypes;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.farm21.model.Sensor;
@@ -38,7 +39,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getSoilMoisture10()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilMoisture10"))
                     .build();
@@ -50,7 +51,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getSoilMoisture20()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilMoisture20"))
                     .build();
@@ -62,7 +63,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getSoilMoisture30()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilMoisture30"))
                     .build();
@@ -74,7 +75,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getTempNeg10()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "tempNeg10"))
                     .build();
@@ -86,7 +87,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getHumidity()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "humidity"))
                     .build();
@@ -98,7 +99,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getTempPos10()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "tempPos10"))
                     .build();
@@ -110,7 +111,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getBattery()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "battery"))
                     .build();
@@ -122,7 +123,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getSoilTemperature()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilTemperature"))
                     .build();
@@ -134,7 +135,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(sd.getAirTemperature()),
                             sd.getMeasuredAt(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "airTemperature"))
                     .build();

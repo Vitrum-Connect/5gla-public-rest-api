@@ -5,6 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.WeenatConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareMetadataTypes;
 import de.app.fivegla.fiware.api.FiwareTypes;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.weenat.model.Measurement;
@@ -33,7 +34,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getTemperature()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "temperature"))
                     .build();
@@ -44,7 +45,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getRelativeHumidity()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "relativeHumidity"))
                     .build();
@@ -55,7 +56,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getCumulativeRainfall()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "cumulativeRainfall"))
                     .build();
@@ -66,7 +67,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getWindSpeed()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "windSpeed"))
                     .build();
@@ -77,7 +78,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getWindGustSpeed()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "windGustSpeed"))
                     .build();
@@ -88,7 +89,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSoilTemperature()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilTemperature"))
                     .build();
@@ -99,7 +100,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSoilTemperature15()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilTemperature15"))
                     .build();
@@ -110,7 +111,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSoilTemperature30()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilTemperature30"))
                     .build();
@@ -121,7 +122,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSoilTemperature60()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilTemperature60"))
                     .build();
@@ -132,7 +133,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential15()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilWaterPotential15"))
                     .build();
@@ -143,7 +144,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential30()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilWaterPotential30"))
                     .build();
@@ -154,7 +155,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential60()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "soilWaterPotential60"))
                     .build();
@@ -165,7 +166,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getDryTemperature()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "dryTemperature"))
                     .build();
@@ -176,7 +177,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getWetTemperature()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "wetTemperature"))
                     .build();
@@ -187,7 +188,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getLeafWetnessDuration()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "leafWetnessDuration"))
                     .build();
@@ -198,7 +199,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getLeafWetnessVoltage()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "leafWetnessVoltage"))
                     .build();
@@ -209,7 +210,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getSolarIrradiance()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "solarIrridiance"))
                     .build();
@@ -220,7 +221,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getMinSolarIrradiance()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "minimumSolarIrridiance"))
                     .build();
@@ -231,7 +232,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getMaxSolarIrradiance()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "maximumSolarIrridiance"))
                     .build();
@@ -242,7 +243,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "photosyntheticallyActiveRadiation"))
                     .build();
@@ -253,7 +254,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "minimumPhotosyntheticallyActiveRadiation"))
                     .build();
@@ -264,7 +265,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "maximumPhotosyntheticallyActiveRadiation"))
                     .build();
@@ -275,7 +276,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getDewPoint()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "dewPoint"))
                     .build();
@@ -286,7 +287,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(measurement.getMeasurementValues().getPotentialEvapotranspiration()),
                             measurement.getTimestamp(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     "potentialEvapotranspiration"))
                     .build();

@@ -5,6 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareMetadataTypes;
 import de.app.fivegla.fiware.api.FiwareTypes;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.soilscout.model.Sensor;
@@ -39,7 +40,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(sensorData.getTemperature()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "temperature"))
                 .build();
@@ -51,7 +52,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(sensorData.getMoisture()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "moisture"))
                 .build();
@@ -63,7 +64,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(sensorData.getConductivity()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "conductivity"))
                 .build();
@@ -75,7 +76,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(sensorData.getSalinity()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "salinity"))
                 .build();
@@ -87,7 +88,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(sensorData.getWaterBalance()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "waterBalance"))
                 .build();

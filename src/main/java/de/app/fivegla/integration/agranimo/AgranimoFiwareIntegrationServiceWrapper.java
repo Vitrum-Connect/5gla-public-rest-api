@@ -5,6 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareMetadataTypes;
 import de.app.fivegla.fiware.api.FiwareTypes;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
@@ -36,7 +37,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(soilMoisture.getSmo1()),
                         soilMoisture.getTms(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "smo1"))
                 .build();
@@ -48,7 +49,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(soilMoisture.getSmo2()),
                         soilMoisture.getTms(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "smo2"))
                 .build();
@@ -60,7 +61,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(soilMoisture.getSmo3()),
                         soilMoisture.getTms(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "smo3"))
                 .build();
@@ -72,7 +73,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                         FiwareTypes.TEXT.getKey(),
                         String.valueOf(soilMoisture.getSmo4()),
                         soilMoisture.getTms(),
-                        new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                 FiwareTypes.TEXT.getKey(),
                                 "smo4"))
                 .build();

@@ -38,7 +38,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         log.debug("Persisting probe data for probe: {}", probe);
         log.debug("Persisting probe data: {}", probeData);
         return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration() + ":" + probe.getId())
+                .withId(getManufacturerConfiguration().fiwarePrefix() + probe.getId())
                 .withType(MeasurementType.SENSOTERRA_SENSOR.name())
                 .withLocation(probe.getLatitude(), probe.getLongitude())
                 .withMeasurement("value", FiwareTypes.TEXT.getKey(), String.valueOf(probeData.getValue()), probeData.getTimestamp())

@@ -147,7 +147,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
         log.debug("Persisting sensor data for sensor: {}", sensor);
         log.debug("Persisting sensor data: {}", sensorData);
         return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration() + ":" + sensor.getId())
+                .withId(getManufacturerConfiguration().fiwarePrefix() + sensor.getId())
                 .withType(MeasurementType.FARM21_SENSOR.name())
                 .withLocation(sensorData.getLatitude(), sensorData.getLongitude());
     }

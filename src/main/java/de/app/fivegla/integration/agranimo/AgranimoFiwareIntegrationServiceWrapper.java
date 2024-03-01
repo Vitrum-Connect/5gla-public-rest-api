@@ -83,7 +83,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
     private DeviceMeasurementBuilder defaultDeviceMeasurement(Zone zone, SoilMoisture soilMoisture) {
         log.debug("Persisting data for zone: {}", zone.getId());
         return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration() + ":" + soilMoisture.getDeviceId())
+                .withId(getManufacturerConfiguration().fiwarePrefix() + soilMoisture.getDeviceId())
                 .withType(MeasurementType.AGRANIMO_SENSOR.name())
                 .withLocation(zone.getData().getPoint().getCoordinates()[0], zone.getData().getPoint().getCoordinates()[1]);
     }

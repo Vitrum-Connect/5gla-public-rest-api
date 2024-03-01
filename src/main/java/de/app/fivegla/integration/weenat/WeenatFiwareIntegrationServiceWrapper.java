@@ -298,7 +298,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
         log.debug("Persisting probe data for probe: {}", plot);
         log.debug("Persisting measurement data: {}", measurement);
         return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration() + ":" + plot.getId())
+                .withId(getManufacturerConfiguration().fiwarePrefix() + plot.getId())
                 .withType(MeasurementType.WEENAT_SENSOR.name())
                 .withLocation(plot.getLatitude(), plot.getLongitude());
     }

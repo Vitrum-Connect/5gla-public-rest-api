@@ -59,7 +59,8 @@ public class MaintenanceController implements SecuredApiAccess {
     @PostMapping("/send-subscription")
     public ResponseEntity<Void> sendSubscription() {
         if (subscriptionStatus.isSubscriptionsEnabled()) {
-            Arrays.stream(MeasurementType.values()).forEach(type -> subscriptionService.subscribeAndReset(type.name()));
+            Arrays.stream(MeasurementType.values()).forEach(type -> subscriptionService.removeAll(type.name()));
+            subscriptionService.subscribe(Arrays.stream(MeasurementType.values()).map(Enum::name).toArray(String[]::new));
             log.info("Subscribed to device measurement notifications.");
             subscriptionStatus.setSubscriptionsSent(true);
             return ResponseEntity.ok().build();

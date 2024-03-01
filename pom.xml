@@ -88,7 +88,7 @@
         <dependency>
             <groupId>de.app.5gla</groupId>
             <artifactId>fiware-integration-layer</artifactId>
-            <version>10.0.0</version>
+            <version>10.1.0</version>
             <exclusions>
                 <!-- SLF4J NOP -->
                 <exclusion>

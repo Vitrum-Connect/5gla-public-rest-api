@@ -5,6 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareMetadataTypes;
 import de.app.fivegla.fiware.api.FiwareTypes;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
@@ -52,7 +53,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
                             FiwareTypes.TEXT.getKey(),
                             String.valueOf(timeSeriesValue.getValue()),
                             timeSeriesValue.getTime(),
-                            new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                            new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                     FiwareTypes.TEXT.getKey(),
                                     timeSeriesEntry.getKey()))
                     .build();

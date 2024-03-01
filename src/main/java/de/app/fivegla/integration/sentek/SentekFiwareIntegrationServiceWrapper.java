@@ -5,6 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.api.FiwareMetadataTypes;
 import de.app.fivegla.fiware.api.FiwareTypes;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
@@ -33,7 +34,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getV1()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "V1"))
                             .build());
@@ -44,7 +45,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getV2()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "V2"))
                             .build());
@@ -55,7 +56,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA1()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A1"))
                             .build());
@@ -66,7 +67,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT1()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T1"))
                             .build());
@@ -77,7 +78,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA2()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A2"))
                             .build());
@@ -88,7 +89,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT2()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T2"))
                             .build());
@@ -99,7 +100,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA3()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A3"))
                             .build());
@@ -110,7 +111,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT3()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T3"))
                             .build());
@@ -121,7 +122,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA4()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A4"))
                             .build());
@@ -132,7 +133,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT4()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T4"))
                             .build());
@@ -143,7 +144,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA5()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A5"))
                             .build());
@@ -154,7 +155,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT5()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T5"))
                             .build());
@@ -165,7 +166,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA6()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A6"))
                             .build());
@@ -176,7 +177,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT6()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T6"))
                             .build());
@@ -187,7 +188,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA7()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A7"))
                             .build());
@@ -198,7 +199,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT7()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T7"))
                             .build());
@@ -209,7 +210,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA8()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "A8"))
                             .build());
@@ -220,7 +221,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT8()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T8"))
                             .build());
@@ -231,7 +232,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getA9()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(), 
                                             FiwareTypes.TEXT.getKey(),
                                             "A9"))
                             .build());
@@ -242,7 +243,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                                     FiwareTypes.TEXT.getKey(),
                                     String.valueOf(reading.getT9()),
                                     reading.getDateTime().toInstant(),
-                                    new DeviceMeasurementBuilder.MetadataEntry("controlledProperty",
+                                    new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
                                             FiwareTypes.TEXT.getKey(),
                                             "T9"))
                             .build());

@@ -12,15 +12,10 @@ import de.app.fivegla.api.Manufacturer;
 public record Farm21Configuration(
         boolean enabled,
         Manufacturer manufacturer,
-        String fiwareDeviceIdPrefix,
-        String fiwareDeviceMeasurementIdPrefix,
+        String fiwarePrefix,
         String username,
         String password,
         String url,
         String apiToken
 ) implements CommonManufacturerConfiguration {
-    @Override
-    public String manufacturerName() {
-        return manufacturer.name().toLowerCase();
-    }
 }

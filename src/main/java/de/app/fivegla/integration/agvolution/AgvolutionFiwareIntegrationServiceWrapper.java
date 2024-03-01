@@ -45,7 +45,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         var deviceMeasurements = new ArrayList<DeviceMeasurement>();
         timeSeriesEntry.getValues().forEach(timeSeriesValue -> {
             var deviceMeasurement = new DeviceMeasurementBuilder()
-                    .withId(getManufacturerConfiguration() + ":" + seriesEntry.getDeviceId())
+                    .withId(getManufacturerConfiguration().fiwarePrefix() + seriesEntry.getDeviceId())
                     .withType(MeasurementType.AGVOLUTION_SENSOR.name())
                     .withLocation(seriesEntry.getLatitude(), seriesEntry.getLongitude())
                     .withMeasurement(timeSeriesEntry.getKey(),

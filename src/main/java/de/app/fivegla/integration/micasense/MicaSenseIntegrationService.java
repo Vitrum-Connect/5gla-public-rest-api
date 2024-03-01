@@ -45,7 +45,7 @@ public class MicaSenseIntegrationService {
         var image = Base64.getDecoder().decode(base64Image);
         log.debug("Channel for the image: {}.", micaSenseChannel);
         var micaSenseImage = applicationDataRepository.addMicaSenseImage(MicaSenseImage.builder()
-                .oid(getManufacturerConfiguration() + ":" + droneId)
+                .oid(getManufacturerConfiguration().fiwarePrefix() + droneId)
                 .channel(micaSenseChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)

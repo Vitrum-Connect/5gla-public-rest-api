@@ -97,7 +97,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
     private DeviceMeasurementBuilder defaultMeasurement(Sensor sensor) {
         return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration() + ":" + sensor.getId())
+                .withId(getManufacturerConfiguration().fiwarePrefix() + sensor.getId())
                 .withType(MeasurementType.SOILSCOUT_SENSOR.name())
                 .withLocation(sensor.getLocation().getLatitude(), sensor.getLocation().getLongitude());
     }

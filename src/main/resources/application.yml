@@ -4,7 +4,7 @@ app:
   sensors:
     farm21:
       manufacturer: FARM21
-      fiwareDeviceIdPrefix: "urn:5gla:dev:f21:"
+      fiwarePrefix: "urn:5gla:dev:f21:"
       enabled: ${FARM21_ENABLED}
       url: https://app.farm21.tech/api/v2/public
       username: ${FARM21_USERNAME}
@@ -12,46 +12,46 @@ app:
       apiToken: ${FARM21_API_TOKEN}
     soilscout:
       manufacturer: SOIL_SCOUT
-      fiwareDeviceIdPrefix: "urn:5gla:dev:sosc:"
+      fiwarePrefix: "urn:5gla:dev:sosc:"
       enabled: ${SOILSCOUT_ENABLED}
       url: https://soilscouts.fi/api/v1
       username: ${SOILSCOUT_USERNAME}
       password: ${SOILSCOUT_PASSWORD}
     agranimo:
       manufacturer: AGRANIMO
-      fiwareDeviceIdPrefix: "urn:5gla:dev:agr:"
+      fiwarePrefix: "urn:5gla:dev:agr:"
       enabled: ${AGRANIMO_ENABLED}
       url: https://public.agranimo.com/
       username: ${AGRANIMO_USERNAME}
       password: ${AGRANIMO_PASSWORD}
     agvolution:
       manufacturer: AGVOLUTION
-      fiwareDeviceIdPrefix: "urn:5gla:dev:agv:"
+      fiwarePrefix: "urn:5gla:dev:agv:"
       enabled: ${AGVOLUTION_ENABLED}
       url: https://api.agvolution.com
       username: ${AGVOLUTION_USERNAME}
       password: ${AGVOLUTION_PASSWORD}
     sensoterra:
       manufacturer: SENSOTERRA
-      fiwareDeviceIdPrefix: "urn:5gla:dev:st:"
+      fiwarePrefix: "urn:5gla:dev:st:"
       enabled: ${SENSOTERRA_ENABLED}
       url: https://monitor.sensoterra.com/api/v3
       username: ${SENSOTERRA_USERNAME}
       password: ${SENSOTERRA_PASSWORD}
     micasense:
       manufacturer: MICASENSE
-      fiwareDeviceIdPrefix: "urn:5gla:dev:ms:"
+      fiwarePrefix: "urn:5gla:dev:ms:"
       enabled: ${MICASENSE_ENABLED}
       imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
     sentek:
       manufacturer: SENTEK
-      fiwareDeviceIdPrefix: "urn:5gla:dev:sent:"
+      fiwarePrefix: "urn:5gla:dev:sent:"
       enabled: ${SENTEK_ENABLED}
       url: https://www.irrimaxlive.com/api
       apiToken: ${SENTEK_API_TOKEN}
     weenat:
       manufacturer: WEENAT
-      fiwareDeviceIdPrefix: "urn:5gla:dev:wee:"
+      fiwarePrefix: "urn:5gla:dev:wee:"
       enabled: ${WEENAT_ENABLED}
       url: https://api-prod.weenat.com/api
       username: ${WEENAT_USERNAME}

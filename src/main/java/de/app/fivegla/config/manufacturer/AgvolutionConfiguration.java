@@ -16,14 +16,9 @@ import de.app.fivegla.api.Manufacturer;
 public record AgvolutionConfiguration(
         boolean enabled,
         Manufacturer manufacturer,
-        String fiwareDeviceIdPrefix,
-        String fiwareDeviceMeasurementIdPrefix,
+        String fiwarePrefix,
         String username,
         String password,
         String url
 ) implements CommonManufacturerConfiguration {
-    @Override
-    public String manufacturerName() {
-        return manufacturer.name().toLowerCase();
-    }
 }

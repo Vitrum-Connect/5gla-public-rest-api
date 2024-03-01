@@ -45,7 +45,7 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
     private DeviceMeasurementBuilder createDefaultDeviceMeasurement(String droneId, MicaSenseImage image) {
         log.debug("Persisting drone image for drone: {}", image.getDroneId());
         return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration() + ":" + droneId)
+                .withId(getManufacturerConfiguration().fiwarePrefix() + droneId)
                 .withType(MeasurementType.MICASENSE_IMAGE.name())
                 .withLocation(image.getLocation().getX(), image.getLocation().getY());
     }

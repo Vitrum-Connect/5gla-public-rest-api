@@ -9,27 +9,11 @@ import de.app.fivegla.api.Manufacturer;
 public interface CommonManufacturerConfiguration {
 
     /**
-     * Get the key for the manufacturer.
-     *
-     * @return the key
-     */
-    default String getKey() {
-        return "urn:5gla:manufacturer:" + manufacturerName().toLowerCase();
-    }
-
-    /**
-     * Get the name of the manufacturer.
-     *
-     * @return the name of the manufacturer
-     */
-    String manufacturerName();
-
-    /**
      * Get the FIWARE device ID prefix.
      *
      * @return the FIWARE device ID prefix as a String
      */
-    String fiwareDeviceIdPrefix();
+    String fiwarePrefix();
 
     /**
      * Get the manufacturer of the device.
@@ -37,4 +21,11 @@ public interface CommonManufacturerConfiguration {
      * @return the manufacturer as an instance of the Manufacturer enum
      */
     Manufacturer manufacturer();
+
+    /**
+     * Checks if the configuration for the manufacturer is enabled.
+     *
+     * @return true if the configuration is enabled, false otherwise
+     */
+    boolean enabled();
 }

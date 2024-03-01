@@ -5,7 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.SensoterraConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareTypes;
+import de.app.fivegla.fiware.api.FiwareType;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.sensoterra.model.Probe;
@@ -40,8 +40,12 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         return new DeviceMeasurementBuilder()
                 .withId(getManufacturerConfiguration().fiwarePrefix() + probe.getId())
                 .withType(MeasurementType.SENSOTERRA_SENSOR.name())
-                .withLocation(probe.getLatitude(), probe.getLongitude())
-                .withMeasurement("value", FiwareTypes.TEXT.getKey(), String.valueOf(probeData.getValue()), probeData.getTimestamp())
+                .withMeasurement("value",
+                        FiwareType.TEXT,
+                        String.valueOf(probeData.getValue()),
+                        probeData.getTimestamp(),
+                        probe.getLatitude(),
+                        probe.getLongitude())
                 .build();
     }
 

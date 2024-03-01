@@ -5,8 +5,7 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareMetadataTypes;
-import de.app.fivegla.fiware.api.FiwareTypes;
+import de.app.fivegla.fiware.api.FiwareType;
 import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.integration.soilscout.model.Sensor;
 import de.app.fivegla.integration.soilscout.model.SensorData;
@@ -37,60 +36,55 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
         var temperature = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("temperature",
-                        FiwareTypes.TEXT.getKey(),
+                        FiwareType.TEXT,
                         String.valueOf(sensorData.getTemperature()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
-                                FiwareTypes.TEXT.getKey(),
-                                "temperature"))
+                        soilScoutSensor.getLocation().getLatitude(),
+                        soilScoutSensor.getLocation().getLongitude())
                 .build();
         log.info("Persisting temperature measurement: {}", temperature);
         deviceMeasurementIntegrationService.persist(temperature);
 
         var moisture = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("moisture",
-                        FiwareTypes.TEXT.getKey(),
+                        FiwareType.TEXT,
                         String.valueOf(sensorData.getMoisture()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
-                                FiwareTypes.TEXT.getKey(),
-                                "moisture"))
+                        soilScoutSensor.getLocation().getLatitude(),
+                        soilScoutSensor.getLocation().getLongitude())
                 .build();
         log.info("Persisting moisture measurement: {}", moisture);
         deviceMeasurementIntegrationService.persist(moisture);
 
         var conductivity = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("conductivity",
-                        FiwareTypes.TEXT.getKey(),
+                        FiwareType.TEXT,
                         String.valueOf(sensorData.getConductivity()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
-                                FiwareTypes.TEXT.getKey(),
-                                "conductivity"))
+                        soilScoutSensor.getLocation().getLatitude(),
+                        soilScoutSensor.getLocation().getLongitude())
                 .build();
         log.info("Persisting conductivity measurement: {}", conductivity);
         deviceMeasurementIntegrationService.persist(conductivity);
 
         var salinity = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("salinity",
-                        FiwareTypes.TEXT.getKey(),
+                        FiwareType.TEXT,
                         String.valueOf(sensorData.getSalinity()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
-                                FiwareTypes.TEXT.getKey(),
-                                "salinity"))
+                        soilScoutSensor.getLocation().getLatitude(),
+                        soilScoutSensor.getLocation().getLongitude())
                 .build();
         log.info("Persisting salinity measurement: {}", salinity);
         deviceMeasurementIntegrationService.persist(salinity);
 
         var waterBalance = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("waterBalance",
-                        FiwareTypes.TEXT.getKey(),
+                        FiwareType.TEXT,
                         String.valueOf(sensorData.getWaterBalance()),
                         sensorData.getTimestamp().toInstant(),
-                        new DeviceMeasurementBuilder.MetadataEntry(FiwareMetadataTypes.CONTROLLED_PROPERTY.getKey(),
-                                FiwareTypes.TEXT.getKey(),
-                                "waterBalance"))
+                        soilScoutSensor.getLocation().getLatitude(),
+                        soilScoutSensor.getLocation().getLongitude())
                 .build();
         log.info("Persisting water balance measurement: {}", waterBalance);
         deviceMeasurementIntegrationService.persist(waterBalance);
@@ -99,8 +93,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
     private DeviceMeasurementBuilder defaultMeasurement(Sensor sensor) {
         return new DeviceMeasurementBuilder()
                 .withId(getManufacturerConfiguration().fiwarePrefix() + sensor.getId())
-                .withType(MeasurementType.SOILSCOUT_SENSOR.name())
-                .withLocation(sensor.getLocation().getLatitude(), sensor.getLocation().getLongitude());
+                .withType(MeasurementType.SOILSCOUT_SENSOR.name());
     }
 
     private CommonManufacturerConfiguration getManufacturerConfiguration() {

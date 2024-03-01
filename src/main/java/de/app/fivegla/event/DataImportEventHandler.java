@@ -41,7 +41,7 @@ public class DataImportEventHandler {
         log.info("Handling data import event for manufacturer {}.", dataImportEvent.manufacturer());
         if (subscriptionStatus.sendOutSubscriptions()) {
             try {
-                Arrays.stream(MeasurementType.values()).forEach(type -> subscriptionService.subscribeAndReset(type.name()));
+                Arrays.stream(MeasurementType.values()).forEach(type -> subscriptionService.subscribe(type.name()));
                 log.info("Subscribed to device measurement notifications.");
                 subscriptionStatus.setSubscriptionsSent(true);
             } catch (FiwareIntegrationLayerException e) {

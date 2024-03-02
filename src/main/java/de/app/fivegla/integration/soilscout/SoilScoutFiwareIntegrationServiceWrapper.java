@@ -37,7 +37,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var temperature = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("temperature",
                         FiwareType.TEXT,
-                        String.valueOf(sensorData.getTemperature()),
+                        sensorData.getTemperature(),
                         sensorData.getTimestamp().toInstant(),
                         soilScoutSensor.getLocation().getLatitude(),
                         soilScoutSensor.getLocation().getLongitude())
@@ -48,7 +48,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var moisture = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("moisture",
                         FiwareType.TEXT,
-                        String.valueOf(sensorData.getMoisture()),
+                        sensorData.getMoisture(),
                         sensorData.getTimestamp().toInstant(),
                         soilScoutSensor.getLocation().getLatitude(),
                         soilScoutSensor.getLocation().getLongitude())
@@ -59,7 +59,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var conductivity = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("conductivity",
                         FiwareType.TEXT,
-                        String.valueOf(sensorData.getConductivity()),
+                        sensorData.getConductivity(),
                         sensorData.getTimestamp().toInstant(),
                         soilScoutSensor.getLocation().getLatitude(),
                         soilScoutSensor.getLocation().getLongitude())
@@ -70,7 +70,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var salinity = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("salinity",
                         FiwareType.TEXT,
-                        String.valueOf(sensorData.getSalinity()),
+                        sensorData.getSalinity(),
                         sensorData.getTimestamp().toInstant(),
                         soilScoutSensor.getLocation().getLatitude(),
                         soilScoutSensor.getLocation().getLongitude())
@@ -81,7 +81,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var waterBalance = defaultMeasurement(soilScoutSensor)
                 .withMeasurement("waterBalance",
                         FiwareType.TEXT,
-                        String.valueOf(sensorData.getWaterBalance()),
+                        sensorData.getWaterBalance(),
                         sensorData.getTimestamp().toInstant(),
                         soilScoutSensor.getLocation().getLatitude(),
                         soilScoutSensor.getLocation().getLongitude())

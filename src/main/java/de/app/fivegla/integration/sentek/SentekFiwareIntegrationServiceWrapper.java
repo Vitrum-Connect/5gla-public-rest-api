@@ -33,7 +33,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("V1",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getV1()),
+                                    reading.getV1(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -43,7 +43,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("V2",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getV2()),
+                                    reading.getV2(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -53,7 +53,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A1",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA1()),
+                                    reading.getA1(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -63,7 +63,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T1",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT1()),
+                                    reading.getT1(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -73,7 +73,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A2",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA2()),
+                                    reading.getA2(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -83,7 +83,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T2",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT2()),
+                                    reading.getT2(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -93,7 +93,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A3",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA3()),
+                                    reading.getA3(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -103,7 +103,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T3",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT3()),
+                                    reading.getT3(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -113,7 +113,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A4",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA4()),
+                                    reading.getA4(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -123,7 +123,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T4",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT4()),
+                                    reading.getT4(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -133,7 +133,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A5",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA5()),
+                                    reading.getA5(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -143,7 +143,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T5",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT5()),
+                                    reading.getT5(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -153,7 +153,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A6",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA6()),
+                                    reading.getA6(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -163,7 +163,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T6",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT6()),
+                                    reading.getT6(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -173,7 +173,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A7",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA7()),
+                                    reading.getA7(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -183,7 +183,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T7",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT7()),
+                                    reading.getT7(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -193,7 +193,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A8",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA8()),
+                                    reading.getA8(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -203,7 +203,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T8",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT8()),
+                                    reading.getT8(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -213,7 +213,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("A9",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getA9()),
+                                    reading.getA9(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)
@@ -223,7 +223,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     defaultMeasurement(logger, reading)
                             .withMeasurement("T9",
                                     FiwareType.TEXT,
-                                    String.valueOf(reading.getT9()),
+                                    reading.getT9(),
                                     reading.getDateTime().toInstant(),
                                     latitude,
                                     longitude)

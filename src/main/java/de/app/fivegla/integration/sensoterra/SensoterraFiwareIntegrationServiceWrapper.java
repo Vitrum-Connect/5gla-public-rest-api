@@ -42,7 +42,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
                 .withType(MeasurementType.SENSOTERRA_SENSOR.name())
                 .withMeasurement("value",
                         FiwareType.TEXT,
-                        String.valueOf(probeData.getValue()),
+                        probeData.getValue(),
                         probeData.getTimestamp(),
                         probe.getLatitude(),
                         probe.getLongitude())

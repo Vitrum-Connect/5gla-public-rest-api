@@ -36,7 +36,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var soilMoisture10 = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("soilMoisture10",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getSoilMoisture10()),
+                            sd.getSoilMoisture10(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -47,7 +47,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var soilMoisture20 = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("soilMoisture20",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getSoilMoisture20()),
+                            sd.getSoilMoisture20(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -58,7 +58,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var soilMoisture30 = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("soilMoisture30",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getSoilMoisture30()),
+                            sd.getSoilMoisture30(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -69,7 +69,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var tempNeg10 = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("tempNeg10",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getTempNeg10()),
+                            sd.getTempNeg10(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -80,7 +80,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var humidity = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("humidity",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getHumidity()),
+                            sd.getHumidity(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -91,7 +91,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var tempPos10 = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("tempPos10",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getTempPos10()),
+                            sd.getTempPos10(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -102,7 +102,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var battery = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("battery",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getBattery()),
+                            sd.getBattery(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -113,7 +113,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var soilTemperature = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("soilTemperature",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getSoilTemperature()),
+                            sd.getSoilTemperature(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())
@@ -124,7 +124,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var airTemperature = defaultDeviceMeasurement(sensor, sd)
                     .withMeasurement("airTemperature",
                             FiwareType.TEXT,
-                            String.valueOf(sd.getAirTemperature()),
+                            sd.getAirTemperature(),
                             sd.getMeasuredAt(),
                             sd.getLatitude(),
                             sd.getLongitude())

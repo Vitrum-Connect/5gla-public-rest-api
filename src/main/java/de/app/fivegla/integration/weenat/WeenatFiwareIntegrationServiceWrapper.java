@@ -33,7 +33,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var temperature = defaultMeasurement(plot, measurement)
                     .withMeasurement("temperature",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getTemperature()),
+                            measurement.getMeasurementValues().getTemperature(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -43,7 +43,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var relativeHumidity = defaultMeasurement(plot, measurement)
                     .withMeasurement("relativeHumidity",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getRelativeHumidity()),
+                            measurement.getMeasurementValues().getRelativeHumidity(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -53,7 +53,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var cumulativeRainfall = defaultMeasurement(plot, measurement)
                     .withMeasurement("cumulativeRainfall",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getCumulativeRainfall()),
+                            measurement.getMeasurementValues().getCumulativeRainfall(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -63,7 +63,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var windSpeed = defaultMeasurement(plot, measurement)
                     .withMeasurement("windSpeed",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getWindSpeed()),
+                            measurement.getMeasurementValues().getWindSpeed(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -73,7 +73,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var windGustSpeed = defaultMeasurement(plot, measurement)
                     .withMeasurement("windGustSpeed",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getWindGustSpeed()),
+                            measurement.getMeasurementValues().getWindGustSpeed(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -83,7 +83,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var soilTemperature = defaultMeasurement(plot, measurement)
                     .withMeasurement("soilTemperature",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature()),
+                            measurement.getMeasurementValues().getSoilTemperature(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -93,7 +93,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var soilTemperature15 = defaultMeasurement(plot, measurement)
                     .withMeasurement("soilTemperature15",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature15()),
+                            measurement.getMeasurementValues().getSoilTemperature15(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -103,7 +103,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var soilTemperature30 = defaultMeasurement(plot, measurement)
                     .withMeasurement("soilTemperature30",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature30()),
+                            measurement.getMeasurementValues().getSoilTemperature30(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -113,7 +113,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var soilTemperature60 = defaultMeasurement(plot, measurement)
                     .withMeasurement("soilTemperature60",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSoilTemperature60()),
+                            measurement.getMeasurementValues().getSoilTemperature60(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -123,7 +123,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var soilWaterPotential15 = defaultMeasurement(plot, measurement)
                     .withMeasurement("soilWaterPotential15",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential15()),
+                            measurement.getMeasurementValues().getSoilWaterPotential15(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -133,7 +133,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var soilWaterPotential30 = defaultMeasurement(plot, measurement)
                     .withMeasurement("soilWaterPotential30",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential30()),
+                            measurement.getMeasurementValues().getSoilWaterPotential30(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -143,7 +143,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var soilWaterPotential60 = defaultMeasurement(plot, measurement)
                     .withMeasurement("soilWaterPotential60",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSoilWaterPotential60()),
+                            measurement.getMeasurementValues().getSoilWaterPotential60(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -153,7 +153,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var dryTemperature = defaultMeasurement(plot, measurement)
                     .withMeasurement("dryTemperature",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getDryTemperature()),
+                            measurement.getMeasurementValues().getDryTemperature(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -163,7 +163,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var wetTemperature = defaultMeasurement(plot, measurement)
                     .withMeasurement("wetTemperature",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getWetTemperature()),
+                            measurement.getMeasurementValues().getWetTemperature(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -173,7 +173,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var leafWetnessDuration = defaultMeasurement(plot, measurement)
                     .withMeasurement("leafWetnessDuration",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getLeafWetnessDuration()),
+                            measurement.getMeasurementValues().getLeafWetnessDuration(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -183,7 +183,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var leafWetnessVoltage = defaultMeasurement(plot, measurement)
                     .withMeasurement("leafWetnessVoltage",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getLeafWetnessVoltage()),
+                            measurement.getMeasurementValues().getLeafWetnessVoltage(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -193,7 +193,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var solarIrridiance = defaultMeasurement(plot, measurement)
                     .withMeasurement("solarIrridiance",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getSolarIrradiance()),
+                            measurement.getMeasurementValues().getSolarIrradiance(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -203,7 +203,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var minimumSolarIrridiance = defaultMeasurement(plot, measurement)
                     .withMeasurement("minimumSolarIrridiance",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getMinSolarIrradiance()),
+                            measurement.getMeasurementValues().getMinSolarIrradiance(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -213,7 +213,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var maximumSolarIrridiance = defaultMeasurement(plot, measurement)
                     .withMeasurement("maximumSolarIrridiance",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getMaxSolarIrradiance()),
+                            measurement.getMeasurementValues().getMaxSolarIrradiance(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -223,7 +223,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var photosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
                     .withMeasurement("photosyntheticallyActiveRadiation",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation()),
+                            measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -233,7 +233,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var minimumPhotosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
                     .withMeasurement("minimumPhotosyntheticallyActiveRadiation",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation()),
+                            measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -243,7 +243,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var maximumPhotosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
                     .withMeasurement("maximumPhotosyntheticallyActiveRadiation",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation()),
+                            measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -253,7 +253,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var dewPoint = defaultMeasurement(plot, measurement)
                     .withMeasurement("dewPoint",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getDewPoint()),
+                            measurement.getMeasurementValues().getDewPoint(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)
@@ -263,7 +263,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
             var potentialEvapotranspiration = defaultMeasurement(plot, measurement)
                     .withMeasurement("potentialEvapotranspiration",
                             FiwareType.TEXT,
-                            String.valueOf(measurement.getMeasurementValues().getPotentialEvapotranspiration()),
+                            measurement.getMeasurementValues().getPotentialEvapotranspiration(),
                             measurement.getTimestamp(),
                             latitude,
                             longitude)

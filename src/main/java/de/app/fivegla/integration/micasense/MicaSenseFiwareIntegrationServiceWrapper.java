@@ -35,10 +35,11 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
         var deviceMeasurement = createDefaultDeviceMeasurement(droneId, image)
                 .withMeasurement("image",
                         FiwareType.TEXT,
-                        imagePathBaseUrl + image.getOid(),
+                        0.0,
                         image.getMeasuredAt(),
                         image.getLocation().getX(),
                         image.getLocation().getY())
+                .withExternalDataReference(imagePathBaseUrl + image.getOid())
                 .build();
         deviceMeasurementIntegrationService.persist(deviceMeasurement);
     }

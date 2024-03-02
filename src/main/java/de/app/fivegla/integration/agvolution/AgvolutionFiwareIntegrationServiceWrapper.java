@@ -49,7 +49,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
                     .withType(MeasurementType.AGVOLUTION_SENSOR.name())
                     .withMeasurement(timeSeriesEntry.getKey(),
                             FiwareType.TEXT,
-                            String.valueOf(timeSeriesValue.getValue()),
+                            timeSeriesValue.getValue(),
                             timeSeriesValue.getTime(),
                             seriesEntry.getLatitude(),
                             seriesEntry.getLongitude())

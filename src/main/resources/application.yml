@@ -74,6 +74,7 @@ logging:
   level:
     root: info
     de.app.fivegla: trace
+    java.net.http: debug
 one:
   microstream:
     storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}

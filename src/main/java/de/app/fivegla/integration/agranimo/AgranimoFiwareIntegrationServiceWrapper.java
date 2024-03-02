@@ -34,7 +34,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo1 = defaultDeviceMeasurement(zone, soilMoisture)
                 .withMeasurement("smo1",
                         FiwareType.TEXT,
-                        String.valueOf(soilMoisture.getSmo1()),
+                        soilMoisture.getSmo1(),
                         soilMoisture.getTms(),
                         zone.getData().getPoint().getCoordinates()[0],
                         zone.getData().getPoint().getCoordinates()[1])
@@ -45,7 +45,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo2 = defaultDeviceMeasurement(zone, soilMoisture)
                 .withMeasurement("smo2",
                         FiwareType.TEXT,
-                        String.valueOf(soilMoisture.getSmo2()),
+                        soilMoisture.getSmo2(),
                         soilMoisture.getTms(),
                         zone.getData().getPoint().getCoordinates()[0],
                         zone.getData().getPoint().getCoordinates()[1])
@@ -56,7 +56,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo3 = defaultDeviceMeasurement(zone, soilMoisture)
                 .withMeasurement("smo3",
                         FiwareType.TEXT,
-                        String.valueOf(soilMoisture.getSmo3()),
+                        soilMoisture.getSmo3(),
                         soilMoisture.getTms(),
                         zone.getData().getPoint().getCoordinates()[0],
                         zone.getData().getPoint().getCoordinates()[1])
@@ -67,7 +67,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo4 = defaultDeviceMeasurement(zone, soilMoisture)
                 .withMeasurement("smo4",
                         FiwareType.TEXT,
-                        String.valueOf(soilMoisture.getSmo4()),
+                        soilMoisture.getSmo4(),
                         soilMoisture.getTms(),
                         zone.getData().getPoint().getCoordinates()[0],
                         zone.getData().getPoint().getCoordinates()[1])

@@ -5,9 +5,11 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareType;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
+import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.fiware.model.internal.EmptyAttribute;
+import de.app.fivegla.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.model.TimeSeriesEntry;
 import lombok.RequiredArgsConstructor;
@@ -44,16 +46,15 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         log.debug("Persisting data: {}", timeSeriesEntry);
         var deviceMeasurements = new ArrayList<DeviceMeasurement>();
         timeSeriesEntry.getValues().forEach(timeSeriesValue -> {
-            var deviceMeasurement = new DeviceMeasurementBuilder()
-                    .withId(getManufacturerConfiguration().fiwarePrefix() + seriesEntry.getDeviceId())
-                    .withType(MeasurementType.AGVOLUTION_SENSOR.name())
-                    .withMeasurement(timeSeriesEntry.getKey(),
-                            FiwareType.TEXT,
-                            timeSeriesValue.getValue(),
-                            timeSeriesValue.getTime(),
-                            seriesEntry.getLatitude(),
-                            seriesEntry.getLongitude())
-                    .build();
+            var deviceMeasurement = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + seriesEntry.getDeviceId(),
+                    MeasurementType.AGVOLUTION_SENSOR.name(),
+                    new TextAttribute(timeSeriesEntry.getKey()),
+                    new NumberAttribute(timeSeriesValue.getValue()),
+                    new DateTimeAttribute(timeSeriesValue.getTime()),
+                    new EmptyAttribute(),
+                    seriesEntry.getLatitude(),
+                    seriesEntry.getLongitude());
             deviceMeasurements.add(deviceMeasurement);
         });
         return deviceMeasurements;

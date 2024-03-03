@@ -6,7 +6,6 @@ import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
 import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.fiware.model.internal.TextAttribute;

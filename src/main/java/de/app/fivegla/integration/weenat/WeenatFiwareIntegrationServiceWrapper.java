@@ -5,9 +5,11 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.WeenatConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareType;
-import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
-import de.app.fivegla.integration.weenat.model.Measurement;
+import de.app.fivegla.fiware.model.DeviceMeasurement;
+import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.fiware.model.internal.EmptyAttribute;
+import de.app.fivegla.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
 import lombok.RequiredArgsConstructor;
@@ -30,254 +32,270 @@ public class WeenatFiwareIntegrationServiceWrapper {
         measurements.getMeasurements().forEach(measurement -> {
             log.info("Persisting measurement for measurement: {}", measurement);
 
-            var temperature = defaultMeasurement(plot, measurement)
-                    .withMeasurement("temperature",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getTemperature(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var temperature = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("temperature"),
+                    new NumberAttribute(measurement.getMeasurementValues().getTemperature()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(temperature);
 
-            var relativeHumidity = defaultMeasurement(plot, measurement)
-                    .withMeasurement("relativeHumidity",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getRelativeHumidity(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var relativeHumidity = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("relativeHumidity"),
+                    new NumberAttribute(measurement.getMeasurementValues().getRelativeHumidity()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(relativeHumidity);
 
-            var cumulativeRainfall = defaultMeasurement(plot, measurement)
-                    .withMeasurement("cumulativeRainfall",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getCumulativeRainfall(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var cumulativeRainfall = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("cumulativeRainfall"),
+                    new NumberAttribute(measurement.getMeasurementValues().getCumulativeRainfall()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(cumulativeRainfall);
 
-            var windSpeed = defaultMeasurement(plot, measurement)
-                    .withMeasurement("windSpeed",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getWindSpeed(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var windSpeed = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("windSpeed"),
+                    new NumberAttribute(measurement.getMeasurementValues().getWindSpeed()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(windSpeed);
 
-            var windGustSpeed = defaultMeasurement(plot, measurement)
-                    .withMeasurement("windGustSpeed",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getWindGustSpeed(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var windGustSpeed = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("windGustSpeed"),
+                    new NumberAttribute(measurement.getMeasurementValues().getWindGustSpeed()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(windGustSpeed);
 
-            var soilTemperature = defaultMeasurement(plot, measurement)
-                    .withMeasurement("soilTemperature",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSoilTemperature(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var soilTemperature = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("soilTemperature"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(soilTemperature);
 
-            var soilTemperature15 = defaultMeasurement(plot, measurement)
-                    .withMeasurement("soilTemperature15",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSoilTemperature15(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var soilTemperature15 = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("soilTemperature15"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature15()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(soilTemperature15);
 
-            var soilTemperature30 = defaultMeasurement(plot, measurement)
-                    .withMeasurement("soilTemperature30",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSoilTemperature30(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var soilTemperature30 = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("soilTemperature30"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature30()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(soilTemperature30);
 
-            var soilTemperature60 = defaultMeasurement(plot, measurement)
-                    .withMeasurement("soilTemperature60",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSoilTemperature60(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var soilTemperature60 = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("soilTemperature60"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature60()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(soilTemperature60);
 
-            var soilWaterPotential15 = defaultMeasurement(plot, measurement)
-                    .withMeasurement("soilWaterPotential15",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSoilWaterPotential15(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var soilWaterPotential15 = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("soilWaterPotential15"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSoilWaterPotential15()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(soilWaterPotential15);
 
-            var soilWaterPotential30 = defaultMeasurement(plot, measurement)
-                    .withMeasurement("soilWaterPotential30",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSoilWaterPotential30(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var soilWaterPotential30 = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("soilWaterPotential30"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSoilWaterPotential30()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(soilWaterPotential30);
 
-            var soilWaterPotential60 = defaultMeasurement(plot, measurement)
-                    .withMeasurement("soilWaterPotential60",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSoilWaterPotential60(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var soilWaterPotential60 = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("soilWaterPotential60"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSoilWaterPotential60()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(soilWaterPotential60);
 
-            var dryTemperature = defaultMeasurement(plot, measurement)
-                    .withMeasurement("dryTemperature",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getDryTemperature(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var dryTemperature = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("dryTemperature"),
+                    new NumberAttribute(measurement.getMeasurementValues().getDryTemperature()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(dryTemperature);
 
-            var wetTemperature = defaultMeasurement(plot, measurement)
-                    .withMeasurement("wetTemperature",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getWetTemperature(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var wetTemperature = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("wetTemperature"),
+                    new NumberAttribute(measurement.getMeasurementValues().getWetTemperature()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(wetTemperature);
 
-            var leafWetnessDuration = defaultMeasurement(plot, measurement)
-                    .withMeasurement("leafWetnessDuration",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getLeafWetnessDuration(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var leafWetnessDuration = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("leafWetnessDuration"),
+                    new NumberAttribute(measurement.getMeasurementValues().getLeafWetnessDuration()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(leafWetnessDuration);
 
-            var leafWetnessVoltage = defaultMeasurement(plot, measurement)
-                    .withMeasurement("leafWetnessVoltage",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getLeafWetnessVoltage(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var leafWetnessVoltage = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("leafWetnessVoltage"),
+                    new NumberAttribute(measurement.getMeasurementValues().getLeafWetnessVoltage()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(leafWetnessVoltage);
 
-            var solarIrridiance = defaultMeasurement(plot, measurement)
-                    .withMeasurement("solarIrridiance",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getSolarIrradiance(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var solarIrridiance = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("solarIrridiance"),
+                    new NumberAttribute(measurement.getMeasurementValues().getSolarIrradiance()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(solarIrridiance);
 
-            var minimumSolarIrridiance = defaultMeasurement(plot, measurement)
-                    .withMeasurement("minimumSolarIrridiance",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getMinSolarIrradiance(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var minimumSolarIrridiance = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("minimumSolarIrridiance"),
+                    new NumberAttribute(measurement.getMeasurementValues().getMinSolarIrradiance()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(minimumSolarIrridiance);
 
-            var maximumSolarIrridiance = defaultMeasurement(plot, measurement)
-                    .withMeasurement("maximumSolarIrridiance",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getMaxSolarIrradiance(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var maximumSolarIrridiance = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("maximumSolarIrridiance"),
+                    new NumberAttribute(measurement.getMeasurementValues().getMaxSolarIrradiance()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(maximumSolarIrridiance);
 
-            var photosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
-                    .withMeasurement("photosyntheticallyActiveRadiation",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var photosyntheticallyActiveRadiation = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("photosyntheticallyActiveRadiation"),
+                    new NumberAttribute(measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(photosyntheticallyActiveRadiation);
 
-            var minimumPhotosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
-                    .withMeasurement("minimumPhotosyntheticallyActiveRadiation",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var minimumPhotosyntheticallyActiveRadiation = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("minimumPhotosyntheticallyActiveRadiation"),
+                    new NumberAttribute(measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(minimumPhotosyntheticallyActiveRadiation);
 
-            var maximumPhotosyntheticallyActiveRadiation = defaultMeasurement(plot, measurement)
-                    .withMeasurement("maximumPhotosyntheticallyActiveRadiation",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var maximumPhotosyntheticallyActiveRadiation = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("maximumPhotosyntheticallyActiveRadiation"),
+                    new NumberAttribute(measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(maximumPhotosyntheticallyActiveRadiation);
 
-            var dewPoint = defaultMeasurement(plot, measurement)
-                    .withMeasurement("dewPoint",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getDewPoint(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var dewPoint = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("dewPoint"),
+                    new NumberAttribute(measurement.getMeasurementValues().getDewPoint()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(dewPoint);
 
-            var potentialEvapotranspiration = defaultMeasurement(plot, measurement)
-                    .withMeasurement("potentialEvapotranspiration",
-                            FiwareType.TEXT,
-                            measurement.getMeasurementValues().getPotentialEvapotranspiration(),
-                            measurement.getTimestamp(),
-                            latitude,
-                            longitude)
-                    .build();
+            var potentialEvapotranspiration = new DeviceMeasurement(
+                    getManufacturerConfiguration().fiwarePrefix() + plot.getId(),
+                    MeasurementType.WEENAT_SENSOR.name(),
+                    new TextAttribute("potentialEvapotranspiration"),
+                    new NumberAttribute(measurement.getMeasurementValues().getPotentialEvapotranspiration()),
+                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new EmptyAttribute(),
+                    latitude,
+                    longitude);
             deviceMeasurementIntegrationService.persist(potentialEvapotranspiration);
         });
-    }
-
-    private DeviceMeasurementBuilder defaultMeasurement(Plot plot, Measurement measurement) {
-        log.debug("Persisting probe data for probe: {}", plot);
-        log.debug("Persisting measurement data: {}", measurement);
-        return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration().fiwarePrefix() + plot.getId())
-                .withType(MeasurementType.WEENAT_SENSOR.name());
     }
 
     private WeenatConfiguration getManufacturerConfiguration() {

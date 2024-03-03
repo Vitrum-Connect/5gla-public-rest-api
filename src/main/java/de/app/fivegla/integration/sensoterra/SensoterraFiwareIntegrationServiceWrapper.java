@@ -5,9 +5,11 @@ import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.ApplicationConfiguration;
 import de.app.fivegla.config.manufacturer.SensoterraConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.api.FiwareType;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.builder.DeviceMeasurementBuilder;
+import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.fiware.model.internal.EmptyAttribute;
+import de.app.fivegla.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +39,15 @@ public class SensoterraFiwareIntegrationServiceWrapper {
     private DeviceMeasurement createDeviceMeasurement(Probe probe, ProbeData probeData) {
         log.debug("Persisting probe data for probe: {}", probe);
         log.debug("Persisting probe data: {}", probeData);
-        return new DeviceMeasurementBuilder()
-                .withId(getManufacturerConfiguration().fiwarePrefix() + probe.getId())
-                .withType(MeasurementType.SENSOTERRA_SENSOR.name())
-                .withMeasurement("value",
-                        FiwareType.TEXT,
-                        probeData.getValue(),
-                        probeData.getTimestamp(),
-                        probe.getLatitude(),
-                        probe.getLongitude())
-                .build();
+        return new DeviceMeasurement(
+                getManufacturerConfiguration().fiwarePrefix() + probe.getId(),
+                MeasurementType.SENSOTERRA_SENSOR.name(),
+                new TextAttribute("value"),
+                new NumberAttribute(probeData.getValue()),
+                new DateTimeAttribute(probeData.getTimestamp()),
+                new EmptyAttribute(),
+                probe.getLatitude(),
+                probe.getLongitude());
     }
 
     private SensoterraConfiguration getManufacturerConfiguration() {

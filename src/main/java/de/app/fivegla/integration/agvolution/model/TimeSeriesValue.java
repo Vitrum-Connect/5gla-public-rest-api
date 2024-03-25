@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.agvolution.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import de.app.fivegla.api.GlobalDefinitions;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,8 +34,13 @@ import java.time.Instant;
 @Schema(description = "Represents a value for a specific time in a time series.")
 public class TimeSeriesValue {
 
+    /**
+     * Parse the time value for the following format: 2024-03-12T10:18:25.000Z
+     */
+    private static final String INSTANT_JSON_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
     @Schema(description = "The time of the value in the time series.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = GlobalDefinitions.INSTANT_JSON_PATTERN, timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = INSTANT_JSON_PATTERN, timezone = "UTC")
     private Instant time;
 
     @Schema(description = "The value of the value in the time series.")

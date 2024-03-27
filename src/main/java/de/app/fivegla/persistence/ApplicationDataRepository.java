@@ -114,9 +114,10 @@ public class ApplicationDataRepository {
      * Adds a tenant to the system.
      *
      * @param tenant The tenant to add.
+     * @return The added tenant.
      */
-    public void addTenant(Tenant tenant) {
-        applicationData.addTenant(tenant);
+    public Tenant addTenant(Tenant tenant) {
+        return applicationData.addTenant(tenant);
     }
 
     /**

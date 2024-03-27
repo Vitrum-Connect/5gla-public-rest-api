@@ -42,8 +42,7 @@ public class TenantService {
         var accessToken = generateAccessToken();
         var encodedAccessToken = new BCryptPasswordEncoder().encode(accessToken);
         tenant.setAccessToken(encodedAccessToken);
-        applicationDataRepository.addTenant(tenant);
-        return tenant;
+        return applicationDataRepository.addTenant(tenant);
     }
 
     private void validateTenantId(String tenantId) {

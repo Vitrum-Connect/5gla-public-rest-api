@@ -123,12 +123,13 @@ public class ApplicationData {
      *
      * @param tenant The tenant to add.
      */
-    protected void addTenant(Tenant tenant) {
+    protected Tenant addTenant(Tenant tenant) {
         if (null == tenants) {
             tenants = new ArrayList<>();
         }
         tenants.add(tenant);
         storageManager.store(this);
+        return tenant;
     }
 
     /**

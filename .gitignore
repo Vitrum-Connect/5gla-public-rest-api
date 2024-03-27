@@ -56,3 +56,6 @@ microstream-*
 
 # LOCAL UPTIME KUMA #
 uptime-kuma-data
+
+# Local .run files #
+.run

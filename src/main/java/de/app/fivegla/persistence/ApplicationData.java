@@ -3,6 +3,7 @@ package de.app.fivegla.persistence;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.persistence.entity.DisabledJob;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.Getter;
 import one.microstream.integrations.spring.boot.types.Storage;
 import one.microstream.storage.types.StorageManager;
@@ -29,12 +30,14 @@ public class ApplicationData {
 
     private List<DisabledJob> disabledJobs;
 
+    private List<Tenant> tenants;
+
     /**
      * Update the last run.
      *
      * @param lastRun the last run
      */
-    public void setLastRun(Manufacturer manufacturer, Instant lastRun) {
+    protected void setLastRun(Manufacturer manufacturer, Instant lastRun) {
         if (lastRuns == null) {
             lastRuns = new HashMap<>();
         }
@@ -48,7 +51,7 @@ public class ApplicationData {
      * @param manufacturer The manufacturer.
      * @return The last run.
      */
-    public Optional<Instant> getLastRun(Manufacturer manufacturer) {
+    protected Optional<Instant> getLastRun(Manufacturer manufacturer) {
         if (lastRuns == null) {
             return Optional.empty();
         } else {
@@ -106,12 +109,37 @@ public class ApplicationData {
      * @return True if the job is disabled for the manufacturer, false otherwise.
      * @see Manufacturer
      */
-    public boolean isTheJobDisabled(Manufacturer manufacturer) {
+    protected boolean isTheJobDisabled(Manufacturer manufacturer) {
         if (CollectionUtils.isEmpty(disabledJobs)) {
             return false;
         } else {
             return disabledJobs.stream()
                     .anyMatch(disabledJob -> disabledJob.getDisabledManufacturers().equals(manufacturer));
         }
+    }
+
+    /**
+     * Adds a tenant to the system.
+     *
+     * @param tenant The tenant to add.
+     */
+    protected void addTenant(Tenant tenant) {
+        if (null == tenants) {
+            tenants = new ArrayList<>();
+        }
+        tenants.add(tenant);
+        storageManager.store(this);
+    }
+
+    /**
+     * Retrieves a tenant with the specified UUID.
+     *
+     * @param uuid The UUID of the tenant to retrieve.
+     * @return An Optional containing the found Tenant, or an empty Optional if no tenant with the specified UUID is found.
+     */
+    protected Optional<Tenant> getTenant(String uuid) {
+        return tenants.stream()
+                .filter(tenant -> tenant.getUuid().equals(uuid))
+                .findFirst();
     }
 }

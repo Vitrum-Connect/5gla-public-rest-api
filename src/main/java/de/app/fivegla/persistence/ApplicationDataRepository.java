@@ -3,6 +3,7 @@ package de.app.fivegla.persistence;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -107,5 +108,14 @@ public class ApplicationDataRepository {
      */
     public boolean isTheJobEnabled(Manufacturer manufacturer) {
         return !applicationData.isTheJobDisabled(manufacturer);
+    }
+
+    /**
+     * Adds a tenant to the system.
+     *
+     * @param tenant The tenant to add.
+     */
+    public void addTenant(Tenant tenant) {
+        applicationData.addTenant(tenant);
     }
 }

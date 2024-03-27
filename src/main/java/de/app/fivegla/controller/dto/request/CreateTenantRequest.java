@@ -21,6 +21,19 @@ public class CreateTenantRequest {
     private String name;
 
     /**
+     * The tenant id.
+     * This field represents the unique identifier for a tenant.
+     * <p>
+     * Constraints:
+     * - The tenant id can only contain alphanumeric characters and underscores.
+     * - The maximum length of the tenant id is 50 characters.
+     * - The tenant id is required and cannot be blank.
+     */
+    @NotBlank
+    @Schema(description = "The tenant id, only alphanumeric characters and the '_' are allowed, maximum length is 50 characters.")
+    private String tenantId;
+
+    /**
      * The description of the tenant, the description optional.
      */
     @Schema(description = "The description of the tenant, the description optional.")

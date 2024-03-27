@@ -32,6 +32,7 @@ public class TenantService {
      */
     public Tenant create(@NotBlank String tenantId, @NotBlank String name, String description) {
         validateTenantId(tenantId);
+        checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
         log.info("Creating tenant with name: {} and description: {}", name, description);
         var tenant = new Tenant();
         tenant.setCreatedAt(Instant.now());
@@ -53,6 +54,16 @@ public class TenantService {
                     .build());
         }
     }
+
+    private void checkIfThereIsAlreadyATenantWithTheSameId(String tenantId) {
+        if (applicationDataRepository.getTenant(tenantId).isPresent()) {
+            throw new BusinessException(ErrorMessage.builder()
+                    .error(Error.TENANT_ALREADY_EXISTS)
+                    .message("A tenant with the same ID already exists.")
+                    .build());
+        }
+    }
+
 
     private String generateAccessToken() {
         log.info("Generating new access token for the the tenant.");

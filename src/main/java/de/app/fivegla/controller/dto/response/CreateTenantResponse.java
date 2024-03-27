@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
-
 /**
  * The CreateTenantResponse class represents a response wrapper for creating a new tenant.
  * It extends the Response class, which is a base class for all responses.

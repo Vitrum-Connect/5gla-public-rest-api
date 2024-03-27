@@ -118,4 +118,14 @@ public class ApplicationDataRepository {
     public void addTenant(Tenant tenant) {
         applicationData.addTenant(tenant);
     }
+
+    /**
+     * Retrieves a tenant with the specified tenant ID.
+     *
+     * @param tenantId The ID of the tenant to retrieve.
+     * @return An Optional containing the found Tenant, or an empty Optional if no tenant with the specified tenant ID is found.
+     */
+    public Optional<Tenant> getTenant(String tenantId) {
+        return applicationData.getTenant(tenantId);
+    }
 }

@@ -1,10 +1,10 @@
 package de.app.fivegla.controller.dto.response;
 
+import de.app.fivegla.api.Format;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Base class for all responses.
@@ -19,6 +19,6 @@ abstract class Response {
     private final String timestamp;
 
     public Response() {
-        timestamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
+        timestamp = Format.format(Instant.now());
     }
 }

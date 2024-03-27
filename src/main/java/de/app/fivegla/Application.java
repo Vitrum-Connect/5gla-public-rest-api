@@ -1,6 +1,8 @@
 package de.app.fivegla;
 
-import de.app.fivegla.fiware.*;
+import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.StatusService;
+import de.app.fivegla.fiware.SubscriptionService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -57,7 +59,7 @@ import java.util.List;
                 ),
                 @Server(
                         description = "Local Development",
-                        url = "http://fuf.me:8080"
+                        url = "http://localhost:8080"
                 )
         }
 )

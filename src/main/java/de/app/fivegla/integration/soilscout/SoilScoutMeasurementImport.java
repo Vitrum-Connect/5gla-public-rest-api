@@ -33,7 +33,7 @@ public class SoilScoutMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run() {
+    public void run(String tenantId) {
         var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {

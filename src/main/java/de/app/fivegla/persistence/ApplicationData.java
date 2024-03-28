@@ -2,13 +2,11 @@ package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
-import de.app.fivegla.persistence.entity.DisabledJob;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.Getter;
 import one.microstream.integrations.spring.boot.types.Storage;
 import one.microstream.storage.types.StorageManager;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
@@ -28,8 +26,6 @@ public class ApplicationData {
     private Map<Manufacturer, Instant> lastRuns;
 
     private List<MicaSenseImage> micaSenseImages;
-
-    private List<DisabledJob> disabledJobs;
 
     @Getter
     private List<Tenant> tenants;
@@ -90,40 +86,6 @@ public class ApplicationData {
     }
 
     /**
-     * Adds a disabled job for a specific manufacturer.
-     *
-     * @param manufacturer The manufacturer for which the job is disabled.
-     * @see Manufacturer
-     * @see DisabledJob
-     */
-    protected void disableJob(Manufacturer manufacturer) {
-        if (null == disabledJobs) {
-            disabledJobs = new ArrayList<>();
-        }
-        var disabledJob = new DisabledJob();
-        disabledJob.setDisabledAt(Instant.now());
-        disabledJob.setDisabledManufacturers(manufacturer);
-        disabledJobs.add(disabledJob);
-        storageManager.store(this);
-    }
-
-    /**
-     * Checks if the specified job is disabled for the given manufacturer.
-     *
-     * @param manufacturer The manufacturer for which to check the job status.
-     * @return True if the job is disabled for the manufacturer, false otherwise.
-     * @see Manufacturer
-     */
-    protected boolean isTheJobDisabled(Manufacturer manufacturer) {
-        if (CollectionUtils.isEmpty(disabledJobs)) {
-            return false;
-        } else {
-            return disabledJobs.stream()
-                    .anyMatch(disabledJob -> disabledJob.getDisabledManufacturers().equals(manufacturer));
-        }
-    }
-
-    /**
      * Adds a tenant to the system.
      *
      * @param tenant The tenant to add.
@@ -154,13 +116,12 @@ public class ApplicationData {
      *
      * @param configuration The configuration to add.
      */
-    protected ThirdPartyApiConfiguration addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
+    protected void addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
         if (null == thirdPartyApiConfigurations) {
             thirdPartyApiConfigurations = new ArrayList<>();
         }
         thirdPartyApiConfigurations.add(configuration);
         storageManager.store(this);
-        return configuration;
     }
 
     /**

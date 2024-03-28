@@ -36,7 +36,7 @@ public class Farm21MeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run() {
+    public void run(String tenantId) {
         var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.FARM21).isPresent()) {

@@ -32,7 +32,7 @@ public class AgranimoMeasurementImport {
     private int daysInThePastForInitialImport;
 
     @Async
-    public void run() {
+    public void run(String tenantId) {
         var begin = Instant.now();
         try {
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGRANIMO);

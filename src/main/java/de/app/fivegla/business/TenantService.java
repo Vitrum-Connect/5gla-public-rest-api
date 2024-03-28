@@ -86,7 +86,7 @@ public class TenantService implements UserDetailsService {
      * @return A list of all tenants in the system.
      */
     public List<Tenant> findAll() {
-        return applicationDataRepository.findAll();
+        return applicationDataRepository.findAllTenants();
     }
 
     /**

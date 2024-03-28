@@ -33,7 +33,7 @@ public class AgvolutionMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run() {
+    public void run(String tenantId) {
         var begin = Instant.now();
         try {
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGVOLUTION);

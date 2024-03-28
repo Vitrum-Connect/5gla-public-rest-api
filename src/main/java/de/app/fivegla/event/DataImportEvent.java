@@ -1,11 +1,11 @@
 package de.app.fivegla.event;
 
-import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 
 /**
  * Event for data import.
  *
- * @param manufacturer the manufacturer
+ * @param thirdPartyApiConfiguration The third-party API configuration.
  */
-public record DataImportEvent(Manufacturer manufacturer) {
+public record DataImportEvent(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
 }

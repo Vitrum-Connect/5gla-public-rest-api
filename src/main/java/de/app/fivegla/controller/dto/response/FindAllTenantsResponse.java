@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Response for finding all tenants.
+ */
 @Getter
 @Setter
 @Builder

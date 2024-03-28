@@ -147,4 +147,14 @@ public class ApplicationDataRepository {
     public void addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
         applicationData.addThirdPartyApiConfiguration(configuration);
     }
+
+    /**
+     * Retrieves a list of ThirdPartyApiConfigurations based on the provided tenant ID.
+     *
+     * @param name The ID of the tenant.
+     * @return A list of ThirdPartyApiConfigurations that match the given tenant ID.
+     */
+    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String name) {
+        return applicationData.getThirdPartyApiConfigurations().stream().filter(configuration -> configuration.getTenantId().equals(name)).toList();
+    }
 }

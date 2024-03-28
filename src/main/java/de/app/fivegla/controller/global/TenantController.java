@@ -7,6 +7,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateTenantRequest;
 import de.app.fivegla.controller.dto.response.CreateTenantResponse;
 import de.app.fivegla.controller.dto.response.FindAllTenantsResponse;
+import de.app.fivegla.controller.dto.response.inner.Tenant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -78,7 +79,7 @@ public class TenantController implements ApiKeyApiAccess {
     )
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FindAllTenantsResponse> findAll() {
-        var tenants = tenantService.findAll().stream().map(tenant -> de.app.fivegla.controller.dto.response.inner.Tenant.builder()
+        var tenants = tenantService.findAll().stream().map(tenant -> Tenant.builder()
                 .createdAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())
                 .tenantId(tenant.getTenantId())

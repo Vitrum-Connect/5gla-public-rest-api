@@ -4,6 +4,8 @@ import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateThirdPartyApiConfigurationRequest;
+import de.app.fivegla.controller.dto.response.FindAllThirdPartyApiConfigurationsResponse;
+import de.app.fivegla.controller.dto.response.inner.ThirdPartyApiConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -11,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -27,7 +26,7 @@ import java.security.Principal;
 @RequestMapping(BaseMappings.THIRD_PARTY_API_CONFIGURATION)
 public class ThirdPartyApiConfigurationController implements TenantCredentialApiAccess {
 
-    private ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
+    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
 
     /**
      * Creates a third-party API configuration and adds it to the system.
@@ -55,6 +54,37 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
         thirdPartyApiConfiguration.setTenantId(principal.getName());
         thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Gets third-party API configuration.
+     *
+     * @param principal The principal object representing the user.
+     * @return A ResponseEntity object containing the third-party API configurations.
+     */
+    @Operation(
+            summary = "Gets third-party API configuration.",
+            description = "Gets third-party API configuration.",
+            tags = BaseMappings.THIRD_PARTY_API_CONFIGURATION
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The third party API configurations were retrieved successfully. The response contains a list of third-party API configurations."
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid."
+    )
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<FindAllThirdPartyApiConfigurationsResponse> getThirdPartyApiConfiguration(Principal principal) {
+        log.info("Getting third-party API configuration.");
+        var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(principal.getName()).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
+                .tenantId(thirdPartyApiConfiguration.getTenantId())
+                .manufacturer(thirdPartyApiConfiguration.getManufacturer())
+                .enabled(thirdPartyApiConfiguration.isEnabled()).build()).toList();
+        return ResponseEntity.ok(FindAllThirdPartyApiConfigurationsResponse.builder()
+                .thirdPartyApiConfigurations(thirdPartyApiConfigurations)
+                .build());
     }
 
 }

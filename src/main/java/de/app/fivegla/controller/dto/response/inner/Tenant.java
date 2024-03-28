@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 @Builder
@@ -16,21 +14,25 @@ public class Tenant {
     /**
      * The creation date of the tenant.
      */
+    @Schema(description = "The creation date of the tenant.")
     private String createdAt;
 
     /**
      * The name of the tenant.
      */
+    @Schema(description = "The name of the tenant.")
     private String name;
 
     /**
      * The description of the tenant.
      */
+    @Schema(description = "The description of the tenant.")
     private String description;
 
     /**
      * The UUID of the tenant.
      */
+    @Schema(description = "The UUID of the tenant.")
     private String tenantId;
 
 }

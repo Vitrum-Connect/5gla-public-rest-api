@@ -157,4 +157,14 @@ public class ApplicationDataRepository {
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String name) {
         return applicationData.getThirdPartyApiConfigurations().stream().filter(configuration -> configuration.getTenantId().equals(name)).toList();
     }
+
+    /**
+     * Deletes a third-party API configuration.
+     *
+     * @param tenantId     The ID of the tenant for which to delete the third-party API configuration.
+     * @param manufacturer The manufacturer of the third-party API configuration.
+     */
+    public void deleteThirdPartyApiConfiguration(String tenantId, Manufacturer manufacturer) {
+        applicationData.deleteThirdPartyApiConfiguration(tenantId, manufacturer);
+    }
 }

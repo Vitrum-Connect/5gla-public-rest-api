@@ -1,5 +1,6 @@
 package de.app.fivegla.controller.tenant;
 
+import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -85,6 +86,33 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
         return ResponseEntity.ok(FindAllThirdPartyApiConfigurationsResponse.builder()
                 .thirdPartyApiConfigurations(thirdPartyApiConfigurations)
                 .build());
+    }
+
+    /**
+     * Deletes a third-party API configuration.
+     *
+     * @param principal    The principal object representing the user.
+     * @param manufacturer The manufacturer of the third-party API configuration to delete.
+     * @return A ResponseEntity object with no body and an HTTP status code of 200 (OK) if the configuration is deleted successfully.
+     */
+    @Operation(
+            summary = "Deletes a third-party API configuration.",
+            description = "Deletes a third-party API configuration.",
+            tags = BaseMappings.THIRD_PARTY_API_CONFIGURATION
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The third-party API configuration was deleted successfully."
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid."
+    )
+    @DeleteMapping(value = "/{manufacturer}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deleteThirdPartyApiConfiguration(Principal principal, @PathVariable String manufacturer) {
+        log.info("Deleting third-party API configuration.");
+        thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(principal.getName(), Manufacturer.valueOf(manufacturer));
+        return ResponseEntity.ok().build();
     }
 
 }

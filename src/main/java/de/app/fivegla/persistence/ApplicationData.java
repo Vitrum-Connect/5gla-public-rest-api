@@ -162,4 +162,17 @@ public class ApplicationData {
         storageManager.store(this);
         return configuration;
     }
+
+    /**
+     * Deletes a third-party API configuration.
+     *
+     * @param tenantId     The tenantId of the third-party API configuration.
+     * @param manufacturer The manufacturer of the third-party API configuration.
+     */
+    public void deleteThirdPartyApiConfiguration(String tenantId, Manufacturer manufacturer) {
+        if (null != thirdPartyApiConfigurations) {
+            thirdPartyApiConfigurations.removeIf(configuration -> configuration.getTenantId().equals(tenantId) && configuration.getManufacturer().equals(manufacturer));
+            storageManager.store(this);
+        }
+    }
 }

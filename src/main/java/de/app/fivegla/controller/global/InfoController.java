@@ -1,4 +1,4 @@
-package de.app.fivegla.controller;
+package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -6,7 +6,7 @@ import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.LastRunResponse;
 import de.app.fivegla.controller.dto.response.VersionResponse;
-import de.app.fivegla.controller.security.SecuredApiAccess;
+import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.fiware.StatusService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +29,7 @@ import java.util.HashMap;
  */
 @RestController
 @RequestMapping(BaseMappings.INFO)
-public class InfoController implements SecuredApiAccess {
+public class InfoController implements ApiKeyApiAccess {
 
     @Value("${app.version:unknown}")
     private String applicationVersion;

@@ -25,16 +25,15 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
     @Override
     @SuppressWarnings("NullableProblems")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!request.getRequestURI().contains(BaseMappings.API_V1)) {
-            log.info("No part of the API is being accessed. No API key is required.");
-            return true;
+        if (!request.getRequestURI().contains(BaseMappings.SECURED_BY_API_KEY)) {
+            log.info("Skipping API key authentication for non-API requests, the request URI is: {}", request.getRequestURI());
         } else {
             var apiKeyHeader = request.getHeader(API_KEY_HEADER);
             if (apiKeyHeader == null || !apiKeyHeader.equals(configuredApiKey)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please provide a valid API key. See the documentation for more information.");
                 return false;
             }
-            return true;
         }
+        return true;
     }
 }

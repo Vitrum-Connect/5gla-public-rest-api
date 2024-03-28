@@ -9,6 +9,9 @@ import de.app.fivegla.persistence.entity.Tenant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TenantService {
+public class TenantService implements UserDetailsService {
 
     private final ApplicationDataRepository applicationDataRepository;
 
@@ -30,7 +33,7 @@ public class TenantService {
      * @param description The description of the tenant.
      * @return The created Tenant object.
      */
-    public Tenant create(@NotBlank String tenantId, @NotBlank String name, String description) {
+    public TenantAndAccessToken create(@NotBlank String tenantId, @NotBlank String name, String description) {
         validateTenantId(tenantId);
         checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
         log.info("Creating tenant with name: {} and description: {}", name, description);
@@ -42,7 +45,7 @@ public class TenantService {
         var accessToken = generateAccessToken();
         var encodedAccessToken = new BCryptPasswordEncoder().encode(accessToken);
         tenant.setAccessToken(encodedAccessToken);
-        return applicationDataRepository.addTenant(tenant);
+        return new TenantAndAccessToken(applicationDataRepository.addTenant(tenant), accessToken);
     }
 
     private void validateTenantId(String tenantId) {
@@ -68,5 +71,17 @@ public class TenantService {
         log.info("Generating new access token for the the tenant.");
         var uuid = UUID.randomUUID().toString();
         return Base64.getEncoder().encodeToString(uuid.getBytes());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return applicationDataRepository.getTenant(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Tenant not found: " + username));
+    }
+
+    /**
+     * Represents a combination of Tenant object and an access token.
+     */
+    public record TenantAndAccessToken(Tenant tenant, String accessToken) {
     }
 }

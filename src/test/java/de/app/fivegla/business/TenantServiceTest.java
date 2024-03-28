@@ -53,8 +53,9 @@ public class TenantServiceTest {
         expectedTenant.setUuid(tenantId);
         expectedTenant.setAccessToken(accessToken);
         when(applicationDataRepository.addTenant(any(Tenant.class))).thenReturn(expectedTenant);
-        Tenant actualTenant = tenantService.create(tenantId, name, description);
-        assertEquals(expectedTenant, actualTenant);
+        var actualTenantWithAccessToken = tenantService.create(tenantId, name, description);
+        assertEquals(expectedTenant, actualTenantWithAccessToken.tenant());
+        assertEquals(accessToken, actualTenantWithAccessToken.accessToken());
     }
 
     // Test case: Tenant already exists with same id.

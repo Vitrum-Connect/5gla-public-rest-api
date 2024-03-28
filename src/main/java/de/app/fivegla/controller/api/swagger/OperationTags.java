@@ -2,11 +2,10 @@ package de.app.fivegla.controller.api.swagger;
 
 public interface OperationTags {
 
-    String MICA_SENSE = "Mica Sense";
-    String INFO = "Info";
-    String MAINTENANCE = "Maintenance (enabled by profile)";
-    String DEVICE_MEASUREMENT = "Device Measurement";
-    String DEVICE = "Device";
-    String AGRI_CROP = "Agri Crop";
-    String JOB = "Job";
+    String IMAGE_PROCESSING = "image processing";
+    String INFO = "info";
+    String MAINTENANCE = "maintenance";
+    String DEVICE_MEASUREMENT = "device measurement";
+    String AGRI_CROP = "agri crop";
+    String JOB = "jobs";
 }

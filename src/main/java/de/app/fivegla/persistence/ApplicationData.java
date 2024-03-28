@@ -4,6 +4,7 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.persistence.entity.DisabledJob;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.Getter;
 import one.microstream.integrations.spring.boot.types.Storage;
 import one.microstream.storage.types.StorageManager;
@@ -30,7 +31,11 @@ public class ApplicationData {
 
     private List<DisabledJob> disabledJobs;
 
+    @Getter
     private List<Tenant> tenants;
+
+    @Getter
+    private List<ThirdPartyApiConfiguration> thirdPartyApiConfigurations;
 
     /**
      * Update the last run.
@@ -140,7 +145,21 @@ public class ApplicationData {
      */
     protected Optional<Tenant> getTenant(String uuid) {
         return tenants.stream()
-                .filter(tenant -> tenant.getUuid().equals(uuid))
+                .filter(tenant -> tenant.getTenantId().equals(uuid))
                 .findFirst();
+    }
+
+    /**
+     * Adds a third-party API configuration to the system.
+     *
+     * @param configuration The configuration to add.
+     */
+    protected ThirdPartyApiConfiguration addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
+        if (null == thirdPartyApiConfigurations) {
+            thirdPartyApiConfigurations = new ArrayList<>();
+        }
+        thirdPartyApiConfigurations.add(configuration);
+        storageManager.store(this);
+        return configuration;
     }
 }

@@ -4,6 +4,7 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -128,5 +129,22 @@ public class ApplicationDataRepository {
      */
     public Optional<Tenant> getTenant(String tenantId) {
         return applicationData.getTenant(tenantId);
+    }
+
+    /**
+     * Finds all tenants in the system.
+     *
+     * @return A list of all tenants in the system.
+     */
+    public List<Tenant> findAll() {
+        return applicationData.getTenants();
+
+    }
+
+    /**
+     * Add third party API configuration.
+     */
+    public void addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
+        applicationData.addThirdPartyApiConfiguration(configuration);
     }
 }

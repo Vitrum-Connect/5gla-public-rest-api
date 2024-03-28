@@ -1,9 +1,8 @@
 package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.business.AgriCropService;
-import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
+import de.app.fivegla.controller.api.BaseMappings;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +26,7 @@ public class AgriCropController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "agri-crop.import-geojson",
             description = "Imports the GeoJSON containing the agri-crop data.",
-            tags = OperationTags.AGRI_CROP
+            tags = BaseMappings.AGRI_CROP
     )
     @ApiResponse(
             responseCode = "201",
@@ -47,7 +46,7 @@ public class AgriCropController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "agri-crop.import-csv",
             description = "Imports the CSV containing the agri-crop data.",
-            tags = OperationTags.AGRI_CROP
+            tags = BaseMappings.AGRI_CROP
     )
     @ApiResponse(
             responseCode = "201",

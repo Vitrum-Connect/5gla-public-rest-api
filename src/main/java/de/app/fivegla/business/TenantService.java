@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -41,7 +42,7 @@ public class TenantService implements UserDetailsService {
         tenant.setCreatedAt(Instant.now());
         tenant.setName(name);
         tenant.setDescription(description);
-        tenant.setUuid(tenantId);
+        tenant.setTenantId(tenantId);
         var accessToken = generateAccessToken();
         var encodedAccessToken = new BCryptPasswordEncoder().encode(accessToken);
         tenant.setAccessToken(encodedAccessToken);
@@ -77,6 +78,15 @@ public class TenantService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return applicationDataRepository.getTenant(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Tenant not found: " + username));
+    }
+
+    /**
+     * Finds all tenants in the system.
+     *
+     * @return A list of all tenants in the system.
+     */
+    public List<Tenant> findAll() {
+        return applicationDataRepository.findAll();
     }
 
     /**

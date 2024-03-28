@@ -2,7 +2,6 @@ package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
@@ -41,7 +40,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.process-image",
             description = "Processes one or multiple images from the mica sense camera.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
@@ -74,7 +73,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.begin-image-processing",
             description = "Begins the image processing for the transaction.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
@@ -98,7 +97,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.end-image-processing",
             description = "Ends the image processing for the transaction.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
@@ -118,7 +117,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.get-image",
             description = "Returns an image from the mica sense camera stored in the database.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "200",
@@ -149,7 +148,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.get-image-oids-for-transaction",
             description = "Returns the image Object IDs (Oids) associated with a specific transaction.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "200",

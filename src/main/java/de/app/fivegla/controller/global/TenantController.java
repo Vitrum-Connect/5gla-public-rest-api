@@ -6,6 +6,7 @@ import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateTenantRequest;
 import de.app.fivegla.controller.dto.response.CreateTenantResponse;
+import de.app.fivegla.controller.dto.response.FindAllTenantsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -13,17 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * The TenantController class manages the creation of tenants.
  */
 @RestController
-@RequestMapping(BaseMappings.TENANT)
 @RequiredArgsConstructor
+@RequestMapping(BaseMappings.TENANT)
 public class TenantController implements ApiKeyApiAccess {
 
     private final TenantService tenantService;
@@ -36,7 +34,8 @@ public class TenantController implements ApiKeyApiAccess {
      */
     @Operation(
             operationId = "tenant.create",
-            description = "Creates a new tenant based on the provided request."
+            description = "Creates a new tenant based on the provided request.",
+            tags = BaseMappings.TENANT
     )
     @ApiResponse(
             responseCode = "201",
@@ -54,9 +53,38 @@ public class TenantController implements ApiKeyApiAccess {
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateTenantResponse.builder()
                 .createdAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())
-                .uuid(tenant.getUuid())
+                .uuid(tenant.getTenantId())
                 .accessToken(accessToken)
                 .build());
+    }
+
+    /**
+     * Finds all tenants.
+     *
+     * @return A {@code ResponseEntity<FindAllTenantsResponse>} object representing the HTTP response containing a list of tenants.
+     */
+    @Operation(
+            operationId = "tenant.findAll",
+            description = "Finds all tenants.",
+            tags = BaseMappings.TENANT
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The tenants are found successfully. The response contains a list of tenants."
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid."
+    )
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<FindAllTenantsResponse> findAll() {
+        var tenants = tenantService.findAll().stream().map(tenant -> de.app.fivegla.controller.dto.response.inner.Tenant.builder()
+                .createdAt(Format.format(tenant.getCreatedAt()))
+                .name(tenant.getName())
+                .tenantId(tenant.getTenantId())
+                .description(tenant.getDescription())
+                .build()).toList();
+        return ResponseEntity.ok(FindAllTenantsResponse.builder().tenants(tenants).build());
     }
 
 }

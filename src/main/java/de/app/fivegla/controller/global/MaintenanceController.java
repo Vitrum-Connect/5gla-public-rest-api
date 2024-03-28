@@ -3,9 +3,8 @@ package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.MeasurementType;
-import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
+import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.fiware.SubscriptionService;
 import de.app.fivegla.scheduled.DataImportScheduler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,7 +45,7 @@ public class MaintenanceController implements ApiKeyApiAccess {
     @Operation(
             operationId = "maintenance.send-subscription",
             description = "Sends a subscription for device measurement notifications.",
-            tags = OperationTags.MAINTENANCE
+            tags = BaseMappings.MAINTENANCE
     )
     @ApiResponse(
             responseCode = "200",
@@ -76,7 +75,7 @@ public class MaintenanceController implements ApiKeyApiAccess {
     @Operation(
             operationId = "manual.import.run",
             description = "Run the import manually.",
-            tags = OperationTags.MAINTENANCE
+            tags = BaseMappings.MAINTENANCE
     )
     @ApiResponse(
             responseCode = "200",

@@ -3,7 +3,6 @@ package de.app.fivegla.controller.tenant;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.SentekDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.WeenatDataLoggingRequest;
@@ -53,7 +52,7 @@ public class DeviceMeasurementController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "device-measurement.sentek",
             description = "Logs the Sentek data for a specific sensor.",
-            tags = OperationTags.DEVICE_MEASUREMENT
+            tags = BaseMappings.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",
@@ -99,7 +98,7 @@ public class DeviceMeasurementController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "device-measurement.weenat",
             description = "Logs the Weenat data for a specific plot.",
-            tags = OperationTags.DEVICE_MEASUREMENT
+            tags = BaseMappings.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",
@@ -145,7 +144,7 @@ public class DeviceMeasurementController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "device-measurement.agvolution",
             description = "Logs the Agvolution data for a specific device.",
-            tags = OperationTags.DEVICE_MEASUREMENT
+            tags = BaseMappings.DEVICE_MEASUREMENT
     )
     @ApiResponse(
             responseCode = "201",

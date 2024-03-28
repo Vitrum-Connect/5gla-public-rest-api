@@ -1,4 +1,4 @@
-package de.app.fivegla.controller;
+package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
@@ -7,7 +7,7 @@ import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.SentekDataLoggingRequest;
 import de.app.fivegla.controller.dto.request.WeenatDataLoggingRequest;
-import de.app.fivegla.controller.security.SecuredApiAccess;
+import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.integration.agvolution.AgvolutionFiwareIntegrationServiceWrapper;
 import de.app.fivegla.integration.agvolution.AgvolutionSensorIntegrationService;
 import de.app.fivegla.integration.sentek.SentekFiwareIntegrationServiceWrapper;
@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RestController
 @RequestMapping(BaseMappings.DEVICE_MEASUREMENT)
 @RequiredArgsConstructor
-public class DeviceMeasurementController implements SecuredApiAccess {
+public class DeviceMeasurementController implements TenantCredentialApiAccess {
 
     private final SentekSensorIntegrationService sentekSensorIntegrationService;
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;

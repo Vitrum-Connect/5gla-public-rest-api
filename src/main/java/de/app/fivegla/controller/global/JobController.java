@@ -1,15 +1,19 @@
-package de.app.fivegla.controller;
+package de.app.fivegla.controller.global;
 
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.DisableJobRequest;
+import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The JobController class handles requests related to job operations.
@@ -18,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(BaseMappings.JOB)
-public class JobController {
+public class JobController implements ApiKeyApiAccess {
 
     private final ApplicationDataRepository applicationDataRepository;
 

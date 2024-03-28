@@ -1,11 +1,11 @@
-package de.app.fivegla.controller;
+package de.app.fivegla.controller.global;
 
 
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
-import de.app.fivegla.controller.security.SecuredApiAccess;
+import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.fiware.SubscriptionService;
 import de.app.fivegla.scheduled.DataImportScheduler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 @RestController
 @RequestMapping(BaseMappings.MAINTENANCE)
 @RequiredArgsConstructor
-public class MaintenanceController implements SecuredApiAccess {
+public class MaintenanceController implements ApiKeyApiAccess {
 
     private final SubscriptionService subscriptionService;
     private final DataImportScheduler dataImportScheduler;

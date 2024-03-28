@@ -1,11 +1,11 @@
-package de.app.fivegla.controller;
+package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.Format;
 import de.app.fivegla.business.TenantService;
+import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateTenantRequest;
 import de.app.fivegla.controller.dto.response.CreateTenantResponse;
-import de.app.fivegla.controller.security.SecuredApiAccess;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(BaseMappings.TENANT)
 @RequiredArgsConstructor
-public class TenantController implements SecuredApiAccess {
+public class TenantController implements ApiKeyApiAccess {
 
     private final TenantService tenantService;
 
@@ -48,12 +48,14 @@ public class TenantController implements SecuredApiAccess {
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateTenantResponse> create(@Valid @RequestBody CreateTenantRequest request) {
-        var tenant = tenantService.create(request.getTenantId(), request.getName(), request.getDescription());
+        var tenantAndAccessToken = tenantService.create(request.getTenantId(), request.getName(), request.getDescription());
+        var tenant = tenantAndAccessToken.tenant();
+        var accessToken = tenantAndAccessToken.accessToken();
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateTenantResponse.builder()
                 .createdAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())
                 .uuid(tenant.getUuid())
-                .accessToken(tenant.getAccessToken())
+                .accessToken(accessToken)
                 .build());
     }
 

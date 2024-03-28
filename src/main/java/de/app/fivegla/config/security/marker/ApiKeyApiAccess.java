@@ -1,4 +1,4 @@
-package de.app.fivegla.controller.security;
+package de.app.fivegla.config.security.marker;
 
 import de.app.fivegla.config.security.ApiKeyInterceptor;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -13,5 +13,5 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
         description = "Please provide a valid API key. See the documentation for more information."
 )
 @SecurityRequirement(name = ApiKeyInterceptor.API_KEY_HEADER)
-public interface SecuredApiAccess {
+public interface ApiKeyApiAccess {
 }

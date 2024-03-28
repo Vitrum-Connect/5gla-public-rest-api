@@ -13,15 +13,15 @@ import java.util.Objects;
 class ImageProcessingIT extends SpringBootIntegrationTestBase {
 
     @Autowired
-    private MicaSenseIntegrationService micaSenseIntegrationService;
+    private ImageProcessingIntegrationService imageProcessingIntegrationService;
 
     @Test
     void givenValidImageWhenReadingImageInformationThen() throws Throwable {
-        micaSenseIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_1.txt"));
-        micaSenseIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_2.txt"));
-        micaSenseIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_3.txt"));
-        micaSenseIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_4.txt"));
-        micaSenseIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_5.txt"));
+        imageProcessingIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_1.txt"));
+        imageProcessingIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_2.txt"));
+        imageProcessingIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_3.txt"));
+        imageProcessingIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_4.txt"));
+        imageProcessingIntegrationService.processImage("transactionId", "droneId", MicaSenseChannel.BLUE, readBase64Image("base64_encoded_drone_image_5.txt"));
     }
 
     private String readBase64Image(String fileName) throws Throwable {

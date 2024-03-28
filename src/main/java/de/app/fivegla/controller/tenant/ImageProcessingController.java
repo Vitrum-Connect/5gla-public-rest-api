@@ -1,12 +1,12 @@
-package de.app.fivegla.controller;
+package de.app.fivegla.controller.tenant;
 
+import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
-import de.app.fivegla.controller.security.SecuredApiAccess;
-import de.app.fivegla.integration.micasense.MicaSenseIntegrationService;
+import de.app.fivegla.integration.micasense.ImageProcessingIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,13 +24,13 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @RestController
-@RequestMapping(BaseMappings.MICA_SENSE + "/images")
-public class ImageProcessingController implements SecuredApiAccess {
+@RequestMapping(BaseMappings.IMAGE_PROCESSING + "/images")
+public class ImageProcessingController implements TenantCredentialApiAccess {
 
-    private final MicaSenseIntegrationService micaSenseIntegrationService;
+    private final ImageProcessingIntegrationService imageProcessingIntegrationService;
 
-    public ImageProcessingController(MicaSenseIntegrationService micaSenseIntegrationService) {
-        this.micaSenseIntegrationService = micaSenseIntegrationService;
+    public ImageProcessingController(ImageProcessingIntegrationService imageProcessingIntegrationService) {
+        this.imageProcessingIntegrationService = imageProcessingIntegrationService;
     }
 
     /**
@@ -41,7 +41,7 @@ public class ImageProcessingController implements SecuredApiAccess {
     @Operation(
             operationId = "images.process-image",
             description = "Processes one or multiple images from the mica sense camera.",
-            tags = OperationTags.MICA_SENSE
+            tags = OperationTags.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
@@ -56,7 +56,7 @@ public class ImageProcessingController implements SecuredApiAccess {
         log.debug("Processing image for the drone: {}.", request.getDroneId());
         var oids = new ArrayList<String>();
         request.getImages().forEach(droneImage -> {
-            var oid = micaSenseIntegrationService.processImage(request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
+            var oid = imageProcessingIntegrationService.processImage(request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
             oids.add(oid);
         });
         return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
@@ -74,17 +74,17 @@ public class ImageProcessingController implements SecuredApiAccess {
     @Operation(
             operationId = "images.begin-image-processing",
             description = "Begins the image processing for the transaction.",
-            tags = OperationTags.MICA_SENSE
+            tags = OperationTags.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
             description = "The image processing was begun."
     )
-    @PostMapping(value = "/{droneId}/{transactionId}/begin", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{droneId}/{transactionId}/begin")
     public ResponseEntity<Void> beginImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
                                                      @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
         log.debug("Beginning image processing for the transaction: {}.", transactionId);
-        micaSenseIntegrationService.beginImageProcessing(droneId, transactionId);
+        imageProcessingIntegrationService.beginImageProcessing(droneId, transactionId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -98,17 +98,17 @@ public class ImageProcessingController implements SecuredApiAccess {
     @Operation(
             operationId = "images.end-image-processing",
             description = "Ends the image processing for the transaction.",
-            tags = OperationTags.MICA_SENSE
+            tags = OperationTags.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
             description = "The image processing was ended."
     )
-    @PostMapping(value = "/{droneId}/{transactionId}/end", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{droneId}/{transactionId}/end")
     public ResponseEntity<Void> endImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
                                                    @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
         log.debug("Ending image processing for the transaction: {}.", transactionId);
-        micaSenseIntegrationService.endImageProcessing(droneId, transactionId);
+        imageProcessingIntegrationService.endImageProcessing(droneId, transactionId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -118,7 +118,7 @@ public class ImageProcessingController implements SecuredApiAccess {
     @Operation(
             operationId = "images.get-image",
             description = "Returns an image from the mica sense camera stored in the database.",
-            tags = OperationTags.MICA_SENSE
+            tags = OperationTags.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "200",
@@ -128,7 +128,7 @@ public class ImageProcessingController implements SecuredApiAccess {
     public ResponseEntity<byte[]> getImage(@PathVariable String oid) {
         var headers = new HttpHeaders();
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-        var micaSenseImage = micaSenseIntegrationService.getImage(oid);
+        var micaSenseImage = imageProcessingIntegrationService.getImage(oid);
         AtomicReference<ResponseEntity<byte[]>> responseEntity = new AtomicReference<>(ResponseEntity.notFound().build());
         micaSenseImage.ifPresent(
                 image -> {
@@ -149,7 +149,7 @@ public class ImageProcessingController implements SecuredApiAccess {
     @Operation(
             operationId = "images.get-image-oids-for-transaction",
             description = "Returns the image Object IDs (Oids) associated with a specific transaction.",
-            tags = OperationTags.MICA_SENSE
+            tags = OperationTags.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "200",
@@ -157,7 +157,7 @@ public class ImageProcessingController implements SecuredApiAccess {
     )
     @GetMapping(value = "/{transactionId}/oids", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OidsForTransactionResponse> getImageOidsForTransaction(@PathVariable String transactionId) {
-        var oids = micaSenseIntegrationService.getImageOidsForTransaction(transactionId);
+        var oids = imageProcessingIntegrationService.getImageOidsForTransaction(transactionId);
         return ResponseEntity.ok(OidsForTransactionResponse.builder()
                 .transactionId(transactionId)
                 .oids(oids)

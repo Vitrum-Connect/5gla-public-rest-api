@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MicaSenseIntegrationService {
+public class ImageProcessingIntegrationService {
 
     private final ExifDataIntegrationService exifDataIntegrationService;
     private final MicaSenseFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;

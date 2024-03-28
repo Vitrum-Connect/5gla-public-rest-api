@@ -1,9 +1,9 @@
-package de.app.fivegla.controller;
+package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.business.AgriCropService;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.api.swagger.OperationTags;
-import de.app.fivegla.controller.security.SecuredApiAccess;
+import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(BaseMappings.AGRI_CROP)
-public class AgriCropController implements SecuredApiAccess {
+public class AgriCropController implements TenantCredentialApiAccess {
 
     private final AgriCropService agriCropService;
 

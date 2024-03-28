@@ -43,7 +43,6 @@ public class TenantServiceTest {
         String tenantId = "validTenantId";
         String name = "validName";
         String description = "validDescription";
-        String accessToken = "accessToken";
         // For tenantId validation
         when(applicationDataRepository.getTenant(tenantId)).thenReturn(Optional.empty());
         Tenant expectedTenant = new Tenant();
@@ -51,11 +50,9 @@ public class TenantServiceTest {
         expectedTenant.setName(name);
         expectedTenant.setDescription(description);
         expectedTenant.setUuid(tenantId);
-        expectedTenant.setAccessToken(accessToken);
         when(applicationDataRepository.addTenant(any(Tenant.class))).thenReturn(expectedTenant);
         var actualTenantWithAccessToken = tenantService.create(tenantId, name, description);
         assertEquals(expectedTenant, actualTenantWithAccessToken.tenant());
-        assertEquals(accessToken, actualTenantWithAccessToken.accessToken());
     }
 
     // Test case: Tenant already exists with same id.

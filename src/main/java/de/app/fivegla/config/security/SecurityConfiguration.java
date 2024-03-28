@@ -59,7 +59,6 @@ public class SecurityConfiguration {
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.authenticationEntryPoint(customAuthenticationEntryPoint))
-                .csrf().disable()
                 .build();
     }
 

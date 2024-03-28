@@ -80,7 +80,7 @@ app:
     allowed-origins: "http://localhost:8080,https://app.5gla.de/"
 logging:
   level:
-    root: debug
+    root: info
     de.app.fivegla: trace
     org.springframework.web.client: trace
 one:

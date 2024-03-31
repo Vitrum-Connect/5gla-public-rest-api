@@ -8,7 +8,6 @@ import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,9 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AgranimoZoneService {
 
-    @Value("${app.sensors.agranimo.url}")
-    private String url;
-
     private final AgranimoLoginIntegrationService loginService;
     private final UserDataCache userDataCache;
     private final RestTemplate restTemplate;
@@ -42,7 +38,7 @@ public class AgranimoZoneService {
                 headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 headers.setBearerAuth(loginService.fetchAccessToken(thirdPartyApiConfiguration));
                 var httpEntity = new HttpEntity<>(headers);
-                var uri = UriComponentsBuilder.fromHttpUrl(url + "/zone")
+                var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/zone")
                         .toUriString();
                 var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Zone[].class);
 

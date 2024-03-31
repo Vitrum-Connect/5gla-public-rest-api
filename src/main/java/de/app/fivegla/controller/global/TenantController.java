@@ -8,7 +8,6 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateTenantRequest;
 import de.app.fivegla.controller.dto.response.CreateTenantResponse;
 import de.app.fivegla.controller.dto.response.FindAllTenantsResponse;
-import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.inner.Tenant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

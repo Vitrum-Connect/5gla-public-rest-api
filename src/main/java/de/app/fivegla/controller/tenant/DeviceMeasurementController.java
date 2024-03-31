@@ -2,6 +2,7 @@ package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
+import de.app.fivegla.api.Response;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AgvolutionDataLoggingRequest;
@@ -17,6 +18,8 @@ import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,11 +62,19 @@ public class DeviceMeasurementController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The Sentek data was logged successfully."
+            description = "The Sentek data was logged successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/sentek/{sensorId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> sentek(@PathVariable @Parameter(description = "The ID of the sensor.", required = true) int sensorId,
@@ -117,11 +128,19 @@ public class DeviceMeasurementController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The Weenat data was logged successfully."
+            description = "The Weenat data was logged successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/weenat/{plotId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> weenat(@PathVariable @Parameter(description = "The ID of the plot.", required = true) int plotId,
@@ -175,11 +194,19 @@ public class DeviceMeasurementController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The Agvolution data was logged successfully."
+            description = "The Agvolution data was logged successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/agvolution/{deviceId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> agvolution(@PathVariable @Parameter(description = "The ID of the device.", required = true) String deviceId,

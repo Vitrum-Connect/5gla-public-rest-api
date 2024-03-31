@@ -12,6 +12,8 @@ import de.app.fivegla.integration.micasense.ImageProcessingIntegrationService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,11 +50,19 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "201",
-            description = "Images were processed successfully."
+            description = "Images were processed successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ImageProcessingResponse.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> processImage(@Valid @RequestBody @Parameter(description = "The image processing request.", required = true) ImageProcessingRequest request, Principal principal) {
@@ -92,7 +102,19 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The image processing was begun."
+            description = "The image processing was begun.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/{droneId}/{transactionId}/begin")
     public ResponseEntity<? extends Response> beginImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
@@ -116,7 +138,19 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The image processing was ended."
+            description = "The image processing was ended.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/{droneId}/{transactionId}/end", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> endImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
@@ -136,7 +170,19 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The image was found and returned."
+            description = "The image was found and returned.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = byte[].class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @GetMapping(value = "/{oid}", produces = "image/tiff")
     public ResponseEntity<byte[]> getImage(@PathVariable String oid) {
@@ -167,7 +213,19 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The OIDs for the images were found and returned."
+            description = "The OIDs for the images were found and returned.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = OidsForTransactionResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @GetMapping(value = "/{transactionId}/oids", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getImageOidsForTransaction(@PathVariable String transactionId) {

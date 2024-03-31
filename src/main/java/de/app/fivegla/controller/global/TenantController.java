@@ -8,8 +8,11 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateTenantRequest;
 import de.app.fivegla.controller.dto.response.CreateTenantResponse;
 import de.app.fivegla.controller.dto.response.FindAllTenantsResponse;
+import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.inner.Tenant;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +44,19 @@ public class TenantController implements ApiKeyApiAccess {
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The tenant was created successfully."
+            description = "The tenant was created successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CreateTenantResponse.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> create(@Valid @RequestBody CreateTenantRequest request) {
@@ -72,7 +83,11 @@ public class TenantController implements ApiKeyApiAccess {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The tenants are found successfully. The response contains a list of tenants."
+            description = "The tenants are found successfully. The response contains a list of tenants.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = FindAllTenantsResponse.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",

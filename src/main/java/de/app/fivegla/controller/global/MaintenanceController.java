@@ -4,8 +4,11 @@ package de.app.fivegla.controller.global;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
+import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.scheduled.DataImportScheduler;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,11 @@ public class MaintenanceController implements ApiKeyApiAccess {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The import has been started asynchronously."
+            description = "The import has been started asynchronously.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/run", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> runAllImports() {

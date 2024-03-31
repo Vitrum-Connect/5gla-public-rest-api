@@ -9,6 +9,8 @@ import de.app.fivegla.controller.dto.request.CreateThirdPartyApiConfigurationReq
 import de.app.fivegla.controller.dto.response.FindAllThirdPartyApiConfigurationsResponse;
 import de.app.fivegla.controller.dto.response.inner.ThirdPartyApiConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +45,19 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The third-party API configuration was created successfully."
+            description = "The third-party API configuration was created successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> createThirdPartyApiConfiguration(@Valid @RequestBody CreateThirdPartyApiConfigurationRequest request, Principal principal) {
@@ -71,11 +81,19 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The third party API configurations were retrieved successfully. The response contains a list of third-party API configurations."
+            description = "The third party API configurations were retrieved successfully. The response contains a list of third-party API configurations.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = FindAllThirdPartyApiConfigurationsResponse.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @GetMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(Principal principal) {
@@ -103,11 +121,19 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The third-party API configuration was deleted successfully."
+            description = "The third-party API configuration was deleted successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @DeleteMapping(value = "/{manufacturer}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(Principal principal, @PathVariable String manufacturer) {

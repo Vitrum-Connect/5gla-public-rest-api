@@ -4,6 +4,7 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class SoilScoutMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(String tenantId) {
+    public void run(Tenant tenant) {
         var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {
@@ -43,14 +44,14 @@ public class SoilScoutMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.forEach(this::persistDataWithinFiware);
+                measurements.forEach(measurement -> persistDataWithinFiware(tenant, measurement));
             } else {
                 log.info("Running initial data import from Soil Scout API, this may take a while");
                 var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.forEach(this::persistDataWithinFiware);
+                measurements.forEach(measurement -> persistDataWithinFiware(tenant, measurement));
             }
             applicationDataRepository.updateLastRun(Manufacturer.SOILSCOUT);
         } catch (Exception e) {
@@ -63,8 +64,8 @@ public class SoilScoutMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(SensorData measurement) {
-        fiwareIntegrationServiceWrapper.persist(measurement);
+    private void persistDataWithinFiware(Tenant tenant, SensorData measurement) {
+        fiwareIntegrationServiceWrapper.persist(tenant, measurement);
     }
 
 }

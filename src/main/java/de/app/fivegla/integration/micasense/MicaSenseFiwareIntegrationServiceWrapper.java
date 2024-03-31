@@ -2,14 +2,13 @@ package de.app.fivegla.integration.micasense;
 
 
 import de.app.fivegla.api.enums.MeasurementType;
-import de.app.fivegla.config.ApplicationConfiguration;
-import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MicaSenseFiwareIntegrationServiceWrapper {
-    private final ApplicationConfiguration applicationConfiguration;
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
 
     @Value("${app.sensors.micasense.imagePathBaseUrl}")
@@ -33,9 +31,9 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
      *
      * @param image the image to create the measurement for
      */
-    public void createDroneDeviceMeasurement(String droneId, MicaSenseImage image) {
+    public void createDroneDeviceMeasurement(Tenant tenant, String droneId, MicaSenseImage image) {
         var deviceMeasurement = new DeviceMeasurement(
-                getManufacturerConfiguration().fiwarePrefix() + droneId,
+                tenant.getFiwarePrefix() + droneId,
                 MeasurementType.MICASENSE_IMAGE.name(),
                 new TextAttribute("image"),
                 new EmptyAttribute(),
@@ -46,7 +44,4 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
         deviceMeasurementIntegrationService.persist(deviceMeasurement);
     }
 
-    private CommonManufacturerConfiguration getManufacturerConfiguration() {
-        return applicationConfiguration.getSensors().micasense();
-    }
 }

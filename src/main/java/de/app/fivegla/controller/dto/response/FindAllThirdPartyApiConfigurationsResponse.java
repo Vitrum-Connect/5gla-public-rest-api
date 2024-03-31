@@ -1,5 +1,6 @@
 package de.app.fivegla.controller.dto.response;
 
+import de.app.fivegla.api.Response;
 import de.app.fivegla.controller.dto.response.inner.ThirdPartyApiConfiguration;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @Schema(name = "Response for finding all third API responses.")
-public class FindAllThirdPartyApiConfigurationsResponse {
+public class FindAllThirdPartyApiConfigurationsResponse extends Response {
 
     /**
      * The list of third-party API configurations.

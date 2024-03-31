@@ -1,6 +1,7 @@
 package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.api.Response;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
@@ -60,8 +61,8 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = VersionResponse.class)
             )
     )
-    @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VersionResponse> getVersion() {
+    @GetMapping(value = "/version", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getVersion() {
         return ResponseEntity.ok(VersionResponse.builder().version(applicationVersion).build());
     }
 
@@ -83,8 +84,8 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = FiwareStatusResponse.class)
             )
     )
-    @GetMapping(value = "/fiware", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FiwareStatusResponse> getFiwareStatus() {
+    @GetMapping(value = "/fiware", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getFiwareStatus() {
         var version = statusService.getVersion();
         return ResponseEntity.ok(FiwareStatusResponse.builder()
                 .fiwareStatus(HttpStatus.OK)
@@ -111,8 +112,8 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = LastRunResponse.class)
             )
     )
-    @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LastRunResponse> getLastImport() {
+    @GetMapping(value = "/last-run", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getLastImport() {
         var lastRuns = new HashMap<Manufacturer, String>();
         var savedLastRuns = applicationDataRepository.getLastRuns();
         if (null != savedLastRuns) {

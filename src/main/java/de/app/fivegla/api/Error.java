@@ -40,7 +40,8 @@ public enum Error {
     MICASENSE_TX_NOT_FOUND(errorOf(30)),
     AGRANIMO_COULD_NOT_FETCH_SOIL_MOISTURE(errorOf(31)),
     INVALID_TENANT_ID(errorOf(32)),
-    TENANT_ALREADY_EXISTS(errorOf(33));
+    TENANT_ALREADY_EXISTS(errorOf(33)),
+    TENANT_NOT_FOUND(errorOf(34));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

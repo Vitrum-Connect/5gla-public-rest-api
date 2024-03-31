@@ -1,6 +1,7 @@
 package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.Format;
+import de.app.fivegla.api.Response;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -47,7 +48,7 @@ public class TenantController implements ApiKeyApiAccess {
             description = "The request is invalid."
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreateTenantResponse> create(@Valid @RequestBody CreateTenantRequest request) {
+    public ResponseEntity<? extends Response> create(@Valid @RequestBody CreateTenantRequest request) {
         var tenantAndAccessToken = tenantService.create(request.getTenantId(), request.getName(), request.getDescription());
         var tenant = tenantAndAccessToken.tenant();
         var accessToken = tenantAndAccessToken.accessToken();
@@ -78,7 +79,7 @@ public class TenantController implements ApiKeyApiAccess {
             description = "The request is invalid."
     )
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FindAllTenantsResponse> findAll() {
+    public ResponseEntity<? extends Response> findAll() {
         var tenants = tenantService.findAll().stream().map(tenant -> Tenant.builder()
                 .createdAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())

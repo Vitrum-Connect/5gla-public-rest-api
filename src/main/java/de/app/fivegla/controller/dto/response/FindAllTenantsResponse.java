@@ -1,5 +1,6 @@
 package de.app.fivegla.controller.dto.response;
 
+import de.app.fivegla.api.Response;
 import de.app.fivegla.controller.dto.response.inner.Tenant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

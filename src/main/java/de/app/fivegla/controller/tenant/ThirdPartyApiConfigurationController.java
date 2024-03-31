@@ -1,6 +1,7 @@
 package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.api.Response;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -49,12 +50,12 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
             description = "The request is invalid."
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createThirdPartyApiConfiguration(@Valid @RequestBody CreateThirdPartyApiConfigurationRequest request, Principal principal) {
+    public ResponseEntity<? extends Response> createThirdPartyApiConfiguration(@Valid @RequestBody CreateThirdPartyApiConfigurationRequest request, Principal principal) {
         log.info("Creating third-party API configuration.");
         var thirdPartyApiConfiguration = request.toEntity();
         thirdPartyApiConfiguration.setTenantId(principal.getName());
         thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(new Response());
     }
 
     /**
@@ -76,8 +77,8 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
             responseCode = "400",
             description = "The request is invalid."
     )
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FindAllThirdPartyApiConfigurationsResponse> getThirdPartyApiConfiguration(Principal principal) {
+    @GetMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(Principal principal) {
         log.info("Getting third-party API configuration.");
         var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(principal.getName()).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
                 .tenantId(thirdPartyApiConfiguration.getTenantId())
@@ -108,11 +109,11 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
             responseCode = "400",
             description = "The request is invalid."
     )
-    @DeleteMapping(value = "/{manufacturer}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteThirdPartyApiConfiguration(Principal principal, @PathVariable String manufacturer) {
+    @DeleteMapping(value = "/{manufacturer}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(Principal principal, @PathVariable String manufacturer) {
         log.info("Deleting third-party API configuration.");
         thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(principal.getName(), Manufacturer.valueOf(manufacturer));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(new Response());
     }
 
 }

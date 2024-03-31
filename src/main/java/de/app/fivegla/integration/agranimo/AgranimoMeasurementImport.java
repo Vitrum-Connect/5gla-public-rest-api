@@ -5,6 +5,7 @@ import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,7 @@ public class AgranimoMeasurementImport {
     private int daysInThePastForInitialImport;
 
     @Async
-    public void run(String tenantId) {
+    public void run(Tenant tenant) {
         var begin = Instant.now();
         try {
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGRANIMO);
@@ -44,7 +45,7 @@ public class AgranimoMeasurementImport {
                     log.info("Found {} water content entries", waterContent.size());
                     log.info("Persisting {} water content entries", waterContent.size());
                     waterContent.forEach(
-                            soilMoisture -> persistDataWithinFiware(zone, soilMoisture)
+                            soilMoisture -> persistDataWithinFiware(tenant, zone, soilMoisture)
                     );
                 });
 
@@ -56,7 +57,7 @@ public class AgranimoMeasurementImport {
                     log.info("Found {} water content entries", waterContent.size());
                     log.info("Persisting {} water content entries", waterContent.size());
                     waterContent.forEach(
-                            soilMoisture -> persistDataWithinFiware(zone, soilMoisture)
+                            soilMoisture -> persistDataWithinFiware(tenant, zone, soilMoisture)
                     );
                 });
             }
@@ -71,9 +72,9 @@ public class AgranimoMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(Zone zone, SoilMoisture soilMoisture) {
+    private void persistDataWithinFiware(Tenant tenant, Zone zone, SoilMoisture soilMoisture) {
         try {
-            fiwareIntegrationServiceWrapper.persist(zone, soilMoisture);
+            fiwareIntegrationServiceWrapper.persist(tenant, zone, soilMoisture);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);

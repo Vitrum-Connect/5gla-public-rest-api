@@ -12,6 +12,7 @@ import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
 import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
 import de.app.fivegla.integration.weenat.WeenatMeasurementImport;
+import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -36,33 +37,40 @@ public class DataImportEventHandler {
     private final WeenatMeasurementImport weenatMeasurementImport;
     private final SubscriptionStatus subscriptionStatus;
     private final Application application;
+    private final ApplicationDataRepository applicationDataRepository;
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
         log.info("Handling data import event for tenant {} and manufacturer {}.", dataImportEvent.thirdPartyApiConfiguration().getTenantId(), dataImportEvent.thirdPartyApiConfiguration().getManufacturer());
         var manufacturer = dataImportEvent.thirdPartyApiConfiguration().getManufacturer();
         var tenantId = dataImportEvent.thirdPartyApiConfiguration().getTenantId();
-        if (subscriptionStatus.sendOutSubscriptions()) {
-            try {
-                subscriptionService(tenantId).subscribe(Arrays.stream(MeasurementType.values()).map(Enum::name).toArray(String[]::new));
-                log.info("Subscribed to device measurement notifications.");
-                subscriptionStatus.setSubscriptionsSent(true);
-            } catch (FiwareIntegrationLayerException e) {
-                log.error("Could not subscribe to device measurement notifications.");
-            }
+        var optionalTenant = applicationDataRepository.getTenant(tenantId);
+        if (optionalTenant.isEmpty()) {
+            log.error("Tenant with id {} not found, not able to handle data import event", tenantId);
         } else {
-            log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
-        }
-        switch (manufacturer) {
-            case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenantId);
-            case AGVOLUTION -> agvolutionMeasurementImport.run(tenantId);
-            case AGRANIMO -> agranimoMeasurementImport.run(tenantId);
-            case FARM21 -> farm21MeasurementImport.run(tenantId);
-            case SENSOTERRA -> sensoterraMeasurementImport.run(tenantId);
-            case SENTEK -> sentekMeasurementImport.run(tenantId);
-            case WEENAT -> weenatMeasurementImport.run(tenantId);
-            case MICA_SENSE -> log.info("There is no scheduled data import for MicaSense");
-            default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
+            var tenant = optionalTenant.get();
+            if (subscriptionStatus.sendOutSubscriptions()) {
+                try {
+                    subscriptionService(tenantId).subscribe(Arrays.stream(MeasurementType.values()).map(Enum::name).toArray(String[]::new));
+                    log.info("Subscribed to device measurement notifications.");
+                    subscriptionStatus.setSubscriptionsSent(true);
+                } catch (FiwareIntegrationLayerException e) {
+                    log.error("Could not subscribe to device measurement notifications.");
+                }
+            } else {
+                log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
+            }
+            switch (manufacturer) {
+                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant);
+                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant);
+                case AGRANIMO -> agranimoMeasurementImport.run(tenant);
+                case FARM21 -> farm21MeasurementImport.run(tenant);
+                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant);
+                case SENTEK -> sentekMeasurementImport.run(tenant);
+                case WEENAT -> weenatMeasurementImport.run(tenant);
+                case MICA_SENSE -> log.info("There is no scheduled data import for MicaSense");
+                default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
+            }
         }
     }
 

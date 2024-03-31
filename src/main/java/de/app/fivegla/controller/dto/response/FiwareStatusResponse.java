@@ -1,5 +1,6 @@
 package de.app.fivegla.controller.dto.response;
 
+import de.app.fivegla.api.Response;
 import de.app.fivegla.fiware.model.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Builder
 @Schema(description = "Response wrapper.")
-public class FiwareStatusResponse {
+public class FiwareStatusResponse extends Response {
 
     /**
      * The status of the fiware connection.

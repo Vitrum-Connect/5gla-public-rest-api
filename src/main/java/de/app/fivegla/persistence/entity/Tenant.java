@@ -75,4 +75,8 @@ public class Tenant implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public String getFiwarePrefix() {
+        return "urn:ngsi-ld:" + tenantId + ":";
+    }
 }

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class MicaSenseFiwareIntegrationServiceWrapper {
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
 
-    @Value("${app.sensors.micasense.imagePathBaseUrl}")
+    @Value("${app.imagePathBaseUrl}")
     private String imagePathBaseUrl;
 
     /**

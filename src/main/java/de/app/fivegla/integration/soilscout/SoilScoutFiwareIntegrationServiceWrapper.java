@@ -10,6 +10,7 @@ import de.app.fivegla.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
      *
      * @param sensorData the sensor data to create
      */
-    public void persist(Tenant tenant, SensorData sensorData) {
-        var soilScoutSensor = soilScoutSensorIntegrationService.fetch(sensorData.getDevice());
+    public void persist(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, SensorData sensorData) {
+        var soilScoutSensor = soilScoutSensorIntegrationService.fetch(thirdPartyApiConfiguration, sensorData.getDevice());
         log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
 
         var temperature = new DeviceMeasurement(

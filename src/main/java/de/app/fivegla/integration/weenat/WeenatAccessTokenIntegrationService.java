@@ -6,6 +6,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.weenat.cache.WeenatUserDataCache;
 import de.app.fivegla.integration.weenat.request.LoginRequest;
 import de.app.fivegla.integration.weenat.response.AccessTokenResponse;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WeenatAccessTokenIntegrationService extends AbstractIntegrationService {
+public class WeenatAccessTokenIntegrationService {
 
     private final WeenatUserDataCache userDataCache;
     private final RestTemplate restTemplate;
@@ -31,16 +32,19 @@ public class WeenatAccessTokenIntegrationService extends AbstractIntegrationServ
      * @return The retrieved access token.
      * @throws BusinessException If there is an error during the login process or if the login response is empty.
      */
-    public String fetchAccessToken() {
+    public String fetchAccessToken(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+        var url = thirdPartyApiConfiguration.getUrl();
+        var username = thirdPartyApiConfiguration.getUsername();
+        var password = thirdPartyApiConfiguration.getPassword();
         if (userDataCache.isExpired()) {
             try {
-                if (StringUtils.isAnyBlank(getUsername(), getPassword())) {
+                if (StringUtils.isAnyBlank(username, password)) {
                     throw new BusinessException(ErrorMessage.builder()
                             .error(Error.WEENAT_COULD_NOT_LOGIN_AGAINST_API)
                             .message("Could not login against the API. Username or password is empty.")
                             .build());
                 }
-                var response = restTemplate.postForEntity(getUrl() + "/api-token-auth", new LoginRequest(getUsername(), getPassword()), AccessTokenResponse.class);
+                var response = restTemplate.postForEntity(url + "/api-token-auth", new LoginRequest(username, password), AccessTokenResponse.class);
                 if (response.getStatusCode() != HttpStatus.OK) {
                     log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()

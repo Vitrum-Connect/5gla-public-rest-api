@@ -6,6 +6,8 @@ import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -23,21 +25,13 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class ProbeDataIntegrationService extends AbstractIntegrationService {
+@RequiredArgsConstructor
+public class ProbeDataIntegrationService {
 
     private final LocationIntegrationService locationIntegrationService;
     private final ProbeIntegrationService probeIntegrationService;
     private final RestTemplate restTemplate;
-
-    public ProbeDataIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService,
-                                       LocationIntegrationService locationIntegrationService,
-                                       ProbeIntegrationService probeIntegrationService,
-                                       RestTemplate restTemplate) {
-        super(apiKeyIntegrationService);
-        this.locationIntegrationService = locationIntegrationService;
-        this.probeIntegrationService = probeIntegrationService;
-        this.restTemplate = restTemplate;
-    }
+    private final ApiKeyIntegrationService apiKeyIntegrationService;
 
     /**
      * Fetches all probes from the Sensoterra API.
@@ -45,17 +39,17 @@ public class ProbeDataIntegrationService extends AbstractIntegrationService {
      * @param begin The beginning date to fetch the data for.
      * @return Map of probes.
      */
-    public Map<Probe, List<ProbeData>> fetchAll(Instant begin) {
+    public Map<Probe, List<ProbeData>> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant begin) {
         var probeData = new HashMap<Probe, List<ProbeData>>();
-        var locations = locationIntegrationService.fetchAll();
-        locations.forEach(location -> probeIntegrationService.fetchAll(location).forEach(probe -> {
+        var locations = locationIntegrationService.fetchAll(thirdPartyApiConfiguration);
+        locations.forEach(location -> probeIntegrationService.fetchAll(thirdPartyApiConfiguration, location).forEach(probe -> {
             try {
                 var headers = new HttpHeaders();
                 headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 headers.setContentType(MediaType.APPLICATION_JSON);
-                headers.add("api_key", getApiKey());
+                headers.add("api_key", apiKeyIntegrationService.fetchApiKey(thirdPartyApiConfiguration));
                 var httpEntity = new HttpEntity<>(headers);
-                var uri = UriComponentsBuilder.fromHttpUrl(url + "/probe/{probeId}/{from}/{to}")
+                var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/probe/{probeId}/{from}/{to}")
                         .encode()
                         .toUriString();
                 var uriVariables = Map.of(

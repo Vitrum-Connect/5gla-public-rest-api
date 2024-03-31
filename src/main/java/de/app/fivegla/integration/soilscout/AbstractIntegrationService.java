@@ -9,9 +9,9 @@ import de.app.fivegla.integration.soilscout.dto.request.TokenRefreshRequest;
 import de.app.fivegla.integration.soilscout.dto.request.TokenRequest;
 import de.app.fivegla.integration.soilscout.dto.response.AccessAndRefreshTokenResponse;
 import de.app.fivegla.integration.soilscout.dto.response.SsoResponse;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,31 +27,22 @@ import java.util.Objects;
 @Slf4j
 abstract class AbstractIntegrationService {
 
-    @Value("${app.sensors.soilscout.url}")
-    protected String url;
-
-    @Value("${app.sensors.soilscout.username}")
-    private String username;
-
-    @Value("${app.sensors.soilscout.password}")
-    private String password;
-
     @Autowired
     protected SoilScoutAccessTokenCache soilScoutAccessTokenCache;
 
     @Autowired
     protected RestTemplate restTemplate;
 
-    protected String getAccessToken() {
+    protected String getAccessToken(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         if (soilScoutAccessTokenCache.isAccessTokenValid()) {
             log.debug("Access token is still valid. Using the access token from cache.");
         } else {
-            getBearerToken();
+            getBearerToken(thirdPartyApiConfiguration.getUsername(), thirdPartyApiConfiguration.getPassword(), thirdPartyApiConfiguration.getUrl());
         }
         return soilScoutAccessTokenCache.getAccessAndRefreshTokenResponse().getAccess();
     }
 
-    private void getBearerToken() {
+    private void getBearerToken(String username, String password, String url) {
         if (soilScoutAccessTokenCache.isRefreshTokenValid()) {
             log.debug("Refresh token is still valid. Fetching a new access / refresh token.");
             var soilScoutTokenRefreshRequest = TokenRefreshRequest.builder()
@@ -69,7 +60,7 @@ abstract class AbstractIntegrationService {
             }
         } else {
             log.debug("Refresh token is not valid. Fetching a new access / refresh token.");
-            String ssoToken = getSsoToken();
+            String ssoToken = getSsoToken(username, password, url);
             var soilScoutTokenRequest = TokenRequest.builder()
                     .ssoToken(ssoToken)
                     .build();
@@ -86,7 +77,7 @@ abstract class AbstractIntegrationService {
         }
     }
 
-    private String getSsoToken() {
+    private String getSsoToken(String username, String password, String url) {
         var soilScoutSsoRequest = SsoRequest.builder()
                 .username(username)
                 .password(password)

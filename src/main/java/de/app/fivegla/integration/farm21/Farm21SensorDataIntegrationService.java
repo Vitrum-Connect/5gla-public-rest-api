@@ -7,6 +7,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.farm21.dto.response.SensorDataResponse;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -27,7 +28,7 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class Farm21SensorDataIntegrationService extends AbstractIntegrationService {
+public class Farm21SensorDataIntegrationService {
 
     private final Farm21SensorIntegrationService farm21SensorIntegrationService;
     private final RestTemplate restTemplate;
@@ -35,18 +36,19 @@ public class Farm21SensorDataIntegrationService extends AbstractIntegrationServi
     /**
      * Fetches all sensor data for all sensors from the Farm21 API.
      *
-     * @param since Start date.
-     * @param until End date.
+     * @param thirdPartyApiConfiguration Configuration for the third party API.
+     * @param since                      Start date.
+     * @param until                      End date.
      * @return Map of sensors with sensor data.
      */
-    public Map<Sensor, List<SensorData>> fetchAll(Instant since, Instant until) {
+    public Map<Sensor, List<SensorData>> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant since, Instant until) {
         try {
-            var sensors = farm21SensorIntegrationService.fetchAll();
+            var sensors = farm21SensorIntegrationService.fetchAll(thirdPartyApiConfiguration);
             log.debug("Found {} sensors", sensors.size());
             Map<Sensor, List<SensorData>> sensorsWithSensorData = new HashMap<>();
             sensors.forEach(sensor -> {
                 log.debug("Processing sensor {}", sensor.getId());
-                var sensorData = fetchAllForSensor(sensor.getId(), since, until);
+                var sensorData = fetchAllForSensor(thirdPartyApiConfiguration, sensor.getId(), since, until);
                 log.debug("Found {} sensor data for sensor {}", sensorData.size(), sensor.getId());
                 if (!sensorData.isEmpty()) {
                     sensorsWithSensorData.put(sensor, sensorData);
@@ -63,11 +65,13 @@ public class Farm21SensorDataIntegrationService extends AbstractIntegrationServi
         return Collections.emptyMap();
     }
 
-    private List<SensorData> fetchAllForSensor(int sensorId, Instant since, Instant until) {
+    private List<SensorData> fetchAllForSensor(ThirdPartyApiConfiguration thirdPartyApiConfiguration, int sensorId, Instant since, Instant until) {
+        var url = thirdPartyApiConfiguration.getUrl();
+        var accessToken = thirdPartyApiConfiguration.getApiToken();
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            headers.setBearerAuth(getAccessToken());
+            headers.setBearerAuth(accessToken);
             var httpEntity = new HttpEntity<String>(headers);
             var uri = UriComponentsBuilder.fromHttpUrl(url + "/sensors/{id}/data?start_date={since}&end_date={until}")
                     .encode()

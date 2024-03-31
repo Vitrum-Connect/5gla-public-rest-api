@@ -6,6 +6,7 @@ import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,20 +38,20 @@ public class SentekMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.SENTEK).isPresent()) {
                 log.info("Running scheduled data import from Sentek API");
                 var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENTEK).get();
-                var measurements = sentekSensorDataIntegrationService.fetchAll(lastRun);
+                var measurements = sentekSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun);
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, loggerListEntry));
             } else {
                 log.info("Running initial data import from Sentek API, this may take a while");
-                var measurements = sentekSensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
+                var measurements = sentekSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());

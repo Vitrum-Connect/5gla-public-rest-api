@@ -6,6 +6,7 @@ import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,20 +38,20 @@ public class SensoterraMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             var lastRun = applicationDataRepository.getLastRun(Manufacturer.SENSOTERRA);
             if (lastRun.isPresent()) {
                 log.info("Running scheduled data import from Sensoterra API");
-                var seriesEntries = probeDataIntegrationService.fetchAll(lastRun.get());
+                var seriesEntries = probeDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun.get());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
                 seriesEntries.entrySet().forEach(probeListEntry -> persistDataWithinFiware(tenant, probeListEntry));
             } else {
                 log.info("Running initial data import from Sensoterra API, this may take a while");
-                var seriesEntries = probeDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
+                var seriesEntries = probeDataIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());

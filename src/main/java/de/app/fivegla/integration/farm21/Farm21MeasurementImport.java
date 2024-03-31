@@ -6,6 +6,7 @@ import de.app.fivegla.integration.farm21.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,20 +38,20 @@ public class Farm21MeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.FARM21).isPresent()) {
                 log.info("Running scheduled data import from Farm21 API");
                 var lastRun = applicationDataRepository.getLastRun(Manufacturer.FARM21).get();
-                var measurements = farm21SensorDataIntegrationService.fetchAll(lastRun, Instant.now());
+                var measurements = farm21SensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun, Instant.now());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, sensorListEntry));
             } else {
                 log.info("Running initial data import from Farm21 API, this may take a while");
-                var measurements = farm21SensorDataIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
+                var measurements = farm21SensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());

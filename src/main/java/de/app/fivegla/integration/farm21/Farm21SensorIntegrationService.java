@@ -3,6 +3,7 @@ package de.app.fivegla.integration.farm21;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.integration.farm21.model.Sensor;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -22,7 +23,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class Farm21SensorIntegrationService extends AbstractIntegrationService {
+public class Farm21SensorIntegrationService {
 
     private final RestTemplate restTemplate;
 
@@ -31,11 +32,13 @@ public class Farm21SensorIntegrationService extends AbstractIntegrationService {
      *
      * @return List of sensors.
      */
-    public List<Sensor> fetchAll() {
+    public List<Sensor> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+        var url = thirdPartyApiConfiguration.getUrl();
+        var accessToken = thirdPartyApiConfiguration.getApiToken();
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            headers.setBearerAuth(getAccessToken());
+            headers.setBearerAuth(accessToken);
             var httpEntity = new HttpEntity<String>(headers);
             var response = restTemplate.exchange(url + "/organisation/sensors", HttpMethod.GET, httpEntity, Sensor[].class);
             if (response.getStatusCode().is2xxSuccessful()) {

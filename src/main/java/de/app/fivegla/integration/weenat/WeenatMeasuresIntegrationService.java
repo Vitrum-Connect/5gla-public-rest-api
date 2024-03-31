@@ -9,6 +9,7 @@ import de.app.fivegla.integration.weenat.model.Measurement;
 import de.app.fivegla.integration.weenat.model.MeasurementValues;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -22,23 +23,23 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WeenatMeasuresIntegrationService extends AbstractIntegrationService {
+public class WeenatMeasuresIntegrationService {
 
     private final WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService;
     private final WeenatPlotIntegrationService weenatPlotIntegrationService;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public Map<Plot, Measurements> fetchAll(Instant start) {
+    public Map<Plot, Measurements> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
         Map<Plot, Measurements> plotsWithMeasurements = new HashMap<>();
-        var plots = weenatPlotIntegrationService.fetchAll();
+        var plots = weenatPlotIntegrationService.fetchAll(thirdPartyApiConfiguration);
         plots.forEach(plot -> {
             var measurementsBuilder = Measurements.builder().plot(plot);
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            headers.setBearerAuth(weenatAccessTokenIntegrationService.fetchAccessToken());
+            headers.setBearerAuth(weenatAccessTokenIntegrationService.fetchAccessToken(thirdPartyApiConfiguration));
             var httpEntity = new HttpEntity<String>(headers);
-            var uri = UriComponentsBuilder.fromHttpUrl(getUrl() + "/v2/access/plots/{plotId}/measures?start={start}&end={end}")
+            var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/v2/access/plots/{plotId}/measures?start={start}&end={end}")
                     .encode()
                     .toUriString();
             var uriVariables = Map.of(

@@ -6,9 +6,9 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agvolution.cache.AccessTokenCache;
 import de.app.fivegla.integration.agvolution.dto.Credentials;
 import de.app.fivegla.integration.agvolution.dto.request.LoginRequest;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,22 +21,16 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AccessTokenIntegrationService {
 
-    @Value("${app.sensors.agvolution.url}")
-    private String url;
-
-    @Value("${app.sensors.agvolution.username}")
-    private String username;
-
-    @Value("${app.sensors.agvolution.password}")
-    private String password;
-
     private final AccessTokenCache accessTokenCache;
     private final RestTemplate restTemplate;
 
     /**
      * Fetch the access token from the API.
      */
-    public String fetchAccessToken() {
+    public String fetchAccessToken(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+        var url = thirdPartyApiConfiguration.getUrl();
+        var username = thirdPartyApiConfiguration.getUsername();
+        var password = thirdPartyApiConfiguration.getPassword();
         if (accessTokenCache.isExpired()) {
             try {
                 var response = restTemplate.postForEntity(url + "/auth/session", new LoginRequest(username, password), Credentials.class);

@@ -6,9 +6,9 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.SoilMoistureType;
 import de.app.fivegla.integration.agranimo.model.Zone;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,36 +27,34 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AgranimoSoilMoistureIntegrationService {
 
-    @Value("${app.sensors.agranimo.url}")
-    private String url;
-
     private final AgranimoLoginIntegrationService loginService;
     private final RestTemplate restTemplate;
 
     /**
      * Fetch the water content from the API.
      *
-     * @param zone  The zone to fetch the data for.
-     * @param since The date since to fetch the data.
+     * @param thirdPartyApiConfiguration The configuration for the third party API.
+     * @param zone                       The zone to fetch the data for.
+     * @param since                      The date since to fetch the data.
      * @return The water content.
      */
-    public List<SoilMoisture> fetchWaterContent(Zone zone, Instant since) {
-        return fetchAll(zone, since);
+    public List<SoilMoisture> fetchWaterContent(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Zone zone, Instant since) {
+        return fetchAll(thirdPartyApiConfiguration, zone, since);
     }
 
     /**
      * Fetch the soil moisture from the API.
      */
-    private List<SoilMoisture> fetchAll(Zone zone, Instant since) {
+    private List<SoilMoisture> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Zone zone, Instant since) {
         var until = Instant.now();
         log.info("Fetching soil moisture data for zone {}.", zone.getName());
         log.debug("Fetching soil moisture data for zone {} from {} to {}.", zone.getId(), since, until);
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            headers.setBearerAuth(loginService.fetchAccessToken());
+            headers.setBearerAuth(loginService.fetchAccessToken(thirdPartyApiConfiguration));
             var httpEntity = new HttpEntity<>(headers);
-            var uri = UriComponentsBuilder.fromHttpUrl(url + "/zone/{zoneId}/data/soilmoisture?dateStart={since}&dateEnd={until}&type={type}")
+            var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/zone/{zoneId}/data/soilmoisture?dateStart={since}&dateEnd={until}&type={type}")
                     .encode()
                     .toUriString();
             var uriVariables = Map.of(

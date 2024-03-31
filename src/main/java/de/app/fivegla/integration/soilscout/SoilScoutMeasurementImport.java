@@ -5,6 +5,7 @@ import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,24 +35,24 @@ public class SoilScoutMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             if (applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {
                 log.info("Running scheduled data import from Soil Scout API");
                 var lastRun = applicationDataRepository.getLastRun(Manufacturer.SOILSCOUT).get();
-                var measurements = soilScoutMeasurementIntegrationService.fetchAll(lastRun, Instant.now());
+                var measurements = soilScoutMeasurementIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun, Instant.now());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.forEach(measurement -> persistDataWithinFiware(tenant, measurement));
+                measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
             } else {
                 log.info("Running initial data import from Soil Scout API, this may take a while");
-                var measurements = soilScoutMeasurementIntegrationService.fetchAll(Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
+                var measurements = soilScoutMeasurementIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.forEach(measurement -> persistDataWithinFiware(tenant, measurement));
+                measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
             }
             applicationDataRepository.updateLastRun(Manufacturer.SOILSCOUT);
         } catch (Exception e) {
@@ -64,8 +65,8 @@ public class SoilScoutMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(Tenant tenant, SensorData measurement) {
-        fiwareIntegrationServiceWrapper.persist(tenant, measurement);
+    private void persistDataWithinFiware(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, SensorData measurement) {
+        fiwareIntegrationServiceWrapper.persist(tenant, thirdPartyApiConfiguration, measurement);
     }
 
 }

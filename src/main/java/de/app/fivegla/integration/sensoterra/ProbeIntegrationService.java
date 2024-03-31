@@ -5,6 +5,8 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.model.Location;
 import de.app.fivegla.integration.sensoterra.model.Probe;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -20,15 +22,11 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class ProbeIntegrationService extends AbstractIntegrationService {
+@RequiredArgsConstructor
+public class ProbeIntegrationService {
 
     private final RestTemplate restTemplate;
-
-    public ProbeIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService,
-                                   RestTemplate restTemplate) {
-        super(apiKeyIntegrationService);
-        this.restTemplate = restTemplate;
-    }
+    private final ApiKeyIntegrationService apiKeyIntegrationService;
 
     /**
      * Fetches all probes from the Sensoterra API.
@@ -36,14 +34,14 @@ public class ProbeIntegrationService extends AbstractIntegrationService {
      * @param location The location to fetch the probes for.
      * @return List of probes.
      */
-    public List<Probe> fetchAll(Location location) {
+    public List<Probe> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Location location) {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("api_key", getApiKey());
+            headers.add("api_key", apiKeyIntegrationService.fetchApiKey(thirdPartyApiConfiguration));
             var httpEntity = new HttpEntity<>(headers);
-            var uri = UriComponentsBuilder.fromHttpUrl(url + "/probe/{locationId}")
+            var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/probe/{locationId}")
                     .encode()
                     .toUriString();
             var uriVariables = Map.of(

@@ -49,6 +49,7 @@ public class DataImportEventHandler {
             log.error("Tenant with id {} not found, not able to handle data import event", tenantId);
         } else {
             var tenant = optionalTenant.get();
+            var config = dataImportEvent.thirdPartyApiConfiguration();
             if (subscriptionStatus.sendOutSubscriptions()) {
                 try {
                     subscriptionService(tenantId).subscribe(Arrays.stream(MeasurementType.values()).map(Enum::name).toArray(String[]::new));
@@ -61,13 +62,13 @@ public class DataImportEventHandler {
                 log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
             }
             switch (manufacturer) {
-                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant);
-                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant);
-                case AGRANIMO -> agranimoMeasurementImport.run(tenant);
-                case FARM21 -> farm21MeasurementImport.run(tenant);
-                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant);
-                case SENTEK -> sentekMeasurementImport.run(tenant);
-                case WEENAT -> weenatMeasurementImport.run(tenant);
+                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant, config);
+                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant, config);
+                case AGRANIMO -> agranimoMeasurementImport.run(tenant, config);
+                case FARM21 -> farm21MeasurementImport.run(tenant, config);
+                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, config);
+                case SENTEK -> sentekMeasurementImport.run(tenant, config);
+                case WEENAT -> weenatMeasurementImport.run(tenant, config);
                 case MICA_SENSE -> log.info("There is no scheduled data import for MicaSense");
                 default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
             }

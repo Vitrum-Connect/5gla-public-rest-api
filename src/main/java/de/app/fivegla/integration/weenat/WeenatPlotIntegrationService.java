@@ -4,6 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.weenat.model.Plot;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import java.util.List;
 @Setter
 @Service
 @RequiredArgsConstructor
-public class WeenatPlotIntegrationService extends AbstractIntegrationService {
+public class WeenatPlotIntegrationService {
 
     private final WeenatAccessTokenIntegrationService weenatAccessTokenIntegrationService;
     private final RestTemplate restTemplate;
@@ -31,12 +32,12 @@ public class WeenatPlotIntegrationService extends AbstractIntegrationService {
      * @return a list of metadata objects
      * @throws BusinessException if there was an error fetching the metadata
      */
-    public List<Plot> fetchAll() {
+    public List<Plot> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(weenatAccessTokenIntegrationService.fetchAccessToken());
+        headers.setBearerAuth(weenatAccessTokenIntegrationService.fetchAccessToken(thirdPartyApiConfiguration));
         var httpEntity = new HttpEntity<String>(headers);
-        var response = restTemplate.exchange(getUrl() + "/v2/access/plots", HttpMethod.GET, httpEntity, Plot[].class);
+        var response = restTemplate.exchange(thirdPartyApiConfiguration.getUrl() + "/v2/access/plots", HttpMethod.GET, httpEntity, Plot[].class);
         if (response.getStatusCode() != HttpStatus.OK) {
             log.error("Could not fetch metadata from the API. Response code was {}.", response.getStatusCode());
             throw new BusinessException(ErrorMessage.builder()

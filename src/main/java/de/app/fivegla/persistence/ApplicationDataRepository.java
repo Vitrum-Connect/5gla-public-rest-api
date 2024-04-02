@@ -4,6 +4,7 @@ import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -82,35 +83,6 @@ public class ApplicationDataRepository {
     }
 
     /**
-     * Disables a job for a specific manufacturer.
-     *
-     * @param manufacturer The manufacturer for which the job is disabled.
-     *                     Possible values are:
-     *                     - SOILSCOUT
-     *                     - AGRANIMO
-     *                     - FARM21
-     *                     - MICA_SENSE
-     *                     - AGVOLUTION
-     *                     - SENSOTERRA
-     *                     - SENTEK
-     *                     - WEENAT
-     */
-    public void disableJob(Manufacturer manufacturer) {
-        applicationData.disableJob(manufacturer);
-    }
-
-    /**
-     * Checks if the specified job is enabled for the given manufacturer.
-     *
-     * @param manufacturer The manufacturer for which to check the job status.
-     * @return True if the job is enabled for the manufacturer, false otherwise.
-     * @see Manufacturer
-     */
-    public boolean isTheJobEnabled(Manufacturer manufacturer) {
-        return !applicationData.isTheJobDisabled(manufacturer);
-    }
-
-    /**
      * Adds a tenant to the system.
      *
      * @param tenant The tenant to add.
@@ -128,5 +100,42 @@ public class ApplicationDataRepository {
      */
     public Optional<Tenant> getTenant(String tenantId) {
         return applicationData.getTenant(tenantId);
+    }
+
+    /**
+     * Finds all tenants in the system.
+     *
+     * @return A list of all tenants in the system.
+     */
+    public List<Tenant> findAllTenants() {
+        return applicationData.getTenants();
+
+    }
+
+    /**
+     * Add third party API configuration.
+     */
+    public void addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
+        applicationData.addThirdPartyApiConfiguration(configuration);
+    }
+
+    /**
+     * Retrieves a list of ThirdPartyApiConfigurations based on the provided tenant ID.
+     *
+     * @param name The ID of the tenant.
+     * @return A list of ThirdPartyApiConfigurations that match the given tenant ID.
+     */
+    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String name) {
+        return applicationData.getThirdPartyApiConfigurations().stream().filter(configuration -> configuration.getTenantId().equals(name)).toList();
+    }
+
+    /**
+     * Deletes a third-party API configuration.
+     *
+     * @param tenantId     The ID of the tenant for which to delete the third-party API configuration.
+     * @param manufacturer The manufacturer of the third-party API configuration.
+     */
+    public void deleteThirdPartyApiConfiguration(String tenantId, Manufacturer manufacturer) {
+        applicationData.deleteThirdPartyApiConfiguration(tenantId, manufacturer);
     }
 }

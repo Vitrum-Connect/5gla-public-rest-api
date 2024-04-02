@@ -1,15 +1,18 @@
 package de.app.fivegla.controller.tenant;
 
+import de.app.fivegla.api.Response;
 import de.app.fivegla.business.AgriCropService;
-import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
+import de.app.fivegla.controller.api.BaseMappings;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,40 +30,56 @@ public class AgriCropController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "agri-crop.import-geojson",
             description = "Imports the GeoJSON containing the agri-crop data.",
-            tags = OperationTags.AGRI_CROP
+            tags = BaseMappings.AGRI_CROP
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The CSV was imported successfully."
+            description = "The CSV was imported successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
-    @PostMapping("/geo-json/feature")
-    public ResponseEntity<Void> importGeoJson(@RequestBody @Parameter(description = "The crop, represented as GeoJSON (RFC 7946).") String geoJson) {
+    @PostMapping(value = "/geo-json/feature", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> importGeoJson(@RequestBody @Parameter(description = "The crop, represented as GeoJSON (RFC 7946).") String geoJson) {
         var feature = agriCropService.parseFeature(geoJson);
         log.debug("Parsed feature: {}.", feature);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
     }
 
     @Operation(
             operationId = "agri-crop.import-csv",
             description = "Imports the CSV containing the agri-crop data.",
-            tags = OperationTags.AGRI_CROP
+            tags = BaseMappings.AGRI_CROP
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The CSV was imported successfully."
+            description = "The CSV was imported successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
-    @PostMapping("/csv/feature")
-    public ResponseEntity<Void> importCsv(@RequestBody @Parameter(description = "The crop, represented as CSV") String csv) {
+    @PostMapping(value = "/csv/feature", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> importCsv(@RequestBody @Parameter(description = "The crop, represented as CSV") String csv) {
         var feature = agriCropService.createFeatureFromCsv(csv);
         log.debug("Parsed feature: {}.", feature);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
     }
 }

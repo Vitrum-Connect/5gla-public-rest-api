@@ -1,24 +1,22 @@
 package de.app.fivegla.controller.global;
 
 
-import de.app.fivegla.api.SubscriptionStatus;
-import de.app.fivegla.api.enums.MeasurementType;
-import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
+import de.app.fivegla.api.Response;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
-import de.app.fivegla.fiware.SubscriptionService;
+import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.scheduled.DataImportScheduler;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Arrays;
 
 /**
  * The MaintenanceController class handles maintenance-related operations.
@@ -33,42 +31,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class MaintenanceController implements ApiKeyApiAccess {
 
-    private final SubscriptionService subscriptionService;
     private final DataImportScheduler dataImportScheduler;
-    private final SubscriptionStatus subscriptionStatus;
-
-
-    /**
-     * Sends a subscription for device measurement notifications.
-     *
-     * @return A ResponseEntity object with HTTP status code and an empty body.
-     */
-    @Operation(
-            operationId = "maintenance.send-subscription",
-            description = "Sends a subscription for device measurement notifications.",
-            tags = OperationTags.MAINTENANCE
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "The subscription was sent successfully."
-    )
-    @ApiResponse(
-            responseCode = "400",
-            description = "The request is invalid since the subscriptions are disabled."
-    )
-    @PostMapping("/send-subscription")
-    public ResponseEntity<Void> sendSubscription() {
-        if (subscriptionStatus.isSubscriptionsEnabled()) {
-            Arrays.stream(MeasurementType.values()).forEach(type -> subscriptionService.removeAll(type.name()));
-            subscriptionService.subscribe(Arrays.stream(MeasurementType.values()).map(Enum::name).toArray(String[]::new));
-            log.info("Subscribed to device measurement notifications.");
-            subscriptionStatus.setSubscriptionsSent(true);
-            return ResponseEntity.ok().build();
-        } else {
-            log.warn("Subscriptions are disabled. Not subscribing to device measurement notifications.");
-            return ResponseEntity.badRequest().build();
-        }
-    }
 
     /**
      * Run the import.
@@ -76,16 +39,20 @@ public class MaintenanceController implements ApiKeyApiAccess {
     @Operation(
             operationId = "manual.import.run",
             description = "Run the import manually.",
-            tags = OperationTags.MAINTENANCE
+            tags = BaseMappings.MAINTENANCE
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The import has been started asynchronously."
+            description = "The import has been started asynchronously.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
-    @PostMapping(value = "/run")
-    public ResponseEntity<Void> runAllImports() {
+    @PostMapping(value = "/run", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> runAllImports() {
         dataImportScheduler.scheduleDataImport();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(new Response());
     }
 
 }

@@ -2,8 +2,6 @@ package de.app.fivegla.integration.agvolution;
 
 
 import de.app.fivegla.api.enums.MeasurementType;
-import de.app.fivegla.config.ApplicationConfiguration;
-import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
@@ -12,6 +10,7 @@ import de.app.fivegla.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.model.TimeSeriesEntry;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,11 +27,10 @@ import java.util.List;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class AgvolutionFiwareIntegrationServiceWrapper {
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
-    private final ApplicationConfiguration applicationConfiguration;
 
-    public void persist(SeriesEntry seriesEntry) {
+    public void persist(Tenant tenant, SeriesEntry seriesEntry) {
         seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
-            var deviceMeasurements = createDeviceMeasurements(seriesEntry, timeSeriesEntry);
+            var deviceMeasurements = createDeviceMeasurements(tenant, seriesEntry, timeSeriesEntry);
             log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
             deviceMeasurements.forEach(deviceMeasurement -> {
                 log.info("Persisting measurement: {}", deviceMeasurement);
@@ -41,13 +39,13 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         });
     }
 
-    private List<DeviceMeasurement> createDeviceMeasurements(SeriesEntry seriesEntry, TimeSeriesEntry timeSeriesEntry) {
+    private List<DeviceMeasurement> createDeviceMeasurements(Tenant tenant, SeriesEntry seriesEntry, TimeSeriesEntry timeSeriesEntry) {
         log.debug("Persisting data for device: {}", seriesEntry.getDeviceId());
         log.debug("Persisting data: {}", timeSeriesEntry);
         var deviceMeasurements = new ArrayList<DeviceMeasurement>();
         timeSeriesEntry.getValues().forEach(timeSeriesValue -> {
             var deviceMeasurement = new DeviceMeasurement(
-                    getManufacturerConfiguration().fiwarePrefix() + seriesEntry.getDeviceId(),
+                    tenant.getFiwarePrefix() + seriesEntry.getDeviceId(),
                     MeasurementType.AGVOLUTION_SENSOR.name(),
                     new TextAttribute(timeSeriesEntry.getKey()),
                     new NumberAttribute(timeSeriesValue.getValue()),
@@ -58,10 +56,6 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
             deviceMeasurements.add(deviceMeasurement);
         });
         return deviceMeasurements;
-    }
-
-    private CommonManufacturerConfiguration getManufacturerConfiguration() {
-        return applicationConfiguration.getSensors().agvolution();
     }
 
 }

@@ -1,12 +1,12 @@
 package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.api.Response;
+import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.LastRunResponse;
 import de.app.fivegla.controller.dto.response.VersionResponse;
-import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.fiware.StatusService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +51,7 @@ public class InfoController implements ApiKeyApiAccess {
     @Operation(
             operationId = "info.version",
             description = "Fetch the version of the application.",
-            tags = OperationTags.INFO
+            tags = BaseMappings.INFO
     )
     @ApiResponse(
             responseCode = "200",
@@ -61,8 +61,8 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = VersionResponse.class)
             )
     )
-    @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VersionResponse> getVersion() {
+    @GetMapping(value = "/version", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getVersion() {
         return ResponseEntity.ok(VersionResponse.builder().version(applicationVersion).build());
     }
 
@@ -74,7 +74,7 @@ public class InfoController implements ApiKeyApiAccess {
     @Operation(
             operationId = "info.fiware",
             description = "Fetch the status of the fiware connection.",
-            tags = OperationTags.INFO
+            tags = BaseMappings.INFO
     )
     @ApiResponse(
             responseCode = "200",
@@ -84,8 +84,8 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = FiwareStatusResponse.class)
             )
     )
-    @GetMapping(value = "/fiware", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FiwareStatusResponse> getFiwareStatus() {
+    @GetMapping(value = "/fiware", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getFiwareStatus() {
         var version = statusService.getVersion();
         return ResponseEntity.ok(FiwareStatusResponse.builder()
                 .fiwareStatus(HttpStatus.OK)
@@ -102,7 +102,7 @@ public class InfoController implements ApiKeyApiAccess {
     @Operation(
             operationId = "info.last-rum",
             description = "Fetch the last run of the import.",
-            tags = OperationTags.INFO
+            tags = BaseMappings.INFO
     )
     @ApiResponse(
             responseCode = "200",
@@ -112,8 +112,8 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = LastRunResponse.class)
             )
     )
-    @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LastRunResponse> getLastImport() {
+    @GetMapping(value = "/last-run", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getLastImport() {
         var lastRuns = new HashMap<Manufacturer, String>();
         var savedLastRuns = applicationDataRepository.getLastRuns();
         if (null != savedLastRuns) {

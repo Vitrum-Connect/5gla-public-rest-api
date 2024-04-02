@@ -4,11 +4,11 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agranimo.cache.UserDataCache;
-import de.app.fivegla.integration.agranimo.model.Credentials;
 import de.app.fivegla.integration.agranimo.dto.request.LoginRequest;
+import de.app.fivegla.integration.agranimo.model.Credentials;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,24 +21,15 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AgranimoLoginIntegrationService {
 
-    @Value("${app.sensors.agranimo.url}")
-    private String url;
-
-    @Value("${app.sensors.agranimo.username}")
-    private String username;
-
-    @Value("${app.sensors.agranimo.password}")
-    private String password;
-
     private final UserDataCache userDataCache;
     private final RestTemplate restTemplate;
 
     /**
      * Fetch the access token from the API.
      */
-    public String fetchAccessToken() {
+    public String fetchAccessToken(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         if (userDataCache.isExpired()) {
-            return getAccessTokenFromApi();
+            return getAccessTokenFromApi(thirdPartyApiConfiguration);
         } else {
             return userDataCache.getAccessToken();
         }
@@ -50,7 +41,10 @@ public class AgranimoLoginIntegrationService {
      * @return The access token retrieved from the API.
      * @throws BusinessException If an error occurs while logging in against the API.
      */
-    private String getAccessTokenFromApi() {
+    private String getAccessTokenFromApi(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+        var url = thirdPartyApiConfiguration.getUrl();
+        var username = thirdPartyApiConfiguration.getUsername();
+        var password = thirdPartyApiConfiguration.getPassword();
         try {
             var response = restTemplate.postForEntity(url + "/auth/login", new LoginRequest(username, password), Credentials.class);
             if (response.getStatusCode() != HttpStatus.CREATED) {

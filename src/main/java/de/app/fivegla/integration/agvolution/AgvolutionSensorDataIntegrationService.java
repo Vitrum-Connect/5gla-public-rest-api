@@ -9,6 +9,8 @@ import de.app.fivegla.integration.agvolution.dto.response.DeviceTimeseriesDataRe
 import de.app.fivegla.integration.agvolution.dto.response.inner.DeviceTimeSeriesEntry;
 import de.app.fivegla.integration.agvolution.model.Device;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +29,9 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationService {
+@RequiredArgsConstructor
+public class AgvolutionSensorDataIntegrationService {
+
 
     private static final String QUERY = """
             {
@@ -53,15 +57,8 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
             }""";
 
     private final AgvolutionSensorIntegrationService agvolutionSensorIntegrationService;
+    private final AccessTokenIntegrationService accessTokenIntegrationService;
     private final RestTemplate restTemplate;
-
-    AgvolutionSensorDataIntegrationService(AccessTokenIntegrationService accessTokenIntegrationService,
-                                           AgvolutionSensorIntegrationService agvolutionSensorIntegrationService,
-                                           RestTemplate restTemplate) {
-        super(accessTokenIntegrationService);
-        this.agvolutionSensorIntegrationService = agvolutionSensorIntegrationService;
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Fetches all series from the SoilScout API.
@@ -69,10 +66,10 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
      * @param begin The date since to fetch the data.
      * @return List of series.
      */
-    public List<SeriesEntry> fetchAll(Instant begin) {
-        List<Device> allDevices = agvolutionSensorIntegrationService.fetchAll();
+    public List<SeriesEntry> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant begin) {
+        List<Device> allDevices = agvolutionSensorIntegrationService.fetchAll(thirdPartyApiConfiguration);
         return allDevices.stream()
-                .map(device -> fetchAll(device, begin))
+                .map(device -> fetchAll(thirdPartyApiConfiguration, device, begin))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
@@ -83,14 +80,15 @@ public class AgvolutionSensorDataIntegrationService extends AbstractIntegrationS
      *
      * @return List of sensors.
      */
-    List<SeriesEntry> fetchAll(Device device, Instant begin) {
+    List<SeriesEntry> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Device device, Instant begin) {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(getAccessToken());
+            headers.setBearerAuth(accessTokenIntegrationService.fetchAccessToken(thirdPartyApiConfiguration));
+
             var httpEntity = new HttpEntity<>(new QueryRequest(String.format(QUERY, device.getId(), Format.format(begin))), headers);
-            var response = restTemplate.postForEntity(url + "/devices", httpEntity, DeviceTimeseriesDataResponse.class);
+            var response = restTemplate.postForEntity(thirdPartyApiConfiguration.getUrl() + "/devices", httpEntity, DeviceTimeseriesDataResponse.class);
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while login against the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()

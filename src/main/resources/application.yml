@@ -1,61 +1,7 @@
 app:
   version: '@project.version@'
   api-key: ${API_KEY}
-  sensors:
-    farm21:
-      manufacturer: FARM21
-      fiwarePrefix: "urn:5gla:dev:f21:"
-      enabled: ${FARM21_ENABLED}
-      url: https://app.farm21.tech/api/v2/public
-      username: ${FARM21_USERNAME}
-      password: ${FARM21_PASSWORD}
-      apiToken: ${FARM21_API_TOKEN}
-    soilscout:
-      manufacturer: SOIL_SCOUT
-      fiwarePrefix: "urn:5gla:dev:sosc:"
-      enabled: ${SOILSCOUT_ENABLED}
-      url: https://soilscouts.fi/api/v1
-      username: ${SOILSCOUT_USERNAME}
-      password: ${SOILSCOUT_PASSWORD}
-    agranimo:
-      manufacturer: AGRANIMO
-      fiwarePrefix: "urn:5gla:dev:agr:"
-      enabled: ${AGRANIMO_ENABLED}
-      url: https://public.agranimo.com/
-      username: ${AGRANIMO_USERNAME}
-      password: ${AGRANIMO_PASSWORD}
-    agvolution:
-      manufacturer: AGVOLUTION
-      fiwarePrefix: "urn:5gla:dev:agv:"
-      enabled: ${AGVOLUTION_ENABLED}
-      url: https://api.agvolution.com
-      username: ${AGVOLUTION_USERNAME}
-      password: ${AGVOLUTION_PASSWORD}
-    sensoterra:
-      manufacturer: SENSOTERRA
-      fiwarePrefix: "urn:5gla:dev:st:"
-      enabled: ${SENSOTERRA_ENABLED}
-      url: https://monitor.sensoterra.com/api/v3
-      username: ${SENSOTERRA_USERNAME}
-      password: ${SENSOTERRA_PASSWORD}
-    micasense:
-      manufacturer: MICASENSE
-      fiwarePrefix: "urn:5gla:dev:ms:"
-      enabled: ${MICASENSE_ENABLED}
-      imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
-    sentek:
-      manufacturer: SENTEK
-      fiwarePrefix: "urn:5gla:dev:sent:"
-      enabled: ${SENTEK_ENABLED}
-      url: https://www.irrimaxlive.com/api
-      apiToken: ${SENTEK_API_TOKEN}
-    weenat:
-      manufacturer: WEENAT
-      fiwarePrefix: "urn:5gla:dev:wee:"
-      enabled: ${WEENAT_ENABLED}
-      url: https://api-prod.weenat.com/api
-      username: ${WEENAT_USERNAME}
-      password: ${WEENAT_PASSWORD}
+  imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
   scheduled:
     data-import:
       # Spring Boot uses ISO-8601 durations, https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html#parse(java.lang.CharSequence)
@@ -72,7 +18,7 @@ app:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
 logging:
   level:
-    root: info
+    root: debug
     de.app.fivegla: trace
     java.net.http: debug
 one:

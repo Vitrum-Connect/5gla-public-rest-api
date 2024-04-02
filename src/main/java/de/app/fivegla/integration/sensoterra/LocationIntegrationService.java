@@ -4,6 +4,8 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.model.Location;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -17,29 +19,25 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class LocationIntegrationService extends AbstractIntegrationService {
+@RequiredArgsConstructor
+public class LocationIntegrationService {
 
     private final RestTemplate restTemplate;
-
-    public LocationIntegrationService(ApiKeyIntegrationService apiKeyIntegrationService,
-                                      RestTemplate restTemplate) {
-        super(apiKeyIntegrationService);
-        this.restTemplate = restTemplate;
-    }
+    private final ApiKeyIntegrationService apiKeyIntegrationService;
 
     /**
      * Fetches all locations from the API.
      *
      * @return List of locations.
      */
-    public List<Location> fetchAll() {
+    public List<Location> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("api_key", getApiKey());
+            headers.add("api_key", apiKeyIntegrationService.fetchApiKey(thirdPartyApiConfiguration));
             var httpEntity = new HttpEntity<>(headers);
-            var response = restTemplate.exchange(url + "/location", HttpMethod.GET, httpEntity, Location[].class);
+            var response = restTemplate.exchange(thirdPartyApiConfiguration + "/location", HttpMethod.GET, httpEntity, Location[].class);
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while fetching the locations from the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()

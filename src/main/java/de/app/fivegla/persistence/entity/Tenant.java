@@ -34,7 +34,7 @@ public class Tenant implements UserDetails {
     /**
      * The UUID of the tenant.
      */
-    private String uuid;
+    private String tenantId;
 
     /**
      * The access token of the tenant.
@@ -53,7 +53,7 @@ public class Tenant implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getUuid();
+        return getTenantId();
     }
 
     @Override
@@ -74,5 +74,9 @@ public class Tenant implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getFiwarePrefix() {
+        return "urn:ngsi-ld:" + tenantId + ":";
     }
 }

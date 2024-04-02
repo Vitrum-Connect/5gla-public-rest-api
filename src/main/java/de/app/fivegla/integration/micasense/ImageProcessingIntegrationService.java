@@ -1,14 +1,13 @@
 package de.app.fivegla.integration.micasense;
 
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.config.ApplicationConfiguration;
-import de.app.fivegla.config.manufacturer.CommonManufacturerConfiguration;
 import de.app.fivegla.integration.micasense.events.ImageProcessingFinishedEvent;
 import de.app.fivegla.integration.micasense.events.ImageProcessingStartedEvent;
 import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
 import de.app.fivegla.integration.micasense.transactions.ActiveMicaSenseTransactions;
 import de.app.fivegla.persistence.ApplicationDataRepository;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -32,7 +31,6 @@ public class ImageProcessingIntegrationService {
     private final ApplicationDataRepository applicationDataRepository;
     private final ActiveMicaSenseTransactions activeMicaSenseTransactions;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final ApplicationConfiguration applicationConfiguration;
 
     /**
      * Processes an image from the mica sense camera.
@@ -41,11 +39,11 @@ public class ImageProcessingIntegrationService {
      * @param micaSenseChannel The channel the image was taken with.
      * @param base64Image      The base64 encoded tiff image.
      */
-    public String processImage(String transactionId, String droneId, MicaSenseChannel micaSenseChannel, String base64Image) {
+    public String processImage(Tenant tenant, String transactionId, String droneId, MicaSenseChannel micaSenseChannel, String base64Image) {
         var image = Base64.getDecoder().decode(base64Image);
         log.debug("Channel for the image: {}.", micaSenseChannel);
         var micaSenseImage = applicationDataRepository.addMicaSenseImage(MicaSenseImage.builder()
-                .oid(getManufacturerConfiguration().fiwarePrefix() + droneId)
+                .oid(tenant.getFiwarePrefix() + droneId)
                 .channel(micaSenseChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)
@@ -54,7 +52,7 @@ public class ImageProcessingIntegrationService {
                 .measuredAt(exifDataIntegrationService.readMeasuredAt(image))
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(droneId, micaSenseImage);
+        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, droneId, micaSenseImage);
         activeMicaSenseTransactions.add(transactionId, micaSenseImage.getOid());
         return micaSenseImage.getOid();
     }
@@ -102,10 +100,6 @@ public class ImageProcessingIntegrationService {
      */
     public void beginImageProcessing(String droneId, String transactionId) {
         applicationEventPublisher.publishEvent(new ImageProcessingStartedEvent(this, droneId, transactionId));
-    }
-
-    private CommonManufacturerConfiguration getManufacturerConfiguration() {
-        return applicationConfiguration.getSensors().micasense();
     }
 
 }

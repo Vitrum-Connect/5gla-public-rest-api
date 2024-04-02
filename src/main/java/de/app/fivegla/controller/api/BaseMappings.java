@@ -22,7 +22,6 @@ public class BaseMappings {
 
     public static final String MAINTENANCE = SECURED_BY_API_KEY + "/maintenance";
     public static final String INFO = SECURED_BY_API_KEY + "/info";
-    public static final String JOB = SECURED_BY_API_KEY + "/job";
     public static final String TENANT = SECURED_BY_API_KEY + "/tenant";
 
     // SECURED_BY_TENANT
@@ -30,4 +29,5 @@ public class BaseMappings {
     public static final String IMAGE_PROCESSING = SECURED_BY_TENANT + "/image-processing";
     public static final String DEVICE_MEASUREMENT = SECURED_BY_TENANT + "/device-measurement";
     public static final String AGRI_CROP = SECURED_BY_TENANT + "/agri-crop";
+    public static final String THIRD_PARTY_API_CONFIGURATION = SECURED_BY_TENANT + "/3rd-party-api-configuration";
 }

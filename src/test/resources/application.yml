@@ -1,69 +1,7 @@
 app:
   version: '@project.version@'
   api-key: super_secret_api_key
-  sensors:
-    farm21:
-      manufacturer: FARM21
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:farm21:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:farm21:"
-      enabled: true
-      url: https://app.farm21.tech/api/v2/public
-      username: ${FARM21_USERNAME}
-      password: ${FARM21_PASSWORD}
-      apiToken: ${FARM21_API_TOKEN}
-    soilscout:
-      manufacturer: SOIL_SCOUT
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:soilscout:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:soilscout:"
-      enabled: true
-      url: https://soilscouts.fi/api/v1
-      username: ${SOILSCOUT_USERNAME}
-      password: ${SOILSCOUT_PASSWORD}
-    agranimo:
-      manufacturer: AGRANIMO
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agranimo:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agranimo:"
-      enabled: true
-      url: https://public.agranimo.com/
-      username: ${AGRANIMO_USERNAME}
-      password: ${AGRANIMO_PASSWORD}
-    agvolution:
-      manufacturer: AGVOLUTION
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:agvolution:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:agvolution:"
-      enabled: true
-      url: https://api.agvolution.com
-      username: ${AGVOLUTION_USERNAME}
-      password: ${AGVOLUTION_PASSWORD}
-    sensoterra:
-      manufacturer: SENSOTERRA
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:sensoterra:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:sensoterra:"
-      enabled: true
-      url: https://monitor.sensoterra.com/api/v3
-      username: ${SENSOTERRA_USERNAME}
-      password: ${SENSOTERRA_PASSWORD}
-    micasense:
-      manufacturer: MICASENSE
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:micasense:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:micasense:"
-      enabled: true
-      imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
-    sentek:
-      manufacturer: SENTEK
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:sentek:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:sentek:"
-      enabled: true
-      url: https://www.irrimaxlive.com/api
-      apiToken: ${SENTEK_API_TOKEN}
-    weenat:
-      manufacturer: WEENAT
-      fiwareDeviceIdPrefix: "urn:5gla:iotdevice:weenat:"
-      fiwareDeviceMeasurementIdPrefix: "urn:5gla:sensordata:weenat:"
-      enabled: true
-      url: https://api-prod.weenat.com/api
-      username: ${WEENAT_USERNAME}
-      password: ${WEENAT_PASSWORD}
+  imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
   scheduled:
     data-import:
       # Spring Boot uses ISO-8601 durations, https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html#parse(java.lang.CharSequence)

@@ -1,6 +1,5 @@
-package de.app.fivegla.controller.dto.response;
+package de.app.fivegla.api;
 
-import de.app.fivegla.api.Format;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -10,7 +9,7 @@ import java.time.Instant;
  * Base class for all responses.
  */
 @Getter
-abstract class Response {
+public class Response {
 
     /**
      * The timestamp of the response.

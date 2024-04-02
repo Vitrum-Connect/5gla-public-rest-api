@@ -49,7 +49,7 @@ public class TenantServiceTest {
         expectedTenant.setCreatedAt(Instant.now());
         expectedTenant.setName(name);
         expectedTenant.setDescription(description);
-        expectedTenant.setUuid(tenantId);
+        expectedTenant.setTenantId(tenantId);
         when(applicationDataRepository.addTenant(any(Tenant.class))).thenReturn(expectedTenant);
         var actualTenantWithAccessToken = tenantService.create(tenantId, name, description);
         assertEquals(expectedTenant, actualTenantWithAccessToken.tenant());
@@ -62,7 +62,7 @@ public class TenantServiceTest {
         String name = "validName";
         String description = "validDescription";
         Tenant existingTenant = new Tenant();
-        existingTenant.setUuid(tenantId);
+        existingTenant.setTenantId(tenantId);
         when(applicationDataRepository.getTenant(tenantId)).thenReturn(Optional.of(existingTenant));
         assertThrows(BusinessException.class, () -> tenantService.create(tenantId, name, description));
     }

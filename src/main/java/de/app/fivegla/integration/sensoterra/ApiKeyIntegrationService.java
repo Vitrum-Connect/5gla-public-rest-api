@@ -6,9 +6,9 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sensoterra.cache.ApiKeyWithSettingsCache;
 import de.app.fivegla.integration.sensoterra.dto.ApiKeyWithSettings;
 import de.app.fivegla.integration.sensoterra.dto.request.LoginRequest;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,21 +23,15 @@ public class ApiKeyIntegrationService {
 
     private final ApiKeyWithSettingsCache apiKeyWithSettingsCache;
 
-    @Value("${app.sensors.sensoterra.url}")
-    private String url;
-
-    @Value("${app.sensors.sensoterra.username}")
-    private String username;
-
-    @Value("${app.sensors.sensoterra.password}")
-    private String password;
-
     private final RestTemplate restTemplate;
 
     /**
      * Fetch the API key from the API.
      */
-    public String fetchApiKey() {
+    public String fetchApiKey(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+        var url = thirdPartyApiConfiguration.getUrl();
+        var username = thirdPartyApiConfiguration.getUsername();
+        var password = thirdPartyApiConfiguration.getPassword();
         if (apiKeyWithSettingsCache.isExpired()) {
             try {
                 var response = restTemplate.postForEntity(url + "/customer/auth", new LoginRequest(username, password), ApiKeyWithSettings.class);

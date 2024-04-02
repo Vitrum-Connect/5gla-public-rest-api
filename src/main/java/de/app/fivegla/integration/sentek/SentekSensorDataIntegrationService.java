@@ -7,6 +7,7 @@ import de.app.fivegla.api.Format;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -30,7 +31,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SentekSensorDataIntegrationService extends AbstractIntegrationService {
+public class SentekSensorDataIntegrationService {
 
     private final RestTemplate restTemplate;
     private final SentekSensorIntegrationService sentekSensorIntegrationService;
@@ -41,11 +42,11 @@ public class SentekSensorDataIntegrationService extends AbstractIntegrationServi
      * @param from the starting timestamp to fetch readings from
      * @return a map containing the sensor names as keys and a list of readings as values
      */
-    public Map<Logger, List<Reading>> fetchAll(Instant from) {
+    public Map<Logger, List<Reading>> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant from) {
         var readings = new HashMap<Logger, List<Reading>>();
-        var sensors = sentekSensorIntegrationService.fetchAll();
+        var sensors = sentekSensorIntegrationService.fetchAll(thirdPartyApiConfiguration);
         sensors.forEach(sensor -> {
-            var allReadingsForSensor = fetchAll(sensor.getName(), from);
+            var allReadingsForSensor = fetchAll(thirdPartyApiConfiguration, sensor.getName(), from);
             readings.put(sensor, allReadingsForSensor);
         });
         return readings;
@@ -59,15 +60,15 @@ public class SentekSensorDataIntegrationService extends AbstractIntegrationServi
      * @return A list of Reading objects representing the sensor data.
      * @throws BusinessException If an error occurs while fetching the sensor data.
      */
-    protected List<Reading> fetchAll(String loggerName, Instant from) {
+    protected List<Reading> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, String loggerName, Instant from) {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));
         var httpEntity = new HttpEntity<String>(headers);
-        var uri = UriComponentsBuilder.fromHttpUrl(url + "/?cmd=getreadings&key={apiToken}&name={loggerName}&from={from}")
+        var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/?cmd=getreadings&key={apiToken}&name={loggerName}&from={from}")
                 .encode()
                 .toUriString();
         log.debug("Fetching sensor data from URI: {}", uri);
-        var uriVariables = Map.of("apiToken", getApiToken(),
+        var uriVariables = Map.of("apiToken", thirdPartyApiConfiguration.getApiToken(),
                 "loggerName", loggerName,
                 "from", Format.formatForIrrimax(from));
         var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);

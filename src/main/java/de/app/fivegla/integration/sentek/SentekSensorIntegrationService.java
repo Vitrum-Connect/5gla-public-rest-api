@@ -5,6 +5,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.integration.sentek.model.xml.User;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SentekSensorIntegrationService extends AbstractIntegrationService {
+public class SentekSensorIntegrationService {
 
     private final RestTemplate restTemplate;
 
@@ -38,24 +39,24 @@ public class SentekSensorIntegrationService extends AbstractIntegrationService {
      * @return A list of Logger objects representing the fetched data.
      * @throws BusinessException If there was an error fetching the data from the Sentek API.
      */
-    public List<Logger> fetchAll() {
+    public List<Logger> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var headers = new HttpHeaders();
-            headers.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));
-            var httpEntity = new HttpEntity<String>(headers);
-            var uri = UriComponentsBuilder.fromHttpUrl(url + "/?cmd=getloggers&key={apiToken}")
-                    .encode()
-                    .toUriString();
-            log.debug("Fetching sensor data from URI: {}", uri);
-            var uriVariables = Map.of("apiToken", getApiToken());
-            var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);
-            if (response.getStatusCode().is2xxSuccessful()) {
-                return parse(response.getBody()).getLoggers();
-            } else {
-                var errorMessage = ErrorMessage.builder()
-                        .error(Error.SENTEK_COULD_NOT_FETCH_SENSORS)
-                        .message("Could not fetch sensors from Sentek API.")
-                        .build();
-                throw new BusinessException(errorMessage);
+        headers.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));
+        var httpEntity = new HttpEntity<String>(headers);
+        var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/?cmd=getloggers&key={apiToken}")
+                .encode()
+                .toUriString();
+        log.debug("Fetching sensor data from URI: {}", uri);
+        var uriVariables = Map.of("apiToken", thirdPartyApiConfiguration.getApiToken());
+        var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class, uriVariables);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return parse(response.getBody()).getLoggers();
+        } else {
+            var errorMessage = ErrorMessage.builder()
+                    .error(Error.SENTEK_COULD_NOT_FETCH_SENSORS)
+                    .message("Could not fetch sensors from Sentek API.")
+                    .build();
+            throw new BusinessException(errorMessage);
         }
     }
 

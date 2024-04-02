@@ -113,8 +113,7 @@ public class Application {
      *
      * @return The SubscriptionService instance.
      */
-    @Bean
-    public SubscriptionService subscriptionService() {
+    public SubscriptionService subscriptionService(String tenant) {
         return new SubscriptionService(contextBrokerUrl, tenant, List.of(notificationUrls));
     }
 

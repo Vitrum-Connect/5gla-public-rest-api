@@ -6,6 +6,8 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.agvolution.dto.request.QueryRequest;
 import de.app.fivegla.integration.agvolution.dto.response.DeviceDataResponse;
 import de.app.fivegla.integration.agvolution.model.Device;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,29 +24,25 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class AgvolutionSensorIntegrationService extends AbstractIntegrationService {
+@RequiredArgsConstructor
+public class AgvolutionSensorIntegrationService {
 
     private final RestTemplate restTemplate;
-
-    AgvolutionSensorIntegrationService(AccessTokenIntegrationService accessTokenIntegrationService,
-                                       RestTemplate restTemplate) {
-        super(accessTokenIntegrationService);
-        this.restTemplate = restTemplate;
-    }
+    private final AccessTokenIntegrationService accessTokenIntegrationService;
 
     /**
      * Fetches all sensors from the SoilScout API.
      *
      * @return List of sensors.
      */
-    public List<Device> fetchAll() {
+    public List<Device> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(getAccessToken());
+            headers.setBearerAuth(accessTokenIntegrationService.fetchAccessToken(thirdPartyApiConfiguration));
             var httpEntity = new HttpEntity<>(new QueryRequest("{devices{id,position{lon,lat},latestSignal}}"), headers);
-            var response = restTemplate.postForEntity(url + "/devices", httpEntity, DeviceDataResponse.class);
+            var response = restTemplate.postForEntity(thirdPartyApiConfiguration.getUrl() + "/devices", httpEntity, DeviceDataResponse.class);
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while fetching devices from the API. Status code: {}", response.getStatusCode());
                 throw new BusinessException(ErrorMessage.builder()

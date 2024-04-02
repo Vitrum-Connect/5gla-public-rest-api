@@ -1,20 +1,27 @@
 package de.app.fivegla.controller.tenant;
 
+import de.app.fivegla.api.Error;
+import de.app.fivegla.api.ErrorMessage;
+import de.app.fivegla.api.Response;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
-import de.app.fivegla.controller.api.swagger.OperationTags;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
 import de.app.fivegla.integration.micasense.ImageProcessingIntegrationService;
+import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
@@ -24,14 +31,12 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(BaseMappings.IMAGE_PROCESSING + "/images")
 public class ImageProcessingController implements TenantCredentialApiAccess {
 
     private final ImageProcessingIntegrationService imageProcessingIntegrationService;
-
-    public ImageProcessingController(ImageProcessingIntegrationService imageProcessingIntegrationService) {
-        this.imageProcessingIntegrationService = imageProcessingIntegrationService;
-    }
+    private final ApplicationDataRepository applicationDataRepository;
 
     /**
      * Processes one or multiple images from the mica sense camera.
@@ -41,27 +46,46 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.process-image",
             description = "Processes one or multiple images from the mica sense camera.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
-            description = "Images were processed successfully."
+            description = "Images were processed successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ImageProcessingResponse.class)
+            )
     )
     @ApiResponse(
             responseCode = "400",
-            description = "The request is invalid."
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ImageProcessingResponse> processImage(@Valid @RequestBody @Parameter(description = "The image processing request.", required = true) ImageProcessingRequest request) {
+    public ResponseEntity<? extends Response> processImage(@Valid @RequestBody @Parameter(description = "The image processing request.", required = true) ImageProcessingRequest request, Principal principal) {
         log.debug("Processing image for the drone: {}.", request.getDroneId());
-        var oids = new ArrayList<String>();
-        request.getImages().forEach(droneImage -> {
-            var oid = imageProcessingIntegrationService.processImage(request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
-            oids.add(oid);
-        });
-        return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
-                .oids(oids)
-                .build());
+        var optionalTenant = applicationDataRepository.getTenant(principal.getName());
+        if (optionalTenant.isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(ErrorMessage.builder()
+                            .error(Error.TENANT_NOT_FOUND)
+                            .message("No tenant found for id " + principal.getName())
+                            .build());
+        } else {
+            var tenant = optionalTenant.get();
+            var oids = new ArrayList<String>();
+            request.getImages().forEach(droneImage -> {
+                var oid = imageProcessingIntegrationService.processImage(tenant, request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
+                oids.add(oid);
+            });
+            return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
+                    .oids(oids)
+                    .build());
+        }
     }
 
     /**
@@ -74,18 +98,30 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.begin-image-processing",
             description = "Begins the image processing for the transaction.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The image processing was begun."
+            description = "The image processing was begun.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @PostMapping(value = "/{droneId}/{transactionId}/begin")
-    public ResponseEntity<Void> beginImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
-                                                     @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
+    public ResponseEntity<? extends Response> beginImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
+                                                                   @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
         log.debug("Beginning image processing for the transaction: {}.", transactionId);
         imageProcessingIntegrationService.beginImageProcessing(droneId, transactionId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
     }
 
     /**
@@ -98,15 +134,27 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.end-image-processing",
             description = "Ends the image processing for the transaction.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "201",
-            description = "The image processing was ended."
+            description = "The image processing was ended.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
-    @PostMapping(value = "/{droneId}/{transactionId}/end")
-    public ResponseEntity<Void> endImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
-                                                   @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PostMapping(value = "/{droneId}/{transactionId}/end", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> endImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
+                                                                 @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
         log.debug("Ending image processing for the transaction: {}.", transactionId);
         imageProcessingIntegrationService.endImageProcessing(droneId, transactionId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -118,11 +166,23 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.get-image",
             description = "Returns an image from the mica sense camera stored in the database.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The image was found and returned."
+            description = "The image was found and returned.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = byte[].class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
     )
     @GetMapping(value = "/{oid}", produces = "image/tiff")
     public ResponseEntity<byte[]> getImage(@PathVariable String oid) {
@@ -149,14 +209,26 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @Operation(
             operationId = "images.get-image-oids-for-transaction",
             description = "Returns the image Object IDs (Oids) associated with a specific transaction.",
-            tags = OperationTags.IMAGE_PROCESSING
+            tags = BaseMappings.IMAGE_PROCESSING
     )
     @ApiResponse(
             responseCode = "200",
-            description = "The OIDs for the images were found and returned."
+            description = "The OIDs for the images were found and returned.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = OidsForTransactionResponse.class)
+            )
     )
-    @GetMapping(value = "/{transactionId}/oids", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OidsForTransactionResponse> getImageOidsForTransaction(@PathVariable String transactionId) {
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @GetMapping(value = "/{transactionId}/oids", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getImageOidsForTransaction(@PathVariable String transactionId) {
         var oids = imageProcessingIntegrationService.getImageOidsForTransaction(transactionId);
         return ResponseEntity.ok(OidsForTransactionResponse.builder()
                 .transactionId(transactionId)

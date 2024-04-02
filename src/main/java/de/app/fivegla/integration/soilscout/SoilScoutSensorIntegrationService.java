@@ -5,6 +5,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.soilscout.cache.SoilScoutSensorCache;
 import de.app.fivegla.integration.soilscout.model.Sensor;
+import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -34,12 +35,12 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
      *
      * @return List of sensors.
      */
-    public List<Sensor> fetchAll() {
+    public List<Sensor> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(getAccessToken());
+        headers.setBearerAuth(getAccessToken(thirdPartyApiConfiguration));
         var httpEntity = new HttpEntity<String>(headers);
-        var response = restTemplate.exchange(url + "/devices/", HttpMethod.GET, httpEntity, Sensor[].class);
+        var response = restTemplate.exchange(thirdPartyApiConfiguration.getUrl() + "/devices/", HttpMethod.GET, httpEntity, Sensor[].class);
         if (response.getStatusCode().is2xxSuccessful()) {
             return Arrays.asList(Objects.requireNonNull(response.getBody()));
         } else {
@@ -54,18 +55,18 @@ public class SoilScoutSensorIntegrationService extends AbstractIntegrationServic
      * @param id The id of the sensor.
      * @return The sensor.
      */
-    public Sensor fetch(int id) {
+    public Sensor fetch(ThirdPartyApiConfiguration thirdPartyApiConfiguration, int id) {
         if (soilScoutSensorCache.get(id).isPresent()) {
             return soilScoutSensorCache.get(id).get();
         } else {
-            return getSensor(id, getAccessToken());
+            return getSensor(thirdPartyApiConfiguration.getUrl(), id, getAccessToken(thirdPartyApiConfiguration));
         }
     }
 
-    private Sensor getSensor(int id, String access) {
+    private Sensor getSensor(String url, int id, String accessToken) {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(access);
+        headers.setBearerAuth(accessToken);
         var httpEntity = new HttpEntity<String>(headers);
         try {
             var response = restTemplate.exchange(url + "/devices/" + id, HttpMethod.GET, httpEntity, Sensor.class);

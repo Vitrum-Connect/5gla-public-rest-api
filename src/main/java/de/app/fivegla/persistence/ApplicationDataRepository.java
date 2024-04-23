@@ -2,7 +2,7 @@ package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.integration.imageprocessing.model.Image;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -54,8 +54,8 @@ public class ApplicationDataRepository {
      * @param oid The oid of the image.
      * @return The image with the given oid.
      */
-    public Optional<MicaSenseImage> getImage(String oid) {
-        return applicationData.getMicaSenseImages().stream()
+    public Optional<Image> getImage(String oid) {
+        return applicationData.getImages().stream()
                 .filter(image -> image.getOid().equals(oid))
                 .findFirst();
     }
@@ -63,11 +63,11 @@ public class ApplicationDataRepository {
     /**
      * Add image to the list of images.
      *
-     * @param micaSenseImage The image to add.
+     * @param image The image to add.
      * @return The added image.
      */
-    public MicaSenseImage addMicaSenseImage(MicaSenseImage micaSenseImage) {
-        return applicationData.addMicaSenseImage(micaSenseImage);
+    public Image addImage(Image image) {
+        return applicationData.addImage(image);
     }
 
     /**
@@ -77,9 +77,9 @@ public class ApplicationDataRepository {
      * @return A list of image Object IDs (Oids) associated with the specified transaction.
      */
     public List<SortableImageOids> getImageOidsForTransaction(String transactionId) {
-        return applicationData.getMicaSenseImages().stream()
-                .filter(micaSenseImage -> micaSenseImage.getTransactionId().equals(transactionId))
-                .map(micaSenseImage -> new SortableImageOids(micaSenseImage.getOid(), micaSenseImage.getMeasuredAt()))
+        return applicationData.getImages().stream()
+                .filter(image -> image.getTransactionId().equals(transactionId))
+                .map(image -> new SortableImageOids(image.getOid(), image.getMeasuredAt()))
                 .toList();
     }
 

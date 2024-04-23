@@ -8,7 +8,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
-import de.app.fivegla.integration.micasense.ImageProcessingIntegrationService;
+import de.app.fivegla.integration.imageprocessing.ImageProcessingIntegrationService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -79,85 +79,13 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
             var tenant = optionalTenant.get();
             var oids = new ArrayList<String>();
             request.getImages().forEach(droneImage -> {
-                var oid = imageProcessingIntegrationService.processImage(tenant, request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
+                var oid = imageProcessingIntegrationService.processImage(tenant, request.getTransactionId(), request.getDroneId(), droneImage.getImageChannel(), droneImage.getBase64Image());
                 oids.add(oid);
             });
             return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
                     .oids(oids)
                     .build());
         }
-    }
-
-    /**
-     * Begins the image processing for the transaction.
-     *
-     * @param droneId       The drone ID. (required)
-     * @param transactionId The transaction ID. (required)
-     * @return A ResponseEntity object with a status of 201.
-     */
-    @Operation(
-            operationId = "images.begin-image-processing",
-            description = "Begins the image processing for the transaction.",
-            tags = BaseMappings.IMAGE_PROCESSING
-    )
-    @ApiResponse(
-            responseCode = "201",
-            description = "The image processing was begun.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @ApiResponse(
-            responseCode = "400",
-            description = "The request is invalid.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @PostMapping(value = "/{droneId}/{transactionId}/begin")
-    public ResponseEntity<? extends Response> beginImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
-                                                                   @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
-        log.debug("Beginning image processing for the transaction: {}.", transactionId);
-        imageProcessingIntegrationService.beginImageProcessing(droneId, transactionId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
-    }
-
-    /**
-     * Ends the image processing for the transaction.
-     *
-     * @param droneId       the ID of the drone to end the image processing for
-     * @param transactionId the ID of the transaction to end the image processing for
-     * @return HTTP status 200 if the image processing was ended successfully
-     */
-    @Operation(
-            operationId = "images.end-image-processing",
-            description = "Ends the image processing for the transaction.",
-            tags = BaseMappings.IMAGE_PROCESSING
-    )
-    @ApiResponse(
-            responseCode = "201",
-            description = "The image processing was ended.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @ApiResponse(
-            responseCode = "400",
-            description = "The request is invalid.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @PostMapping(value = "/{droneId}/{transactionId}/end", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> endImageProcessing(@PathVariable @Parameter(description = "The drone ID.", required = true) String droneId,
-                                                                 @PathVariable @Parameter(description = "The transaction ID.", required = true) String transactionId) {
-        log.debug("Ending image processing for the transaction: {}.", transactionId);
-        imageProcessingIntegrationService.endImageProcessing(droneId, transactionId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**

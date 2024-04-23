@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.micasense.model;
+package de.app.fivegla.integration.imageprocessing.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,12 +8,12 @@ import org.locationtech.jts.geom.Point;
 import java.time.Instant;
 
 /**
- * MicaSense image.
+ * Image.
  */
 @Getter
 @Setter
 @Builder
-public class MicaSenseImage {
+public class Image {
 
     /**
      * The oid of the image.
@@ -33,7 +33,7 @@ public class MicaSenseImage {
     /**
      * The channel of the image since the value can not be read from the EXIF.
      */
-    private MicaSenseChannel channel;
+    private ImageChannel channel;
 
     /**
      * The base64 encoded tiff image.

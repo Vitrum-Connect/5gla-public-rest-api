@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.micasense;
+package de.app.fivegla.integration.imageprocessing;
 
 
 import de.app.fivegla.api.enums.MeasurementType;
@@ -7,7 +7,7 @@ import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.fiware.model.internal.TextAttribute;
-import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.integration.imageprocessing.model.Image;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MicaSenseFiwareIntegrationServiceWrapper {
+public class ImageProcessingFiwareIntegrationServiceWrapper {
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
 
     @Value("${app.imagePathBaseUrl}")
@@ -31,7 +31,7 @@ public class MicaSenseFiwareIntegrationServiceWrapper {
      *
      * @param image the image to create the measurement for
      */
-    public void createDroneDeviceMeasurement(Tenant tenant, String droneId, MicaSenseImage image) {
+    public void createDroneDeviceMeasurement(Tenant tenant, String droneId, Image image) {
         var deviceMeasurement = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + droneId,
                 MeasurementType.MICASENSE_IMAGE.name(),

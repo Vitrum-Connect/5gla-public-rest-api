@@ -27,7 +27,6 @@ public class BaseMappings {
     // SECURED_BY_TENANT
 
     public static final String IMAGE_PROCESSING = SECURED_BY_TENANT + "/image-processing";
-    public static final String DEVICE_MEASUREMENT = SECURED_BY_TENANT + "/device-measurement";
     public static final String AGRI_CROP = SECURED_BY_TENANT + "/agri-crop";
     public static final String THIRD_PARTY_API_CONFIGURATION = SECURED_BY_TENANT + "/3rd-party-api-configuration";
     public static final String DEVICE_POSITION = SECURED_BY_TENANT + "/device-position";

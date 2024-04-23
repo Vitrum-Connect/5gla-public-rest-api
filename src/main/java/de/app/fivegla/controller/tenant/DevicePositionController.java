@@ -4,6 +4,7 @@ import de.app.fivegla.api.Response;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AddDevicePositionRequest;
+import de.app.fivegla.integration.deviceposition.DevicePositionIntegrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(BaseMappings.DEVICE_POSITION)
 public class DevicePositionController implements TenantCredentialApiAccess {
+
+    private final DevicePositionIntegrationService devicePositionIntegrationService;
 
     @Operation(
             operationId = "device-position.add",
@@ -49,6 +52,7 @@ public class DevicePositionController implements TenantCredentialApiAccess {
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> addDevicePosition(@Valid @RequestBody AddDevicePositionRequest request) {
         log.info("Adding device( position: {}", request);
+        devicePositionIntegrationService.createDevicePosition(request.getTransactionId(), request.getDeviceId(), request.getLatitude(), request.getLongitude());
         return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
     }
 

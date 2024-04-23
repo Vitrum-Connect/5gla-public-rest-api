@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -126,7 +127,11 @@ public class ApplicationDataRepository {
      * @return A list of ThirdPartyApiConfigurations that match the given tenant ID.
      */
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String name) {
-        return applicationData.getThirdPartyApiConfigurations().stream().filter(configuration -> configuration.getTenantId().equals(name)).toList();
+        if (applicationData.getThirdPartyApiConfigurations() == null) {
+            return Collections.emptyList();
+        } else {
+            return applicationData.getThirdPartyApiConfigurations().stream().filter(configuration -> configuration.getTenantId().equals(name)).toList();
+        }
     }
 
     /**

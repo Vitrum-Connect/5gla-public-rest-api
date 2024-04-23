@@ -104,7 +104,7 @@ public class Application {
      *
      * @return -
      */
-    @Bean
+    @Bean("fiwareDevicePositionIntegrationService")
     public DevicePositionIntegrationService devicePositionIntegrationService() {
         return new DevicePositionIntegrationService(contextBrokerUrl, tenant);
     }

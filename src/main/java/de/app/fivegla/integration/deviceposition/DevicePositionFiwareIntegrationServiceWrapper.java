@@ -9,6 +9,7 @@ import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DevicePositionFiwareIntegrationServiceWrapper {
 
+    @Qualifier("fiwareDevicePositionIntegrationService")
     private final DevicePositionIntegrationService devicePositionIntegrationService;
 
     /**

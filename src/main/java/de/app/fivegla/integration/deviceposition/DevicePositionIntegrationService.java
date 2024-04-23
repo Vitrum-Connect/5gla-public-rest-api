@@ -15,12 +15,12 @@ public class DevicePositionIntegrationService {
     /**
      * Creates a device position for the specified transaction, device, latitude, and longitude.
      *
-     * @param transactionId The ID of the transaction related to the device position.
      * @param deviceId      The ID of the device for which the position is being created.
+     * @param transactionId The ID of the transaction related to the device position.
      * @param latitude      The latitude value of the device position.
      * @param longitude     The longitude value of the device position.
      */
-    public void createDevicePosition(String transactionId, String deviceId, double latitude, double longitude) {
+    public void createDevicePosition(String deviceId, String transactionId, double latitude, double longitude) {
         log.info("Creating device position for device {} with transaction id {} at latitude {} and longitude {}.", deviceId, transactionId, latitude, longitude);
     }
 

@@ -26,7 +26,6 @@ public class ImageProcessingIntegrationService {
     private final ExifDataIntegrationService exifDataIntegrationService;
     private final ImageProcessingFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final ApplicationDataRepository applicationDataRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Processes an image from the mica sense camera.

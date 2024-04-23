@@ -7,7 +7,6 @@ import de.app.fivegla.fiware.model.DevicePosition;
 import de.app.fivegla.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.fiware.model.internal.TextAttribute;
 import de.app.fivegla.persistence.entity.Tenant;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,11 +16,13 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class DevicePositionFiwareIntegrationServiceWrapper {
 
-    @Qualifier("fiwareDevicePositionIntegrationService")
     private final DevicePositionIntegrationService devicePositionIntegrationService;
+
+    public DevicePositionFiwareIntegrationServiceWrapper(@Qualifier("fiwareDevicePositionIntegrationService") DevicePositionIntegrationService devicePositionIntegrationService) {
+        this.devicePositionIntegrationService = devicePositionIntegrationService;
+    }
 
     /**
      * Persists a device position for a specific tenant, measurement type, device ID, transaction ID, latitude, and longitude.

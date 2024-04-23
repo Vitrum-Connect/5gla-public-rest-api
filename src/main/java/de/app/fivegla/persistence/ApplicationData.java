@@ -106,9 +106,13 @@ public class ApplicationData {
      * @return An Optional containing the found Tenant, or an empty Optional if no tenant with the specified UUID is found.
      */
     protected Optional<Tenant> getTenant(String uuid) {
-        return tenants.stream()
-                .filter(tenant -> tenant.getTenantId().equals(uuid))
-                .findFirst();
+        if (this.tenants == null) {
+            return Optional.empty();
+        } else {
+            return tenants.stream()
+                    .filter(tenant -> tenant.getTenantId().equals(uuid))
+                    .findFirst();
+        }
     }
 
     /**

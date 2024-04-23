@@ -16,19 +16,7 @@ following template and replace the values with your own ones:
 ```
   CONTEXT_BROKER_URL=https://localhost:1026/;
   MICROSTREAM_STORAGE_DIRECTORY=/opt/application/.microstream;
-  AGRANIMO_PASSWORD=___CHANGE_ME___;
-  AGRANIMO_USERNAME=___CHANGE_ME___;
-  AGVOLUTION_PASSWORD=___CHANGE_ME___;
-  AGVOLUTION_USERNAME=___CHANGE_ME___;
-  FARM21_API_TOKEN=___CHANGE_ME___;
   IMAGE_PATH_BASE_URL=http://localhost:8080/api/images/;
-  SENSOTERRA_PASSWORD=___CHANGE_ME___;
-  SENSOTERRA_USERNAME=___CHANGE_ME___;
-  SENTEK_API_TOKEN=___CHANGE_ME___;
-  SOILSCOUT_PASSWORD=___CHANGE_ME___;
-  SOILSCOUT_USERNAME=___CHANGE_ME___;
-  WEENAT_PASSWORD=___CHANGE_ME___;
-  WEENAT_USERNAME=___CHANGE_ME___;
   API_KEY=___CHANGE_ME___;
   NOTIFICATION_URLS=https://localhost:5050/notify;
   SPRING_PROFILES_ACTIVE=maintenance;
@@ -42,19 +30,8 @@ The following table describes the environment variables:
 |-------------------------------|---------------------------------------------------------|
 | CONTEXT_BROKER_URL            | The URL of the Orion Context Broker.                    |
 | MICROSTREAM_STORAGE_DIRECTORY | The directory where the Microstream database is stored. |
-| AGRANIMO_PASSWORD             | The password of the Agranimo account.                   |
-| AGRANIMO_USERNAME             | The username of the Agranimo account.                   |
-| AGVOLUTION_PASSWORD           | The password of the Agvolution account.                 |
-| AGVOLUTION_USERNAME           | The username of the Agvolution account.                 |
-| FARM21_API_TOKEN              | The API token of the Farm21 account.                    |
 | IMAGE_PATH_BASE_URL           | The base URL of the image path.                         |
-| SENSOTERRA_PASSWORD           | The password of the Sensoterra account.                 |
-| SENSOTERRA_USERNAME           | The username of the Sensoterra account.                 |
 | SENTEK_API_TOKEN              | The API token of the Sentek account.                    |
-| SOILSCOUT_PASSWORD            | The password of the Soil Scout account.                 |
-| SOILSCOUT_USERNAME            | The username of the Soil Scout account.                 |
-| WEENAT_PASSWORD               | The password of the Weenat account.                     |
-| WEENAT_USERNAME               | The username of the Weenat account.                     |
 | API_KEY                       | The API key of the application.                         |
 | NOTIFICATION_URLS             | The URL of the notification service.                    |
 | SPRING_PROFILES_ACTIVE        | The active Spring profile.                              |

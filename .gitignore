@@ -53,6 +53,7 @@ microstream-*
 # LOCAL DATA #
 .uptime-kuma-data
 .grafana-data
+test_tenant_credentials.json
 
 # LOCAL UPTIME KUMA #
 uptime-kuma-data

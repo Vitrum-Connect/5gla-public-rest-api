@@ -24,7 +24,6 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class AgvolutionFiwareIntegrationServiceWrapper {
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
 

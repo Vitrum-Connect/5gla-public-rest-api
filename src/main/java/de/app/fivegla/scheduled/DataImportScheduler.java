@@ -25,15 +25,13 @@ public class DataImportScheduler {
     @Scheduled(initialDelayString = "${app.scheduled.data-import.initial-delay}", fixedDelayString = "${app.scheduled.data-import.delay}")
     public void scheduleDataImport() {
         log.info("Scheduled data import started for all third-party APIs.");
-        applicationDataRepository.findAllTenants().forEach(tenant -> {
-            applicationDataRepository.getThirdPartyApiConfigurations(tenant.getTenantId()).forEach(configuration -> {
-                if (configuration.isEnabled()) {
-                    applicationEventPublisher.publishEvent(new DataImportEvent(configuration));
-                } else {
-                    log.info("Skipping data import for tenant {} and manufacturer {} because it is disabled.", tenant.getName(), configuration.getManufacturer());
-                }
-            });
-        });
+        applicationDataRepository.findAllTenants().forEach(tenant -> applicationDataRepository.getThirdPartyApiConfigurations(tenant.getTenantId()).forEach(configuration -> {
+            if (configuration.isEnabled()) {
+                applicationEventPublisher.publishEvent(new DataImportEvent(configuration));
+            } else {
+                log.info("Skipping data import for tenant {} and manufacturer {} because it is disabled.", tenant.getName(), configuration.getManufacturer());
+            }
+        }));
     }
 
 }

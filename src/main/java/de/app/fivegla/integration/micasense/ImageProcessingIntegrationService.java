@@ -1,11 +1,8 @@
 package de.app.fivegla.integration.micasense;
 
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.integration.micasense.events.ImageProcessingFinishedEvent;
-import de.app.fivegla.integration.micasense.events.ImageProcessingStartedEvent;
 import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
 import de.app.fivegla.integration.micasense.model.MicaSenseImage;
-import de.app.fivegla.integration.micasense.transactions.ActiveMicaSenseTransactions;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +26,6 @@ public class ImageProcessingIntegrationService {
     private final ExifDataIntegrationService exifDataIntegrationService;
     private final MicaSenseFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final ApplicationDataRepository applicationDataRepository;
-    private final ActiveMicaSenseTransactions activeMicaSenseTransactions;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
@@ -53,7 +49,6 @@ public class ImageProcessingIntegrationService {
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
         fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, droneId, micaSenseImage);
-        activeMicaSenseTransactions.add(transactionId, micaSenseImage.getOid());
         return micaSenseImage.getOid();
     }
 
@@ -73,16 +68,6 @@ public class ImageProcessingIntegrationService {
     }
 
     /**
-     * Ends the image processing for a transaction.
-     *
-     * @param droneId       The ID of the drone.
-     * @param transactionId The ID of the transaction.
-     */
-    public void endImageProcessing(String droneId, String transactionId) {
-        applicationEventPublisher.publishEvent(new ImageProcessingFinishedEvent(this, droneId, transactionId));
-    }
-
-    /**
      * Retrieves the image OIDs for a given transaction.
      *
      * @param transactionId the ID of the transaction
@@ -90,16 +75,6 @@ public class ImageProcessingIntegrationService {
      */
     public List<SortableImageOids> getImageOidsForTransaction(String transactionId) {
         return applicationDataRepository.getImageOidsForTransaction(transactionId).stream().sorted().toList();
-    }
-
-    /**
-     * Begins image processing for a specific drone and transaction.
-     *
-     * @param droneId       The ID of the drone for which the image processing is starting.
-     * @param transactionId The ID of the transaction associated with the image processing.
-     */
-    public void beginImageProcessing(String droneId, String transactionId) {
-        applicationEventPublisher.publishEvent(new ImageProcessingStartedEvent(this, droneId, transactionId));
     }
 
 }

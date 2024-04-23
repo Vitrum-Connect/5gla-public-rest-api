@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class AgranimoFiwareIntegrationServiceWrapper {
+
     private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
 
     /**

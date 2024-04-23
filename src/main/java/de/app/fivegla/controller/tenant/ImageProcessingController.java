@@ -8,7 +8,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
-import de.app.fivegla.integration.micasense.ImageProcessingIntegrationService;
+import de.app.fivegla.integration.imageprocessing.ImageProcessingIntegrationService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -79,7 +79,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
             var tenant = optionalTenant.get();
             var oids = new ArrayList<String>();
             request.getImages().forEach(droneImage -> {
-                var oid = imageProcessingIntegrationService.processImage(tenant, request.getTransactionId(), request.getDroneId(), droneImage.getMicaSenseChannel(), droneImage.getBase64Image());
+                var oid = imageProcessingIntegrationService.processImage(tenant, request.getTransactionId(), request.getDroneId(), droneImage.getImageChannel(), droneImage.getBase64Image());
                 oids.add(oid);
             });
             return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()

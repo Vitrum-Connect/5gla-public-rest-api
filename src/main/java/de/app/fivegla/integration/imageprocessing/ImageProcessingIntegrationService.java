@@ -1,8 +1,8 @@
-package de.app.fivegla.integration.micasense;
+package de.app.fivegla.integration.imageprocessing;
 
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
-import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.integration.imageprocessing.model.Image;
+import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Service for Mica Sense integration.
+ * Service for  Sense integration.
  */
 @Slf4j
 @Service
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ImageProcessingIntegrationService {
 
     private final ExifDataIntegrationService exifDataIntegrationService;
-    private final MicaSenseFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
+    private final ImageProcessingFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final ApplicationDataRepository applicationDataRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -32,15 +32,15 @@ public class ImageProcessingIntegrationService {
      * Processes an image from the mica sense camera.
      *
      * @param transactionId    The transaction id.
-     * @param micaSenseChannel The channel the image was taken with.
+     * @param imageChannel The channel the image was taken with.
      * @param base64Image      The base64 encoded tiff image.
      */
-    public String processImage(Tenant tenant, String transactionId, String droneId, MicaSenseChannel micaSenseChannel, String base64Image) {
+    public String processImage(Tenant tenant, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
         var image = Base64.getDecoder().decode(base64Image);
-        log.debug("Channel for the image: {}.", micaSenseChannel);
-        var micaSenseImage = applicationDataRepository.addMicaSenseImage(MicaSenseImage.builder()
+        log.debug("Channel for the image: {}.", imageChannel);
+        var micaSenseImage = applicationDataRepository.addImage(Image.builder()
                 .oid(tenant.getFiwarePrefix() + droneId)
-                .channel(micaSenseChannel)
+                .channel(imageChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)
                 .base64Image(base64Image)
@@ -58,8 +58,8 @@ public class ImageProcessingIntegrationService {
      * @param oid The oid of the image.
      * @return The image with the given oid.
      */
-    public Optional<MicaSenseImage> getImage(String oid) {
-        AtomicReference<Optional<MicaSenseImage>> result = new AtomicReference<>(Optional.empty());
+    public Optional<Image> getImage(String oid) {
+        AtomicReference<Optional<Image>> result = new AtomicReference<>(Optional.empty());
         applicationDataRepository.getImage(oid).ifPresent(image -> {
             log.debug("Image with oid {} found.", oid);
             result.set(Optional.of(image));

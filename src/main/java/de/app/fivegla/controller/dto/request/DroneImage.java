@@ -1,6 +1,6 @@
 package de.app.fivegla.controller.dto.request;
 
-import de.app.fivegla.integration.micasense.model.MicaSenseChannel;
+import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class DroneImage {
      * The channel of the image since the value can not be read from the EXIF.
      */
     @Schema(description = "The channel of the image.")
-    private MicaSenseChannel micaSenseChannel;
+    private ImageChannel imageChannel;
 
     /**
      * The base64 encoded tiff image.

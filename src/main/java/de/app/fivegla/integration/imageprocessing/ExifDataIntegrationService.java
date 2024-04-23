@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.micasense;
+package de.app.fivegla.integration.imageprocessing;
 
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;

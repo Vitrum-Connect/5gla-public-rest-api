@@ -1,7 +1,7 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.integration.micasense.model.MicaSenseImage;
+import de.app.fivegla.integration.imageprocessing.model.Image;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class ApplicationData {
     @Getter
     private Map<Manufacturer, Instant> lastRuns;
 
-    private List<MicaSenseImage> micaSenseImages;
+    private List<Image> images;
 
     @Getter
     private List<Tenant> tenants;
@@ -64,16 +64,16 @@ public class ApplicationData {
     /**
      * Add image to the list of images.
      *
-     * @param micaSenseImage The image to add.
+     * @param image The image to add.
      * @return The added image.
      */
-    protected MicaSenseImage addMicaSenseImage(MicaSenseImage micaSenseImage) {
-        if (null == micaSenseImages) {
-            micaSenseImages = new ArrayList<>();
+    protected Image addImage(Image image) {
+        if (null == images) {
+            images = new ArrayList<>();
         }
-        micaSenseImages.add(micaSenseImage);
+        images.add(image);
         storageManager.store(this);
-        return micaSenseImage;
+        return image;
     }
 
     /**
@@ -81,8 +81,8 @@ public class ApplicationData {
      *
      * @return The list of images.
      */
-    protected List<MicaSenseImage> getMicaSenseImages() {
-        return micaSenseImages;
+    protected List<Image> getImages() {
+        return images;
     }
 
     /**

@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.micasense.events;
+package de.app.fivegla.integration.imageprocessing.events;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;

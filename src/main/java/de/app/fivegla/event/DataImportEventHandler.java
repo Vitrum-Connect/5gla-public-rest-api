@@ -69,7 +69,6 @@ public class DataImportEventHandler {
                 case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, config);
                 case SENTEK -> sentekMeasurementImport.run(tenant, config);
                 case WEENAT -> weenatMeasurementImport.run(tenant, config);
-                case MICA_SENSE -> log.info("There is no scheduled data import for MicaSense");
                 default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
             }
         }

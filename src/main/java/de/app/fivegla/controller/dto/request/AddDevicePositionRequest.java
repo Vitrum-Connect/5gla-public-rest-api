@@ -10,14 +10,6 @@ import lombok.Setter;
 @Schema(description = "Request to add a device position.")
 public class AddDevicePositionRequest {
 
-    @NotBlank
-    @Schema(description = "The transaction id.")
-    private String transactionId;
-
-    @NotBlank
-    @Schema(description = "The device id.")
-    private String deviceId;
-
     @Schema(description = "The latitude of the device.")
     private double latitude;
 

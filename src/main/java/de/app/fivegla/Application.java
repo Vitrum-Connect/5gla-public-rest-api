@@ -1,6 +1,7 @@
 package de.app.fivegla;
 
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
+import de.app.fivegla.fiware.DevicePositionIntegrationService;
 import de.app.fivegla.fiware.StatusService;
 import de.app.fivegla.fiware.SubscriptionService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -96,6 +97,16 @@ public class Application {
     @Bean
     public DeviceMeasurementIntegrationService deviceMeasurementIntegrationService() {
         return new DeviceMeasurementIntegrationService(contextBrokerUrl, tenant);
+    }
+
+    /**
+     * Dependency injection for the device position integration service.
+     *
+     * @return -
+     */
+    @Bean
+    public DevicePositionIntegrationService devicePositionIntegrationService() {
+        return new DevicePositionIntegrationService(contextBrokerUrl, tenant);
     }
 
     /**

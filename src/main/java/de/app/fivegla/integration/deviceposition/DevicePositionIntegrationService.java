@@ -1,5 +1,7 @@
 package de.app.fivegla.integration.deviceposition;
 
+import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DevicePositionIntegrationService {
 
+    private final DevicePositionFiwareIntegrationServiceWrapper devicePositionFiwareIntegrationServiceWrapper;
+    private final ApplicationDataRepository applicationDataRepository;
+
     /**
      * Creates a device position for the specified transaction, device, latitude, and longitude.
      *
@@ -20,8 +25,25 @@ public class DevicePositionIntegrationService {
      * @param latitude      The latitude value of the device position.
      * @param longitude     The longitude value of the device position.
      */
-    public void createDevicePosition(String deviceId, String transactionId, double latitude, double longitude) {
-        log.info("Creating device position for device {} with transaction id {} at latitude {} and longitude {}.", deviceId, transactionId, latitude, longitude);
+    public void createDevicePosition(String tenantId,
+                                     MeasurementType measurementType,
+                                     String deviceId,
+                                     String transactionId,
+                                     double latitude,
+                                     double longitude) {
+        log.info("Creating device position for device ID: {}, transaction ID: {}, latitude: {}, longitude: {}", deviceId, transactionId, latitude, longitude);
+        var optionalTenant = applicationDataRepository.getTenant(tenantId);
+        if (optionalTenant.isEmpty()) {
+            log.error("Could not find tenant with ID: {}", tenantId);
+        } else {
+            var tenant = optionalTenant.get();
+            devicePositionFiwareIntegrationServiceWrapper.persist(tenant,
+                    measurementType,
+                    deviceId,
+                    transactionId,
+                    latitude,
+                    longitude);
+        }
     }
 
 }

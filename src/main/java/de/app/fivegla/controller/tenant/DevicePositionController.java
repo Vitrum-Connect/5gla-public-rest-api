@@ -1,6 +1,7 @@
 package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Response;
+import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AddDevicePositionRequest;
@@ -17,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Slf4j
 @RestController
@@ -50,9 +53,16 @@ public class DevicePositionController implements TenantCredentialApiAccess {
     @PostMapping(value = "/{deviceId}/{transactionId}/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> addDevicePosition(@PathVariable @Parameter(description = "The device ID") String deviceId,
                                                                 @PathVariable @Parameter(description = "The transaction ID") String transactionId,
-                                                                @Valid @RequestBody AddDevicePositionRequest request) {
+                                                                @Valid @RequestBody AddDevicePositionRequest request,
+                                                                Principal principal) {
         log.info("Adding device( position: {}", request);
-        devicePositionIntegrationService.createDevicePosition(deviceId, transactionId, request.getLatitude(), request.getLongitude());
+        devicePositionIntegrationService.createDevicePosition(
+                principal.getName(),
+                MeasurementType.DRONE_POSITION,
+                deviceId,
+                transactionId,
+                request.getLatitude(),
+                request.getLongitude());
         return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
     }
 

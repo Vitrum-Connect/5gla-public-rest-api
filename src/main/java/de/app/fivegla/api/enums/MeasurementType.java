@@ -9,5 +9,6 @@ public enum MeasurementType {
     FARM21_SENSOR,
     AGRANIMO_SENSOR,
     SOILSCOUT_SENSOR,
+    DRONE_POSITION,
     UNKNOWN
 }

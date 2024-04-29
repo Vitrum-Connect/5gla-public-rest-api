@@ -1,6 +1,7 @@
 package de.app.fivegla.business;
 
 import de.app.fivegla.SpringBootIntegrationTestBase;
+import de.app.fivegla.persistence.entity.Tenant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,13 +69,13 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
 
     @Test
     void givenValidFeatureWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
-        var parsedFeature = agriCropService.parseFeature(feature);
+        var parsedFeature = agriCropService.createFeatureFromGeoJson(new Tenant(), feature);
         assertThat(parsedFeature).isNotNull();
     }
 
     @Test
     void givenValidCsvWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
-        var parsedFeature = agriCropService.createFeatureFromCsv(csv);
+        var parsedFeature = agriCropService.createFeatureFromCsv(new Tenant(), csv);
         assertThat(parsedFeature).isNotNull();
     }
 

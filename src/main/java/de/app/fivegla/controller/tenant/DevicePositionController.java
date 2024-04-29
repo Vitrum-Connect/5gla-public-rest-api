@@ -1,11 +1,14 @@
 package de.app.fivegla.controller.tenant;
 
+import de.app.fivegla.api.Error;
+import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AddDevicePositionRequest;
 import de.app.fivegla.integration.deviceposition.DevicePositionIntegrationService;
+import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +31,7 @@ import java.security.Principal;
 public class DevicePositionController implements TenantCredentialApiAccess {
 
     private final DevicePositionIntegrationService devicePositionIntegrationService;
+    private final ApplicationDataRepository applicationDataRepository;
 
     @Operation(
             operationId = "device-position.add",
@@ -55,15 +59,25 @@ public class DevicePositionController implements TenantCredentialApiAccess {
                                                                 @PathVariable @Parameter(description = "The transaction ID") String transactionId,
                                                                 @Valid @RequestBody AddDevicePositionRequest request,
                                                                 Principal principal) {
-        log.info("Adding device( position: {}", request);
-        devicePositionIntegrationService.createDevicePosition(
-                principal.getName(),
-                MeasurementType.DRONE_POSITION,
-                deviceId,
-                transactionId,
-                request.getLatitude(),
-                request.getLongitude());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
+        var optionalTenant = applicationDataRepository.getTenant(principal.getName());
+        if (optionalTenant.isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(ErrorMessage.builder()
+                            .error(Error.TENANT_NOT_FOUND)
+                            .message("No tenant found for id " + principal.getName())
+                            .build());
+        } else {
+            log.info("Adding device( position: {}", request);
+            devicePositionIntegrationService.createDevicePosition(
+                    principal.getName(),
+                    MeasurementType.DRONE_POSITION,
+                    deviceId,
+                    transactionId,
+                    request.getLatitude(),
+                    request.getLongitude());
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
+        }
     }
 
 }

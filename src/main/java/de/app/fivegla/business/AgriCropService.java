@@ -5,6 +5,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.constants.JSONObjectTypes;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,8 +24,10 @@ public class AgriCropService {
     /**
      * Parses the GeoJSON file containing the agri-crop data.
      */
-    public SimpleFeature parseFeature(String geoJson) {
+    public SimpleFeature createFeatureFromGeoJson(Tenant tenant, String geoJson) {
         try {
+            log.info("Tenant {} is parsing GeoJSON.", tenant.getName());
+            log.debug("Parsing GeoJSON: {}.", geoJson);
             var featureHandler = new FeatureHandler();
             return GeoJSONUtil.parse(featureHandler, geoJson, true);
         } catch (Exception e) {
@@ -47,8 +50,9 @@ public class AgriCropService {
      *                           contain exactly two columns.
      */
     @SuppressWarnings("unchecked")
-    public SimpleFeature createFeatureFromCsv(String csv) {
+    public SimpleFeature createFeatureFromCsv(Tenant tenant, String csv) {
         if (StringUtils.isNotBlank(csv)) {
+            log.info("Tenant {} is parsing CSV.", tenant.getName());
             log.debug("Parsing CSV: {}.", csv);
             var lines = csv.split("\n");
             log.debug("Looks like we have {} lines.", lines.length);
@@ -58,7 +62,7 @@ public class AgriCropService {
             featureCollection.put("features", createFeatures(lines));
 
             String jsonString = featureCollection.toJSONString();
-            return parseFeature(jsonString);
+            return createFeatureFromGeoJson(tenant, jsonString);
         } else {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.COULD_NOT_PARSE_CSV)

@@ -50,11 +50,11 @@ public class DataImportEventHandler {
         } else {
             var tenant = optionalTenant.get();
             var config = dataImportEvent.thirdPartyApiConfiguration();
-            if (subscriptionStatus.sendOutSubscriptions()) {
+            if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
                 try {
                     subscriptionService(tenantId).subscribe(Arrays.stream(MeasurementType.values()).map(Enum::name).toArray(String[]::new));
                     log.info("Subscribed to device measurement notifications.");
-                    subscriptionStatus.setSubscriptionsSent(true);
+                    subscriptionStatus.subscriptionSent(tenantId);
                 } catch (FiwareIntegrationLayerException e) {
                     log.error("Could not subscribe to device measurement notifications.");
                 }

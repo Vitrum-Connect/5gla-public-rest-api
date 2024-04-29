@@ -90,6 +90,19 @@ public class TenantService implements UserDetailsService {
     }
 
     /**
+     * Updates the tenant with the provided tenantId.
+     *
+     * @param tenantId    The tenantId of the tenant to update.
+     * @param name        The new name of the tenant.
+     * @param description The new description of the tenant.
+     * @return The updated tenant.
+     */
+    public Tenant update(String tenantId, String name, String description) {
+        checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
+        return applicationDataRepository.updateTenant(tenantId, name, description);
+    }
+
+    /**
      * Represents a combination of Tenant object and an access token.
      */
     public record TenantAndAccessToken(Tenant tenant, String accessToken) {

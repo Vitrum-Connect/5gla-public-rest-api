@@ -1,6 +1,9 @@
 package de.app.fivegla.persistence;
 
+import de.app.fivegla.api.Error;
+import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.imageprocessing.model.Image;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
@@ -139,5 +142,28 @@ public class ApplicationData {
             thirdPartyApiConfigurations.removeIf(configuration -> configuration.getTenantId().equals(tenantId) && configuration.getManufacturer().equals(manufacturer));
             storageManager.store(this);
         }
+    }
+
+    /**
+     * Updates the tenant with the provided tenantId.
+     *
+     * @param tenantId    The tenantId of the tenant to update.
+     * @param name        The new name of the tenant.
+     * @param description The new description of the tenant.
+     * @return The updated tenant.
+     * @throws BusinessException if the tenant with the specified tenantId is not found.
+     */
+    public Tenant updateTenant(String tenantId, String name, String description) {
+        var tenant = tenants.stream()
+                .filter(t -> t.getTenantId().equals(tenantId))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                        .error(Error.TENANT_NOT_FOUND)
+                        .message("Could not update tenant, since the tenant was not found.")
+                        .build()));
+        tenant.setName(name);
+        tenant.setDescription(description);
+        storageManager.store(this);
+        return tenant;
     }
 }

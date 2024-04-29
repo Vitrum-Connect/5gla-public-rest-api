@@ -6,8 +6,10 @@ import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateTenantRequest;
+import de.app.fivegla.controller.dto.request.UpdateTenantRequest;
 import de.app.fivegla.controller.dto.response.CreateTenantResponse;
 import de.app.fivegla.controller.dto.response.FindAllTenantsResponse;
+import de.app.fivegla.controller.dto.response.UpdateTenantResponse;
 import de.app.fivegla.controller.dto.response.inner.Tenant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -65,8 +67,39 @@ public class TenantController implements ApiKeyApiAccess {
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateTenantResponse.builder()
                 .createdAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())
-                .uuid(tenant.getTenantId())
+                .tenantId(tenant.getTenantId())
                 .accessToken(accessToken)
+                .build());
+    }
+
+    @Operation(
+            operationId = "tenant.update",
+            description = "Update a new tenant based on the provided request.",
+            tags = BaseMappings.TENANT
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "The tenant was updated successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CreateTenantResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PutMapping
+    public ResponseEntity<? extends Response> update(@Valid @RequestBody UpdateTenantRequest request) {
+        var tenant = tenantService.update(request.getTenantId(), request.getName(), request.getDescription());
+        return ResponseEntity.ok(UpdateTenantResponse.builder()
+                .updatedAt(Format.format(tenant.getCreatedAt()))
+                .name(tenant.getName())
+                .uuid(tenant.getTenantId())
                 .build());
     }
 

@@ -14,16 +14,16 @@ import lombok.Setter;
 @Setter
 @Builder
 @Schema(description = "Response wrapper.")
-public class CreateTenantResponse extends Response {
+public class UpdateTenantResponse extends Response {
 
     @Schema(description = "The creation date of the tenant.")
-    private String createdAt;
+    private String updatedAt;
 
     @Schema(description = "The name of the tenant.")
     private String name;
 
     @Schema(description = "The UUID of the tenant.")
-    private String tenantId;
+    private String uuid;
 
     @Schema(description = "The access token of the tenant.")
     private String accessToken;

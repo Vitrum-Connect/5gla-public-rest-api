@@ -88,20 +88,6 @@
             <version>08.00.00-MS-EA2</version>
         </dependency>
 
-        <!-- FIWARE INTEGRATION LAYER -->
-        <dependency>
-            <groupId>de.app.5gla</groupId>
-            <artifactId>fiware-integration-layer</artifactId>
-            <version>14.1.0</version>
-            <exclusions>
-                <!-- SLF4J NOP -->
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-nop</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- JUNIT -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -77,6 +77,6 @@ public class Tenant implements UserDetails {
     }
 
     public String getFiwarePrefix() {
-        return "urn:ngsi-ld:" + tenantId + ":";
+        return "urn:ngsi-ld:" + tenantId.replace("_", "-") + ":";
     }
 }

@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * This class represents a repository for application data.
+ */
 @Component
 @RequiredArgsConstructor
 public class ApplicationDataRepository {
@@ -142,5 +145,17 @@ public class ApplicationDataRepository {
      */
     public void deleteThirdPartyApiConfiguration(String tenantId, Manufacturer manufacturer) {
         applicationData.deleteThirdPartyApiConfiguration(tenantId, manufacturer);
+    }
+
+    /**
+     * Updates the tenant with the provided tenantId.
+     *
+     * @param tenantId    The tenantId of the tenant to update.
+     * @param name        The new name of the tenant.
+     * @param description The new description of the tenant.
+     * @return The updated tenant.
+     */
+    public Tenant updateTenant(String tenantId, String name, String description) {
+        return applicationData.updateTenant(tenantId, name, description);
     }
 }

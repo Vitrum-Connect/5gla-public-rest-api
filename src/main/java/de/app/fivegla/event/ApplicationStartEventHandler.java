@@ -28,7 +28,7 @@ public class ApplicationStartEventHandler {
     public void triggerSubscriptionsForAllTenants() {
         log.debug("Triggering subscriptions for all tenants to ensure that they are subscribed to device measurement notifications and other entities.");
         var allTenants = applicationDataRepository.findAllTenants();
-        if (allTenants.isEmpty()) {
+        if (null == allTenants || allTenants.isEmpty()) {
             log.error("There are no tenants, it is not necessary to send out subscriptions");
         } else {
             allTenants.forEach(this::triggerSubscriptionsForTenant);

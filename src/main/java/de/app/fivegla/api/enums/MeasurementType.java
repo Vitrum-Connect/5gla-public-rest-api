@@ -5,6 +5,7 @@ import lombok.Getter;
 /**
  * Represents the type of measurement.
  */
+@Getter
 public enum MeasurementType {
     SENTEK_SENSOR("SentekSensor"),
     WEENAT_SENSOR("WeenatSensor"),
@@ -17,7 +18,6 @@ public enum MeasurementType {
     DEVICE_POSITION("DevicePosition"),
     UNKNOWN("Unknown");
 
-    @Getter
     private final String key;
 
     MeasurementType(String key) {

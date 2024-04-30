@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.fiware;
 
 import de.app.fivegla.integration.fiware.api.CustomHeader;
+import de.app.fivegla.integration.fiware.api.FiwareEntityChecker;
 import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.fiware.model.FiwareEntity;
 import de.app.fivegla.integration.fiware.request.UpdateOrCreateFiwareEntitiesRequest;
@@ -28,6 +29,7 @@ public class FiwareEntityIntegrationService extends AbstractIntegrationService {
      * @param entity the device to create
      */
     public void persist(FiwareEntity entity) {
+        FiwareEntityChecker.check(entity);
         var updateOrCreateEntityRequest = UpdateOrCreateFiwareEntitiesRequest.builder()
                 .entities(List.of(entity))
                 .build();

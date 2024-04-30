@@ -36,4 +36,6 @@ public abstract class AbstractIntegrationService {
         return contextBrokerUrl + "/v2";
     }
 
+
+
 }

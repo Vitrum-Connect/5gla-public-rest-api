@@ -28,4 +28,11 @@ public interface FiwareEntity {
                     "}";
         }
     }
+
+    /**
+     * Returns the ID of the FiwareEntity object.
+     *
+     * @return The ID of the FiwareEntity object.
+     */
+    String getId();
 }

@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.fiware.api;
 
+import de.app.fivegla.integration.fiware.model.FiwareEntity;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -7,13 +8,18 @@ import lombok.extern.slf4j.Slf4j;
  * FIWARE IDs are used to uniquely identify entities in the FIWARE ecosystem.
  */
 @Slf4j
-public final class FiwareChecker {
+public final class FiwareEntityChecker {
 
     public static final int MAX_ID_LENGTH = 62;
     public static final int MAX_TYPE_LENGTH = 62;
 
-    private FiwareChecker() {
+    private FiwareEntityChecker() {
         // private constructor to prevent instantiation
+    }
+
+
+    public static void check(FiwareEntity entity) {
+        checkId(entity.getId());
     }
 
     /**
@@ -22,7 +28,7 @@ public final class FiwareChecker {
      * @param id the ID to be checked
      * @throws FiwareIntegrationLayerException if the ID is too long
      */
-    public static void checkId(String id) {
+    private static void checkId(String id) {
         if (id.length() > MAX_ID_LENGTH) {
             log.error("The id is too long. Please choose a shorter prefix.");
             log.debug("Checked ID: " + id);
@@ -36,12 +42,11 @@ public final class FiwareChecker {
      * @param type the type to be checked
      * @throws FiwareIntegrationLayerException if the type is too long
      */
-    public static void checkType(String type) {
+    private static void checkType(String type) {
         if (type.length() > MAX_TYPE_LENGTH) {
             log.error("The type is too long. Please choose a shorter prefix.");
             log.debug("Checked ID: " + type);
             throw new FiwareIntegrationLayerException("The generated type is too long. Please choose a shorter value.");
         }
     }
-
 }

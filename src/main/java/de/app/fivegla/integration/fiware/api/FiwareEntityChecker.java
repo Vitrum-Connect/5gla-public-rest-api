@@ -20,6 +20,7 @@ public final class FiwareEntityChecker {
 
     public static void check(FiwareEntity entity) {
         checkId(entity.getId());
+        checkType(entity.getType());
     }
 
     /**

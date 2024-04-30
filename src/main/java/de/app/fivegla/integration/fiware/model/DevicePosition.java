@@ -44,4 +44,9 @@ public record DevicePosition(
     public String getId() {
         return id;
     }
+
+    @Override
+    public String getType() {
+        return type;
+    }
 }

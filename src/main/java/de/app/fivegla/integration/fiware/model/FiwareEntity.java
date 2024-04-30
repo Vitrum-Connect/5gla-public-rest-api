@@ -35,4 +35,11 @@ public interface FiwareEntity {
      * @return The ID of the FiwareEntity object.
      */
     String getId();
+
+    /**
+     * Returns the type of the FiwareEntity object.
+     *
+     * @return The type of the FiwareEntity object.
+     */
+    String getType();
 }

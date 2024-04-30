@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -22,6 +23,9 @@ public class TenantServiceTest {
     @Mock
     private ApplicationDataRepository applicationDataRepository;
 
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
+
     private TenantService tenantService;
 
     private AutoCloseable openMocks;
@@ -29,7 +33,7 @@ public class TenantServiceTest {
     @BeforeEach
     public void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        tenantService = new TenantService(applicationDataRepository);
+        tenantService = new TenantService(applicationDataRepository, applicationEventPublisher);
     }
 
     @AfterEach

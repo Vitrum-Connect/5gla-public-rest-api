@@ -3,6 +3,7 @@ package de.app.fivegla.event;
 import de.app.fivegla.Application;
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.event.events.ResendSubscriptionsEvent;
 import de.app.fivegla.fiware.SubscriptionService;
 import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.persistence.ApplicationDataRepository;
@@ -24,10 +25,10 @@ public class ApplicationStartEventHandler {
     private final Application application;
     private final ApplicationDataRepository applicationDataRepository;
 
-    @EventListener(ApplicationReadyEvent.class)
+    @EventListener(classes = {ApplicationReadyEvent.class, ResendSubscriptionsEvent.class})
     public void triggerSubscriptionsForAllTenants() {
         log.debug("Triggering subscriptions for all tenants to ensure that they are subscribed to device measurement notifications and other entities.");
-        var allTenants = applicationDataRepository.findAllTenants();
+        var allTenants = applicationDataRepository.findTenants();
         if (null == allTenants || allTenants.isEmpty()) {
             log.error("There are no tenants, it is not necessary to send out subscriptions");
         } else {

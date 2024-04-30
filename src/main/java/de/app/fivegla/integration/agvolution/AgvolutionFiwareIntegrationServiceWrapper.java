@@ -45,7 +45,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
         timeSeriesEntry.getValues().forEach(timeSeriesValue -> {
             var deviceMeasurement = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + seriesEntry.getDeviceId(),
-                    MeasurementType.AGVOLUTION_SENSOR.name(),
+                    MeasurementType.AGVOLUTION_SENSOR.getKey(),
                     new TextAttribute(timeSeriesEntry.getKey()),
                     new NumberAttribute(timeSeriesValue.getValue()),
                     new DateTimeAttribute(timeSeriesValue.getTime()),

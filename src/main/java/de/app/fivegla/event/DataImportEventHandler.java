@@ -3,6 +3,7 @@ package de.app.fivegla.event;
 import de.app.fivegla.Application;
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.event.events.DataImportEvent;
 import de.app.fivegla.fiware.SubscriptionService;
 import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;

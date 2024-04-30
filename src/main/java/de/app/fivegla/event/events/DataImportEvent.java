@@ -1,4 +1,4 @@
-package de.app.fivegla.event;
+package de.app.fivegla.event.events;
 
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 

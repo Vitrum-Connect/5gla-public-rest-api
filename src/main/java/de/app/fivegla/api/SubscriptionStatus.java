@@ -32,7 +32,12 @@ public class SubscriptionStatus {
     @PostConstruct
     public void init() {
         log.info("Initializing subscriptions sent status for all tenants.");
-        applicationDataRepository.findTenants().forEach(tenant -> subscriptionsSent.put(tenant.getTenantId(), false));
+        var tenants = applicationDataRepository.findTenants();
+        if (null == tenants) {
+            log.warn("Currently there are no tenants within the system.");
+        } else {
+            tenants.forEach(tenant -> subscriptionsSent.put(tenant.getTenantId(), false));
+        }
     }
 
     /**

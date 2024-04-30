@@ -40,8 +40,7 @@ public class AgriCropService {
             var coordinates = Arrays.stream(defaultGeometry.getCoordinates())
                     .map(coordinate -> GpsCoordinate.builder().latitude(coordinate.y).longitude(coordinate.x).build())
                     .toList();
-            var agriCrop = agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
-            return agriCrop;
+            return agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
         } catch (Exception e) {
             log.error("Failed to parse GeoJSON: {}.", geoJson, e);
             throw new BusinessException(ErrorMessage.builder()
@@ -69,8 +68,7 @@ public class AgriCropService {
             log.debug("Looks like we have {} lines.", lines.length);
             var coordinates = parseCoordinates(lines);
             agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
-            var agriCrop = agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
-            return agriCrop;
+            return agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
         } else {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.COULD_NOT_PARSE_CSV)

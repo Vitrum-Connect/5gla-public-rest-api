@@ -1,9 +1,8 @@
 package de.app.fivegla;
 
-import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.DevicePositionIntegrationService;
-import de.app.fivegla.fiware.StatusService;
-import de.app.fivegla.fiware.SubscriptionService;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.integration.fiware.StatusIntegrationService;
+import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -95,18 +94,8 @@ public class Application {
      * @return -
      */
     @Bean
-    public DeviceMeasurementIntegrationService deviceMeasurementIntegrationService() {
-        return new DeviceMeasurementIntegrationService(contextBrokerUrl, tenant);
-    }
-
-    /**
-     * Dependency injection for the device position integration service.
-     *
-     * @return -
-     */
-    @Bean("fiwareDevicePositionIntegrationService")
-    public DevicePositionIntegrationService devicePositionIntegrationService() {
-        return new DevicePositionIntegrationService(contextBrokerUrl, tenant);
+    public FiwareEntityIntegrationService deviceMeasurementIntegrationService() {
+        return new FiwareEntityIntegrationService(contextBrokerUrl, tenant);
     }
 
     /**
@@ -115,8 +104,8 @@ public class Application {
      * @return -
      */
     @Bean
-    public StatusService statusService() {
-        return new StatusService(contextBrokerUrl, tenant);
+    public StatusIntegrationService statusService() {
+        return new StatusIntegrationService(contextBrokerUrl, tenant);
     }
 
     /**
@@ -124,8 +113,8 @@ public class Application {
      *
      * @return The SubscriptionService instance.
      */
-    public SubscriptionService subscriptionService(String tenant) {
-        return new SubscriptionService(contextBrokerUrl, tenant, List.of(notificationUrls));
+    public SubscriptionIntegrationService subscriptionService(String tenant) {
+        return new SubscriptionIntegrationService(contextBrokerUrl, tenant, List.of(notificationUrls));
     }
 
     /**

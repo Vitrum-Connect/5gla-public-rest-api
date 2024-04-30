@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -54,8 +51,9 @@ public class AgriCropController implements TenantCredentialApiAccess {
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @PostMapping(value = "/geo-json/feature", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/geo-json/{cropId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> importGeoJson(@RequestBody @Parameter(description = "The crop, represented as GeoJSON (RFC 7946).") String geoJson,
+                                                            @PathVariable @Parameter(description = "The crop ID") String cropId,
                                                             Principal principal) {
         var optionalTenant = applicationDataRepository.getTenant(principal.getName());
         if (optionalTenant.isEmpty()) {
@@ -67,8 +65,7 @@ public class AgriCropController implements TenantCredentialApiAccess {
                             .build());
         } else {
             var tenant = optionalTenant.get();
-            var feature = agriCropService.createFeatureFromGeoJson(tenant, geoJson);
-            log.debug("Parsed feature: {}.", feature);
+            agriCropService.createFromGeoJson(tenant, cropId, geoJson);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
         }
     }
@@ -94,8 +91,9 @@ public class AgriCropController implements TenantCredentialApiAccess {
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @PostMapping(value = "/csv/feature", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/csv/{cropId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> importCsv(@RequestBody @Parameter(description = "The crop, represented as CSV") String csv,
+                                                        @PathVariable @Parameter(description = "The crop ID") String cropId,
                                                         Principal principal) {
         var optionalTenant = applicationDataRepository.getTenant(principal.getName());
         if (optionalTenant.isEmpty()) {
@@ -107,8 +105,7 @@ public class AgriCropController implements TenantCredentialApiAccess {
                             .build());
         } else {
             var tenant = optionalTenant.get();
-            var feature = agriCropService.createFeatureFromCsv(tenant, csv);
-            log.debug("Parsed feature: {}.", feature);
+            agriCropService.createFromCsv(tenant, cropId, csv);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
         }
     }

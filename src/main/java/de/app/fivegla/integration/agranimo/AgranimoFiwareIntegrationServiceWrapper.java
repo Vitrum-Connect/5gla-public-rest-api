@@ -2,12 +2,12 @@ package de.app.fivegla.integration.agranimo;
 
 
 import de.app.fivegla.api.enums.EntityType;
-import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
-import de.app.fivegla.fiware.model.internal.EmptyAttribute;
-import de.app.fivegla.fiware.model.internal.NumberAttribute;
-import de.app.fivegla.fiware.model.internal.TextAttribute;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
+import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
+import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AgranimoFiwareIntegrationServiceWrapper {
 
-    private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
 
     /**
      * Persists the soil moisture measurement for a given zone.
@@ -41,7 +41,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);
-        deviceMeasurementIntegrationService.persist(smo1);
+        fiwareEntityIntegrationService.persist(smo1);
 
         var smo2 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
@@ -52,7 +52,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);
-        deviceMeasurementIntegrationService.persist(smo2);
+        fiwareEntityIntegrationService.persist(smo2);
 
         var smo3 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
@@ -63,7 +63,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);
-        deviceMeasurementIntegrationService.persist(smo3);
+        fiwareEntityIntegrationService.persist(smo3);
 
         var smo4 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
@@ -74,7 +74,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);
-        deviceMeasurementIntegrationService.persist(smo4);
+        fiwareEntityIntegrationService.persist(smo4);
     }
 
 }

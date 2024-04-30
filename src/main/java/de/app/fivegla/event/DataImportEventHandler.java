@@ -4,8 +4,8 @@ import de.app.fivegla.Application;
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.event.events.DataImportEvent;
-import de.app.fivegla.fiware.SubscriptionService;
-import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
+import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
+import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
@@ -75,7 +75,7 @@ public class DataImportEventHandler {
         }
     }
 
-    private SubscriptionService subscriptionService(String tenantId) {
+    private SubscriptionIntegrationService subscriptionService(String tenantId) {
         return application.subscriptionService(tenantId);
     }
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
+import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

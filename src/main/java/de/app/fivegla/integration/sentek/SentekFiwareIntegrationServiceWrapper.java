@@ -2,12 +2,12 @@ package de.app.fivegla.integration.sentek;
 
 
 import de.app.fivegla.api.enums.EntityType;
-import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
-import de.app.fivegla.fiware.model.internal.EmptyAttribute;
-import de.app.fivegla.fiware.model.internal.NumberAttribute;
-import de.app.fivegla.fiware.model.internal.TextAttribute;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
+import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
+import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -24,13 +24,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SentekFiwareIntegrationServiceWrapper {
-    private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
 
     public void persist(Tenant tenant, Logger logger, List<Reading> readings) {
         var latitude = logger.getLatitude();
         var longitude = logger.getLongitude();
         readings.forEach(reading -> {
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -41,7 +41,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -52,7 +52,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -63,7 +63,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -74,7 +74,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -85,7 +85,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -96,7 +96,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -107,7 +107,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -118,7 +118,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -129,7 +129,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -140,7 +140,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -151,7 +151,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -162,7 +162,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -173,7 +173,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -184,7 +184,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -195,7 +195,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -206,7 +206,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -217,7 +217,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -228,7 +228,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
@@ -239,7 +239,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                             latitude,
                             longitude));
 
-            deviceMeasurementIntegrationService.persist(
+            fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),

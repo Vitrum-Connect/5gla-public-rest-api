@@ -69,13 +69,13 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
 
     @Test
     void givenValidFeatureWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
-        var parsedFeature = agriCropService.createFeatureFromGeoJson(new Tenant(), feature);
+        var parsedFeature = agriCropService.createFromGeoJson(new Tenant(), "some-random-crop-id", feature);
         assertThat(parsedFeature).isNotNull();
     }
 
     @Test
     void givenValidCsvWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
-        var parsedFeature = agriCropService.createFeatureFromCsv(new Tenant(), csv);
+        var parsedFeature = agriCropService.createFromCsv(new Tenant(), "another-random-crop-id", csv);
         assertThat(parsedFeature).isNotNull();
     }
 

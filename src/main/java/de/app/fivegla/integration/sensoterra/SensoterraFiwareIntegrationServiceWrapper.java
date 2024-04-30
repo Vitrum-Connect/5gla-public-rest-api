@@ -2,12 +2,12 @@ package de.app.fivegla.integration.sensoterra;
 
 
 import de.app.fivegla.api.enums.EntityType;
-import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
-import de.app.fivegla.fiware.model.internal.EmptyAttribute;
-import de.app.fivegla.fiware.model.internal.NumberAttribute;
-import de.app.fivegla.fiware.model.internal.TextAttribute;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
+import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
+import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -24,13 +24,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SensoterraFiwareIntegrationServiceWrapper {
-    private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
 
     public void persist(Tenant tenant, Probe probe, List<ProbeData> probeData) {
         probeData.forEach(probeDataEntry -> {
             log.info("Persisting measurement for probe: {}", probe);
             var deviceMeasurement = createDeviceMeasurement(tenant, probe, probeDataEntry);
-            deviceMeasurementIntegrationService.persist(deviceMeasurement);
+            fiwareEntityIntegrationService.persist(deviceMeasurement);
         });
     }
 

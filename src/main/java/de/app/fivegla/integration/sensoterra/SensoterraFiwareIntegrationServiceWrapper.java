@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.sensoterra;
 
 
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
@@ -38,7 +38,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         log.debug("Persisting probe data for probe: {}", probe);
         log.debug("Persisting probe data: {}", probeData);
         return new DeviceMeasurement(tenant.getFiwarePrefix() + probe.getId(),
-                MeasurementType.SENSOTERRA_SENSOR.getKey(),
+                EntityType.SENSOTERRA_SENSOR.getKey(),
                 new TextAttribute("value"),
                 new NumberAttribute(probeData.getValue()),
                 new DateTimeAttribute(probeData.getTimestamp()),

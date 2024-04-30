@@ -6,7 +6,7 @@ import lombok.Getter;
  * Represents the type of measurement.
  */
 @Getter
-public enum MeasurementType {
+public enum EntityType {
     SENTEK_SENSOR("SentekSensor"),
     WEENAT_SENSOR("WeenatSensor"),
     AGVOLUTION_SENSOR("AgvolutionSensor"),
@@ -16,11 +16,12 @@ public enum MeasurementType {
     AGRANIMO_SENSOR("AgranimoSensor"),
     SOILSCOUT_SENSOR("SoilScoutSensor"),
     DEVICE_POSITION("DevicePosition"),
+    AGRI_CROP("AgriCrop"),
     UNKNOWN("Unknown");
 
     private final String key;
 
-    MeasurementType(String key) {
+    EntityType(String key) {
         this.key = key;
     }
 }

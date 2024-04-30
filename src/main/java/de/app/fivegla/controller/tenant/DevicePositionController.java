@@ -3,7 +3,7 @@ package de.app.fivegla.controller.tenant;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AddDevicePositionRequest;
@@ -71,7 +71,7 @@ public class DevicePositionController implements TenantCredentialApiAccess {
             log.info("Adding device( position: {}", request);
             devicePositionIntegrationService.createDevicePosition(
                     principal.getName(),
-                    MeasurementType.DEVICE_POSITION,
+                    EntityType.DEVICE_POSITION,
                     deviceId,
                     transactionId,
                     request.getLatitude(),

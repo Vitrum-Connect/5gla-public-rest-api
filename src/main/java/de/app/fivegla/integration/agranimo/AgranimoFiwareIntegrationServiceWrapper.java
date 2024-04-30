@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.agranimo;
 
 
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
@@ -34,7 +34,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
     public void persist(Tenant tenant, Zone zone, SoilMoisture soilMoisture) {
         var smo1 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
-                MeasurementType.AGRANIMO_SENSOR.getKey(),
+                EntityType.AGRANIMO_SENSOR.getKey(),
                 new TextAttribute("smo1"),
                 new NumberAttribute(soilMoisture.getSmo1()),
                 new DateTimeAttribute(soilMoisture.getTms()),
@@ -45,7 +45,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
 
         var smo2 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
-                MeasurementType.AGRANIMO_SENSOR.getKey(),
+                EntityType.AGRANIMO_SENSOR.getKey(),
                 new TextAttribute("smo2"),
                 new NumberAttribute(soilMoisture.getSmo2()),
                 new DateTimeAttribute(soilMoisture.getTms()),
@@ -56,7 +56,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
 
         var smo3 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
-                MeasurementType.AGRANIMO_SENSOR.getKey(),
+                EntityType.AGRANIMO_SENSOR.getKey(),
                 new TextAttribute("smo3"),
                 new NumberAttribute(soilMoisture.getSmo3()),
                 new DateTimeAttribute(soilMoisture.getTms()),
@@ -67,7 +67,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
 
         var smo4 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
-                MeasurementType.AGRANIMO_SENSOR.getKey(),
+                EntityType.AGRANIMO_SENSOR.getKey(),
                 new TextAttribute("smo4"),
                 new NumberAttribute(soilMoisture.getSmo4()),
                 new DateTimeAttribute(soilMoisture.getTms()),

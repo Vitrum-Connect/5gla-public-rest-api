@@ -1,6 +1,6 @@
 package de.app.fivegla.integration.deviceposition;
 
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class DevicePositionIntegrationService {
      * @param longitude     The longitude value of the device position.
      */
     public void createDevicePosition(String tenantId,
-                                     MeasurementType measurementType,
+                                     EntityType entityType,
                                      String deviceId,
                                      String transactionId,
                                      double latitude,
@@ -38,7 +38,7 @@ public class DevicePositionIntegrationService {
         } else {
             var tenant = optionalTenant.get();
             devicePositionFiwareIntegrationServiceWrapper.persist(tenant,
-                    measurementType,
+                    entityType,
                     deviceId,
                     transactionId,
                     latitude,

@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.imageprocessing;
 
 
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
 import de.app.fivegla.fiware.model.DeviceMeasurement;
 import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
@@ -34,7 +34,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
     public void createDroneDeviceMeasurement(Tenant tenant, String droneId, Image image) {
         var deviceMeasurement = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + droneId,
-                MeasurementType.MICASENSE_IMAGE.getKey(),
+                EntityType.MICASENSE_IMAGE.getKey(),
                 new TextAttribute("image"),
                 new EmptyAttribute(),
                 new DateTimeAttribute(image.getMeasuredAt()),

@@ -38,4 +38,8 @@ public record AgriCrop(
         }
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
 }

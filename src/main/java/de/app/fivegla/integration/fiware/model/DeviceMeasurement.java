@@ -42,4 +42,8 @@ public record DeviceMeasurement(
         }
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
 }

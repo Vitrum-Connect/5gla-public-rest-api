@@ -3,7 +3,6 @@ package de.app.fivegla.integration.fiware.api;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 
 /**
  * A class that provides custom date formatting functionality.
@@ -28,13 +27,4 @@ public final class CustomDateFormatter {
         return FMT.format(instant);
     }
 
-    /**
-     * Parses a string representation of a date and time into a TemporalAccessor object using the default date format.
-     *
-     * @param s The string representation of the date and time to be parsed.
-     * @return A TemporalAccessor object representing the parsed date and time.
-     */
-    public static TemporalAccessor parse(String s) {
-        return FMT.parse(s);
-    }
 }

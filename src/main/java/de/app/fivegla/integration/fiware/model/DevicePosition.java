@@ -40,4 +40,8 @@ public record DevicePosition(
         }
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
 }

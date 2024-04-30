@@ -1,6 +1,6 @@
 package de.app.fivegla.scheduled;
 
-import de.app.fivegla.event.DataImportEvent;
+import de.app.fivegla.event.events.DataImportEvent;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -4,11 +4,13 @@ package de.app.fivegla.business;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
+import de.app.fivegla.event.events.ResendSubscriptionsEvent;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +28,7 @@ import java.util.UUID;
 public class TenantService implements UserDetailsService {
 
     private final ApplicationDataRepository applicationDataRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Creates a new tenant with the provided name and description.
@@ -46,7 +49,9 @@ public class TenantService implements UserDetailsService {
         var accessToken = generateAccessToken();
         var encodedAccessToken = new BCryptPasswordEncoder().encode(accessToken);
         tenant.setAccessToken(encodedAccessToken);
-        return new TenantAndAccessToken(applicationDataRepository.addTenant(tenant), accessToken);
+        var tenantAndAccessToken = new TenantAndAccessToken(applicationDataRepository.addTenant(tenant), accessToken);
+        applicationEventPublisher.publishEvent(new ResendSubscriptionsEvent(this));
+        return tenantAndAccessToken;
     }
 
     private void validateTenantId(String tenantId) {
@@ -99,7 +104,9 @@ public class TenantService implements UserDetailsService {
      */
     public Tenant update(String tenantId, String name, String description) {
         checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
-        return applicationDataRepository.updateTenant(tenantId, name, description);
+        var tenant = applicationDataRepository.updateTenant(tenantId, name, description);
+        applicationEventPublisher.publishEvent(new ResendSubscriptionsEvent(this));
+        return tenant;
     }
 
     /**

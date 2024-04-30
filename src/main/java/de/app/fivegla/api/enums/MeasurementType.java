@@ -1,14 +1,26 @@
 package de.app.fivegla.api.enums;
 
+import lombok.Getter;
+
+/**
+ * Represents the type of measurement.
+ */
 public enum MeasurementType {
-    SENTEK_SENSOR,
-    WEENAT_SENSOR,
-    AGVOLUTION_SENSOR,
-    MICASENSE_IMAGE,
-    SENSOTERRA_SENSOR,
-    FARM21_SENSOR,
-    AGRANIMO_SENSOR,
-    SOILSCOUT_SENSOR,
-    DRONE_POSITION,
-    UNKNOWN
+    SENTEK_SENSOR("SentekSensor"),
+    WEENAT_SENSOR("WeenatSensor"),
+    AGVOLUTION_SENSOR("AgvolutionSensor"),
+    MICASENSE_IMAGE("MicaseSenseImage"),
+    SENSOTERRA_SENSOR("SensoterraSensor"),
+    FARM21_SENSOR("Farm21Sensor"),
+    AGRANIMO_SENSOR("AgranimoSensor"),
+    SOILSCOUT_SENSOR("SoilScoutSensor"),
+    DEVICE_POSITION("DevicePosition"),
+    UNKNOWN("Unknown");
+
+    @Getter
+    private final String key;
+
+    MeasurementType(String key) {
+        this.key = key;
+    }
 }

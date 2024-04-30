@@ -34,7 +34,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
     public void createDroneDeviceMeasurement(Tenant tenant, String droneId, Image image) {
         var deviceMeasurement = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + droneId,
-                MeasurementType.MICASENSE_IMAGE.name(),
+                MeasurementType.MICASENSE_IMAGE.getKey(),
                 new TextAttribute("image"),
                 new EmptyAttribute(),
                 new DateTimeAttribute(image.getMeasuredAt()),

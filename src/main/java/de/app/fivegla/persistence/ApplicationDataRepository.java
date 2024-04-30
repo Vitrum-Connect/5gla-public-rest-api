@@ -111,7 +111,7 @@ public class ApplicationDataRepository {
      *
      * @return A list of all tenants in the system.
      */
-    public List<Tenant> findAllTenants() {
+    public List<Tenant> findTenants() {
         return applicationData.getTenants();
 
     }

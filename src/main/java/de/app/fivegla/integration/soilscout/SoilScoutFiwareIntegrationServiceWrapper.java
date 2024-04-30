@@ -37,7 +37,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
         var temperature = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.name(),
+                MeasurementType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("temperature"),
                 new NumberAttribute(sensorData.getTemperature()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -48,7 +48,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
         var moisture = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.name(),
+                MeasurementType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("moisture"),
                 new NumberAttribute(sensorData.getMoisture()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -59,7 +59,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
         var conductivity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.name(),
+                MeasurementType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("conductivity"),
                 new NumberAttribute(sensorData.getConductivity()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -70,7 +70,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
         var salinity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.name(),
+                MeasurementType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("salinity"),
                 new NumberAttribute(sensorData.getSalinity()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -81,7 +81,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
         var waterBalance = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.name(),
+                MeasurementType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("waterBalance"),
                 new NumberAttribute(sensorData.getWaterBalance()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),

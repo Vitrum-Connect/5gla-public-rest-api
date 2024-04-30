@@ -71,7 +71,7 @@ public class DevicePositionController implements TenantCredentialApiAccess {
             log.info("Adding device( position: {}", request);
             devicePositionIntegrationService.createDevicePosition(
                     principal.getName(),
-                    MeasurementType.DRONE_POSITION,
+                    MeasurementType.DEVICE_POSITION,
                     deviceId,
                     transactionId,
                     request.getLatitude(),

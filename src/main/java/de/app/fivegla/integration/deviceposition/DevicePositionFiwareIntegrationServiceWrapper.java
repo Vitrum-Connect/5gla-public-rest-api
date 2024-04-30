@@ -37,7 +37,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
     public void persist(Tenant tenant, MeasurementType measurementType, String deviceId, String transactionId, double latitude, double longitude) {
         var devicePosition = new DevicePosition(
                 tenant.getFiwarePrefix() + deviceId,
-                measurementType.name(),
+                measurementType.getKey(),
                 new TextAttribute(transactionId),
                 new TextAttribute(deviceId),
                 new EmptyAttribute(),

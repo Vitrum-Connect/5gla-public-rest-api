@@ -1,17 +1,7 @@
 package de.app.fivegla.integration.fiware;
 
-import de.app.fivegla.integration.fiware.api.CustomHeader;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
-import de.app.fivegla.integration.fiware.model.FiwareEntity;
-import de.app.fivegla.integration.fiware.request.UpdateOrCreateFiwareEntitiesRequest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
 
 /**
  * Abstract integration service.

@@ -6,6 +6,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.agricrop.AgriCropFiwareIntegrationServiceWrapper;
+import de.app.fivegla.integration.fiware.model.AgriCrop;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class AgriCropService {
     /**
      * Parses the GeoJSON file containing the agri-crop data.
      */
-    public List<GpsCoordinate> createFromGeoJson(Tenant tenant, String cropId, String geoJson) {
+    public AgriCrop createFromGeoJson(Tenant tenant, String cropId, String geoJson) {
         try {
             log.info("Tenant {} is parsing GeoJSON.", tenant.getName());
             log.debug("Parsing GeoJSON: {}.", geoJson);
@@ -39,8 +40,8 @@ public class AgriCropService {
             var coordinates = Arrays.stream(defaultGeometry.getCoordinates())
                     .map(coordinate -> GpsCoordinate.builder().latitude(coordinate.y).longitude(coordinate.x).build())
                     .toList();
-            agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
-            return coordinates;
+            var agriCrop = agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
+            return agriCrop;
         } catch (Exception e) {
             log.error("Failed to parse GeoJSON: {}.", geoJson, e);
             throw new BusinessException(ErrorMessage.builder()
@@ -60,7 +61,7 @@ public class AgriCropService {
      * @throws BusinessException If the CSV file cannot be parsed, or if a line does not
      *                           contain exactly two columns.
      */
-    public List<GpsCoordinate> createFromCsv(Tenant tenant, String cropId, String csv) {
+    public AgriCrop createFromCsv(Tenant tenant, String cropId, String csv) {
         if (StringUtils.isNotBlank(csv)) {
             log.info("Tenant {} is parsing CSV.", tenant.getName());
             log.debug("Parsing CSV: {}.", csv);
@@ -68,7 +69,8 @@ public class AgriCropService {
             log.debug("Looks like we have {} lines.", lines.length);
             var coordinates = parseCoordinates(lines);
             agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
-            return coordinates;
+            var agriCrop = agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
+            return agriCrop;
         } else {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.COULD_NOT_PARSE_CSV)

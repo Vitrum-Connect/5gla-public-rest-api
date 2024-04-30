@@ -30,13 +30,15 @@ public class AgriCropFiwareIntegrationServiceWrapper {
      * @param tenant      the tenant owning the crop
      * @param cropId      the ID of the crop
      * @param coordinates the list of GPS coordinates of the crop
+     * @return the persisted crop
      */
-    public void persist(Tenant tenant, String cropId, List<GpsCoordinate> coordinates) {
+    public AgriCrop persist(Tenant tenant, String cropId, List<GpsCoordinate> coordinates) {
         var agriCrop = new AgriCrop(
                 tenant.getFiwarePrefix() + cropId,
                 EntityType.AGRI_CROP.getKey(),
                 new DateTimeAttribute(Instant.now()),
                 coordinates);
         fiwareEntityIntegrationService.persist(agriCrop);
+        return agriCrop;
     }
 }

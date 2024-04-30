@@ -1,6 +1,9 @@
 package de.app.fivegla.integration.fiware.model;
 
+import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.fiware.api.FiwareType;
+
+import java.util.List;
 
 /**
  * The FiwareEntity interface represents an entity in the Fiware system.
@@ -15,6 +18,13 @@ public interface FiwareEntity {
      */
     String asJson();
 
+    /**
+     * Returns the JSON representation of the location coordinates.
+     *
+     * @param latitude  the latitude coordinate
+     * @param longitude the longitude coordinate
+     * @return the JSON representation of the location coordinates
+     */
     default String locationAsJson(double latitude, double longitude) {
         if (latitude == 0.0 && longitude == 0.0) {
             return "{}";
@@ -24,6 +34,26 @@ public interface FiwareEntity {
                     "  \"value\": {" +
                     "    \"type\":\"Point\"," +
                     "    \"coordinates\": [" + longitude + "," + latitude + "]" +
+                    "  }" +
+                    "}";
+        }
+    }
+
+    /**
+     * Converts a list of GpsCoordinate objects to a JSON string representing a Polygon in GeoJSON format.
+     *
+     * @param coordinates the list of GpsCoordinate objects to be converted
+     * @return the JSON string representing the Polygon in GeoJSON format
+     */
+    default String coordinatesAsJson(List<GpsCoordinate> coordinates) {
+        if (coordinates.isEmpty()) {
+            return "{}";
+        } else {
+            return "{" +
+                    "  \"type\":\"" + FiwareType.GEO_JSON.getKey() + "\"," +
+                    "  \"value\": {" +
+                    "    \"type\":\"Polygon\"," +
+                    "    \"coordinates\": [" + coordinates.stream().map(c -> "[" + c.getLatitude() + "," + c.getLongitude() + "]").reduce((a, b) -> a + "," + b).orElse("") + "]" +
                     "  }" +
                     "}";
         }

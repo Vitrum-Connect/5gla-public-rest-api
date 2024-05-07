@@ -14,8 +14,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -41,7 +39,7 @@ public class ApplicationStartEventHandler {
         var subscriptionService = subscriptionService(tenantId);
         if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
             try {
-                subscriptionService.subscribe(Arrays.stream(EntityType.values()).map(Enum::name).toArray(String[]::new));
+                subscriptionService.subscribe(EntityType.values());
                 log.info("Subscribed to device measurement notifications.");
                 subscriptionStatus.subscriptionSent(tenantId);
             } catch (FiwareIntegrationLayerException e) {

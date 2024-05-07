@@ -28,19 +28,22 @@ public class AgriCropService {
      * coordinates of a point in the format "latitude, longitude". The feature will have a
      * unique ID generated using UUID.
      *
-     * @param csv The CSV file containing the coordinates.
+     * @param tenant The tenant owning the feature.
+     * @param zone   The zone of the feature
+     * @param cropId The ID of the featurel
+     * @param csv    The CSV file containing the coordinates.
      * @return The created feature.
      * @throws BusinessException If the CSV file cannot be parsed, or if a line does not
      *                           contain exactly two columns.
      */
-    public AgriCrop createFromCsv(Tenant tenant, String cropId, String csv) {
+    public AgriCrop createFromCsv(Tenant tenant, String zone, String cropId, String csv) {
         if (StringUtils.isNotBlank(csv)) {
             log.info("Tenant {} is parsing CSV.", tenant.getName());
             log.debug("Parsing CSV: {}.", csv);
             var lines = csv.split("\n");
             log.debug("Looks like we have {} lines.", lines.length);
             var coordinates = parseCoordinates(lines);
-            return agriCropFiwareIntegrationServiceWrapper.persist(tenant, cropId, coordinates);
+            return agriCropFiwareIntegrationServiceWrapper.persist(tenant, zone, cropId, coordinates);
         } else {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.COULD_NOT_PARSE_CSV)

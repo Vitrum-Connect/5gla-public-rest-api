@@ -13,6 +13,7 @@ import java.util.List;
 public record AgriCrop(
         String id,
         String type,
+        String zone,
         Attribute dateCreated,
         List<GpsCoordinate> coordinates
 ) implements Validatable, FiwareEntity {
@@ -23,6 +24,7 @@ public record AgriCrop(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
+                "  \"zone\":\"" + zone + "\"," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +
                 "  \"coordinates\":" + coordinatesAsJson(coordinates) +
                 "}";

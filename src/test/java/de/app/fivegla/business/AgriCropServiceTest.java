@@ -45,7 +45,7 @@ class AgriCropServiceTest {
     void givenValidCsvWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
         var tenant = new Tenant();
         tenant.setTenantId("another-random-tenant-id");
-        Assertions.assertDoesNotThrow(() -> agriCropService.createFromCsv(tenant, "another-random-crop-id", csv));
+        Assertions.assertDoesNotThrow(() -> agriCropService.createFromCsv(tenant, "another-random-zone-id", "another-random-crop-id", csv));
     }
 
 }

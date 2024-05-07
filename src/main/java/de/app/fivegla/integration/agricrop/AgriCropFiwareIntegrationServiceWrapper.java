@@ -28,13 +28,15 @@ public class AgriCropFiwareIntegrationServiceWrapper {
      * Persists the coordinates of a tenant's crop to the context broker.
      *
      * @param tenant      the tenant owning the crop
+     * @param zone        the zone of the crop
      * @param cropId      the ID of the crop
      * @param coordinates the list of GPS coordinates of the crop
      * @return the persisted crop
      */
-    public AgriCrop persist(Tenant tenant, String cropId, List<GpsCoordinate> coordinates) {
+    public AgriCrop persist(Tenant tenant, String zone, String cropId, List<GpsCoordinate> coordinates) {
         var agriCrop = new AgriCrop(
                 tenant.getFiwarePrefix() + cropId,
+                zone,
                 EntityType.AGRI_CROP.getKey(),
                 new DateTimeAttribute(Instant.now()),
                 coordinates);

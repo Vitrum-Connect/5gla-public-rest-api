@@ -2,6 +2,7 @@ package de.app.fivegla.fiware;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.app.fivegla.api.enums.MeasurementType;
 import de.app.fivegla.fiware.api.CustomHeader;
 import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.fiware.model.cygnus.*;
@@ -38,14 +39,14 @@ public class SubscriptionService extends AbstractIntegrationService {
     /**
      * Creates or updates subscriptions for the specified types.
      *
-     * @param types The types of entities to subscribe to.
-     *              Accepts multiple arguments of type String,
-     *              each representing a different type.
+     * @param measurementTypes The types of entities to subscribe to.
+     *                         Accepts multiple arguments of type String,
+     *                         each representing a different type.
      * @throws FiwareIntegrationLayerException if there is an error creating or updating the subscription.
      */
-    public void subscribe(String... types) {
+    public void subscribe(MeasurementType... measurementTypes) {
         var httpClient = HttpClient.newHttpClient();
-        var subscriptions = createSubscriptions(types);
+        var subscriptions = createSubscriptions(measurementTypes);
         for (var subscription : subscriptions) {
             String json = toJson(subscription);
             log.debug("Creating subscription: " + json);
@@ -70,14 +71,14 @@ public class SubscriptionService extends AbstractIntegrationService {
         }
     }
 
-    private List<Subscription> createSubscriptions(String... types) {
-        log.debug("Creating subscriptions for types: " + Arrays.toString(types));
+    private List<Subscription> createSubscriptions(MeasurementType... measurementTypes) {
+        log.debug("Creating subscriptions for measurementTypes: " + Arrays.toString(measurementTypes));
         var subscriptions = new ArrayList<Subscription>();
         for (var notificationUrl : notificationUrls) {
             var subscription = Subscription.builder()
-                    .description("Subscription for " + Arrays.toString(types) + " type")
+                    .description("Subscription for " + Arrays.toString(measurementTypes) + " type")
                     .subject(Subject.builder()
-                            .entities(createSubscriptionEntities(types))
+                            .entities(createSubscriptionEntities(measurementTypes))
                             .build())
                     .notification(Notification.builder()
                             .http(Http.builder()
@@ -90,12 +91,12 @@ public class SubscriptionService extends AbstractIntegrationService {
         return subscriptions;
     }
 
-    private List<Entity> createSubscriptionEntities(String[] types) {
+    private List<Entity> createSubscriptionEntities(MeasurementType... types) {
         var entities = new ArrayList<Entity>();
         for (var type : types) {
             entities.add(Entity.builder()
                     .idPattern(".*")
-                    .type(type)
+                    .type(type.getKey())
                     .build());
         }
         return entities;
@@ -106,7 +107,7 @@ public class SubscriptionService extends AbstractIntegrationService {
      *
      * @param type the type of subscriptions to be removed
      */
-    public void removeAll(String type) {
+    public void removeAll(MeasurementType type) {
         findAll(type).forEach(this::removeSubscription);
     }
 
@@ -137,7 +138,7 @@ public class SubscriptionService extends AbstractIntegrationService {
      * @return A list of Subscription objects matching the given type.
      * @throws FiwareIntegrationLayerException if there was an error finding the subscriptions.
      */
-    public List<Subscription> findAll(String type) {
+    public List<Subscription> findAll(MeasurementType type) {
         var httpClient = HttpClient.newHttpClient();
         var httpRequest = HttpRequest.newBuilder()
                 .header(CustomHeader.FIWARE_SERVICE, getTenant())
@@ -153,7 +154,7 @@ public class SubscriptionService extends AbstractIntegrationService {
                 log.info("Subscription found successfully.");
                 return toListOfObjects(response.body()).stream().filter(subscription -> subscription.getSubject().getEntities()
                         .stream()
-                        .anyMatch(entity -> entity.getType().equals(type))).toList();
+                        .anyMatch(entity -> entity.getType().equals(type.getKey()))).toList();
             }
         } catch (Exception e) {
             throw new FiwareIntegrationLayerException("Could not find subscription", e);

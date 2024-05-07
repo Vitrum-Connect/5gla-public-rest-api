@@ -19,8 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 /**
  * Event handler for data import events.
  */
@@ -53,7 +51,7 @@ public class DataImportEventHandler {
             var config = dataImportEvent.thirdPartyApiConfiguration();
             if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
                 try {
-                    subscriptionService(tenantId).subscribe(Arrays.stream(MeasurementType.values()).map(Enum::name).toArray(String[]::new));
+                    subscriptionService(tenantId).subscribe(MeasurementType.values());
                     log.info("Subscribed to device measurement notifications.");
                     subscriptionStatus.subscriptionSent(tenantId);
                 } catch (FiwareIntegrationLayerException e) {

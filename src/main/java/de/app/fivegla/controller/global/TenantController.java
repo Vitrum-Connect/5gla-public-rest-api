@@ -93,7 +93,7 @@ public class TenantController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @PutMapping
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> update(@Valid @RequestBody UpdateTenantRequest request) {
         var tenant = tenantService.update(request.getTenantId(), request.getName(), request.getDescription());
         return ResponseEntity.ok(UpdateTenantResponse.builder()

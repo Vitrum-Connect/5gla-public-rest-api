@@ -61,7 +61,7 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = VersionResponse.class)
             )
     )
-    @GetMapping(value = "/version", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getVersion() {
         return ResponseEntity.ok(VersionResponse.builder().version(applicationVersion).build());
     }
@@ -84,7 +84,7 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = FiwareStatusResponse.class)
             )
     )
-    @GetMapping(value = "/fiware", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/fiware", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getFiwareStatus() {
         var version = statusIntegrationService.getVersion();
         return ResponseEntity.ok(FiwareStatusResponse.builder()
@@ -112,7 +112,7 @@ public class InfoController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = LastRunResponse.class)
             )
     )
-    @GetMapping(value = "/last-run", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getLastImport() {
         var lastRuns = new HashMap<Manufacturer, String>();
         var savedLastRuns = applicationDataRepository.getLastRuns();

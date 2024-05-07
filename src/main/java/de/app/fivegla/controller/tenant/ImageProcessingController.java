@@ -155,7 +155,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @GetMapping(value = "/{transactionId}/oids", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{transactionId}/oids",  = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getImageOidsForTransaction(@PathVariable String transactionId) {
         var oids = imageProcessingIntegrationService.getImageOidsForTransaction(transactionId);
         return ResponseEntity.ok(OidsForTransactionResponse.builder()

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Represents a request to create a third-party API configuration.")
-public class CreateThirdPartyApiConfigurationRequest {
+public class CreateThirdPartyApiConfigurationRequest extends BaseRequest {
 
     /**
      * Represents the manufacturer.

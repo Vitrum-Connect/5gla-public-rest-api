@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Schema(description = "Request for image processing.")
-public class ImageProcessingRequest {
+public class ImageProcessingRequest extends BaseRequest {
 
     /**
      * The transaction id.

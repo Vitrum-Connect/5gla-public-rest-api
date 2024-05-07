@@ -31,46 +31,6 @@ public class AgriCropController implements TenantCredentialApiAccess {
     private final ApplicationDataRepository applicationDataRepository;
 
     @Operation(
-            operationId = "agri-crop.import-geojson",
-            description = "Imports the GeoJSON containing the agri-crop data.",
-            tags = BaseMappings.AGRI_CROP
-    )
-    @ApiResponse(
-            responseCode = "201",
-            description = "The CSV was imported successfully.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @ApiResponse(
-            responseCode = "400",
-            description = "The request is invalid.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @PostMapping(value = "/geo-json/{cropId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> importGeoJson(@RequestBody @Parameter(description = "The crop, represented as GeoJSON (RFC 7946).") String geoJson,
-                                                            @PathVariable @Parameter(description = "The crop ID") String cropId,
-                                                            Principal principal) {
-        var optionalTenant = applicationDataRepository.getTenant(principal.getName());
-        if (optionalTenant.isEmpty()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(ErrorMessage.builder()
-                            .error(Error.TENANT_NOT_FOUND)
-                            .message("No tenant found for id " + principal.getName())
-                            .build());
-        } else {
-            var tenant = optionalTenant.get();
-            agriCropService.createFromGeoJson(tenant, cropId, geoJson);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
-        }
-    }
-
-    @Operation(
             operationId = "agri-crop.import-csv",
             description = "Imports the CSV containing the agri-crop data.",
             tags = BaseMappings.AGRI_CROP

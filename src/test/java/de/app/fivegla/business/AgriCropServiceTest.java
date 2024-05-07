@@ -1,18 +1,14 @@
 package de.app.fivegla.business;
 
-import de.app.fivegla.SpringBootIntegrationTestBase;
+import de.app.fivegla.integration.agricrop.AgriCropFiwareIntegrationServiceWrapper;
 import de.app.fivegla.persistence.entity.Tenant;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+class AgriCropServiceTest {
 
-@SpringBootTest
-class AgriCropServiceTest extends SpringBootIntegrationTestBase {
-
-    @Autowired
-    private AgriCropService agriCropService;
 
     @SuppressWarnings("FieldCanBeLocal")
     private final String feature = """
@@ -67,16 +63,25 @@ class AgriCropServiceTest extends SpringBootIntegrationTestBase {
                             10.443273285881673,52.88334609790465
             """;
 
-    @Test
-    void givenValidFeatureWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
-        var parsedFeature = agriCropService.createFromGeoJson(new Tenant(), "some-random-crop-id", feature);
-        assertThat(parsedFeature).isNotNull();
+
+    private AgriCropService agriCropService;
+
+    private AutoCloseable openMocks;
+
+    @Mock
+    private AgriCropFiwareIntegrationServiceWrapper agriCropFiwareIntegrationServiceWrapper;
+
+
+    public AgriCropServiceTest() {
+        openMocks = MockitoAnnotations.openMocks(this);
+        this.agriCropService = new AgriCropService(agriCropFiwareIntegrationServiceWrapper);
     }
 
     @Test
     void givenValidCsvWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
-        var parsedFeature = agriCropService.createFromCsv(new Tenant(), "another-random-crop-id", csv);
-        assertThat(parsedFeature).isNotNull();
+        var tenant = new Tenant();
+        tenant.setTenantId("another-random-tenant-id");
+        Assertions.assertDoesNotThrow(() -> agriCropService.createFromCsv(tenant, "another-random-crop-id", csv));
     }
 
 }

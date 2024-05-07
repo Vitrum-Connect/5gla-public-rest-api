@@ -39,14 +39,14 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
     /**
      * Creates or updates subscriptions for the specified types.
      *
-     * @param measurementTypes The types of entities to subscribe to.
+     * @param entityTypes The types of entities to subscribe to.
      *                         Accepts multiple arguments of type String,
      *                         each representing a different type.
      * @throws FiwareIntegrationLayerException if there is an error creating or updating the subscription.
      */
-    public void subscribe(EntityType... measurementTypes) {
+    public void subscribe(EntityType... entityTypes) {
         var httpClient = HttpClient.newHttpClient();
-        var subscriptions = createSubscriptions(measurementTypes);
+        var subscriptions = createSubscriptions(entityTypes);
         for (var subscription : subscriptions) {
             String json = toJson(subscription);
             log.debug("Creating subscription: " + json);
@@ -71,14 +71,14 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
         }
     }
 
-    private List<Subscription> createSubscriptions(EntityType... measurementTypes) {
-        log.debug("Creating subscriptions for measurementTypes: " + Arrays.toString(measurementTypes));
+    private List<Subscription> createSubscriptions(EntityType... entityTypes) {
+        log.debug("Creating subscriptions for entityTypes: " + Arrays.toString(entityTypes));
         var subscriptions = new ArrayList<Subscription>();
         for (var notificationUrl : notificationUrls) {
             var subscription = Subscription.builder()
-                    .description("Subscription for " + Arrays.toString(measurementTypes) + " type")
+                    .description("Subscription for " + Arrays.toString(entityTypes) + " type")
                     .subject(Subject.builder()
-                            .entities(createSubscriptionEntities(measurementTypes))
+                            .entities(createSubscriptionEntities(entityTypes))
                             .build())
                     .notification(Notification.builder()
                             .http(Http.builder()
@@ -91,9 +91,9 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
         return subscriptions;
     }
 
-    private List<Entity> createSubscriptionEntities(EntityType... types) {
+    private List<Entity> createSubscriptionEntities(EntityType... entityTypes) {
         var entities = new ArrayList<Entity>();
-        for (var type : types) {
+        for (var type : entityTypes) {
             entities.add(Entity.builder()
                     .idPattern(".*")
                     .type(type.getKey())
@@ -132,13 +132,13 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
     }
 
     /**
-     * Finds all subscriptions of a given type.
+     * Finds all subscriptions of a given entityType.
      *
-     * @param type The type of subscription to find.
-     * @return A list of Subscription objects matching the given type.
+     * @param entityType The entityType of subscription to find.
+     * @return A list of Subscription objects matching the given entityType.
      * @throws FiwareIntegrationLayerException if there was an error finding the subscriptions.
      */
-    public List<Subscription> findAll(EntityType type) {
+    public List<Subscription> findAll(EntityType entityType) {
         var httpClient = HttpClient.newHttpClient();
         var httpRequest = HttpRequest.newBuilder()
                 .header(CustomHeader.FIWARE_SERVICE, getTenant())
@@ -154,7 +154,7 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                 log.info("Subscription found successfully.");
                 return toListOfObjects(response.body()).stream().filter(subscription -> subscription.getSubject().getEntities()
                         .stream()
-                        .anyMatch(entity -> entity.getType().equals(type.getKey()))).toList();
+                        .anyMatch(entity -> entity.getType().equals(entityType.getKey()))).toList();
             }
         } catch (Exception e) {
             throw new FiwareIntegrationLayerException("Could not find subscription", e);

@@ -11,13 +11,9 @@ import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.geotools.geojson.GeoJSONUtil;
-import org.geotools.geojson.feature.FeatureHandler;
-import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j

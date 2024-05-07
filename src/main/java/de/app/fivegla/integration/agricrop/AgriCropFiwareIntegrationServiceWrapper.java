@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.agricrop;
 
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
@@ -36,8 +37,8 @@ public class AgriCropFiwareIntegrationServiceWrapper {
     public AgriCrop persist(Tenant tenant, String zone, String cropId, List<GpsCoordinate> coordinates) {
         var agriCrop = new AgriCrop(
                 tenant.getFiwarePrefix() + cropId,
-                zone,
                 EntityType.AGRI_CROP.getKey(),
+                new ZoneOrDefaultValue(zone),
                 new DateTimeAttribute(Instant.now()),
                 coordinates);
         fiwareEntityIntegrationService.persist(agriCrop);

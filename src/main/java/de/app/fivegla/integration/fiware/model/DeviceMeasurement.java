@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.fiware.model;
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 public record DeviceMeasurement(
         String id,
         String type,
-        String zone,
+        ZoneOrDefaultValue zone,
         Attribute name,
         Attribute controlledProperty,
         Attribute dateCreated,
@@ -26,7 +27,7 @@ public record DeviceMeasurement(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"zone\":\"" + zone + "\"," +
+                "  \"zone\":\"" + zone.value() + "\"," +
                 "  \"name\":" + name.asJson() + "," +
                 "  \"controlledProperty\":" + controlledProperty.asJson() + "," +
                 "  \"externalDataReference\":" + externalDataReference.asJson() + "," +

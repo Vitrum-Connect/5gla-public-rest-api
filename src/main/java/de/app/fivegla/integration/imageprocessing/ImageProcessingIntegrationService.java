@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.imageprocessing;
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.imageprocessing.model.Image;
 import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
@@ -40,6 +41,7 @@ public class ImageProcessingIntegrationService {
         log.debug("Channel for the image: {}.", imageChannel);
         var micaSenseImage = applicationDataRepository.addImage(Image.builder()
                 .oid(tenant.getFiwarePrefix() + droneId)
+                .zone(new ZoneOrDefaultValue(zone))
                 .channel(imageChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)
@@ -48,7 +50,7 @@ public class ImageProcessingIntegrationService {
                 .measuredAt(exifDataIntegrationService.readMeasuredAt(image))
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, droneId, micaSenseImage);
+        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, droneId, zone, micaSenseImage);
         return micaSenseImage.getOid();
     }
 

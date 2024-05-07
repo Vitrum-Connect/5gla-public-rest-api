@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.soilscout;
 
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
@@ -38,6 +39,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var temperature = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
+                ZoneOrDefaultValue.DEFAULT,
                 new TextAttribute("temperature"),
                 new NumberAttribute(sensorData.getTemperature()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -49,6 +51,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var moisture = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
+                ZoneOrDefaultValue.DEFAULT,
                 new TextAttribute("moisture"),
                 new NumberAttribute(sensorData.getMoisture()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -60,6 +63,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var conductivity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
+                ZoneOrDefaultValue.DEFAULT,
                 new TextAttribute("conductivity"),
                 new NumberAttribute(sensorData.getConductivity()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -71,6 +75,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var salinity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
+                ZoneOrDefaultValue.DEFAULT,
                 new TextAttribute("salinity"),
                 new NumberAttribute(sensorData.getSalinity()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
@@ -82,6 +87,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var waterBalance = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
+                ZoneOrDefaultValue.DEFAULT,
                 new TextAttribute("waterBalance"),
                 new NumberAttribute(sensorData.getWaterBalance()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),

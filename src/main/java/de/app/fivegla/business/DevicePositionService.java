@@ -1,5 +1,6 @@
 package de.app.fivegla.business;
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.deviceposition.DevicePositionFiwareIntegrationServiceWrapper;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -35,6 +36,7 @@ public class DevicePositionService {
         log.info("Creating device position for device ID: {}, transaction ID: {}, latitude: {}, longitude: {}", deviceId, transactionId, latitude, longitude);
         devicePositionFiwareIntegrationServiceWrapper.persist(tenant,
                 entityType,
+                zone,
                 deviceId,
                 transactionId,
                 latitude,

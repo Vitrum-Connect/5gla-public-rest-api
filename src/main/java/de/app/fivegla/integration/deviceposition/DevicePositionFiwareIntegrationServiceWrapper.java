@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.deviceposition;
 
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DevicePosition;
@@ -28,6 +29,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
      *
      * @param tenant        The Tenant object representing the tenant.
      * @param entityType    The MeasurementType representing the type of measurement.
+     * @param zone          The zone in which the device is located.
      * @param deviceId      The ID of the device for which the position is being persisted.
      * @param transactionId The ID of the transaction related to the device position.
      * @param latitude      The latitude value of the device position.
@@ -35,6 +37,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
      */
     public void persist(Tenant tenant,
                         EntityType entityType,
+                        String zone,
                         String deviceId,
                         String transactionId,
                         double latitude,
@@ -42,6 +45,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
         var devicePosition = new DevicePosition(
                 tenant.getFiwarePrefix() + deviceId,
                 entityType.getKey(),
+                new ZoneOrDefaultValue(zone),
                 new TextAttribute(transactionId),
                 new TextAttribute(deviceId),
                 new DateTimeAttribute(Instant.now()),

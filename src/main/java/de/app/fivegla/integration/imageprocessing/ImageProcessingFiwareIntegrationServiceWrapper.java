@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.imageprocessing;
 
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
@@ -31,10 +32,11 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
      *
      * @param image the image to create the measurement for
      */
-    public void createDroneDeviceMeasurement(Tenant tenant, String droneId, Image image) {
+    public void createDroneDeviceMeasurement(Tenant tenant, String zone, String droneId, Image image) {
         var deviceMeasurement = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + droneId,
                 EntityType.MICASENSE_IMAGE.getKey(),
+                new ZoneOrDefaultValue(zone),
                 new TextAttribute("image"),
                 new EmptyAttribute(),
                 new DateTimeAttribute(image.getMeasuredAt()),

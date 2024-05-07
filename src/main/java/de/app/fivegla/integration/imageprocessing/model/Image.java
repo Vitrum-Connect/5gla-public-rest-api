@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.imageprocessing.model;
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,4 +50,9 @@ public class Image {
      * The location of the image.
      */
     private Point location;
+
+    /**
+     * The zone of the image.
+     */
+    private ZoneOrDefaultValue zone;
 }

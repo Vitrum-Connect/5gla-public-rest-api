@@ -95,7 +95,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @GetMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(Principal principal) {
         log.info("Getting third-party API configuration.");
         var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(principal.getName()).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
@@ -135,7 +135,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @DeleteMapping(value = "/{manufacturer}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{manufacturer}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(Principal principal, @PathVariable String manufacturer) {
         log.info("Deleting third-party API configuration.");
         thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(principal.getName(), Manufacturer.valueOf(manufacturer));

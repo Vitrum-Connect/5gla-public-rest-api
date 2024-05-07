@@ -2,13 +2,13 @@ package de.app.fivegla.event;
 
 import de.app.fivegla.Application;
 import de.app.fivegla.api.SubscriptionStatus;
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.event.events.DataImportEvent;
-import de.app.fivegla.fiware.SubscriptionService;
-import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
+import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
+import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
 import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
@@ -51,7 +51,7 @@ public class DataImportEventHandler {
             var config = dataImportEvent.thirdPartyApiConfiguration();
             if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
                 try {
-                    subscriptionService(tenantId).subscribe(MeasurementType.values());
+                    subscriptionService(tenantId).subscribe(EntityType.values());
                     log.info("Subscribed to device measurement notifications.");
                     subscriptionStatus.subscriptionSent(tenantId);
                 } catch (FiwareIntegrationLayerException e) {
@@ -73,7 +73,7 @@ public class DataImportEventHandler {
         }
     }
 
-    private SubscriptionService subscriptionService(String tenantId) {
+    private SubscriptionIntegrationService subscriptionService(String tenantId) {
         return application.subscriptionService(tenantId);
     }
 }

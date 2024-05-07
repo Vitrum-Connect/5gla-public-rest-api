@@ -3,11 +3,11 @@ package de.app.fivegla.controller.tenant;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AddDevicePositionRequest;
-import de.app.fivegla.integration.deviceposition.DevicePositionIntegrationService;
+import de.app.fivegla.business.DevicePositionService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,7 +30,7 @@ import java.security.Principal;
 @RequestMapping(BaseMappings.DEVICE_POSITION)
 public class DevicePositionController implements TenantCredentialApiAccess {
 
-    private final DevicePositionIntegrationService devicePositionIntegrationService;
+    private final DevicePositionService devicePositionService;
     private final ApplicationDataRepository applicationDataRepository;
 
     @Operation(
@@ -69,9 +69,10 @@ public class DevicePositionController implements TenantCredentialApiAccess {
                             .build());
         } else {
             log.info("Adding device( position: {}", request);
-            devicePositionIntegrationService.createDevicePosition(
-                    principal.getName(),
-                    MeasurementType.DEVICE_POSITION,
+            var tenant = optionalTenant.get();
+            devicePositionService.createDevicePosition(
+                    tenant,
+                    EntityType.DEVICE_POSITION,
                     deviceId,
                     transactionId,
                     request.getLatitude(),

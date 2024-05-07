@@ -1,13 +1,13 @@
 package de.app.fivegla.integration.soilscout;
 
 
-import de.app.fivegla.api.enums.MeasurementType;
-import de.app.fivegla.fiware.DeviceMeasurementIntegrationService;
-import de.app.fivegla.fiware.model.DeviceMeasurement;
-import de.app.fivegla.fiware.model.internal.DateTimeAttribute;
-import de.app.fivegla.fiware.model.internal.EmptyAttribute;
-import de.app.fivegla.fiware.model.internal.NumberAttribute;
-import de.app.fivegla.fiware.model.internal.TextAttribute;
+import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
+import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
+import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class SoilScoutFiwareIntegrationServiceWrapper {
 
     private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
-    private final DeviceMeasurementIntegrationService deviceMeasurementIntegrationService;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
 
     /**
      * Create soil scout sensor data in FIWARE.
@@ -37,58 +37,58 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
         var temperature = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.getKey(),
+                EntityType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("temperature"),
                 new NumberAttribute(sensorData.getTemperature()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        deviceMeasurementIntegrationService.persist(temperature);
+        fiwareEntityIntegrationService.persist(temperature);
 
         var moisture = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.getKey(),
+                EntityType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("moisture"),
                 new NumberAttribute(sensorData.getMoisture()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        deviceMeasurementIntegrationService.persist(moisture);
+        fiwareEntityIntegrationService.persist(moisture);
 
         var conductivity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.getKey(),
+                EntityType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("conductivity"),
                 new NumberAttribute(sensorData.getConductivity()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        deviceMeasurementIntegrationService.persist(conductivity);
+        fiwareEntityIntegrationService.persist(conductivity);
 
         var salinity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.getKey(),
+                EntityType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("salinity"),
                 new NumberAttribute(sensorData.getSalinity()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        deviceMeasurementIntegrationService.persist(salinity);
+        fiwareEntityIntegrationService.persist(salinity);
 
         var waterBalance = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
-                MeasurementType.SOILSCOUT_SENSOR.getKey(),
+                EntityType.SOILSCOUT_SENSOR.getKey(),
                 new TextAttribute("waterBalance"),
                 new NumberAttribute(sensorData.getWaterBalance()),
                 new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        deviceMeasurementIntegrationService.persist(waterBalance);
+        fiwareEntityIntegrationService.persist(waterBalance);
     }
 
 }

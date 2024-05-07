@@ -7,7 +7,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.LastRunResponse;
 import de.app.fivegla.controller.dto.response.VersionResponse;
-import de.app.fivegla.fiware.StatusService;
+import de.app.fivegla.integration.fiware.StatusIntegrationService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,12 +35,12 @@ public class InfoController implements ApiKeyApiAccess {
     private String applicationVersion;
 
     private final ApplicationDataRepository applicationDataRepository;
-    private final StatusService statusService;
+    private final StatusIntegrationService statusIntegrationService;
 
     public InfoController(ApplicationDataRepository applicationDataRepository,
-                          StatusService statusService) {
+                          StatusIntegrationService statusIntegrationService) {
         this.applicationDataRepository = applicationDataRepository;
-        this.statusService = statusService;
+        this.statusIntegrationService = statusIntegrationService;
     }
 
     /**
@@ -86,7 +86,7 @@ public class InfoController implements ApiKeyApiAccess {
     )
     @GetMapping(value = "/fiware", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getFiwareStatus() {
-        var version = statusService.getVersion();
+        var version = statusIntegrationService.getVersion();
         return ResponseEntity.ok(FiwareStatusResponse.builder()
                 .fiwareStatus(HttpStatus.OK)
                 .fiwareVersion(version)

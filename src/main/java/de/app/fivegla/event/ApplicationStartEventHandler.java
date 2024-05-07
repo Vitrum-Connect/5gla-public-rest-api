@@ -2,10 +2,10 @@ package de.app.fivegla.event;
 
 import de.app.fivegla.Application;
 import de.app.fivegla.api.SubscriptionStatus;
-import de.app.fivegla.api.enums.MeasurementType;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.event.events.ResendSubscriptionsEvent;
-import de.app.fivegla.fiware.SubscriptionService;
-import de.app.fivegla.fiware.api.FiwareIntegrationLayerException;
+import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
+import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class ApplicationStartEventHandler {
         var subscriptionService = subscriptionService(tenantId);
         if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
             try {
-                subscriptionService.subscribe(MeasurementType.values());
+                subscriptionService.subscribe(EntityType.values());
                 log.info("Subscribed to device measurement notifications.");
                 subscriptionStatus.subscriptionSent(tenantId);
             } catch (FiwareIntegrationLayerException e) {
@@ -50,7 +50,7 @@ public class ApplicationStartEventHandler {
         }
     }
 
-    private SubscriptionService subscriptionService(String tenantId) {
+    private SubscriptionIntegrationService subscriptionService(String tenantId) {
         return application.subscriptionService(tenantId);
     }
 

@@ -12,10 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "A single image to process.")
-public class DroneImage {
+public class DroneImage extends BaseRequest {
 
     /**
-     * The channel of the image since the value can not be read from the EXIF.
+     * The channel of the image since the value cannot be read from the EXIF.
      */
     @Schema(description = "The channel of the image.")
     private ImageChannel imageChannel;

@@ -4,10 +4,10 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.business.DevicePositionService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.AddDevicePositionRequest;
-import de.app.fivegla.business.DevicePositionService;
 import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,6 +33,15 @@ public class DevicePositionController implements TenantCredentialApiAccess {
     private final DevicePositionService devicePositionService;
     private final ApplicationDataRepository applicationDataRepository;
 
+    /**
+     * Adds a device position.
+     *
+     * @param deviceId      The device ID.
+     * @param transactionId The transaction ID.
+     * @param request       The request.
+     * @param principal     The principal.
+     * @return The response.
+     */
     @Operation(
             operationId = "device-position.add",
             description = "Adds a device position.",
@@ -72,6 +81,7 @@ public class DevicePositionController implements TenantCredentialApiAccess {
             var tenant = optionalTenant.get();
             devicePositionService.createDevicePosition(
                     tenant,
+                    request.getZone(),
                     EntityType.DEVICE_POSITION,
                     deviceId,
                     transactionId,

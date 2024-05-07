@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.fiware.model;
+package de.app.fivegla.integration.fiware.model.api;
 
 import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.fiware.api.FiwareType;

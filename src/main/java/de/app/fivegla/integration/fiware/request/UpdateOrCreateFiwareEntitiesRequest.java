@@ -1,6 +1,6 @@
 package de.app.fivegla.integration.fiware.request;
 
-import de.app.fivegla.integration.fiware.model.FiwareEntity;
+import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.request.enums.ActionType;
 import lombok.Builder;
 import lombok.Getter;

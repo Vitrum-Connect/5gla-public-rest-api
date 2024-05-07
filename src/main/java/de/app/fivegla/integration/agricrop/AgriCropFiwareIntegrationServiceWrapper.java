@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.agricrop;
 
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
@@ -28,14 +29,16 @@ public class AgriCropFiwareIntegrationServiceWrapper {
      * Persists the coordinates of a tenant's crop to the context broker.
      *
      * @param tenant      the tenant owning the crop
+     * @param zone        the zone of the crop
      * @param cropId      the ID of the crop
      * @param coordinates the list of GPS coordinates of the crop
      * @return the persisted crop
      */
-    public AgriCrop persist(Tenant tenant, String cropId, List<GpsCoordinate> coordinates) {
+    public AgriCrop persist(Tenant tenant, String zone, String cropId, List<GpsCoordinate> coordinates) {
         var agriCrop = new AgriCrop(
                 tenant.getFiwarePrefix() + cropId,
                 EntityType.AGRI_CROP.getKey(),
+                new ZoneOrDefaultValue(zone),
                 new DateTimeAttribute(Instant.now()),
                 coordinates);
         fiwareEntityIntegrationService.persist(agriCrop);

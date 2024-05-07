@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.imageprocessing;
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.imageprocessing.model.Image;
 import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
@@ -29,15 +30,18 @@ public class ImageProcessingIntegrationService {
     /**
      * Processes an image from the mica sense camera.
      *
-     * @param transactionId    The transaction id.
-     * @param imageChannel The channel the image was taken with.
-     * @param base64Image      The base64 encoded tiff image.
+     * @param transactionId The transaction id.
+     * @param zone          The zone.
+     * @param droneId       The id of the drone.
+     * @param imageChannel  The channel the image was taken with.
+     * @param base64Image   The base64 encoded tiff image.
      */
-    public String processImage(Tenant tenant, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
+    public String processImage(Tenant tenant, String zone, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
         var image = Base64.getDecoder().decode(base64Image);
         log.debug("Channel for the image: {}.", imageChannel);
         var micaSenseImage = applicationDataRepository.addImage(Image.builder()
                 .oid(tenant.getFiwarePrefix() + droneId)
+                .zone(new ZoneOrDefaultValue(zone))
                 .channel(imageChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)
@@ -46,7 +50,7 @@ public class ImageProcessingIntegrationService {
                 .measuredAt(exifDataIntegrationService.readMeasuredAt(image))
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, droneId, micaSenseImage);
+        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, droneId, zone, micaSenseImage);
         return micaSenseImage.getOid();
     }
 

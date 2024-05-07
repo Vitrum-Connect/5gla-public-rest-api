@@ -1,6 +1,6 @@
 package de.app.fivegla.integration.fiware.api;
 
-import de.app.fivegla.integration.fiware.model.FiwareEntity;
+import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import lombok.extern.slf4j.Slf4j;
 
 /**

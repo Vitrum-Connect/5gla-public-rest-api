@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.agvolution;
 
 
+import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
@@ -46,6 +47,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
             var deviceMeasurement = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + seriesEntry.getDeviceId(),
                     EntityType.AGVOLUTION_SENSOR.getKey(),
+                    ZoneOrDefaultValue.DEFAULT,
                     new TextAttribute(timeSeriesEntry.getKey()),
                     new NumberAttribute(timeSeriesValue.getValue()),
                     new DateTimeAttribute(timeSeriesValue.getTime()),

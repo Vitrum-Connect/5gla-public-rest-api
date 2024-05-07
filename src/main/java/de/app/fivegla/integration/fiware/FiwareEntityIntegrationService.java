@@ -3,7 +3,7 @@ package de.app.fivegla.integration.fiware;
 import de.app.fivegla.integration.fiware.api.CustomHeader;
 import de.app.fivegla.integration.fiware.api.FiwareEntityChecker;
 import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
-import de.app.fivegla.integration.fiware.model.FiwareEntity;
+import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.request.UpdateOrCreateFiwareEntitiesRequest;
 import lombok.extern.slf4j.Slf4j;
 

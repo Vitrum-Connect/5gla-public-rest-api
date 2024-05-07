@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Represents a request to create a third-party API configuration.")
-public class CreateThirdPartyApiConfigurationRequest {
+public class CreateThirdPartyApiConfigurationRequest extends BaseRequest {
 
     /**
      * Represents the manufacturer.
@@ -52,7 +52,7 @@ public class CreateThirdPartyApiConfigurationRequest {
      * @return The converted ThirdPartyApiConfiguration object.
      */
     public ThirdPartyApiConfiguration toEntity() {
-        ThirdPartyApiConfiguration configuration = new ThirdPartyApiConfiguration();
+        var configuration = new ThirdPartyApiConfiguration();
         configuration.setManufacturer(manufacturer);
         configuration.setFiwarePrefix(fiwarePrefix);
         configuration.setEnabled(enabled);
@@ -60,6 +60,7 @@ public class CreateThirdPartyApiConfigurationRequest {
         configuration.setUsername(username);
         configuration.setPassword(password);
         configuration.setApiToken(apiToken);
+        configuration.setZone(getZone());
         return configuration;
     }
 }

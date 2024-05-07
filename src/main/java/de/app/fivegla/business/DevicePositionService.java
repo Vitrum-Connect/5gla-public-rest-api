@@ -26,6 +26,7 @@ public class DevicePositionService {
      * @param longitude     The longitude value of the device position.
      */
     public void createDevicePosition(Tenant tenant,
+                                     String zone,
                                      EntityType entityType,
                                      String deviceId,
                                      String transactionId,
@@ -34,6 +35,7 @@ public class DevicePositionService {
         log.info("Creating device position for device ID: {}, transaction ID: {}, latitude: {}, longitude: {}", deviceId, transactionId, latitude, longitude);
         devicePositionFiwareIntegrationServiceWrapper.persist(tenant,
                 entityType,
+                zone,
                 deviceId,
                 transactionId,
                 latitude,

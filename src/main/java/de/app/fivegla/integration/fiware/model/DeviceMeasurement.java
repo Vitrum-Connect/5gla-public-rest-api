@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public record DeviceMeasurement(
         String id,
         String type,
+        String zone,
         Attribute name,
         Attribute controlledProperty,
         Attribute dateCreated,
@@ -24,6 +25,7 @@ public record DeviceMeasurement(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
+                "  \"zone\":\"" + zone + "\"," +
                 "  \"name\":" + name.asJson() + "," +
                 "  \"controlledProperty\":" + controlledProperty.asJson() + "," +
                 "  \"externalDataReference\":" + externalDataReference.asJson() + "," +

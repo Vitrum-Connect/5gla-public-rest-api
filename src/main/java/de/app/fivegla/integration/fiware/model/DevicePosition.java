@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public record DevicePosition(
         String id,
         String type,
+        String zone,
         Attribute transactionId,
         Attribute deviceId,
         Attribute dateCreated,
@@ -23,6 +24,7 @@ public record DevicePosition(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
+                "  \"zone\":\"" + zone + "\"," +
                 "  \"transactionId\":" + transactionId.asJson() + "," +
                 "  \"deviceId\":" + deviceId.asJson() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +

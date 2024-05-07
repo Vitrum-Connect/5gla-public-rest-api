@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.fiware.model;
 
 import de.app.fivegla.business.agricrop.GpsCoordinate;
+import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
 import org.apache.commons.lang3.StringUtils;

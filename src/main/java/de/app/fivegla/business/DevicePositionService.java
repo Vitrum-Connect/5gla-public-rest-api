@@ -1,6 +1,5 @@
 package de.app.fivegla.business;
 
-import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.deviceposition.DevicePositionFiwareIntegrationServiceWrapper;
 import de.app.fivegla.persistence.entity.Tenant;

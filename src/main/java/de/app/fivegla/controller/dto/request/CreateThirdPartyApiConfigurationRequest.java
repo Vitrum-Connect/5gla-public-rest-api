@@ -52,7 +52,7 @@ public class CreateThirdPartyApiConfigurationRequest extends BaseRequest {
      * @return The converted ThirdPartyApiConfiguration object.
      */
     public ThirdPartyApiConfiguration toEntity() {
-        ThirdPartyApiConfiguration configuration = new ThirdPartyApiConfiguration();
+        var configuration = new ThirdPartyApiConfiguration();
         configuration.setManufacturer(manufacturer);
         configuration.setFiwarePrefix(fiwarePrefix);
         configuration.setEnabled(enabled);
@@ -60,6 +60,7 @@ public class CreateThirdPartyApiConfigurationRequest extends BaseRequest {
         configuration.setUsername(username);
         configuration.setPassword(password);
         configuration.setApiToken(apiToken);
+        configuration.setZone(getZone());
         return configuration;
     }
 }

@@ -1,7 +1,6 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.persistence.entity.Group;
-import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

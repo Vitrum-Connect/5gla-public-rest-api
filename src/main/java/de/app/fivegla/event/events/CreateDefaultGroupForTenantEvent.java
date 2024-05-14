@@ -8,9 +8,9 @@ import org.springframework.context.ApplicationEvent;
  * This class represents an event triggered when a default group needs to be created for a tenant.
  * It extends the ApplicationEvent class.
  */
+@Getter
 public class CreateDefaultGroupForTenantEvent extends ApplicationEvent {
 
-    @Getter
     private final Tenant tenant;
 
     public CreateDefaultGroupForTenantEvent(Object source, Tenant tenant) {

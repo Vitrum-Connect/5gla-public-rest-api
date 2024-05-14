@@ -6,8 +6,6 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.event.events.CreateDefaultGroupForTenantEvent;
 import de.app.fivegla.event.events.ResendSubscriptionsEvent;
-import de.app.fivegla.persistence.ApplicationData;
-import de.app.fivegla.persistence.GroupRepository;
 import de.app.fivegla.persistence.TenantRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import jakarta.validation.constraints.NotBlank;
@@ -32,9 +30,7 @@ import java.util.UUID;
 public class TenantService implements UserDetailsService {
 
     private final TenantRepository tenantRepository;
-    private final GroupRepository groupRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final ApplicationData applicationData;
 
     /**
      * Creates a new tenant with the provided name and description.

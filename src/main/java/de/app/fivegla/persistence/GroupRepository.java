@@ -33,7 +33,7 @@ public class GroupRepository {
      *
      * @param newGroupData The new group data.
      */
-    public void update(Group newGroupData) {
+    public Optional<Group> update(Group newGroupData) {
         if (null == applicationData.getGroups()) {
             applicationData.setGroups(new ArrayList<>());
         }
@@ -45,6 +45,7 @@ public class GroupRepository {
                     group.setUpdatedAt(Instant.now());
                 });
         applicationData.persist();
+        return get(newGroupData.getGroupId());
     }
 
     /**

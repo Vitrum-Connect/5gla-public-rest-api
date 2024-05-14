@@ -32,8 +32,14 @@ public class GroupService {
         return groupRepository.add(group);
     }
 
-    public void update(Group newGroupData) {
-        groupRepository.update(newGroupData);
+    /**
+     * Updates the group data with new information.
+     *
+     * @param newGroupData The new group data.
+     * @return An Optional containing the updated group if it exists, or an empty Optional if the group doesn't exist.
+     */
+    public Optional<Group> update(Group newGroupData) {
+        return groupRepository.update(newGroupData);
     }
 
     /**

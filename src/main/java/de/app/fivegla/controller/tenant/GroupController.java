@@ -4,6 +4,7 @@ import de.app.fivegla.api.Response;
 import de.app.fivegla.business.GroupService;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateGroupRequest;
+import de.app.fivegla.controller.dto.request.UpdateGroupRequest;
 import de.app.fivegla.controller.dto.response.CreateGroupResponse;
 import de.app.fivegla.controller.dto.response.ReadGroupResponse;
 import de.app.fivegla.controller.dto.response.ReadGroupsResponse;
@@ -90,17 +91,16 @@ public class GroupController {
         var optionalGroup = groupService.get(groupId);
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
-        } else {
-            var group = optionalGroup.get();
-            var readGroupResponse = ReadGroupResponse.builder()
-                    .groupId(group.getGroupId())
-                    .name(group.getName())
-                    .description(group.getDescription())
-                    .createdAt(group.getCreatedAt().toString())
-                    .updatedAt(group.getUpdatedAt().toString())
-                    .build();
-            return ResponseEntity.status(HttpStatus.OK).body(readGroupResponse);
         }
+        var group = optionalGroup.get();
+        var readGroupResponse = ReadGroupResponse.builder()
+                .groupId(group.getGroupId())
+                .name(group.getName())
+                .description(group.getDescription())
+                .createdAt(group.getCreatedAt().toString())
+                .updatedAt(group.getUpdatedAt().toString())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(readGroupResponse);
     }
 
     @Operation(
@@ -163,8 +163,18 @@ public class GroupController {
             )
     )
     @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> updateGroup() {
-        var updateGroupResponse = UpdateGroupResponse.builder().build();
+    public ResponseEntity<? extends Response> updateGroup(@Valid @RequestBody UpdateGroupRequest updateGroupRequest) {
+        var optionalGroup = groupService.update(Group.from(updateGroupRequest));
+        if (optionalGroup.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
+        }
+        var updateGroupResponse = UpdateGroupResponse.builder()
+                .groupId(optionalGroup.get().getGroupId())
+                .name(optionalGroup.get().getName())
+                .description(optionalGroup.get().getDescription())
+                .createdAt(optionalGroup.get().getCreatedAt().toString())
+                .updatedAt(optionalGroup.get().getUpdatedAt().toString())
+                .build();
         return ResponseEntity.status(HttpStatus.OK).body(updateGroupResponse);
     }
 

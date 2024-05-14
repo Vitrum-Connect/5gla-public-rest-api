@@ -1,6 +1,7 @@
 package de.app.fivegla.persistence.entity;
 
 import de.app.fivegla.controller.dto.request.CreateGroupRequest;
+import de.app.fivegla.controller.dto.request.UpdateGroupRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +48,14 @@ public class Group {
         Group group = new Group();
         group.setName(createGroupRequest.getName());
         group.setDescription(createGroupRequest.getDescription());
+        return group;
+    }
+
+    public static Group from(UpdateGroupRequest updateGroupRequest) {
+        Group group = new Group();
+        group.setGroupId(updateGroupRequest.getGroupId());
+        group.setName(updateGroupRequest.getName());
+        group.setDescription(updateGroupRequest.getDescription());
         return group;
     }
 }

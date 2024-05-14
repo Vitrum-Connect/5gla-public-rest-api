@@ -1,6 +1,7 @@
 package de.app.fivegla.business;
 
 import de.app.fivegla.integration.agricrop.AgriCropFiwareIntegrationServiceWrapper;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -45,7 +46,7 @@ class AgriCropServiceTest {
     void givenValidCsvWhenParsingThenTheServiceShouldReturnTheSimpleFeature() {
         var tenant = new Tenant();
         tenant.setTenantId("another-random-tenant-id");
-        Assertions.assertDoesNotThrow(() -> agriCropService.createFromCsv(tenant, "another-random-group-id", "another-random-crop-id", csv));
+        Assertions.assertDoesNotThrow(() -> agriCropService.createFromCsv(tenant, new Group(), "another-random-crop-id", csv));
     }
 
 }

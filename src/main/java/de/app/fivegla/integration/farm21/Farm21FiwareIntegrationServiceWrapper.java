@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.farm21;
 
 
-import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
@@ -11,6 +10,7 @@ import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +33,12 @@ public class Farm21FiwareIntegrationServiceWrapper {
      * @param sensor     the sensor
      * @param sensorData the sensor data to create
      */
-    public void persist(Tenant tenant, Sensor sensor, List<SensorData> sensorData) {
+    public void persist(Tenant tenant, Group group, Sensor sensor, List<SensorData> sensorData) {
         sensorData.forEach(sd -> {
             var soilMoisture10 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("soilMoisture10"),
                     new NumberAttribute(sd.getSoilMoisture10()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -50,7 +50,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var soilMoisture20 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("soilMoisture20"),
                     new NumberAttribute(sd.getSoilMoisture20()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -62,7 +62,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var soilMoisture30 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("soilMoisture30"),
                     new NumberAttribute(sd.getSoilMoisture30()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -74,7 +74,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var tempNeg10 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("tempNeg10"),
                     new NumberAttribute(sd.getTempNeg10()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -86,7 +86,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var humidity = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("humidity"),
                     new NumberAttribute(sd.getHumidity()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -98,7 +98,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var tempPos10 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("tempPos10"),
                     new NumberAttribute(sd.getTempPos10()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -110,7 +110,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var battery = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("battery"),
                     new NumberAttribute(sd.getBattery()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -122,7 +122,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var soilTemperature = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("soilTemperature"),
                     new NumberAttribute(sd.getSoilTemperature()),
                     new DateTimeAttribute(sd.getMeasuredAt()),
@@ -134,7 +134,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
             var airTemperature = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
                     EntityType.FARM21_SENSOR.getKey(),
-                    ZoneOrDefaultValue.DEFAULT,
+                    new TextAttribute(group.getGroupId()),
                     new TextAttribute("airTemperature"),
                     new NumberAttribute(sd.getAirTemperature()),
                     new DateTimeAttribute(sd.getMeasuredAt()),

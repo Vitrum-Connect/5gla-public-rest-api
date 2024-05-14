@@ -5,6 +5,7 @@ import de.app.fivegla.business.LastRunService;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
 import de.app.fivegla.monitoring.JobMonitor;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class WeenatMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+    public void run(Tenant tenant, Group group, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             if (lastRunService.getLastRun(Manufacturer.WEENAT).isPresent()) {
@@ -47,14 +48,14 @@ public class WeenatMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.WEENAT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, plotMeasurementsEntry));
+                measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, group, plotMeasurementsEntry));
             } else {
                 log.info("Running initial data import from Weenat API, this may take a while");
                 var measurements = weenatMeasuresIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.WEENAT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, plotMeasurementsEntry));
+                measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, group, plotMeasurementsEntry));
             }
             lastRunService.updateLastRun(Manufacturer.WEENAT);
         } catch (Exception e) {
@@ -67,11 +68,11 @@ public class WeenatMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(Tenant tenant, Map.Entry<Plot, Measurements> entry) {
+    private void persistDataWithinFiware(Tenant tenant, Group group, Map.Entry<Plot, Measurements> entry) {
         try {
             Plot key = entry.getKey();
             Measurements value = entry.getValue();
-            weenatFiwareIntegrationServiceWrapper.persist(tenant, key, value);
+            weenatFiwareIntegrationServiceWrapper.persist(tenant, group, key, value);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Weenat API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.WEENAT);

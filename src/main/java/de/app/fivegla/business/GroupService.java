@@ -145,4 +145,14 @@ public class GroupService {
                         .message("Could not find the default group for the tenant.")
                         .build())));
     }
+
+    public Group getDefaultGroupForTenant(Tenant tenant) {
+        return groupRepository.getAll().stream()
+                .filter(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant())
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                        .error(Error.DEFAULT_GROUP_FOR_TENANT_NOT_FOUND)
+                        .message("Could not find the default group for the tenant.")
+                        .build()));
+    }
 }

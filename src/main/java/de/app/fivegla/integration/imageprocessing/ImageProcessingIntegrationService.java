@@ -50,7 +50,7 @@ public class ImageProcessingIntegrationService {
                 .measuredAt(exifDataIntegrationService.readMeasuredAt(image))
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, droneId, zone, micaSenseImage);
+        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, group, droneId, micaSenseImage);
         return micaSenseImage.getOid();
     }
 

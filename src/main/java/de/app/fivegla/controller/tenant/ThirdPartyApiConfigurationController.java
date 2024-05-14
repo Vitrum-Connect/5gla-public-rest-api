@@ -2,7 +2,6 @@ package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.Response;
-import de.app.fivegla.business.GroupService;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
@@ -34,7 +33,6 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
 
     private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final TenantService tenantService;
-    private final GroupService groupService;
 
     /**
      * Creates a third-party API configuration and adds it to the system.

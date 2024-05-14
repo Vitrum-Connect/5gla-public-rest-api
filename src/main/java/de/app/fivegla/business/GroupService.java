@@ -5,7 +5,6 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.persistence.GroupRepository;
-import de.app.fivegla.persistence.TenantRepository;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class GroupService {
 
     private final GroupRepository groupRepository;
-    private final TenantRepository tenantRepository;
 
     /**
      * Adds a group to the application.

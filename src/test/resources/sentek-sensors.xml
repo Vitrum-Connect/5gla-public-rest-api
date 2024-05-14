@@ -2,130 +2,230 @@
     <Logger id="46186" name="Ostfalia001" logger_id="Ostfalia001" latitude="0.000000" longitude="0.000000">
         <Site name="Default">
             <Probe name="P1">
-                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
+                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0"
+                        maximum="50" invalid="-1"/>
+                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50"
+                        invalid="-1"/>
+                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
             </Probe>
         </Site>
     </Logger>
     <Logger id="46722" name="Ostfalia002" logger_id="Ostfalia002" latitude="0.000000" longitude="0.000000">
         <Site name="Default">
             <Probe name="P1">
-                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
+                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0"
+                        maximum="50" invalid="-1"/>
+                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50"
+                        invalid="-1"/>
+                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
             </Probe>
         </Site>
     </Logger>
     <Logger id="46814" name="Ostfalia003" logger_id="Ostfalia003" latitude="0.000000" longitude="0.000000">
         <Site name="Default">
             <Probe name="P1">
-                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
+                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0"
+                        maximum="50" invalid="-1"/>
+                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50"
+                        invalid="-1"/>
+                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
             </Probe>
         </Site>
     </Logger>
     <Logger id="46219" name="Ostfalia004" logger_id="Ostfalia004" latitude="0.000000" longitude="0.000000">
         <Site name="Default">
             <Probe name="P1">
-                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
+                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0"
+                        maximum="50" invalid="-1"/>
+                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50"
+                        invalid="-1"/>
+                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
             </Probe>
         </Site>
     </Logger>
     <Logger id="46723" name="Ostfalia005" logger_id="Ostfalia005" latitude="0.000000" longitude="0.000000">
         <Site name="Default">
             <Probe name="P1">
-                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50" invalid="-1" />
-                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
-                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0" maximum="100" invalid="-1" />
-                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150" invalid="-1000" />
+                <Sensor name="V1" depth_cm="0" type="Voltage" description="Probe Supply" unit="V" minimum="0"
+                        maximum="50" invalid="-1"/>
+                <Sensor name="V2" depth_cm="0" type="Voltage" description="Upload" unit="V" minimum="0" maximum="50"
+                        invalid="-1"/>
+                <Sensor name="A1" depth_cm="5" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T1" depth_cm="5" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A2" depth_cm="15" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T2" depth_cm="15" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A3" depth_cm="25" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T3" depth_cm="25" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A4" depth_cm="35" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T4" depth_cm="35" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A5" depth_cm="45" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T5" depth_cm="45" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A6" depth_cm="55" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T6" depth_cm="55" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A7" depth_cm="65" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T7" depth_cm="65" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A8" depth_cm="75" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T8" depth_cm="75" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
+                <Sensor name="A9" depth_cm="85" type="Soil Water Content" description="" unit="mm" minimum="0"
+                        maximum="100" invalid="-1"/>
+                <Sensor name="T9" depth_cm="85" type="Temperature" description="" unit="°C" minimum="-50" maximum="150"
+                        invalid="-1000"/>
             </Probe>
         </Site>
     </Logger>

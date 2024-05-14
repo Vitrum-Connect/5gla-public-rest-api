@@ -34,7 +34,7 @@ public class AgranimoSoilMoistureIntegrationService {
      * Fetch the water content from the API.
      *
      * @param thirdPartyApiConfiguration The configuration for the third party API.
-     * @param zone                       The zone to fetch the data for.
+     * @param zone                       The group to fetch the data for.
      * @param since                      The date since to fetch the data.
      * @return The water content.
      */
@@ -47,14 +47,14 @@ public class AgranimoSoilMoistureIntegrationService {
      */
     private List<SoilMoisture> fetchAll(ThirdPartyApiConfiguration thirdPartyApiConfiguration, Zone zone, Instant since) {
         var until = Instant.now();
-        log.info("Fetching soil moisture data for zone {}.", zone.getName());
-        log.debug("Fetching soil moisture data for zone {} from {} to {}.", zone.getId(), since, until);
+        log.info("Fetching soil moisture data for group {}.", zone.getName());
+        log.debug("Fetching soil moisture data for group {} from {} to {}.", zone.getId(), since, until);
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setBearerAuth(loginService.fetchAccessToken(thirdPartyApiConfiguration));
             var httpEntity = new HttpEntity<>(headers);
-            var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/zone/{zoneId}/data/soilmoisture?dateStart={since}&dateEnd={until}&type={type}")
+            var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/group/{zoneId}/data/soilmoisture?dateStart={since}&dateEnd={until}&type={type}")
                     .encode()
                     .toUriString();
             var uriVariables = Map.of(
@@ -71,20 +71,20 @@ public class AgranimoSoilMoistureIntegrationService {
 
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Error while fetching soil moisture from the API. Status code: {}", response.getStatusCode());
-                log.info("Could not fetch soil moisture data for zone {}.", zone.getName());
+                log.info("Could not fetch soil moisture data for group {}.", zone.getName());
                 throw new BusinessException(ErrorMessage.builder()
                         .error(Error.AGRANIMO_COULD_NOT_FETCH_SOIL_MOISTURE_FOR_ZONE)
                         .message("Could not fetch soil moisture.")
                         .build());
             } else {
                 log.info("Successfully fetched soil moisture from the API.");
-                log.info("Successfully fetched soil moisture data for zone {}.", zone.getName());
+                log.info("Successfully fetched soil moisture data for group {}.", zone.getName());
                 var soilMoistures = response.getBody();
                 if (null != soilMoistures) {
-                    log.info("Successfully fetched {} soil moisture data points for zone {}.", soilMoistures.length, zone.getName());
+                    log.info("Successfully fetched {} soil moisture data points for group {}.", soilMoistures.length, zone.getName());
                     return List.of(soilMoistures);
                 } else {
-                    log.info("Could not fetch soil moisture data for zone {}.", zone.getName());
+                    log.info("Could not fetch soil moisture data for group {}.", zone.getName());
                     throw new BusinessException(ErrorMessage.builder()
                             .error(Error.AGRANIMO_COULD_NOT_FETCH_SOIL_MOISTURE_FOR_ZONE)
                             .message("Could not fetch soil moisture.")
@@ -93,7 +93,7 @@ public class AgranimoSoilMoistureIntegrationService {
             }
         } catch (Exception e) {
             log.error("Error while fetching soil moisture from the API.", e);
-            log.info("Could not fetch soil moisture data for zone {}.", zone.getName());
+            log.info("Could not fetch soil moisture data for group {}.", zone.getName());
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.AGRANIMO_COULD_NOT_FETCH_SOIL_MOISTURE)
                     .message("Could not fetch soil moisture.")

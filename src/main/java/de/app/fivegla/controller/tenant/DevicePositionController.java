@@ -1,10 +1,9 @@
 package de.app.fivegla.controller.tenant;
 
-import de.app.fivegla.api.Error;
-import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.DevicePositionService;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -32,6 +31,7 @@ public class DevicePositionController implements TenantCredentialApiAccess {
 
     private final DevicePositionService devicePositionService;
     private final TenantService tenantService;
+    private final GroupService groupService;
 
     /**
      * Adds a device position.
@@ -68,27 +68,17 @@ public class DevicePositionController implements TenantCredentialApiAccess {
                                                                 @PathVariable @Parameter(description = "The transaction ID") String transactionId,
                                                                 @Valid @RequestBody AddDevicePositionRequest request,
                                                                 Principal principal) {
-        var optionalTenant = tenantService.findTenantByName(principal.getName());
-        if (optionalTenant.isEmpty()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(ErrorMessage.builder()
-                            .error(Error.TENANT_NOT_FOUND)
-                            .message("No tenant found for id " + principal.getName())
-                            .build());
-        } else {
-            log.info("Adding device( position: {}", request);
-            var tenant = optionalTenant.get();
-            devicePositionService.createDevicePosition(
-                    tenant,
-                    request.getZone(),
-                    EntityType.DEVICE_POSITION,
-                    deviceId,
-                    transactionId,
-                    request.getLatitude(),
-                    request.getLongitude());
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
-        }
+        var tenant = validateTenant(tenantService, principal);
+        var group = groupService.getOrDefault(tenant, request.getGroupId());
+        devicePositionService.createDevicePosition(
+                tenant,
+                group,
+                EntityType.DEVICE_POSITION,
+                deviceId,
+                transactionId,
+                request.getLatitude(),
+                request.getLongitude());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
     }
 
 }

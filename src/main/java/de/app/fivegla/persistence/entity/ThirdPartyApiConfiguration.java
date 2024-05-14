@@ -49,8 +49,8 @@ public class ThirdPartyApiConfiguration {
     private String apiToken;
 
     /**
-     * Represents the zone for the third-party API.
+     * Represents the group for the third-party API.
      */
-    private String zone;
+    private String groupId;
 
 }

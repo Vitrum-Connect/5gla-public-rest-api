@@ -1,9 +1,8 @@
 package de.app.fivegla.controller.tenant;
 
-import de.app.fivegla.api.Error;
-import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.business.AgriCropService;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -34,6 +33,7 @@ public class AgriCropController implements TenantCredentialApiAccess {
 
     private final AgriCropService agriCropService;
     private final TenantService tenantService;
+    private final GroupService groupService;
 
     @Operation(
             operationId = "agri-crop.import-csv",
@@ -57,20 +57,12 @@ public class AgriCropController implements TenantCredentialApiAccess {
             )
     )
     @PostMapping(value = "/csv/{cropId}/{zone}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> importCsv(@RequestBody @Valid @Parameter(description = "The request body, containing the CSV, the crop ID and the optional zone") ImportAgriCropFromCsvRequest request,
+    public ResponseEntity<? extends Response> importCsv(@RequestBody @Valid @Parameter(description = "The request body, containing the CSV, the crop ID and the optional group") ImportAgriCropFromCsvRequest request,
                                                         Principal principal) {
-        var optionalTenant = tenantService.findTenantByName(principal.getName());
-        if (optionalTenant.isEmpty()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(ErrorMessage.builder()
-                            .error(Error.TENANT_NOT_FOUND)
-                            .message("No tenant found for id " + principal.getName())
-                            .build());
-        } else {
-            var tenant = optionalTenant.get();
-            agriCropService.createFromCsv(tenant, request.getZone(), request.getCropId(), request.getCsvData());
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
-        }
+
+        var tenant = validateTenant(tenantService, principal);
+        var group = groupService.getOrDefault(tenant, request.getGroupId());
+        agriCropService.createFromCsv(tenant, group, request.getCropId(), request.getCsvData());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response());
     }
 }

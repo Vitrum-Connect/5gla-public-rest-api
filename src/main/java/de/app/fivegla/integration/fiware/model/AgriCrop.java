@@ -1,6 +1,5 @@
 package de.app.fivegla.integration.fiware.model;
 
-import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
@@ -15,7 +14,7 @@ import java.util.List;
 public record AgriCrop(
         String id,
         String type,
-        ZoneOrDefaultValue zone,
+        Attribute group,
         Attribute dateCreated,
         List<GpsCoordinate> coordinates
 ) implements Validatable, FiwareEntity {
@@ -26,7 +25,7 @@ public record AgriCrop(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"zone\":\"" + zone.value() + "\"," +
+                "  \"group\":\"" + group.asJson() + "\"," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +
                 "  \"coordinates\":" + coordinatesAsJson(coordinates) +
                 "}";

@@ -1,12 +1,12 @@
 package de.app.fivegla.integration.deviceposition;
 
 
-import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DevicePosition;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
      *
      * @param tenant        The Tenant object representing the tenant.
      * @param entityType    The MeasurementType representing the type of measurement.
-     * @param zone          The zone in which the device is located.
+     * @param group         The group in which the device is located.
      * @param deviceId      The ID of the device for which the position is being persisted.
      * @param transactionId The ID of the transaction related to the device position.
      * @param latitude      The latitude value of the device position.
@@ -37,7 +37,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
      */
     public void persist(Tenant tenant,
                         EntityType entityType,
-                        String zone,
+                        Group group,
                         String deviceId,
                         String transactionId,
                         double latitude,
@@ -45,7 +45,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
         var devicePosition = new DevicePosition(
                 tenant.getFiwarePrefix() + deviceId,
                 entityType.getKey(),
-                new ZoneOrDefaultValue(zone),
+                new TextAttribute(group.getGroupId()),
                 new TextAttribute(transactionId),
                 new TextAttribute(deviceId),
                 new DateTimeAttribute(Instant.now()),

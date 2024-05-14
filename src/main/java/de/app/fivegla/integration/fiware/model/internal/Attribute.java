@@ -9,5 +9,5 @@ public interface Attribute {
      *
      * @return the JSON representation of this object
      */
-    String asJson ();
+    String asJson();
 }

@@ -2,6 +2,7 @@ package de.app.fivegla.business;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.deviceposition.DevicePositionFiwareIntegrationServiceWrapper;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class DevicePositionService {
      * @param longitude     The longitude value of the device position.
      */
     public void createDevicePosition(Tenant tenant,
-                                     String zone,
+                                     Group group,
                                      EntityType entityType,
                                      String deviceId,
                                      String transactionId,
@@ -35,7 +36,7 @@ public class DevicePositionService {
         log.info("Creating device position for device ID: {}, transaction ID: {}, latitude: {}, longitude: {}", deviceId, transactionId, latitude, longitude);
         devicePositionFiwareIntegrationServiceWrapper.persist(tenant,
                 entityType,
-                zone,
+                group,
                 deviceId,
                 transactionId,
                 latitude,

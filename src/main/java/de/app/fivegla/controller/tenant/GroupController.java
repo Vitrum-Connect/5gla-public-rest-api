@@ -2,6 +2,8 @@ package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Response;
 import de.app.fivegla.business.GroupService;
+import de.app.fivegla.business.TenantService;
+import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateGroupRequest;
 import de.app.fivegla.controller.dto.request.UpdateGroupRequest;
@@ -29,9 +31,10 @@ import java.security.Principal;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(BaseMappings.GROUPS)
-public class GroupController {
+public class GroupController implements TenantCredentialApiAccess {
 
     private final GroupService groupService;
+    private final TenantService tenantService;
 
     @Operation(
             operationId = "groups.create",
@@ -56,7 +59,8 @@ public class GroupController {
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> createGroup(@Valid @RequestBody CreateGroupRequest createGroupRequest, Principal principal) {
-        var createdGroup = groupService.add(principal.getName(), Group.from(createGroupRequest));
+        var tenant = validateTenant(tenantService, principal);
+        var createdGroup = groupService.add(tenant, Group.from(createGroupRequest));
         var createGroupResponse = CreateGroupResponse.builder()
                 .groupId(createdGroup.getGroupId())
                 .name(createdGroup.getName())
@@ -90,7 +94,8 @@ public class GroupController {
     )
     @GetMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> readGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId, Principal principal) {
-        var optionalGroup = groupService.get(principal.getName(), groupId);
+        var tenant = validateTenant(tenantService, principal);
+        var optionalGroup = groupService.get(tenant, groupId);
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
@@ -128,7 +133,8 @@ public class GroupController {
     )
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> readAllGroups(Principal principal) {
-        var groups = groupService.getAll(principal.getName());
+        var tenant = validateTenant(tenantService, principal);
+        var groups = groupService.getAll(tenant);
         var readGroupsResponse = ReadGroupsResponse.builder()
                 .groups(groups.stream()
                         .map(group -> de.app.fivegla.controller.dto.response.inner.Group.builder()
@@ -166,7 +172,8 @@ public class GroupController {
     )
     @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> updateGroup(@Valid @RequestBody UpdateGroupRequest updateGroupRequest, Principal principal) {
-        var optionalGroup = groupService.update(principal.getName(), Group.from(updateGroupRequest));
+        var tenant = validateTenant(tenantService, principal);
+        var optionalGroup = groupService.update(tenant, Group.from(updateGroupRequest));
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
@@ -203,11 +210,12 @@ public class GroupController {
     )
     @DeleteMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> deleteGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId, Principal principal) {
-        var optionalGroup = groupService.get(principal.getName(), groupId);
+        var tenant = validateTenant(tenantService, principal);
+        var optionalGroup = groupService.get(tenant, groupId);
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
-        groupService.delete(principal.getName(), groupId);
+        groupService.delete(tenant, groupId);
         return ResponseEntity.status(HttpStatus.OK).body(new Response());
     }
 

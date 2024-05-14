@@ -1,6 +1,5 @@
 package de.app.fivegla.integration.fiware.model;
 
-import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
@@ -12,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 public record DevicePosition(
         String id,
         String type,
-        ZoneOrDefaultValue zone,
+        Attribute group,
         Attribute transactionId,
         Attribute deviceId,
         Attribute dateCreated,
@@ -26,7 +25,7 @@ public record DevicePosition(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"zone\":\"" + zone.value() + "\"," +
+                "  \"group\":\"" + group.asJson() + "\"," +
                 "  \"transactionId\":" + transactionId.asJson() + "," +
                 "  \"deviceId\":" + deviceId.asJson() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +

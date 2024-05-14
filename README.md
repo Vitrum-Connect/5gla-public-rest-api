@@ -40,7 +40,8 @@ The following table describes the environment variables:
 
 ## Build the project
 
-To build the project and to resolve the dependencies from GitHub Packages you need to create a personal access token and place it in the file `~/.m2/settings.xml`:
+To build the project and to resolve the dependencies from GitHub Packages you need to create a personal access token and
+place it in the file `~/.m2/settings.xml`:
 
 ```xml
 

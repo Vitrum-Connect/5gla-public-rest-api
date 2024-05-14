@@ -40,8 +40,8 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      * Creates or updates subscriptions for the specified types.
      *
      * @param entityTypes The types of entities to subscribe to.
-     *                         Accepts multiple arguments of type String,
-     *                         each representing a different type.
+     *                    Accepts multiple arguments of type String,
+     *                    each representing a different type.
      * @throws FiwareIntegrationLayerException if there is an error creating or updating the subscription.
      */
     public void subscribe(EntityType... entityTypes) {

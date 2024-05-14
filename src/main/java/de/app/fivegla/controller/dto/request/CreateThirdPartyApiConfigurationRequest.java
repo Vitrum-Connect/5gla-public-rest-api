@@ -60,7 +60,7 @@ public class CreateThirdPartyApiConfigurationRequest extends BaseRequest {
         configuration.setUsername(username);
         configuration.setPassword(password);
         configuration.setApiToken(apiToken);
-        configuration.setZone(getZone());
+        configuration.setGroupId(groupId);
         return configuration;
     }
 }

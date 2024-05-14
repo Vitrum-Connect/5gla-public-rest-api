@@ -1,10 +1,10 @@
 package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.business.LastRunService;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.monitoring.JobMonitor;
-import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class AgranimoMeasurementImport {
 
-    private final ApplicationDataRepository applicationDataRepository;
+    private final LastRunService lastRunService;
     private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final AgranimoSoilMoistureIntegrationService agranimoSoilMoistureIntegrationService;
     private final AgranimoZoneService agranimoZoneService;
@@ -37,7 +37,7 @@ public class AgranimoMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGRANIMO);
+            var lastRun = lastRunService.getLastRun(Manufacturer.AGRANIMO);
             if (lastRun.isPresent()) {
                 log.info("Running scheduled data import from Agranimo API");
                 agranimoZoneService.fetchZones(thirdPartyApiConfiguration).forEach(zone -> {
@@ -62,7 +62,7 @@ public class AgranimoMeasurementImport {
                     );
                 });
             }
-            applicationDataRepository.updateLastRun(Manufacturer.AGRANIMO);
+            lastRunService.updateLastRun(Manufacturer.AGRANIMO);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);

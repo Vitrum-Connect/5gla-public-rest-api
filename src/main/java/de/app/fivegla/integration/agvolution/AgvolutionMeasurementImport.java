@@ -1,9 +1,9 @@
 package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.business.LastRunService;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.monitoring.JobMonitor;
-import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 public class AgvolutionMeasurementImport {
 
     private final AgvolutionSensorDataIntegrationService agvolutionSensorDataIntegrationService;
-    private final ApplicationDataRepository applicationDataRepository;
+    private final LastRunService lastRunService;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -38,7 +38,7 @@ public class AgvolutionMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            var lastRun = applicationDataRepository.getLastRun(Manufacturer.AGVOLUTION);
+            var lastRun = lastRunService.getLastRun(Manufacturer.AGVOLUTION);
             if (lastRun.isPresent()) {
                 log.info("Running scheduled data import from Agvolution API");
                 var seriesEntries = agvolutionSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun.get());
@@ -54,7 +54,7 @@ public class AgvolutionMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGVOLUTION, seriesEntries.size());
                 seriesEntries.forEach(seriesEntry -> persistDataWithinFiware(tenant, seriesEntry));
             }
-            applicationDataRepository.updateLastRun(Manufacturer.AGVOLUTION);
+            lastRunService.updateLastRun(Manufacturer.AGVOLUTION);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agvolution API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGVOLUTION);

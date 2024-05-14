@@ -3,13 +3,13 @@ package de.app.fivegla.controller.tenant;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
+import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
 import de.app.fivegla.integration.imageprocessing.ImageProcessingIntegrationService;
-import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ImageProcessingController implements TenantCredentialApiAccess {
 
     private final ImageProcessingIntegrationService imageProcessingIntegrationService;
-    private final ApplicationDataRepository applicationDataRepository;
+    private final TenantService tenantService;
 
     /**
      * Processes one or multiple images from the mica sense camera.
@@ -67,7 +67,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> processImage(@Valid @RequestBody @Parameter(description = "The image processing request.", required = true) ImageProcessingRequest request, Principal principal) {
         log.debug("Processing image for the drone: {}.", request.getDroneId());
-        var optionalTenant = applicationDataRepository.getTenant(principal.getName());
+        var optionalTenant = tenantService.findTenantByName(principal.getName());
         if (optionalTenant.isEmpty()) {
             return ResponseEntity
                     .badRequest()

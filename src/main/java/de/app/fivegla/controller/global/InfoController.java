@@ -2,17 +2,18 @@ package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.Response;
+import de.app.fivegla.business.LastRunService;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.response.FiwareStatusResponse;
 import de.app.fivegla.controller.dto.response.LastRunResponse;
 import de.app.fivegla.controller.dto.response.VersionResponse;
 import de.app.fivegla.integration.fiware.StatusIntegrationService;
-import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,20 +29,15 @@ import java.util.HashMap;
  * Controller for information purpose.
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(BaseMappings.INFO)
 public class InfoController implements ApiKeyApiAccess {
 
     @Value("${app.version:unknown}")
     private String applicationVersion;
 
-    private final ApplicationDataRepository applicationDataRepository;
+    private final LastRunService lastRunService;
     private final StatusIntegrationService statusIntegrationService;
-
-    public InfoController(ApplicationDataRepository applicationDataRepository,
-                          StatusIntegrationService statusIntegrationService) {
-        this.applicationDataRepository = applicationDataRepository;
-        this.statusIntegrationService = statusIntegrationService;
-    }
 
     /**
      * Returns the version of the application.
@@ -115,7 +111,7 @@ public class InfoController implements ApiKeyApiAccess {
     @GetMapping(value = "/last-run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getLastImport() {
         var lastRuns = new HashMap<Manufacturer, String>();
-        var savedLastRuns = applicationDataRepository.getLastRuns();
+        var savedLastRuns = lastRunService.getLastRuns();
         if (null != savedLastRuns) {
             savedLastRuns
                     .forEach((key, value) -> lastRuns.put(key, DateTimeFormatter.ISO_INSTANT.format(value)));

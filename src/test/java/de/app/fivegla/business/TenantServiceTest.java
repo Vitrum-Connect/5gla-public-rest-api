@@ -1,7 +1,7 @@
 package de.app.fivegla.business;
 
 import de.app.fivegla.api.exceptions.BusinessException;
-import de.app.fivegla.persistence.ApplicationDataRepository;
+import de.app.fivegla.persistence.TenantRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class TenantServiceTest {
 
     @Mock
-    private ApplicationDataRepository applicationDataRepository;
+    private TenantRepository tenantRepository;
 
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
@@ -33,7 +33,7 @@ public class TenantServiceTest {
     @BeforeEach
     public void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        tenantService = new TenantService(applicationDataRepository, applicationEventPublisher);
+        tenantService = new TenantService(tenantRepository, applicationEventPublisher);
     }
 
     @AfterEach
@@ -48,13 +48,13 @@ public class TenantServiceTest {
         String name = "validName";
         String description = "validDescription";
         // For tenantId validation
-        when(applicationDataRepository.getTenant(tenantId)).thenReturn(Optional.empty());
+        when(tenantRepository.getTenant(tenantId)).thenReturn(Optional.empty());
         Tenant expectedTenant = new Tenant();
         expectedTenant.setCreatedAt(Instant.now());
         expectedTenant.setName(name);
         expectedTenant.setDescription(description);
         expectedTenant.setTenantId(tenantId);
-        when(applicationDataRepository.addTenant(any(Tenant.class))).thenReturn(expectedTenant);
+        when(tenantRepository.addTenant(any(Tenant.class))).thenReturn(expectedTenant);
         var actualTenantWithAccessToken = tenantService.create(tenantId, name, description);
         assertEquals(expectedTenant, actualTenantWithAccessToken.tenant());
     }
@@ -67,7 +67,7 @@ public class TenantServiceTest {
         String description = "validDescription";
         Tenant existingTenant = new Tenant();
         existingTenant.setTenantId(tenantId);
-        when(applicationDataRepository.getTenant(tenantId)).thenReturn(Optional.of(existingTenant));
+        when(tenantRepository.getTenant(tenantId)).thenReturn(Optional.of(existingTenant));
         assertThrows(BusinessException.class, () -> tenantService.create(tenantId, name, description));
     }
 

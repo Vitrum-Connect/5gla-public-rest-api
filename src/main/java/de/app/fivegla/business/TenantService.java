@@ -5,7 +5,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.event.events.ResendSubscriptionsEvent;
-import de.app.fivegla.persistence.ApplicationDataRepository;
+import de.app.fivegla.persistence.TenantRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -27,7 +28,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TenantService implements UserDetailsService {
 
-    private final ApplicationDataRepository applicationDataRepository;
+    private final TenantRepository tenantRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
@@ -49,7 +50,7 @@ public class TenantService implements UserDetailsService {
         var accessToken = generateAccessToken();
         var encodedAccessToken = new BCryptPasswordEncoder().encode(accessToken);
         tenant.setAccessToken(encodedAccessToken);
-        var tenantAndAccessToken = new TenantAndAccessToken(applicationDataRepository.addTenant(tenant), accessToken);
+        var tenantAndAccessToken = new TenantAndAccessToken(tenantRepository.addTenant(tenant), accessToken);
         applicationEventPublisher.publishEvent(new ResendSubscriptionsEvent(this));
         return tenantAndAccessToken;
     }
@@ -64,7 +65,7 @@ public class TenantService implements UserDetailsService {
     }
 
     private void checkIfThereIsAlreadyATenantWithTheSameId(String tenantId) {
-        if (applicationDataRepository.getTenant(tenantId).isPresent()) {
+        if (tenantRepository.getTenant(tenantId).isPresent()) {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.TENANT_ALREADY_EXISTS)
                     .message("A tenant with the same ID already exists.")
@@ -81,7 +82,7 @@ public class TenantService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return applicationDataRepository.getTenant(username)
+        return tenantRepository.getTenant(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Tenant not found: " + username));
     }
 
@@ -91,7 +92,7 @@ public class TenantService implements UserDetailsService {
      * @return A list of all tenants in the system.
      */
     public List<Tenant> findAll() {
-        return applicationDataRepository.findTenants();
+        return tenantRepository.findTenants();
     }
 
     /**
@@ -104,9 +105,19 @@ public class TenantService implements UserDetailsService {
      */
     public Tenant update(String tenantId, String name, String description) {
         checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
-        var tenant = applicationDataRepository.updateTenant(tenantId, name, description);
+        var tenant = tenantRepository.updateTenant(tenantId, name, description);
         applicationEventPublisher.publishEvent(new ResendSubscriptionsEvent(this));
         return tenant;
+    }
+
+    /**
+     * Fine a tenant by its name.
+     *
+     * @param name The name of the tenant to find.
+     * @return An Optional containing the tenant if it exists, or an empty Optional if the tenant doesn't exist.
+     */
+    public Optional<Tenant> findTenantByName(String name) {
+        return tenantRepository.getTenant(name);
     }
 
     /**

@@ -158,4 +158,5 @@ public class ApplicationDataRepository {
     public Tenant updateTenant(String tenantId, String name, String description) {
         return applicationData.updateTenant(tenantId, name, description);
     }
+
 }

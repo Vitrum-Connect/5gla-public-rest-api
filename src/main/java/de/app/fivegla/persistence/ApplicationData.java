@@ -5,9 +5,11 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.imageprocessing.model.Image;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.Getter;
+import lombok.Setter;
 import one.microstream.integrations.spring.boot.types.Storage;
 import one.microstream.storage.types.StorageManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,10 @@ public class ApplicationData {
 
     @Getter
     private List<ThirdPartyApiConfiguration> thirdPartyApiConfigurations;
+
+    @Getter
+    @Setter
+    private List<Group> groups;
 
     /**
      * Update the last run.
@@ -166,4 +172,9 @@ public class ApplicationData {
         storageManager.store(this);
         return tenant;
     }
+
+    protected void persist() {
+        storageManager.store(this);
+    }
+
 }

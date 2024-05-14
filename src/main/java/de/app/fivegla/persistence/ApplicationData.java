@@ -44,10 +44,6 @@ public class ApplicationData {
     @Setter
     private List<Group> groups;
 
-    @Getter
-    @Setter
-    private List<Group> defaultGroups;
-
     /**
      * Add image to the list of images.
      *

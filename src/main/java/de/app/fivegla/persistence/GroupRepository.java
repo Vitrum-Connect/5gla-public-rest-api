@@ -1,6 +1,7 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.persistence.entity.Group;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -95,5 +96,17 @@ public class GroupRepository {
      */
     public String generateGroupId() {
         return UUID.randomUUID().toString();
+    }
+
+    public void createDefaultGroup(Tenant tenant) {
+        Group group = new Group();
+        group.setGroupId(generateGroupId());
+        group.setTenant(tenant);
+        group.setName("Default Group");
+        group.setDescription("The default group for the tenant.");
+        group.setCreatedAt(Instant.now());
+        group.setUpdatedAt(Instant.now());
+        group.setDefaultGroupForTenant(true);
+        add(group);
     }
 }

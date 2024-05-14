@@ -25,7 +25,7 @@ public interface TenantCredentialApiAccess {
         var optionalTenant = tenantService.findTenantByName(principal.getName());
         if (optionalTenant.isEmpty()) {
             throw new BusinessException(ErrorMessage.builder().error(Error.TENANT_NOT_FOUND).message("The tenant was not found.").build());
-        }else{
+        } else {
             return optionalTenant.get();
         }
     }

@@ -1,6 +1,5 @@
 package de.app.fivegla.integration.fiware.model;
 
-import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;

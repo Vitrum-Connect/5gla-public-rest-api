@@ -4,10 +4,10 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.business.AgriCropService;
+import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.ImportAgriCropFromCsvRequest;
-import de.app.fivegla.persistence.ApplicationDataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,7 +33,7 @@ import java.security.Principal;
 public class AgriCropController implements TenantCredentialApiAccess {
 
     private final AgriCropService agriCropService;
-    private final ApplicationDataRepository applicationDataRepository;
+    private final TenantService tenantService;
 
     @Operation(
             operationId = "agri-crop.import-csv",
@@ -59,7 +59,7 @@ public class AgriCropController implements TenantCredentialApiAccess {
     @PostMapping(value = "/csv/{cropId}/{zone}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> importCsv(@RequestBody @Valid @Parameter(description = "The request body, containing the CSV, the crop ID and the optional zone") ImportAgriCropFromCsvRequest request,
                                                         Principal principal) {
-        var optionalTenant = applicationDataRepository.getTenant(principal.getName());
+        var optionalTenant = tenantService.findTenantByName(principal.getName());
         if (optionalTenant.isEmpty()) {
             return ResponseEntity
                     .badRequest()

@@ -1,6 +1,6 @@
 package de.app.fivegla.api;
 
-import de.app.fivegla.persistence.ApplicationDataRepository;
+import de.app.fivegla.business.TenantService;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class SubscriptionStatus {
 
-    private final ApplicationDataRepository applicationDataRepository;
+    private final TenantService tenantService;
 
     @Getter
     @Value("${app.fiware.subscriptions.enabled}")
@@ -32,7 +32,7 @@ public class SubscriptionStatus {
     @PostConstruct
     public void init() {
         log.info("Initializing subscriptions sent status for all tenants.");
-        var tenants = applicationDataRepository.findTenants();
+        var tenants = tenantService.findAll();
         if (null == tenants) {
             log.warn("Currently there are no tenants within the system.");
         } else {

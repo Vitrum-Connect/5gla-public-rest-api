@@ -1,10 +1,10 @@
 package de.app.fivegla.integration.weenat;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.business.LastRunService;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
 import de.app.fivegla.monitoring.JobMonitor;
-import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class WeenatMeasurementImport {
 
     private final WeenatMeasuresIntegrationService weenatMeasuresIntegrationService;
-    private final ApplicationDataRepository applicationDataRepository;
+    private final LastRunService lastRunService;
     private final WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -40,9 +40,9 @@ public class WeenatMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            if (applicationDataRepository.getLastRun(Manufacturer.WEENAT).isPresent()) {
+            if (lastRunService.getLastRun(Manufacturer.WEENAT).isPresent()) {
                 log.info("Running scheduled data import from Weenat API");
-                var lastRun = applicationDataRepository.getLastRun(Manufacturer.WEENAT).get();
+                var lastRun = lastRunService.getLastRun(Manufacturer.WEENAT).get();
                 var measurements = weenatMeasuresIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun);
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.WEENAT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
@@ -56,7 +56,7 @@ public class WeenatMeasurementImport {
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, plotMeasurementsEntry));
             }
-            applicationDataRepository.updateLastRun(Manufacturer.WEENAT);
+            lastRunService.updateLastRun(Manufacturer.WEENAT);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Weenat API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.WEENAT);

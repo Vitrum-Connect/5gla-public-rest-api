@@ -96,4 +96,5 @@ public class GroupRepository {
     public String generateGroupId() {
         return UUID.randomUUID().toString();
     }
+
 }

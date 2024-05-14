@@ -1,10 +1,10 @@
 package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.business.LastRunService;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
-import de.app.fivegla.persistence.ApplicationDataRepository;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class Farm21MeasurementImport {
 
     private final Farm21SensorDataIntegrationService farm21SensorDataIntegrationService;
-    private final ApplicationDataRepository applicationDataRepository;
+    private final LastRunService lastRunService;
     private final Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -41,9 +41,9 @@ public class Farm21MeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            if (applicationDataRepository.getLastRun(Manufacturer.FARM21).isPresent()) {
+            if (lastRunService.getLastRun(Manufacturer.FARM21).isPresent()) {
                 log.info("Running scheduled data import from Farm21 API");
-                var lastRun = applicationDataRepository.getLastRun(Manufacturer.FARM21).get();
+                var lastRun = lastRunService.getLastRun(Manufacturer.FARM21).get();
                 var measurements = farm21SensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun, Instant.now());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 log.info("Found {} measurements", measurements.size());
@@ -57,7 +57,7 @@ public class Farm21MeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, sensorListEntry));
             }
-            applicationDataRepository.updateLastRun(Manufacturer.FARM21);
+            lastRunService.updateLastRun(Manufacturer.FARM21);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Farm21 API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.FARM21);

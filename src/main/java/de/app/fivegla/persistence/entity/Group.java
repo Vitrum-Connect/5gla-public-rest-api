@@ -44,6 +44,11 @@ public class Group {
      */
     private Instant updatedAt;
 
+    /**
+     * Represents if the group is the default group for the tenant.
+     */
+    private boolean defaultGroupForTenant;
+
     public static Group from(CreateGroupRequest createGroupRequest) {
         Group group = new Group();
         group.setName(createGroupRequest.getName());

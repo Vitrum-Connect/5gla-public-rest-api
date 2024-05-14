@@ -126,7 +126,18 @@ public class GroupController {
     )
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> readAllGroups() {
-        var readGroupsResponse = ReadGroupsResponse.builder().build();
+        var groups = groupService.getAll();
+        var readGroupsResponse = ReadGroupsResponse.builder()
+                .groups(groups.stream()
+                        .map(group -> de.app.fivegla.controller.dto.response.inner.Group.builder()
+                                .groupId(group.getGroupId())
+                                .name(group.getName())
+                                .description(group.getDescription())
+                                .createdAt(group.getCreatedAt().toString())
+                                .updatedAt(group.getUpdatedAt().toString())
+                                .build())
+                        .toList())
+                .build();
         return ResponseEntity.status(HttpStatus.OK).body(readGroupsResponse);
     }
 

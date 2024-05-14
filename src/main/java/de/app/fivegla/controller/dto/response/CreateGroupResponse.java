@@ -11,4 +11,19 @@ import lombok.Setter;
 @Builder
 @Schema(description = "Response wrapper.")
 public class CreateGroupResponse extends Response {
+
+        @Schema(description = "The id of the group.")
+        private String groupId;
+
+        @Schema(description = "The name of the group.")
+        private String name;
+
+        @Schema(description = "The description of the group.")
+        private String description;
+
+        @Schema(description = "The creation date of the group.")
+        private String createdAt;
+
+        @Schema(description = "The last update date of the group.")
+        private String updatedAt;
 }

@@ -1,16 +1,20 @@
 package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Response;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.controller.api.BaseMappings;
+import de.app.fivegla.controller.dto.request.CreateGroupRequest;
 import de.app.fivegla.controller.dto.response.CreateGroupResponse;
 import de.app.fivegla.controller.dto.response.ReadGroupResponse;
 import de.app.fivegla.controller.dto.response.ReadGroupsResponse;
 import de.app.fivegla.controller.dto.response.UpdateGroupResponse;
+import de.app.fivegla.persistence.entity.Group;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(BaseMappings.GROUPS)
 public class GroupController {
+
+    private final GroupService groupService;
 
     @Operation(
             operationId = "groups.create",
@@ -46,8 +52,15 @@ public class GroupController {
             )
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> createGroup() {
-        var createGroupResponse = CreateGroupResponse.builder().build();
+    public ResponseEntity<? extends Response> createGroup(@Valid @RequestBody CreateGroupRequest createGroupRequest) {
+        var createdGroup = groupService.add(Group.from(createGroupRequest));
+        var createGroupResponse = CreateGroupResponse.builder()
+                .groupId(createdGroup.getGroupId())
+                .name(createdGroup.getName())
+                .description(createdGroup.getDescription())
+                .createdAt(createdGroup.getCreatedAt().toString())
+                .updatedAt(createdGroup.getUpdatedAt().toString())
+                .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(createGroupResponse);
     }
 

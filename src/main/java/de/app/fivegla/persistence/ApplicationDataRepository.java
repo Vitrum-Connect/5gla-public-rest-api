@@ -3,6 +3,7 @@ package de.app.fivegla.persistence;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.imageprocessing.model.Image;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -158,4 +159,5 @@ public class ApplicationDataRepository {
     public Tenant updateTenant(String tenantId, String name, String description) {
         return applicationData.updateTenant(tenantId, name, description);
     }
+
 }

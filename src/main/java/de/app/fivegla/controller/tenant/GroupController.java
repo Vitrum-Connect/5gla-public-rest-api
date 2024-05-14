@@ -23,6 +23,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -53,8 +55,8 @@ public class GroupController {
             )
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> createGroup(@Valid @RequestBody CreateGroupRequest createGroupRequest) {
-        var createdGroup = groupService.add(Group.from(createGroupRequest));
+    public ResponseEntity<? extends Response> createGroup(@Valid @RequestBody CreateGroupRequest createGroupRequest, Principal principal) {
+        var createdGroup = groupService.add(principal.getName(), Group.from(createGroupRequest));
         var createGroupResponse = CreateGroupResponse.builder()
                 .groupId(createdGroup.getGroupId())
                 .name(createdGroup.getName())
@@ -87,8 +89,8 @@ public class GroupController {
             )
     )
     @GetMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> readGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId) {
-        var optionalGroup = groupService.get(groupId);
+    public ResponseEntity<? extends Response> readGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId, Principal principal) {
+        var optionalGroup = groupService.get(principal.getName(), groupId);
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
@@ -125,8 +127,8 @@ public class GroupController {
             )
     )
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> readAllGroups() {
-        var groups = groupService.getAll();
+    public ResponseEntity<? extends Response> readAllGroups(Principal principal) {
+        var groups = groupService.getAll(principal.getName());
         var readGroupsResponse = ReadGroupsResponse.builder()
                 .groups(groups.stream()
                         .map(group -> de.app.fivegla.controller.dto.response.inner.Group.builder()
@@ -163,8 +165,8 @@ public class GroupController {
             )
     )
     @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> updateGroup(@Valid @RequestBody UpdateGroupRequest updateGroupRequest) {
-        var optionalGroup = groupService.update(Group.from(updateGroupRequest));
+    public ResponseEntity<? extends Response> updateGroup(@Valid @RequestBody UpdateGroupRequest updateGroupRequest, Principal principal) {
+        var optionalGroup = groupService.update(principal.getName(), Group.from(updateGroupRequest));
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
@@ -200,12 +202,12 @@ public class GroupController {
             )
     )
     @DeleteMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> deleteGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId) {
-        var optionalGroup = groupService.get(groupId);
+    public ResponseEntity<? extends Response> deleteGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId, Principal principal) {
+        var optionalGroup = groupService.get(principal.getName(), groupId);
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
-        groupService.delete(groupId);
+        groupService.delete(principal.getName(), groupId);
         return ResponseEntity.status(HttpStatus.OK).body(new Response());
     }
 

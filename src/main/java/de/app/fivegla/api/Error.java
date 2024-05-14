@@ -42,7 +42,11 @@ public enum Error {
     INVALID_TENANT_ID(errorOf(32)),
     TENANT_ALREADY_EXISTS(errorOf(33)),
     TENANT_NOT_FOUND(errorOf(34)),
-    COULD_NOT_CREATE_GPS_COORDINATES(errorOf(35));
+    COULD_NOT_CREATE_GPS_COORDINATES(errorOf(35)),
+    GROUP_NOT_FOUND(errorOf(36)),
+    TRYING_TO_UPDATE_GROUP_FROM_ANOTHER_TENANT(errorOf(37)),
+    TRYING_TO_ACCESS_GROUP_FROM_ANOTHER_TENANT(errorOf(38)),
+    TRYING_TO_DELETE_GROUP_FROM_ANOTHER_TENANT(errorOf(39));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

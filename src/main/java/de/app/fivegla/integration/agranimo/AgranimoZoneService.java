@@ -38,7 +38,7 @@ public class AgranimoZoneService {
                 headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 headers.setBearerAuth(loginService.fetchAccessToken(thirdPartyApiConfiguration));
                 var httpEntity = new HttpEntity<>(headers);
-                var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/zone")
+                var uri = UriComponentsBuilder.fromHttpUrl(thirdPartyApiConfiguration.getUrl() + "/group")
                         .toUriString();
                 var response = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Zone[].class);
 

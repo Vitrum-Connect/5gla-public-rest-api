@@ -2,6 +2,8 @@ package de.app.fivegla.controller.tenant;
 
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.Response;
+import de.app.fivegla.business.GroupService;
+import de.app.fivegla.business.TenantService;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -31,6 +33,8 @@ import java.security.Principal;
 public class ThirdPartyApiConfigurationController implements TenantCredentialApiAccess {
 
     private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
+    private final TenantService tenantService;
+    private final GroupService groupService;
 
     /**
      * Creates a third-party API configuration and adds it to the system.
@@ -61,9 +65,9 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> createThirdPartyApiConfiguration(@Valid @RequestBody CreateThirdPartyApiConfigurationRequest request, Principal principal) {
-        log.info("Creating third-party API configuration.");
+        var tenant = validateTenant(tenantService, principal);
         var thirdPartyApiConfiguration = request.toEntity();
-        thirdPartyApiConfiguration.setTenantId(principal.getName());
+        thirdPartyApiConfiguration.setTenantId(tenant.getTenantId());
         thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
         return ResponseEntity.ok().body(new Response());
     }
@@ -97,8 +101,8 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     )
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(Principal principal) {
-        log.info("Getting third-party API configuration.");
-        var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(principal.getName()).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
+        var tenant = validateTenant(tenantService, principal);
+        var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId()).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
                 .tenantId(thirdPartyApiConfiguration.getTenantId())
                 .manufacturer(thirdPartyApiConfiguration.getManufacturer())
                 .enabled(thirdPartyApiConfiguration.isEnabled()).build()).toList();
@@ -137,8 +141,8 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     )
     @DeleteMapping(value = "/{manufacturer}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(Principal principal, @PathVariable String manufacturer) {
-        log.info("Deleting third-party API configuration.");
-        thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(principal.getName(), Manufacturer.valueOf(manufacturer));
+        var tenant = validateTenant(tenantService, principal);
+        thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(tenant.getTenantId(), Manufacturer.valueOf(manufacturer));
         return ResponseEntity.ok().body(new Response());
     }
 

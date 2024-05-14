@@ -30,11 +30,7 @@ public class GroupService {
      * @param group The group to be added.
      * @return The added group.
      */
-    public Group add(String tenantId, Group group) {
-        var tenant = tenantRepository.getTenant(tenantId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
-                .error(Error.TENANT_NOT_FOUND)
-                .message("Could not add group, since the tenant was not found.")
-                .build()));
+    public Group add(Tenant tenant, Group group) {
         group.setGroupId(groupRepository.generateGroupId());
         group.setTenant(tenant);
         group.setCreatedAt(Instant.now());
@@ -49,12 +45,12 @@ public class GroupService {
      * @param newGroupData The new group data.
      * @return An Optional containing the updated group if it exists, or an empty Optional if the group doesn't exist.
      */
-    public Optional<Group> update(String tenantId, Group newGroupData) {
+    public Optional<Group> update(Tenant tenant, Group newGroupData) {
         var group = groupRepository.get(newGroupData.getGroupId()).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not update group, since the group was not found.")
                 .build()));
-        if (!group.getTenant().getTenantId().equals(tenantId)) {
+        if (!group.getTenant().getTenantId().equals(tenant.getTenantId())) {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.TRYING_TO_UPDATE_GROUP_FROM_ANOTHER_TENANT)
                     .message("Could not update group, since the group is from another tenant.")
@@ -69,9 +65,9 @@ public class GroupService {
      * @param groupId The ID of the group to retrieve.
      * @return An Optional containing the retrieved group, or an empty Optional if no group with the specified ID is found.
      */
-    public Optional<Group> get(String tenantId, String groupId) {
+    public Optional<Group> get(Tenant tenant, String groupId) {
         var optionalGroup = groupRepository.get(groupId);
-        if (optionalGroup.isPresent() && !optionalGroup.get().getTenant().getTenantId().equals(tenantId)) {
+        if (optionalGroup.isPresent() && !optionalGroup.get().getTenant().getTenantId().equals(tenant.getTenantId())) {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.TRYING_TO_ACCESS_GROUP_FROM_ANOTHER_TENANT)
                     .message("Could not get group, since the group is from another tenant.")
@@ -86,8 +82,8 @@ public class GroupService {
      *
      * @return A list of all groups.
      */
-    public List<Group> getAll(String tenantId) {
-        return groupRepository.getAll().stream().filter(group -> group.getTenant().getTenantId().equals(tenantId)).toList();
+    public List<Group> getAll(Tenant tenant) {
+        return groupRepository.getAll().stream().filter(group -> group.getTenant().getTenantId().equals(tenant.getTenantId())).toList();
     }
 
     /**
@@ -95,12 +91,12 @@ public class GroupService {
      *
      * @param groupId The ID of the group to delete.
      */
-    public void delete(String tenantId, String groupId) {
+    public void delete(Tenant tenant, String groupId) {
         var group = groupRepository.get(groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not update group, since the group was not found.")
                 .build()));
-        if (!group.getTenant().getTenantId().equals(tenantId)) {
+        if (!group.getTenant().getTenantId().equals(tenant.getTenantId())) {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.TRYING_TO_DELETE_GROUP_FROM_ANOTHER_TENANT)
                     .message("Could not delete group, since the group is from another tenant.")
@@ -129,5 +125,24 @@ public class GroupService {
     private boolean checkIfThereIsAlreadyADefaultGroup(Tenant tenant) {
         return groupRepository.getAll().stream()
                 .anyMatch(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant());
+    }
+
+    /**
+     * Retrieves the group with the specified group ID for the given tenant. If the group does not exist, a default group is created for the tenant and returned.
+     *
+     * @param tenant  The tenant for which to retrieve the group.
+     * @param groupId The ID of the group to retrieve.
+     * @return The group with the specified group ID for the given tenant, or a default group if the group does not exist.
+     * @throws BusinessException If the default group for the tenant cannot be found.
+     */
+    public Group getOrDefault(Tenant tenant, String groupId) {
+        var optionalGroup = groupRepository.get(groupId);
+        return optionalGroup.orElseGet(() -> groupRepository.getAll().stream()
+                .filter(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant())
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                        .error(Error.DEFAULT_GROUP_FOR_TENANT_NOT_FOUND)
+                        .message("Could not find the default group for the tenant.")
+                        .build())));
     }
 }

@@ -1,6 +1,7 @@
 package de.app.fivegla.controller.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,9 +13,10 @@ import lombok.Setter;
 class BaseRequest {
 
     /**
-     * A custom zone, which can be used to group devices / measurements. This is optional.
+     * A custom group, which can be used to group devices / measurements.
      */
-    @Schema(description = "A custom zone, which can be used to group devices / measurements. This is optional.")
-    private String zone;
+    @NotBlank
+    @Schema(description = "A custom group ID, which can be used to group devices / measurements. This is mandatory since all devices and measurements must be assigned to a group.")
+    protected String groupId;
 
 }

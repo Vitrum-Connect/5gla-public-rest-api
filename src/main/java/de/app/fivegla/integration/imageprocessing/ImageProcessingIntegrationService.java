@@ -1,10 +1,10 @@
 package de.app.fivegla.integration.imageprocessing;
 
-import de.app.fivegla.api.ZoneOrDefaultValue;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.imageprocessing.model.Image;
 import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
 import de.app.fivegla.persistence.ImageRepository;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,17 +31,17 @@ public class ImageProcessingIntegrationService {
      * Processes an image from the mica sense camera.
      *
      * @param transactionId The transaction id.
-     * @param zone          The zone.
+     * @param group         The group.
      * @param droneId       The id of the drone.
      * @param imageChannel  The channel the image was taken with.
      * @param base64Image   The base64 encoded tiff image.
      */
-    public String processImage(Tenant tenant, String zone, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
+    public String processImage(Tenant tenant, Group group, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
         var image = Base64.getDecoder().decode(base64Image);
         log.debug("Channel for the image: {}.", imageChannel);
         var micaSenseImage = imageRepository.addImage(Image.builder()
                 .oid(tenant.getFiwarePrefix() + droneId)
-                .zone(new ZoneOrDefaultValue(zone))
+                .group(group.getGroupId())
                 .channel(imageChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)

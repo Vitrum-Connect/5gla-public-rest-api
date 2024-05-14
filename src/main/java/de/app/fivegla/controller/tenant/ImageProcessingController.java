@@ -1,8 +1,7 @@
 package de.app.fivegla.controller.tenant;
 
-import de.app.fivegla.api.Error;
-import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Response;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
@@ -37,6 +36,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
 
     private final ImageProcessingIntegrationService imageProcessingIntegrationService;
     private final TenantService tenantService;
+    private final GroupService groupService;
 
     /**
      * Processes one or multiple images from the mica sense camera.
@@ -66,26 +66,16 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
     )
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> processImage(@Valid @RequestBody @Parameter(description = "The image processing request.", required = true) ImageProcessingRequest request, Principal principal) {
-        log.debug("Processing image for the drone: {}.", request.getDroneId());
-        var optionalTenant = tenantService.findTenantByName(principal.getName());
-        if (optionalTenant.isEmpty()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(ErrorMessage.builder()
-                            .error(Error.TENANT_NOT_FOUND)
-                            .message("No tenant found for id " + principal.getName())
-                            .build());
-        } else {
-            var tenant = optionalTenant.get();
-            var oids = new ArrayList<String>();
-            request.getImages().forEach(droneImage -> {
-                var oid = imageProcessingIntegrationService.processImage(tenant, request.getZone(), request.getTransactionId(), request.getDroneId(), droneImage.getImageChannel(), droneImage.getBase64Image());
-                oids.add(oid);
-            });
-            return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
-                    .oids(oids)
-                    .build());
-        }
+        var tenant = validateTenant(tenantService, principal);
+        var group = groupService.getOrDefault(tenant, request.getGroupId());
+        var oids = new ArrayList<String>();
+        request.getImages().forEach(droneImage -> {
+            var oid = imageProcessingIntegrationService.processImage(tenant, group, request.getTransactionId(), request.getDroneId(), droneImage.getImageChannel(), droneImage.getBase64Image());
+            oids.add(oid);
+        });
+        return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
+                .oids(oids)
+                .build());
     }
 
     /**

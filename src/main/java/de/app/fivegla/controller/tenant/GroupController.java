@@ -87,8 +87,20 @@ public class GroupController {
     )
     @GetMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> readGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId) {
-        var readGroupResponse = ReadGroupResponse.builder().build();
-        return ResponseEntity.status(HttpStatus.OK).body(readGroupResponse);
+        var optionalGroup = groupService.get(groupId);
+        if (optionalGroup.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
+        } else {
+            var group = optionalGroup.get();
+            var readGroupResponse = ReadGroupResponse.builder()
+                    .groupId(group.getGroupId())
+                    .name(group.getName())
+                    .description(group.getDescription())
+                    .createdAt(group.getCreatedAt().toString())
+                    .updatedAt(group.getUpdatedAt().toString())
+                    .build();
+            return ResponseEntity.status(HttpStatus.OK).body(readGroupResponse);
+        }
     }
 
     @Operation(

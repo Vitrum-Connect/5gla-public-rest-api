@@ -36,6 +36,12 @@ public class GroupService {
         groupRepository.update(newGroupData);
     }
 
+    /**
+     * Retrieves a group by its ID.
+     *
+     * @param groupId The ID of the group to retrieve.
+     * @return An Optional containing the retrieved group, or an empty Optional if no group with the specified ID is found.
+     */
     public Optional<Group> get(String groupId) {
         return groupRepository.get(groupId);
     }

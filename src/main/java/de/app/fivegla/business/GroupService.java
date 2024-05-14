@@ -7,6 +7,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.persistence.GroupRepository;
 import de.app.fivegla.persistence.TenantRepository;
 import de.app.fivegla.persistence.entity.Group;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -107,5 +108,26 @@ public class GroupService {
         } else {
             groupRepository.delete(groupId);
         }
+    }
+
+    public void createDefaultGroup(Tenant tenant) {
+        if (!checkIfThereIsAlreadyADefaultGroup(tenant)) {
+            Group group = new Group();
+            group.setGroupId(groupRepository.generateGroupId());
+            group.setTenant(tenant);
+            group.setName("Default Group");
+            group.setDescription("The default group for the tenant.");
+            group.setDefaultGroupForTenant(true);
+            group.setCreatedAt(Instant.now());
+            group.setUpdatedAt(Instant.now());
+            groupRepository.add(group);
+        } else {
+            log.info("Default group already exists for tenant with ID: {}", tenant.getTenantId());
+        }
+    }
+
+    private boolean checkIfThereIsAlreadyADefaultGroup(Tenant tenant) {
+        return groupRepository.getAll().stream()
+                .anyMatch(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant());
     }
 }

@@ -57,7 +57,7 @@ public class TenantService implements UserDetailsService {
         tenant.setAccessToken(encodedAccessToken);
         var tenantAndAccessToken = new TenantAndAccessToken(tenantRepository.addTenant(tenant), accessToken);
         applicationEventPublisher.publishEvent(new ResendSubscriptionsEvent(this));
-        applicationEventPublisher.publishEvent(new CreateDefaultGroupForTenantEvent(this));
+        applicationEventPublisher.publishEvent(new CreateDefaultGroupForTenantEvent(this, tenant));
         return tenantAndAccessToken;
     }
 

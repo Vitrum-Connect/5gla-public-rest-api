@@ -1,7 +1,7 @@
 package de.app.fivegla.event;
 
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.event.events.CreateDefaultGroupForTenantEvent;
-import de.app.fivegla.persistence.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CreateDefaultGroupForTenantEventHandler {
 
-    private final GroupRepository groupRepository;
+    private final GroupService groupService;
 
     /**
      * This method handles the event of creating a default group for a tenant.
@@ -24,6 +24,6 @@ public class CreateDefaultGroupForTenantEventHandler {
     @EventListener(CreateDefaultGroupForTenantEvent.class)
     public void handleCreateDefaultGroupForTenantEvent(CreateDefaultGroupForTenantEvent createDefaultGroupForTenantEvent) {
         log.info("Handling create default group for tenant '{}'.", createDefaultGroupForTenantEvent.getTenant().getTenantId());
-        groupRepository.createDefaultGroup(createDefaultGroupForTenantEvent.getTenant());
+        groupService.createDefaultGroup(createDefaultGroupForTenantEvent.getTenant());
     }
 }

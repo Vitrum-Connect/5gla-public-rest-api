@@ -98,15 +98,4 @@ public class GroupRepository {
         return UUID.randomUUID().toString();
     }
 
-    public void createDefaultGroup(Tenant tenant) {
-        Group group = new Group();
-        group.setGroupId(generateGroupId());
-        group.setTenant(tenant);
-        group.setName("Default Group");
-        group.setDescription("The default group for the tenant.");
-        group.setCreatedAt(Instant.now());
-        group.setUpdatedAt(Instant.now());
-        group.setDefaultGroupForTenant(true);
-        add(group);
-    }
 }

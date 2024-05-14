@@ -52,10 +52,20 @@ public class GroupService {
         return groupRepository.get(groupId);
     }
 
+    /**
+     * Retrieves all groups.
+     *
+     * @return A list of all groups.
+     */
     public List<Group> getAll() {
         return groupRepository.getAll();
     }
 
+    /**
+     * Deletes a group by its ID.
+     *
+     * @param groupId The ID of the group to delete.
+     */
     public void delete(String groupId) {
         groupRepository.delete(groupId);
     }

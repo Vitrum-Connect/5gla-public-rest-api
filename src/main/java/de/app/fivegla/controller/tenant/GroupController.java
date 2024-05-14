@@ -201,6 +201,11 @@ public class GroupController {
     )
     @DeleteMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> deleteGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId) {
+        var optionalGroup = groupService.get(groupId);
+        if (optionalGroup.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
+        }
+        groupService.delete(groupId);
         return ResponseEntity.status(HttpStatus.OK).body(new Response());
     }
 

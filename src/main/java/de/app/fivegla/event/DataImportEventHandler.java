@@ -38,7 +38,6 @@ public class DataImportEventHandler {
     private final SubscriptionStatus subscriptionStatus;
     private final Application application;
     private final TenantService tenantService;
-    private final GroupService groupService;
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {

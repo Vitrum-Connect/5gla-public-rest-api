@@ -25,7 +25,7 @@ public record AgriCrop(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"group\":\"" + group.asJson() + "\"," +
+                "  \"group\":" + group.asJson() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +
                 "  \"coordinates\":" + coordinatesAsJson(coordinates) +
                 "}";

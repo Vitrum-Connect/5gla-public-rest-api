@@ -3,7 +3,7 @@ package de.app.fivegla.integration.weenat;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
-import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class WeenatFiwareIntegrationServiceWrapper {
-    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final InternalBeanConfiguration internalBeanConfiguration;
     private final GroupService groupService;
 
     public void persist(Tenant tenant, Plot plot, Measurements measurements) {
@@ -46,7 +46,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(temperature);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(temperature);
 
             var relativeHumidity = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -58,7 +58,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(relativeHumidity);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(relativeHumidity);
 
             var cumulativeRainfall = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -70,7 +70,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(cumulativeRainfall);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(cumulativeRainfall);
 
             var windSpeed = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -82,7 +82,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(windSpeed);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(windSpeed);
 
             var windGustSpeed = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -94,7 +94,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(windGustSpeed);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(windGustSpeed);
 
             var soilTemperature = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -106,7 +106,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(soilTemperature);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilTemperature);
 
             var soilTemperature15 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -118,7 +118,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(soilTemperature15);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilTemperature15);
 
             var soilTemperature30 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -130,7 +130,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(soilTemperature30);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilTemperature30);
 
             var soilTemperature60 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -142,7 +142,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(soilTemperature60);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilTemperature60);
 
             var soilWaterPotential15 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -154,7 +154,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(soilWaterPotential15);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilWaterPotential15);
 
             var soilWaterPotential30 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -166,7 +166,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(soilWaterPotential30);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilWaterPotential30);
 
             var soilWaterPotential60 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -178,7 +178,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(soilWaterPotential60);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilWaterPotential60);
 
             var dryTemperature = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -190,7 +190,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(dryTemperature);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(dryTemperature);
 
             var wetTemperature = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -202,7 +202,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(wetTemperature);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(wetTemperature);
 
             var leafWetnessDuration = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -214,7 +214,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(leafWetnessDuration);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(leafWetnessDuration);
 
             var leafWetnessVoltage = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -226,7 +226,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(leafWetnessVoltage);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(leafWetnessVoltage);
 
             var solarIrridiance = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -238,7 +238,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(solarIrridiance);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(solarIrridiance);
 
             var minimumSolarIrridiance = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -250,7 +250,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(minimumSolarIrridiance);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(minimumSolarIrridiance);
 
             var maximumSolarIrridiance = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -262,7 +262,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(maximumSolarIrridiance);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(maximumSolarIrridiance);
 
             var photosyntheticallyActiveRadiation = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -274,7 +274,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(photosyntheticallyActiveRadiation);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(photosyntheticallyActiveRadiation);
 
             var minimumPhotosyntheticallyActiveRadiation = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -286,7 +286,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(minimumPhotosyntheticallyActiveRadiation);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(minimumPhotosyntheticallyActiveRadiation);
 
             var maximumPhotosyntheticallyActiveRadiation = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -298,7 +298,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(maximumPhotosyntheticallyActiveRadiation);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(maximumPhotosyntheticallyActiveRadiation);
 
             var dewPoint = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -310,7 +310,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(dewPoint);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(dewPoint);
 
             var potentialEvapotranspiration = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + plot.getId(),
@@ -322,7 +322,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     latitude,
                     longitude);
-            fiwareEntityIntegrationService.persist(potentialEvapotranspiration);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(potentialEvapotranspiration);
         });
     }
 

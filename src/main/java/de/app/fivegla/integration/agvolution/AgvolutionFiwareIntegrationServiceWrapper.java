@@ -3,9 +3,9 @@ package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
+import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.model.TimeSeriesEntry;
-import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AgvolutionFiwareIntegrationServiceWrapper {
-    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final InternalBeanConfiguration internalBeanConfiguration;
     private final GroupService groupService;
 
     public void persist(Tenant tenant, SeriesEntry seriesEntry) {
@@ -35,7 +35,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
             log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
             deviceMeasurements.forEach(deviceMeasurement -> {
                 log.info("Persisting measurement: {}", deviceMeasurement);
-                fiwareEntityIntegrationService.persist(deviceMeasurement);
+                internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(deviceMeasurement);
             });
         });
     }

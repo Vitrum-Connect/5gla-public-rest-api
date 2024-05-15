@@ -3,9 +3,9 @@ package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
+import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
-import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class Farm21FiwareIntegrationServiceWrapper {
-    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final InternalBeanConfiguration internalBeanConfiguration;
     private final GroupService groupService;
 
     /**
@@ -50,7 +50,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(soilMoisture10);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilMoisture10);
 
             var soilMoisture20 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -62,7 +62,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(soilMoisture20);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilMoisture20);
 
             var soilMoisture30 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -74,7 +74,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(soilMoisture30);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilMoisture30);
 
             var tempNeg10 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -86,7 +86,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(tempNeg10);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(tempNeg10);
 
             var humidity = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -98,7 +98,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(humidity);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(humidity);
 
             var tempPos10 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -110,7 +110,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(tempPos10);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(tempPos10);
 
             var battery = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -122,7 +122,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(battery);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(battery);
 
             var soilTemperature = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -134,7 +134,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(soilTemperature);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(soilTemperature);
 
             var airTemperature = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),
@@ -146,7 +146,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
-            fiwareEntityIntegrationService.persist(airTemperature);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(airTemperature);
         });
     }
 

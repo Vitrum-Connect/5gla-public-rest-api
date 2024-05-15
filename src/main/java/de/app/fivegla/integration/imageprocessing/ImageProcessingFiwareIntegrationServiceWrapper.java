@@ -2,7 +2,7 @@ package de.app.fivegla.integration.imageprocessing;
 
 
 import de.app.fivegla.api.enums.EntityType;
-import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ImageProcessingFiwareIntegrationServiceWrapper {
-    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final InternalBeanConfiguration internalBeanConfiguration;
 
     @Value("${app.imagePathBaseUrl}")
     private String imagePathBaseUrl;
@@ -43,7 +43,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
                 new TextAttribute(imagePathBaseUrl + image.getOid()),
                 image.getLocation().getX(),
                 image.getLocation().getY());
-        fiwareEntityIntegrationService.persist(deviceMeasurement);
+        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(deviceMeasurement);
     }
 
 }

@@ -1,9 +1,9 @@
 package de.app.fivegla.event;
 
-import de.app.fivegla.Application;
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.TenantService;
+import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.event.events.DataImportEvent;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
@@ -35,7 +35,7 @@ public class DataImportEventHandler {
     private final SentekMeasurementImport sentekMeasurementImport;
     private final WeenatMeasurementImport weenatMeasurementImport;
     private final SubscriptionStatus subscriptionStatus;
-    private final Application application;
+    private final InternalBeanConfiguration internalBeanConfiguration;
     private final TenantService tenantService;
 
     @EventListener(DataImportEvent.class)
@@ -74,6 +74,6 @@ public class DataImportEventHandler {
     }
 
     private SubscriptionIntegrationService subscriptionService(String tenantId) {
-        return application.subscriptionService(tenantId);
+        return internalBeanConfiguration.subscriptionService(tenantId);
     }
 }

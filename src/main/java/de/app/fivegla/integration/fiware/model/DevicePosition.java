@@ -3,11 +3,13 @@ package de.app.fivegla.integration.fiware.model;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Device position.
  */
+@Slf4j
 public record DevicePosition(
         String id,
         String type,
@@ -22,7 +24,7 @@ public record DevicePosition(
     @Override
     public String asJson() {
         validate();
-        return "{" +
+        var json = "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
                 "  \"group\":" + group.asJson() + "," +
@@ -31,6 +33,8 @@ public record DevicePosition(
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +
                 "  \"location\":" + locationAsJson(latitude, longitude) +
                 "}";
+        log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);
+        return json;
     }
 
     @Override

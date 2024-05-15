@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Represents a request to create a third-party API configuration.")
-public class CreateThirdPartyApiConfigurationRequest extends BaseRequest {
+public class CreateThirdPartyApiConfigurationRequest {
 
     /**
      * Represents the manufacturer.
@@ -60,7 +60,6 @@ public class CreateThirdPartyApiConfigurationRequest extends BaseRequest {
         configuration.setUsername(username);
         configuration.setPassword(password);
         configuration.setApiToken(apiToken);
-        configuration.setGroupId(groupId);
         return configuration;
     }
 }

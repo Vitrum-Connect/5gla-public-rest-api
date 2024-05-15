@@ -35,7 +35,7 @@ public class AgranimoMeasurementImport {
     private int daysInThePastForInitialImport;
 
     @Async
-    public void run(Tenant tenant, Group group, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             var lastRun = lastRunService.getLastRun(Manufacturer.AGRANIMO);
@@ -47,7 +47,7 @@ public class AgranimoMeasurementImport {
                     log.info("Found {} water content entries", waterContent.size());
                     log.info("Persisting {} water content entries", waterContent.size());
                     waterContent.forEach(
-                            soilMoisture -> persistDataWithinFiware(tenant, group, zone, soilMoisture)
+                            soilMoisture -> persistDataWithinFiware(tenant, zone, soilMoisture)
                     );
                 });
 
@@ -59,7 +59,7 @@ public class AgranimoMeasurementImport {
                     log.info("Found {} water content entries", waterContent.size());
                     log.info("Persisting {} water content entries", waterContent.size());
                     waterContent.forEach(
-                            soilMoisture -> persistDataWithinFiware(tenant, group, zone, soilMoisture)
+                            soilMoisture -> persistDataWithinFiware(tenant, zone, soilMoisture)
                     );
                 });
             }
@@ -74,9 +74,9 @@ public class AgranimoMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(Tenant tenant, Group group, Zone zone, SoilMoisture soilMoisture) {
+    private void persistDataWithinFiware(Tenant tenant, Zone zone, SoilMoisture soilMoisture) {
         try {
-            fiwareIntegrationServiceWrapper.persist(tenant, group, zone, soilMoisture);
+            fiwareIntegrationServiceWrapper.persist(tenant, zone, soilMoisture);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);

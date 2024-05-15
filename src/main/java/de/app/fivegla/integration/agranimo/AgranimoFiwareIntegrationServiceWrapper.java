@@ -2,6 +2,7 @@ package de.app.fivegla.integration.agranimo;
 
 
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
@@ -10,7 +11,6 @@ import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
-import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class AgranimoFiwareIntegrationServiceWrapper {
 
     private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final GroupService groupService;
 
     /**
      * Persists the soil moisture measurement for a given group.
@@ -32,7 +33,11 @@ public class AgranimoFiwareIntegrationServiceWrapper {
      * @param zone         the group associated with the soil moisture measurement
      * @param soilMoisture the soil moisture measurement to persist
      */
-    public void persist(Tenant tenant, Group group, Zone zone, SoilMoisture soilMoisture) {
+    public void persist(Tenant tenant, Zone zone, SoilMoisture soilMoisture) {
+        var group = groupService.findGroupByTenantAndSensorId(tenant, soilMoisture.getDeviceId());
+        if (group.isDefaultGroupForTenant()) {
+            log.warn("Looks like the group for the sensor with id {} is not set. We are using the default group for the tenant.", soilMoisture.getDeviceId());
+        }
         var smo1 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
                 EntityType.AGRANIMO_SENSOR.getKey(),

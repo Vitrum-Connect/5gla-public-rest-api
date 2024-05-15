@@ -7,10 +7,7 @@ import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateGroupRequest;
 import de.app.fivegla.controller.dto.request.UpdateGroupRequest;
-import de.app.fivegla.controller.dto.response.CreateGroupResponse;
-import de.app.fivegla.controller.dto.response.ReadGroupResponse;
-import de.app.fivegla.controller.dto.response.ReadGroupsResponse;
-import de.app.fivegla.controller.dto.response.UpdateGroupResponse;
+import de.app.fivegla.controller.dto.response.*;
 import de.app.fivegla.persistence.entity.Group;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -217,6 +215,47 @@ public class GroupController implements TenantCredentialApiAccess {
         }
         groupService.delete(tenant, groupId);
         return ResponseEntity.status(HttpStatus.OK).body(new Response());
+    }
+
+    @Operation(
+            operationId = "groups.assign-sensor",
+            description = "Assigns a sensor to an existing group.",
+            tags = BaseMappings.GROUPS
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The sensor was assigned to the group successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = SensorAddedToGroupResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PostMapping(value = "/{groupId}/assign-sensor/{sensorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> assignSensorToExistingGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId,
+                                                                          @PathVariable("sensorId") @Parameter(description = "The unique ID of the sensor.") String sensorId,
+                                                                          Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        Optional<Group> group = groupService.assignSensorToExistingGroup(tenant, groupId, sensorId);
+        if (group.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(SensorAddedToGroupResponse.builder()
+                .groupId(group.get().getGroupId())
+                .name(group.get().getName())
+                .description(group.get().getDescription())
+                .createdAt(group.get().getCreatedAt().toString())
+                .updatedAt(group.get().getUpdatedAt().toString())
+                .sensorIdsAssignedToGroup(group.get().getSensorIdsAssignedToGroup())
+                .build()
+        );
     }
 
 }

@@ -43,6 +43,7 @@ public class GroupRepository {
                     group.setName(newGroupData.getName());
                     group.setDescription(newGroupData.getDescription());
                     group.setUpdatedAt(Instant.now());
+                    group.setSensorIdsAssignedToGroup(newGroupData.getSensorIdsAssignedToGroup());
                 });
         applicationData.persist();
         return get(newGroupData.getGroupId());
@@ -97,4 +98,17 @@ public class GroupRepository {
         return UUID.randomUUID().toString();
     }
 
+    /**
+     * Adds a sensor to a group.
+     *
+     * @param group    The group to which the sensor is to be added.
+     * @param sensorId The ID of the sensor to be added.
+     */
+    public Optional<Group> addSensorToGroup(Group group, String sensorId) {
+        if (null == group.getSensorIdsAssignedToGroup()) {
+            group.setSensorIdsAssignedToGroup(new ArrayList<>());
+        }
+        group.getSensorIdsAssignedToGroup().add(sensorId);
+        return update(group);
+    }
 }

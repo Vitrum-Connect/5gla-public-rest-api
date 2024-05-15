@@ -124,4 +124,23 @@ public class GroupRepository {
         }
         return update(group);
     }
+
+    /**
+     * Removes a sensor ID from all groups in the application data.
+     * If the application data contains groups and each group contains a list
+     * of sensor IDs assigned to the group, the specified sensor ID will be removed
+     * from the sensorIdsAssignedToGroup list of each group.
+     *
+     * @param sensorId The ID of the sensor to be removed from all groups.
+     */
+    public void removeSensorFromAllGroups(String sensorId) {
+        if (null != applicationData.getGroups()) {
+            applicationData.getGroups().forEach(group -> {
+                if (null != group.getSensorIdsAssignedToGroup()) {
+                    group.getSensorIdsAssignedToGroup().remove(sensorId);
+                }
+            });
+            applicationData.persist();
+        }
+    }
 }

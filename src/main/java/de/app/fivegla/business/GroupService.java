@@ -201,4 +201,22 @@ public class GroupService {
                 .build()));
         return groupRepository.removeSensorFromGroup(group, sensorId);
     }
+
+    /**
+     * Reassigns a sensor to an existing group.
+     *
+     * @param tenant    The tenant to which the group belongs.
+     * @param groupId   The ID of the group.
+     * @param sensorId  The ID of the sensor to be reassigned.
+     * @return An Optional object containing the updated group if reassignment is successful, or empty if the group was not found.
+     * @throws BusinessException   If the group is not found.
+     */
+    public Optional<Group> reAssignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
+        var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                .error(Error.GROUP_NOT_FOUND)
+                .message("Could not reassign sensor to group, since the group was not found.")
+                .build()));
+        groupRepository.removeSensorFromAllGroups(sensorId);
+        return groupRepository.addSensorToGroup(group, sensorId);
+    }
 }

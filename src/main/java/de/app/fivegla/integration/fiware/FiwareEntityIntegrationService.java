@@ -34,11 +34,13 @@ public class FiwareEntityIntegrationService extends AbstractIntegrationService {
                 .entities(List.of(entity))
                 .build();
         var httpClient = HttpClient.newHttpClient();
+        var requestBody = HttpRequest.BodyPublishers.ofString(updateOrCreateEntityRequest.asJson());
+        log.debug("Request: " + updateOrCreateEntityRequest.asJson());
         var httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(contextBrokerUrlForCommands() + "/op/update"))
                 .header("Content-Type", "application/json")
                 .header(CustomHeader.FIWARE_SERVICE, getTenant())
-                .POST(HttpRequest.BodyPublishers.ofString(updateOrCreateEntityRequest.asJson())).build();
+                .POST(requestBody).build();
         try {
             var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 204) {

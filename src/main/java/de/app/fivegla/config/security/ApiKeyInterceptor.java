@@ -26,7 +26,7 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
     @SuppressWarnings("NullableProblems")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!request.getRequestURI().contains(BaseMappings.SECURED_BY_API_KEY)) {
-            log.info("Skipping API key authentication for non-API requests, the request URI is: {}", request.getRequestURI());
+            log.debug("Skipping API key authentication for non-API requests, the request URI is: {}", request.getRequestURI());
         } else {
             var apiKeyHeader = request.getHeader(API_KEY_HEADER);
             if (apiKeyHeader == null || !apiKeyHeader.equals(configuredApiKey)) {

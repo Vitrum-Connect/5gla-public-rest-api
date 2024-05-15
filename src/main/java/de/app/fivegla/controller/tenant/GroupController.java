@@ -104,6 +104,7 @@ public class GroupController implements TenantCredentialApiAccess {
                 .description(group.getDescription())
                 .createdAt(group.getCreatedAt().toString())
                 .updatedAt(group.getUpdatedAt().toString())
+                .sensorIdsAssignedToGroup(group.getSensorIdsAssignedToGroup())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(readGroupResponse);
     }
@@ -141,6 +142,7 @@ public class GroupController implements TenantCredentialApiAccess {
                                 .description(group.getDescription())
                                 .createdAt(group.getCreatedAt().toString())
                                 .updatedAt(group.getUpdatedAt().toString())
+                                .sensorIdsAssignedToGroup(group.getSensorIdsAssignedToGroup())
                                 .build())
                         .toList())
                 .build();

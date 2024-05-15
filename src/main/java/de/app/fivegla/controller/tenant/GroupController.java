@@ -216,7 +216,7 @@ public class GroupController implements TenantCredentialApiAccess {
                                                                           @PathVariable("sensorId") @Parameter(description = "The unique ID of the sensor.") String sensorId,
                                                                           Principal principal) {
         var tenant = validateTenant(tenantService, principal);
-        Optional<Group> group = groupService.assignSensorToExistingGroup(tenant, groupId, sensorId);
+        var group = groupService.assignSensorToExistingGroup(tenant, groupId, sensorId);
         return createGroupResponse(group);
     }
 
@@ -246,7 +246,7 @@ public class GroupController implements TenantCredentialApiAccess {
                                                                               @PathVariable("sensorId") @Parameter(description = "The unique ID of the sensor.") String sensorId,
                                                                               Principal principal) {
         var tenant = validateTenant(tenantService, principal);
-        Optional<Group> group = groupService.unassignSensorFromExistingGroup(tenant, groupId, sensorId);
+        var group = groupService.unassignSensorFromExistingGroup(tenant, groupId, sensorId);
         return createGroupResponse(group);
     }
 
@@ -265,6 +265,34 @@ public class GroupController implements TenantCredentialApiAccess {
                         .build())
                 .build()
         );
+    }
+
+    @Operation(
+            operationId = "groups.reassign-sensor",
+            description = "Reassign a sensor to an existing group.",
+            tags = BaseMappings.GROUPS
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The sensor was reassigned to the group successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = GroupResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PutMapping(value = "/{groupId}/reassign-sensor/{sensorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> reAssignSensorToExistingGroup(String groupId, String sensorId, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        var group = groupService.reAssignSensorToExistingGroup(tenant, groupId, sensorId);
+        return createGroupResponse(group);
     }
 
 }

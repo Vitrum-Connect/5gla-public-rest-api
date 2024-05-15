@@ -36,7 +36,7 @@ public class SoilScoutMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant, Group group, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             if (lastRunService.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {
@@ -46,14 +46,14 @@ public class SoilScoutMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.forEach(measurement -> persistDataWithinFiware(tenant, group, thirdPartyApiConfiguration, measurement));
+                measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
             } else {
                 log.info("Running initial data import from Soil Scout API, this may take a while");
                 var measurements = soilScoutMeasurementIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.forEach(measurement -> persistDataWithinFiware(tenant, group, thirdPartyApiConfiguration, measurement));
+                measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
             }
             lastRunService.updateLastRun(Manufacturer.SOILSCOUT);
         } catch (Exception e) {
@@ -66,8 +66,8 @@ public class SoilScoutMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(Tenant tenant, Group group, ThirdPartyApiConfiguration thirdPartyApiConfiguration, SensorData measurement) {
-        fiwareIntegrationServiceWrapper.persist(tenant, group, thirdPartyApiConfiguration, measurement);
+    private void persistDataWithinFiware(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, SensorData measurement) {
+        fiwareIntegrationServiceWrapper.persist(tenant, thirdPartyApiConfiguration, measurement);
     }
 
 }

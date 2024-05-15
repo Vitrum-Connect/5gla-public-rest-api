@@ -2,6 +2,7 @@ package de.app.fivegla.integration.soilscout;
 
 
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
@@ -9,7 +10,6 @@ import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.soilscout.model.SensorData;
-import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +26,19 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
 
     private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
     private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final GroupService groupService;
 
     /**
      * Create soil scout sensor data in FIWARE.
      *
      * @param sensorData the sensor data to create
      */
-    public void persist(Tenant tenant, Group group, ThirdPartyApiConfiguration thirdPartyApiConfiguration, SensorData sensorData) {
+    public void persist(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, SensorData sensorData) {
         var soilScoutSensor = soilScoutSensorIntegrationService.fetch(thirdPartyApiConfiguration, sensorData.getDevice());
-        log.debug("Found sensor with id {} in Soil Scout API.", sensorData.getDevice());
+        var group = groupService.findGroupByTenantAndSensorId(tenant, String.valueOf(sensorData.getDevice()));
+        if (group.isDefaultGroupForTenant()) {
+            log.warn("Looks like the group for the sensor with id {} is not set. We are using the default group for the tenant.", sensorData.getDevice());
+        }
 
         var temperature = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),

@@ -62,15 +62,14 @@ public class DataImportEventHandler {
             } else {
                 log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
             }
-            var group = groupService.getDefaultGroupForTenant(tenant);
             switch (manufacturer) {
-                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant, group, config);
-                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant, group, config);
-                case AGRANIMO -> agranimoMeasurementImport.run(tenant, group, config);
-                case FARM21 -> farm21MeasurementImport.run(tenant, group, config);
-                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, group, config);
-                case SENTEK -> sentekMeasurementImport.run(tenant, group, config);
-                case WEENAT -> weenatMeasurementImport.run(tenant, group, config);
+                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant, config);
+                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant, config);
+                case AGRANIMO -> agranimoMeasurementImport.run(tenant, config);
+                case FARM21 -> farm21MeasurementImport.run(tenant, config);
+                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, config);
+                case SENTEK -> sentekMeasurementImport.run(tenant, config);
+                case WEENAT -> weenatMeasurementImport.run(tenant, config);
                 default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
             }
         }

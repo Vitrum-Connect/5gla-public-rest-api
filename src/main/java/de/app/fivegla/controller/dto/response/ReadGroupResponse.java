@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -26,4 +28,7 @@ public class ReadGroupResponse extends Response {
 
     @Schema(description = "The last update date of the group.")
     private String updatedAt;
+
+    @Schema(description = "The sensor ids assigned to the group.")
+    private List<String> sensorIdsAssignedToGroup;
 }

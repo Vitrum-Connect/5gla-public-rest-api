@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -40,4 +42,10 @@ public class Group {
      */
     @Schema(description = "The UUID of the group.")
     private String groupId;
+
+    /**
+     * The sensor ids assigned to the group.
+     */
+    @Schema(description = "The sensor ids assigned to the group.")
+    private List<String> sensorIdsAssignedToGroup;
 }

@@ -25,7 +25,7 @@ public record DevicePosition(
         return "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"group\":\"" + group.asJson() + "\"," +
+                "  \"group\":" + group.asJson() + "," +
                 "  \"transactionId\":" + transactionId.asJson() + "," +
                 "  \"deviceId\":" + deviceId.asJson() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +

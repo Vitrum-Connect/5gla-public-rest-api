@@ -48,9 +48,4 @@ public class ThirdPartyApiConfiguration {
      */
     private String apiToken;
 
-    /**
-     * Represents the group for the third-party API.
-     */
-    private String groupId;
-
 }

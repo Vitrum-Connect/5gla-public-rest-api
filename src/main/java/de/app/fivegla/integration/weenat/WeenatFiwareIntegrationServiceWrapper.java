@@ -2,6 +2,7 @@ package de.app.fivegla.integration.weenat;
 
 
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
@@ -10,7 +11,6 @@ import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
-import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +24,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WeenatFiwareIntegrationServiceWrapper {
     private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final GroupService groupService;
 
-    public void persist(Tenant tenant, Group group, Plot plot, Measurements measurements) {
+    public void persist(Tenant tenant, Plot plot, Measurements measurements) {
         var latitude = plot.getLatitude();
         var longitude = plot.getLongitude();
+        var group = groupService.findGroupByTenantAndSensorId(tenant, String.valueOf(plot.getId()));
+        if (group.isDefaultGroupForTenant()) {
+            log.warn("Looks like the group for the sensor with id {} is not set. We are using the default group for the tenant.", plot.getId());
+        }
         measurements.getMeasurements().forEach(measurement -> {
             log.info("Persisting measurement for measurement: {}", measurement);
 

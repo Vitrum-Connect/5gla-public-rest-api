@@ -144,6 +144,13 @@ public class GroupService {
                         .build())));
     }
 
+    /**
+     * Retrieves the default group for a given tenant.
+     *
+     * @param tenant the tenant for which to retrieve the default group
+     * @return the default group for the tenant
+     * @throws BusinessException if the default group for the tenant is not found
+     */
     public Group getDefaultGroupForTenant(Tenant tenant) {
         return groupRepository.getAll().stream()
                 .filter(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant())
@@ -170,5 +177,20 @@ public class GroupService {
                 .message("Could not assign sensor to group, since the group was not found.")
                 .build()));
         return groupRepository.addSensorToGroup(group, sensorId);
+    }
+
+    /**
+     * Finds a group by tenant and sensor ID.
+     *
+     * @param tenant   The tenant object to filter by.
+     * @param sensorId The sensor ID to filter by.
+     * @return The group found based on the given tenant and sensor ID,
+     * or the default group for the tenant if no group is found.
+     */
+    public Group findGroupByTenantAndSensorId(Tenant tenant, String sensorId) {
+        return groupRepository.getAll().stream()
+                .filter(group -> group.getTenant().equals(tenant) && group.getSensorIdsAssignedToGroup().contains(sensorId))
+                .findFirst()
+                .orElse(getDefaultGroupForTenant(tenant));
     }
 }

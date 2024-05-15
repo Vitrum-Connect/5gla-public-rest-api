@@ -46,7 +46,12 @@ public class SubscriptionStatus {
      * @return true if subscriptions are enabled and subscriptions have not been sent yet, false otherwise
      */
     public boolean sendOutSubscriptions(String tenantId) {
-        return subscriptionsEnabled && !subscriptionsSent.get(tenantId);
+        if (subscriptionsSent.get(tenantId) == null) {
+            log.warn("Tenant with ID {} not yet found.", tenantId);
+            return false;
+        } else {
+            return subscriptionsEnabled && !subscriptionsSent.get(tenantId);
+        }
     }
 
     /**

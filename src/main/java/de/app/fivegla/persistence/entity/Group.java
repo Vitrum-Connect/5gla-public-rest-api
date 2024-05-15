@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a group of sensors or devices, created by the tenant.
@@ -48,6 +50,11 @@ public class Group {
      * Represents if the group is the default group for the tenant.
      */
     private boolean defaultGroupForTenant;
+
+    /**
+     * The sensor ids assigned to the group.
+     */
+    private List<String> sensorIdsAssignedToGroup;
 
     public static Group from(CreateGroupRequest createGroupRequest) {
         Group group = new Group();

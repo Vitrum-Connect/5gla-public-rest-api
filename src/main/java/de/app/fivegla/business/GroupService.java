@@ -153,4 +153,22 @@ public class GroupService {
                         .message("Could not find the default group for the tenant.")
                         .build()));
     }
+
+    /**
+     * Assigns a sensor to an existing group within a specified tenant.
+     *
+     * @param tenant   The tenant owning the group and sensor.
+     * @param groupId  The ID of the group to assign the sensor to.
+     * @param sensorId The ID of the sensor to assign to the group.
+     * @return An {@link Optional} containing the updated group if assignment is successful,
+     * otherwise returns an empty {@link Optional}.
+     * @throws BusinessException If the group is not found.
+     */
+    public Optional<Group> assignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
+        var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                .error(Error.GROUP_NOT_FOUND)
+                .message("Could not assign sensor to group, since the group was not found.")
+                .build()));
+        return groupRepository.addSensorToGroup(group, sensorId);
+    }
 }

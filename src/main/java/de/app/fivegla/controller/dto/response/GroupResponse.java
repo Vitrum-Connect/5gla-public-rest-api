@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @Builder
 @Schema(description = "Response wrapper.")
-public class SensorAddedToGroupResponse extends Response {
+public class GroupResponse extends Response {
 
-    @Schema(description = "The group to which the sensor was added.")
+    @Schema(description = "The group with all its details.")
     private Group group;
 }

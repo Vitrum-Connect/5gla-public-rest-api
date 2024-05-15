@@ -111,4 +111,17 @@ public class GroupRepository {
         group.getSensorIdsAssignedToGroup().add(sensorId);
         return update(group);
     }
+
+    /**
+     * Removes a sensor from a group.
+     *
+     * @param group    The group from which the sensor is to be removed.
+     * @param sensorId The ID of the sensor to be removed.
+     */
+    public Optional<Group> removeSensorFromGroup(Group group, String sensorId) {
+        if (null != group.getSensorIdsAssignedToGroup()) {
+            group.getSensorIdsAssignedToGroup().remove(sensorId);
+        }
+        return update(group);
+    }
 }

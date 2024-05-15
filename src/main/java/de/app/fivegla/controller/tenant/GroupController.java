@@ -44,7 +44,7 @@ public class GroupController implements TenantCredentialApiAccess {
             description = "The group was created successfully.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = CreateGroupResponse.class)
+                    schema = @Schema(implementation = GroupResponse.class)
             )
     )
     @ApiResponse(
@@ -59,14 +59,7 @@ public class GroupController implements TenantCredentialApiAccess {
     public ResponseEntity<? extends Response> createGroup(@Valid @RequestBody CreateGroupRequest createGroupRequest, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var createdGroup = groupService.add(tenant, Group.from(createGroupRequest));
-        var createGroupResponse = CreateGroupResponse.builder()
-                .groupId(createdGroup.getGroupId())
-                .name(createdGroup.getName())
-                .description(createdGroup.getDescription())
-                .createdAt(createdGroup.getCreatedAt().toString())
-                .updatedAt(createdGroup.getUpdatedAt().toString())
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(createGroupResponse);
+        return createGroupResponse(Optional.of(createdGroup));
     }
 
     @Operation(
@@ -94,19 +87,7 @@ public class GroupController implements TenantCredentialApiAccess {
     public ResponseEntity<? extends Response> readGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var optionalGroup = groupService.get(tenant, groupId);
-        if (optionalGroup.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
-        }
-        var group = optionalGroup.get();
-        var readGroupResponse = ReadGroupResponse.builder()
-                .groupId(group.getGroupId())
-                .name(group.getName())
-                .description(group.getDescription())
-                .createdAt(group.getCreatedAt().toString())
-                .updatedAt(group.getUpdatedAt().toString())
-                .sensorIdsAssignedToGroup(group.getSensorIdsAssignedToGroup())
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(readGroupResponse);
+        return createGroupResponse(optionalGroup);
     }
 
     @Operation(
@@ -174,17 +155,7 @@ public class GroupController implements TenantCredentialApiAccess {
     public ResponseEntity<? extends Response> updateGroup(@Valid @RequestBody UpdateGroupRequest updateGroupRequest, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var optionalGroup = groupService.update(tenant, Group.from(updateGroupRequest));
-        if (optionalGroup.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
-        }
-        var updateGroupResponse = UpdateGroupResponse.builder()
-                .groupId(optionalGroup.get().getGroupId())
-                .name(optionalGroup.get().getName())
-                .description(optionalGroup.get().getDescription())
-                .createdAt(optionalGroup.get().getCreatedAt().toString())
-                .updatedAt(optionalGroup.get().getUpdatedAt().toString())
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(updateGroupResponse);
+        return createGroupResponse(optionalGroup);
     }
 
     @Operation(
@@ -246,16 +217,52 @@ public class GroupController implements TenantCredentialApiAccess {
                                                                           Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         Optional<Group> group = groupService.assignSensorToExistingGroup(tenant, groupId, sensorId);
+        return createGroupResponse(group);
+    }
+
+    @Operation(
+            operationId = "groups.unassign-sensor",
+            description = "Unassign a sensor from an existing group.",
+            tags = BaseMappings.GROUPS
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The sensor was unassigned from the group successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = GroupResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @DeleteMapping(value = "/{groupId}/unassign-sensor/{sensorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> unassignSensorFromExistingGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId,
+                                                                              @PathVariable("sensorId") @Parameter(description = "The unique ID of the sensor.") String sensorId,
+                                                                              Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        Optional<Group> group = groupService.unassignSensorFromExistingGroup(tenant, groupId, sensorId);
+        return createGroupResponse(group);
+    }
+
+    private static ResponseEntity<? extends Response> createGroupResponse(Optional<Group> group) {
         if (group.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(SensorAddedToGroupResponse.builder()
-                .groupId(group.get().getGroupId())
-                .name(group.get().getName())
-                .description(group.get().getDescription())
-                .createdAt(group.get().getCreatedAt().toString())
-                .updatedAt(group.get().getUpdatedAt().toString())
-                .sensorIdsAssignedToGroup(group.get().getSensorIdsAssignedToGroup())
+        return ResponseEntity.status(HttpStatus.OK).body(GroupResponse.builder()
+                .group(de.app.fivegla.controller.dto.response.inner.Group.builder()
+                        .groupId(group.get().getGroupId())
+                        .name(group.get().getName())
+                        .description(group.get().getDescription())
+                        .createdAt(group.get().getCreatedAt().toString())
+                        .updatedAt(group.get().getUpdatedAt().toString())
+                        .sensorIdsAssignedToGroup(group.get().getSensorIdsAssignedToGroup())
+                        .build())
                 .build()
         );
     }

@@ -39,7 +39,7 @@ public class Farm21MeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant, Group group, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             if (lastRunService.getLastRun(Manufacturer.FARM21).isPresent()) {
@@ -49,14 +49,14 @@ public class Farm21MeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, group, sensorListEntry));
+                measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, sensorListEntry));
             } else {
                 log.info("Running initial data import from Farm21 API, this may take a while");
                 var measurements = farm21SensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS), Instant.now());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
-                measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, group, sensorListEntry));
+                measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, sensorListEntry));
             }
             lastRunService.updateLastRun(Manufacturer.FARM21);
         } catch (Exception e) {
@@ -69,11 +69,11 @@ public class Farm21MeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(Tenant tenant, Group group, Map.Entry<Sensor, List<SensorData>> entry) {
+    private void persistDataWithinFiware(Tenant tenant, Map.Entry<Sensor, List<SensorData>> entry) {
         try {
             Sensor key = entry.getKey();
             List<SensorData> value = entry.getValue();
-            farm21FiwareIntegrationServiceWrapper.persist(tenant, group, key, value);
+            farm21FiwareIntegrationServiceWrapper.persist(tenant, key, value);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Farm21 API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.FARM21);

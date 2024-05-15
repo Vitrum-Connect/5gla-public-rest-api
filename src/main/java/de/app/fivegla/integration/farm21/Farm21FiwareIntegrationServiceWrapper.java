@@ -2,6 +2,7 @@ package de.app.fivegla.integration.farm21;
 
 
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
@@ -10,7 +11,6 @@ import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
-import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Farm21FiwareIntegrationServiceWrapper {
     private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final GroupService groupService;
 
     /**
      * Create Farm21 sensor data in FIWARE.
@@ -33,7 +34,11 @@ public class Farm21FiwareIntegrationServiceWrapper {
      * @param sensor     the sensor
      * @param sensorData the sensor data to create
      */
-    public void persist(Tenant tenant, Group group, Sensor sensor, List<SensorData> sensorData) {
+    public void persist(Tenant tenant, Sensor sensor, List<SensorData> sensorData) {
+        var group = groupService.findGroupByTenantAndSensorId(tenant, String.valueOf(sensor.getId()));
+        if (group.isDefaultGroupForTenant()) {
+            log.warn("Looks like the group for the sensor with id {} is not set. We are using the default group for the tenant.", sensor.getId());
+        }
         sensorData.forEach(sd -> {
             var soilMoisture10 = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + sensor.getId(),

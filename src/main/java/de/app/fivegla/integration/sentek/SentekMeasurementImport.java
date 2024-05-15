@@ -39,7 +39,7 @@ public class SentekMeasurementImport {
      * Run scheduled data import.
      */
     @Async
-    public void run(Tenant tenant, Group group, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
             if (lastRunService.getLastRun(Manufacturer.SENTEK).isPresent()) {
@@ -49,14 +49,14 @@ public class SentekMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
-                measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, group, loggerListEntry));
+                measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, loggerListEntry));
             } else {
                 log.info("Running initial data import from Sentek API, this may take a while");
                 var measurements = sentekSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, Instant.now().minus(daysInThePastForInitialImport, ChronoUnit.DAYS));
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
-                measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, group, loggerListEntry));
+                measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, loggerListEntry));
             }
             lastRunService.updateLastRun(Manufacturer.SENTEK);
         } catch (Exception e) {
@@ -69,11 +69,11 @@ public class SentekMeasurementImport {
         }
     }
 
-    private void persistDataWithinFiware(Tenant tenant, Group group, Map.Entry<Logger, List<Reading>> entry) {
+    private void persistDataWithinFiware(Tenant tenant, Map.Entry<Logger, List<Reading>> entry) {
         try {
             Logger key = entry.getKey();
             List<Reading> value = entry.getValue();
-            sentekFiwareIntegrationServiceWrapper.persist(tenant, group, key, value);
+            sentekFiwareIntegrationServiceWrapper.persist(tenant, key, value);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Sentek API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);

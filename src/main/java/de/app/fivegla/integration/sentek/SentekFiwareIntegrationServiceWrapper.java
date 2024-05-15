@@ -2,6 +2,7 @@ package de.app.fivegla.integration.sentek;
 
 
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.business.GroupService;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
@@ -10,7 +11,6 @@ import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
-import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +26,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SentekFiwareIntegrationServiceWrapper {
     private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+    private final GroupService groupService;
 
-    public void persist(Tenant tenant, Group group, Logger logger, List<Reading> readings) {
+    public void persist(Tenant tenant, Logger logger, List<Reading> readings) {
         var latitude = logger.getLatitude();
         var longitude = logger.getLongitude();
         readings.forEach(reading -> {
+            var group = groupService.findGroupByTenantAndSensorId(tenant, logger.getLoggerId());
+            if (group.isDefaultGroupForTenant()) {
+                log.warn("Looks like the group for the sensor with id {} is not set. We are using the default group for the tenant.", logger.getLoggerId());
+            }
             fiwareEntityIntegrationService.persist(
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),

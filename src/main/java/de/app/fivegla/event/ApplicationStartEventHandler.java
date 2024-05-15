@@ -1,10 +1,10 @@
 package de.app.fivegla.event;
 
-import de.app.fivegla.Application;
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
 import de.app.fivegla.business.TenantService;
+import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.event.events.ResendSubscriptionsEvent;
 import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
 import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationStartEventHandler {
 
     private final SubscriptionStatus subscriptionStatus;
-    private final Application application;
+    private final InternalBeanConfiguration internalBeanConfiguration;
     private final TenantService tenantService;
     private final GroupService groupService;
 
@@ -54,7 +54,7 @@ public class ApplicationStartEventHandler {
     }
 
     private SubscriptionIntegrationService subscriptionService(String tenantId) {
-        return application.subscriptionService(tenantId);
+        return internalBeanConfiguration.subscriptionService(tenantId);
     }
 
 }

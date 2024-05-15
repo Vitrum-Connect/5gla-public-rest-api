@@ -3,7 +3,7 @@ package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
-import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
@@ -25,14 +25,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SensoterraFiwareIntegrationServiceWrapper {
-    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
+
     private final GroupService groupService;
+    private final InternalBeanConfiguration internalBeanConfiguration;
 
     public void persist(Tenant tenant, Probe probe, List<ProbeData> probeData) {
         probeData.forEach(probeDataEntry -> {
             log.info("Persisting measurement for probe: {}", probe);
             var deviceMeasurement = createDeviceMeasurement(tenant, probe, probeDataEntry);
-            fiwareEntityIntegrationService.persist(deviceMeasurement);
+            internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(deviceMeasurement);
         });
     }
 

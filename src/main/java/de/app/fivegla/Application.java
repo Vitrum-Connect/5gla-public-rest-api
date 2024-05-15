@@ -65,62 +65,8 @@ import java.util.List;
 )
 public class Application {
 
-    @Value("${app.fiware.contextBrokerUrl}")
-    private String contextBrokerUrl;
-
-    @Value("${app.fiware.subscriptions.notificationUrls}")
-    private String[] notificationUrls;
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    /**
-     * Dependency injection for the model mapper.
-     *
-     * @return -
-     */
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
-    /**
-     * Dependency injection for the status service.
-     *
-     * @return -
-     */
-    @Bean
-    public StatusIntegrationService statusService() {
-        return new StatusIntegrationService(contextBrokerUrl, "unused");
-    }
-
-    /**
-     * Dependency injection for the subscription service.
-     *
-     * @return The SubscriptionService instance.
-     */
-    public SubscriptionIntegrationService subscriptionService(String tenant) {
-        return new SubscriptionIntegrationService(contextBrokerUrl, tenant, List.of(notificationUrls));
-    }
-
-    /**
-     * Dependency injection for the device measurement integration service.
-     *
-     * @return -
-     */
-    public FiwareEntityIntegrationService fiwareEntityIntegrationService(String tenant) {
-        return new FiwareEntityIntegrationService(contextBrokerUrl, tenant);
-    }
-
-    /**
-     * Dependency injection for the rest template.
-     *
-     * @return -
-     */
-    @Bean
-    @Scope("prototype")
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }

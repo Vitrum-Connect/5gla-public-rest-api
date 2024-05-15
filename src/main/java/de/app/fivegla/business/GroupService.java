@@ -194,6 +194,16 @@ public class GroupService {
                 .orElse(getDefaultGroupForTenant(tenant));
     }
 
+    /**
+     * Unassigns a sensor from an existing group.
+     *
+     * @param tenant The tenant to which the group belongs.
+     * @param groupId The ID of the group.
+     * @param sensorId The ID of the sensor to be unassigned.
+     * @return A Optional<Group> containing the updated group without the sensor,
+     *         or an empty Optional if the group or sensor was not found.
+     * @throws BusinessException If the group was not found.
+     */
     public Optional<Group> unassignSensorFromExistingGroup(Tenant tenant, String groupId, String sensorId) {
         var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)

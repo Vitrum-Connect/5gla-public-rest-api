@@ -4,6 +4,7 @@ import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Device position.
  */
+@Slf4j
 public record AgriCrop(
         String id,
         String type,
@@ -22,13 +24,15 @@ public record AgriCrop(
     @Override
     public String asJson() {
         validate();
-        return "{" +
+        var json = "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
                 "  \"group\":" + group.asJson() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +
                 "  \"coordinates\":" + coordinatesAsJson(coordinates) +
                 "}";
+        log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);
+        return json;
     }
 
     @Override

@@ -193,4 +193,12 @@ public class GroupService {
                 .findFirst()
                 .orElse(getDefaultGroupForTenant(tenant));
     }
+
+    public Optional<Group> unassignSensorFromExistingGroup(Tenant tenant, String groupId, String sensorId) {
+        var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                .error(Error.GROUP_NOT_FOUND)
+                .message("Could not unassign sensor from group, since the group was not found.")
+                .build()));
+        return groupRepository.removeSensorFromGroup(group, sensorId);
+    }
 }

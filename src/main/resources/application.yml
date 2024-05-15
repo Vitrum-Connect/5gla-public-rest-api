@@ -13,7 +13,6 @@ app:
     subscriptions:
       enabled: true
       notificationUrls: ${NOTIFICATION_URLS}
-    tenant: ${FIWARE_TENANT}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
 logging:

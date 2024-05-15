@@ -71,9 +71,6 @@ public class Application {
     @Value("${app.fiware.subscriptions.notificationUrls}")
     private String[] notificationUrls;
 
-    @Value("${app.fiware.tenant}")
-    private String tenant;
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -89,23 +86,13 @@ public class Application {
     }
 
     /**
-     * Dependency injection for the device measurement integration service.
-     *
-     * @return -
-     */
-    @Bean
-    public FiwareEntityIntegrationService deviceMeasurementIntegrationService() {
-        return new FiwareEntityIntegrationService(contextBrokerUrl, tenant);
-    }
-
-    /**
      * Dependency injection for the status service.
      *
      * @return -
      */
     @Bean
     public StatusIntegrationService statusService() {
-        return new StatusIntegrationService(contextBrokerUrl, tenant);
+        return new StatusIntegrationService(contextBrokerUrl, "unused");
     }
 
     /**
@@ -115,6 +102,15 @@ public class Application {
      */
     public SubscriptionIntegrationService subscriptionService(String tenant) {
         return new SubscriptionIntegrationService(contextBrokerUrl, tenant, List.of(notificationUrls));
+    }
+
+    /**
+     * Dependency injection for the device measurement integration service.
+     *
+     * @return -
+     */
+    public FiwareEntityIntegrationService fiwareEntityIntegrationService(String tenant) {
+        return new FiwareEntityIntegrationService(contextBrokerUrl, tenant);
     }
 
     /**

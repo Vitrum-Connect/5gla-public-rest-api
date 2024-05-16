@@ -93,9 +93,6 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                             .http(Http.builder()
                                     .url(notificationUrl)
                                     .build())
-                            .httpCustom(HttpCustom.builder()
-                                    .url(notificationUrl)
-                                    .build())
                             .build())
                     .build();
             subscriptions.add(subscription);

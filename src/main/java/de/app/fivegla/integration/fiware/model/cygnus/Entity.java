@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.fiware.model.cygnus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
@@ -43,10 +42,10 @@ public class Entity implements Validatable {
     @Override
     public void validate() {
         if (StringUtils.isAllBlank(id, idPattern)) {
-            throw new FiwareIntegrationLayerException("Either id or idPattern must be set");
+            throw new IllegalArgumentException("Either id or idPattern must be set");
         }
         if (StringUtils.isAllBlank(type, typePattern)) {
-            throw new FiwareIntegrationLayerException("Either type or typePattern must be set");
+            throw new IllegalArgumentException("Either type or typePattern must be set");
         }
     }
 }

@@ -2,10 +2,13 @@ package de.app.fivegla.integration.fiware;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.app.fivegla.api.Error;
+import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.fiware.api.CustomHeader;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.fiware.model.cygnus.*;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -31,8 +34,8 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
 
     private final List<String> notificationUrls;
 
-    public SubscriptionIntegrationService(String contextBrokerUrl, String tenant, List<String> notificationUrls) {
-        super(contextBrokerUrl, tenant);
+    public SubscriptionIntegrationService(String contextBrokerUrl, List<String> notificationUrls) {
+        super(contextBrokerUrl);
         this.notificationUrls = notificationUrls;
     }
 
@@ -42,9 +45,8 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      * @param entityTypes The types of entities to subscribe to.
      *                    Accepts multiple arguments of type String,
      *                    each representing a different type.
-     * @throws FiwareIntegrationLayerException if there is an error creating or updating the subscription.
      */
-    public void subscribe(EntityType... entityTypes) {
+    public void subscribe(Tenant tenant, EntityType... entityTypes) {
         var httpClient = HttpClient.newHttpClient();
         var subscriptions = createSubscriptions(entityTypes);
         for (var subscription : subscriptions) {
@@ -53,20 +55,27 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
             var httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(contextBrokerUrlForCommands() + "/subscriptions"))
                     .header("Content-Type", "application/json")
-                    .header(CustomHeader.FIWARE_SERVICE, getTenant())
+                    .header(CustomHeader.FIWARE_SERVICE, tenant.getTenantId())
                     .POST(HttpRequest.BodyPublishers.ofString(json)).build();
             try {
                 var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
                 if (response.statusCode() != 201) {
-                    log.error("Could not create subscription. Response: " + response.body());
-                    log.debug("Request: " + json);
-                    log.debug("Response: " + response.body());
-                    throw new FiwareIntegrationLayerException("Could not create subscription, there was an error from FIWARE.");
+                    log.error("Could not create subscription. Response: {}", response.body());
+                    log.debug("Request: {}", json);
+                    log.debug("Response: {}", response.body());
+                    throw new BusinessException(ErrorMessage.builder()
+                            .message("Could not create subscription, there was an error from FIWARE.")
+                            .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                            .build());
                 } else {
                     log.info("Subscription created/updated successfully.");
                 }
             } catch (Exception e) {
-                throw new FiwareIntegrationLayerException("Could not create/update subscription", e);
+                log.error("Could not create subscription.", e);
+                throw new BusinessException(ErrorMessage.builder()
+                        .message("Could not create subscription.")
+                        .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                        .build());
             }
         }
     }
@@ -82,6 +91,9 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                             .build())
                     .notification(Notification.builder()
                             .http(Http.builder()
+                                    .url(notificationUrl)
+                                    .build())
+                            .httpCustom(HttpCustom.builder()
                                     .url(notificationUrl)
                                     .build())
                             .build())
@@ -105,51 +117,62 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
     /**
      * Removes all subscriptions of the specified type.
      *
-     * @param type the type of subscriptions to be removed
+     * @param tenant the tenant to remove subscriptions for
+     * @param type   the type of subscriptions to be removed
      */
-    public void removeAll(EntityType type) {
-        findAll(type).forEach(this::removeSubscription);
+    public void removeAll(Tenant tenant, EntityType type) {
+        findAll(tenant, type).forEach(subscription -> removeSubscription(tenant, subscription));
     }
 
-    private void removeSubscription(Subscription subscription) {
+    private void removeSubscription(Tenant tenant, Subscription subscription) {
         var httpClient = HttpClient.newHttpClient();
         var httpRequest = HttpRequest.newBuilder()
-                .header(CustomHeader.FIWARE_SERVICE, getTenant())
+                .header(CustomHeader.FIWARE_SERVICE, tenant.getTenantId())
                 .uri(URI.create(contextBrokerUrlForCommands() + "/subscriptions/" + subscription.getId()))
                 .DELETE().build();
         try {
             var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 204) {
-                log.error("Could not remove subscription. Response: " + response.body());
-                log.debug("Response: " + response.body());
-                throw new FiwareIntegrationLayerException("Could not remove subscription, there was an error from FIWARE.");
+                log.error("Could not remove subscription. Response: {}", response.body());
+                log.debug("Response: {}", response.body());
+                throw new BusinessException(ErrorMessage.builder()
+                        .message("Could not remove subscription, there was an error from FIWARE.")
+                        .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                        .build());
             } else {
                 log.info("Subscription removed successfully.");
             }
         } catch (Exception e) {
-            throw new FiwareIntegrationLayerException("Could not remove subscription", e);
+            log.error("Could not remove subscription.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .message("Could not remove subscription.")
+                    .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                    .build());
         }
     }
 
     /**
      * Finds all subscriptions of a given entityType.
      *
+     * @param tenant     The tenant to find subscriptions for.
      * @param entityType The entityType of subscription to find.
      * @return A list of Subscription objects matching the given entityType.
-     * @throws FiwareIntegrationLayerException if there was an error finding the subscriptions.
      */
-    public List<Subscription> findAll(EntityType entityType) {
+    public List<Subscription> findAll(Tenant tenant, EntityType entityType) {
         var httpClient = HttpClient.newHttpClient();
         var httpRequest = HttpRequest.newBuilder()
-                .header(CustomHeader.FIWARE_SERVICE, getTenant())
+                .header(CustomHeader.FIWARE_SERVICE, tenant.getTenantId())
                 .uri(URI.create(contextBrokerUrlForCommands() + "/subscriptions"))
                 .GET().build();
         try {
             var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                log.error("Could not find subscriptions. Response: " + response.body());
-                log.debug("Response: " + response.body());
-                throw new FiwareIntegrationLayerException("Could not find subscription, there was an error from FIWARE.");
+                log.error("Could not find subscriptions. Response: {}", response.body());
+                log.debug("Response: {}", response.body());
+                throw new BusinessException(ErrorMessage.builder()
+                        .message("Could not find subscriptions, there was an error from FIWARE.")
+                        .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                        .build());
             } else {
                 log.info("Subscription found successfully.");
                 return toListOfObjects(response.body()).stream().filter(subscription -> subscription.getSubject().getEntities()
@@ -157,7 +180,11 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                         .anyMatch(entity -> entity.getType().equals(entityType.getKey()))).toList();
             }
         } catch (Exception e) {
-            throw new FiwareIntegrationLayerException("Could not find subscription", e);
+            log.error("Could not find subscriptions.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .message("Could not find subscriptions.")
+                    .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                    .build());
         }
     }
 
@@ -166,13 +193,16 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      *
      * @param object the object to convert
      * @return a JSON string representing the current object
-     * @throws FiwareIntegrationLayerException if an error occurs while transforming the object to JSON
      */
     private String toJson(Object object) {
         try {
             return OBJECT_MAPPER.writer().withDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new FiwareIntegrationLayerException("Could not transform object to JSON.", e);
+            log.error("Could not transform object to JSON.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .message("Could not find subscriptions.")
+                    .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                    .build());
         }
     }
 
@@ -182,7 +212,11 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                     .constructCollectionType(List.class, Subscription.class);
             return OBJECT_MAPPER.readValue(json, type);
         } catch (IOException e) {
-            throw new FiwareIntegrationLayerException("Could not transform JSON to object.", e);
+            log.error("Could not transform object to JSON.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .message("Could not transform JSON to object.")
+                    .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                    .build());
         }
     }
 

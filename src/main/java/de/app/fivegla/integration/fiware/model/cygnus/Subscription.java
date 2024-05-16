@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.fiware.model.cygnus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.cygnus.enums.SubscriptionStatus;
 import lombok.*;
@@ -59,20 +58,20 @@ public class Subscription implements Validatable {
     @Override
     public void validate() {
         if (subject == null) {
-            throw new FiwareIntegrationLayerException("Subject must not be null");
+            throw new IllegalArgumentException("Subject must not be null");
         }
         subject.validate();
 
         if (notification == null) {
-            throw new FiwareIntegrationLayerException("Notification must not be null");
+            throw new IllegalArgumentException("Notification must not be null");
         }
         notification.validate();
 
         if (status == null) {
-            throw new FiwareIntegrationLayerException("Status must not be null");
+            throw new IllegalArgumentException("Status must not be null");
         }
         if (throttling < 0) {
-            throw new FiwareIntegrationLayerException("Throttling must not be negative");
+            throw new IllegalArgumentException("Throttling must not be negative");
         }
     }
 }

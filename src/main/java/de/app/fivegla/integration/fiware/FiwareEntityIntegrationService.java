@@ -1,10 +1,14 @@
 package de.app.fivegla.integration.fiware;
 
+import de.app.fivegla.api.Error;
+import de.app.fivegla.api.ErrorMessage;
+import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.fiware.api.CustomHeader;
 import de.app.fivegla.integration.fiware.api.FiwareEntityChecker;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.request.UpdateOrCreateFiwareEntitiesRequest;
+import de.app.fivegla.persistence.entity.Group;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
@@ -19,8 +23,8 @@ import java.util.List;
 @Slf4j
 public class FiwareEntityIntegrationService extends AbstractIntegrationService {
 
-    public FiwareEntityIntegrationService(String contextBrokerUrl, String tenant) {
-        super(contextBrokerUrl, tenant);
+    public FiwareEntityIntegrationService(String contextBrokerUrl) {
+        super(contextBrokerUrl);
     }
 
     /**
@@ -28,31 +32,40 @@ public class FiwareEntityIntegrationService extends AbstractIntegrationService {
      *
      * @param entity the device to create
      */
-    public void persist(FiwareEntity entity) {
+    public void persist(Tenant tenant, Group group, FiwareEntity entity) {
         FiwareEntityChecker.check(entity);
         var updateOrCreateEntityRequest = UpdateOrCreateFiwareEntitiesRequest.builder()
                 .entities(List.of(entity))
                 .build();
         var httpClient = HttpClient.newHttpClient();
         var requestBody = HttpRequest.BodyPublishers.ofString(updateOrCreateEntityRequest.asJson());
-        log.debug("Request: " + updateOrCreateEntityRequest.asJson());
+        log.debug("Request: {}", updateOrCreateEntityRequest.asJson());
         var httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(contextBrokerUrlForCommands() + "/op/update"))
                 .header("Content-Type", "application/json")
-                .header(CustomHeader.FIWARE_SERVICE, getTenant())
+                .header(CustomHeader.FIWARE_SERVICE, tenant.getTenantId())
+                .header(CustomHeader.FIWARE_SERVICE_PATH, "/" + group.getName())
                 .POST(requestBody).build();
         try {
             var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 204) {
-                log.error("Could not create entity. Response: " + response.body());
-                log.debug("Request: " + updateOrCreateEntityRequest.asJson());
-                log.debug("Response: " + response.body());
-                throw new FiwareIntegrationLayerException("Could not create entity, there was an error from FIWARE.");
+                log.error("Could not create entity. Response: {}", response.body());
+                log.debug("Request: {}", updateOrCreateEntityRequest.asJson());
+                log.debug("Response: {}", response.body());
+                throw new BusinessException(ErrorMessage.builder()
+                        .message("Could not create entity, there was an error from FIWARE.")
+                        .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                        .build());
+
             } else {
                 log.info("Device created/updated successfully.");
             }
         } catch (Exception e) {
-            throw new FiwareIntegrationLayerException("Could not create/update entity", e);
+            log.error("Could not create entity.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .message("Could not create entity in FIWARE.")
+                    .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                    .build());
         }
     }
 

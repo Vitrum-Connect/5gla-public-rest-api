@@ -4,6 +4,7 @@ package de.app.fivegla.business;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
+import de.app.fivegla.integration.fiware.api.FiwareEntityChecker;
 import de.app.fivegla.persistence.GroupRepository;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -29,6 +30,7 @@ public class GroupService {
      * @return The added group.
      */
     public Group add(Tenant tenant, Group group) {
+        FiwareEntityChecker.checkGroupName(group.getName());
         group.setGroupId(groupRepository.generateGroupId());
         group.setTenant(tenant);
         group.setCreatedAt(Instant.now());
@@ -44,6 +46,7 @@ public class GroupService {
      * @return An Optional containing the updated group if it exists, or an empty Optional if the group doesn't exist.
      */
     public Optional<Group> update(Tenant tenant, Group newGroupData) {
+        FiwareEntityChecker.checkGroupName(newGroupData.getName());
         var group = groupRepository.get(newGroupData.getGroupId()).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not update group, since the group was not found.")
@@ -109,7 +112,7 @@ public class GroupService {
             Group group = new Group();
             group.setGroupId(groupRepository.generateGroupId());
             group.setTenant(tenant);
-            group.setName("Default Group");
+            group.setName("default_group");
             group.setDescription("The default group for the tenant.");
             group.setDefaultGroupForTenant(true);
             group.setCreatedAt(Instant.now());

@@ -3,14 +3,15 @@ package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
-import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.model.TimeSeriesEntry;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,28 +27,29 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AgvolutionFiwareIntegrationServiceWrapper {
-    private final InternalBeanConfiguration internalBeanConfiguration;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
     private final GroupService groupService;
 
     public void persist(Tenant tenant, SeriesEntry seriesEntry) {
-        seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
-            var deviceMeasurements = createDeviceMeasurements(tenant, seriesEntry, timeSeriesEntry);
-            log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
-            deviceMeasurements.forEach(deviceMeasurement -> {
-                log.info("Persisting measurement: {}", deviceMeasurement);
-                internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(deviceMeasurement);
-            });
-        });
-    }
-
-    private List<DeviceMeasurement> createDeviceMeasurements(Tenant tenant, SeriesEntry seriesEntry, TimeSeriesEntry timeSeriesEntry) {
-        log.debug("Persisting data for device: {}", seriesEntry.getDeviceId());
-        log.debug("Persisting data: {}", timeSeriesEntry);
-        var deviceMeasurements = new ArrayList<DeviceMeasurement>();
         var group = groupService.findGroupByTenantAndSensorId(tenant, seriesEntry.getDeviceId());
         if (group.isDefaultGroupForTenant()) {
             log.warn("Looks like the group for the sensor with id {} is not set. We are using the default group for the tenant.", seriesEntry.getDeviceId());
         }
+        seriesEntry.getTimeSeriesEntries().forEach(timeSeriesEntry -> {
+            var deviceMeasurements = createDeviceMeasurements(tenant, group, seriesEntry, timeSeriesEntry);
+            log.info("Persisting measurement for device: {}", seriesEntry.getDeviceId());
+            deviceMeasurements.forEach(deviceMeasurement -> {
+                log.info("Persisting measurement: {}", deviceMeasurement);
+                fiwareEntityIntegrationService.persist(tenant, group, deviceMeasurement);
+            });
+        });
+    }
+
+    private List<DeviceMeasurement> createDeviceMeasurements(Tenant tenant, Group group, SeriesEntry seriesEntry, TimeSeriesEntry timeSeriesEntry) {
+        log.debug("Persisting data for device: {}", seriesEntry.getDeviceId());
+        log.debug("Persisting data: {}", timeSeriesEntry);
+        var deviceMeasurements = new ArrayList<DeviceMeasurement>();
+
         timeSeriesEntry.getValues().forEach(timeSeriesValue -> {
             var deviceMeasurement = new DeviceMeasurement(
                     tenant.getFiwarePrefix() + seriesEntry.getDeviceId(),

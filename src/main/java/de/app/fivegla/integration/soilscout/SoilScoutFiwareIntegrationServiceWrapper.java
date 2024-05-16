@@ -3,7 +3,7 @@ package de.app.fivegla.integration.soilscout;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
-import de.app.fivegla.config.InternalBeanConfiguration;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class SoilScoutFiwareIntegrationServiceWrapper {
 
     private final SoilScoutSensorIntegrationService soilScoutSensorIntegrationService;
-    private final InternalBeanConfiguration internalBeanConfiguration;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
     private final GroupService groupService;
 
     /**
@@ -50,7 +50,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(temperature);
+        fiwareEntityIntegrationService.persist(tenant, group, temperature);
 
         var moisture = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
@@ -62,7 +62,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(moisture);
+        fiwareEntityIntegrationService.persist(tenant, group, moisture);
 
         var conductivity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
@@ -74,7 +74,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(conductivity);
+        fiwareEntityIntegrationService.persist(tenant, group, conductivity);
 
         var salinity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
@@ -86,7 +86,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(salinity);
+        fiwareEntityIntegrationService.persist(tenant, group, salinity);
 
         var waterBalance = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
@@ -98,7 +98,7 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
-        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(waterBalance);
+        fiwareEntityIntegrationService.persist(tenant, group, waterBalance);
     }
 
 }

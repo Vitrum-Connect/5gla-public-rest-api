@@ -2,14 +2,13 @@ package de.app.fivegla.event;
 
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.TenantService;
-import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.event.events.DataImportEvent;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
 import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
 import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
@@ -35,8 +34,8 @@ public class DataImportEventHandler {
     private final SentekMeasurementImport sentekMeasurementImport;
     private final WeenatMeasurementImport weenatMeasurementImport;
     private final SubscriptionStatus subscriptionStatus;
-    private final InternalBeanConfiguration internalBeanConfiguration;
     private final TenantService tenantService;
+    private final SubscriptionIntegrationService subscriptionService;
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
@@ -51,11 +50,11 @@ public class DataImportEventHandler {
             var config = dataImportEvent.thirdPartyApiConfiguration();
             if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
                 try {
-                    subscriptionService(tenantId).subscribe(EntityType.values());
+                    subscriptionService.subscribe(tenant, EntityType.values());
                     log.info("Subscribed to device measurement notifications.");
                     subscriptionStatus.subscriptionSent(tenantId);
-                } catch (FiwareIntegrationLayerException e) {
-                    log.error("Could not subscribe to device measurement notifications.");
+                } catch (BusinessException e) {
+                    log.error("Could not subscribe to device measurement notifications.", e);
                 }
             } else {
                 log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
@@ -73,7 +72,4 @@ public class DataImportEventHandler {
         }
     }
 
-    private SubscriptionIntegrationService subscriptionService(String tenantId) {
-        return internalBeanConfiguration.subscriptionService(tenantId);
-    }
 }

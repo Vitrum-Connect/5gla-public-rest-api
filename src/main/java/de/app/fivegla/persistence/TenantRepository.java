@@ -26,17 +26,24 @@ public class TenantRepository {
      * @return The updated tenant.
      */
     public Tenant updateTenant(String tenantId, String name, String description) {
-        var tenant = applicationData.getTenants().stream()
-                .filter(t -> t.getTenantId().equals(tenantId))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
-                        .error(Error.TENANT_NOT_FOUND)
-                        .message("Could not update tenant, since the tenant was not found.")
-                        .build()));
-        tenant.setName(name);
-        tenant.setDescription(description);
-        applicationData.persist();
-        return tenant;
+        if (null != applicationData.getTenants()) {
+            var tenant = applicationData.getTenants().stream()
+                    .filter(t -> t.getTenantId().equals(tenantId))
+                    .findFirst()
+                    .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                            .error(Error.TENANT_NOT_FOUND)
+                            .message("Could not update tenant, since the tenant was not found.")
+                            .build()));
+            tenant.setName(name);
+            tenant.setDescription(description);
+            applicationData.persist();
+            return tenant;
+        } else {
+            throw new BusinessException(ErrorMessage.builder()
+                    .error(Error.TENANT_NOT_FOUND)
+                    .message("Could not update tenant, since the tenant was not found.")
+                    .build());
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,10 +21,9 @@ public class ThirdPartyApiConfigurationRepository {
      */
     public void addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
         if (applicationData.getThirdPartyApiConfigurations() == null) {
-            applicationData.setThirdPartyApiConfigurations(List.of(configuration));
-        } else {
-            applicationData.getThirdPartyApiConfigurations().add(configuration);
+            applicationData.setThirdPartyApiConfigurations(new ArrayList<>());
         }
+        applicationData.getThirdPartyApiConfigurations().add(configuration);
         applicationData.persist();
     }
 

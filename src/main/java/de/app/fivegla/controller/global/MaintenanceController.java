@@ -49,7 +49,7 @@ public class MaintenanceController implements ApiKeyApiAccess {
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @PostMapping(value = "/run", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> runAllImports() {
         dataImportScheduler.scheduleDataImport();
         return ResponseEntity.ok().body(new Response());

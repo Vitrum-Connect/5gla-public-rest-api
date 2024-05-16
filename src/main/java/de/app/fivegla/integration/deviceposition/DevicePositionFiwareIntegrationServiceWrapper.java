@@ -2,7 +2,7 @@ package de.app.fivegla.integration.deviceposition;
 
 
 import de.app.fivegla.api.enums.EntityType;
-import de.app.fivegla.config.InternalBeanConfiguration;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DevicePosition;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
@@ -22,7 +22,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class DevicePositionFiwareIntegrationServiceWrapper {
 
-    private final InternalBeanConfiguration internalBeanConfiguration;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
 
     /**
      * Persists a device position for a specific tenant, measurement type, device ID, transaction ID, latitude, and longitude.
@@ -52,6 +52,6 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
                 latitude,
                 longitude
         );
-        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(devicePosition);
+        fiwareEntityIntegrationService.persist(tenant, group, devicePosition);
     }
 }

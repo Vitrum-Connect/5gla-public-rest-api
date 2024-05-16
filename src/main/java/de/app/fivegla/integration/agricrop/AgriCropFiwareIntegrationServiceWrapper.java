@@ -3,7 +3,7 @@ package de.app.fivegla.integration.agricrop;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.agricrop.GpsCoordinate;
-import de.app.fivegla.config.InternalBeanConfiguration;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.AgriCrop;
 import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AgriCropFiwareIntegrationServiceWrapper {
 
-    private final InternalBeanConfiguration internalBeanConfiguration;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
 
     /**
      * Persists the coordinates of a tenant's crop to the context broker.
@@ -42,7 +42,7 @@ public class AgriCropFiwareIntegrationServiceWrapper {
                 new TextAttribute(group.getGroupId()),
                 new DateTimeAttribute(Instant.now()),
                 coordinates);
-        internalBeanConfiguration.fiwareEntityIntegrationService(tenant.getTenantId()).persist(agriCrop);
+        fiwareEntityIntegrationService.persist(tenant, group, agriCrop);
         return agriCrop;
     }
 }

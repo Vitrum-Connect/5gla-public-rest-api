@@ -1,7 +1,9 @@
 package de.app.fivegla.integration.fiware;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
+import de.app.fivegla.api.Error;
+import de.app.fivegla.api.ErrorMessage;
+import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.fiware.model.Version;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,8 +18,8 @@ import java.net.http.HttpResponse;
 public class StatusIntegrationService extends AbstractIntegrationService {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public StatusIntegrationService(String contextBrokerUrl, String tenant) {
-        super(contextBrokerUrl, tenant);
+    public StatusIntegrationService(String contextBrokerUrl) {
+        super(contextBrokerUrl);
     }
 
     /**
@@ -26,7 +28,6 @@ public class StatusIntegrationService extends AbstractIntegrationService {
      * parses the response to extract the version information.
      *
      * @return the version of the context broker
-     * @throws FiwareIntegrationLayerException if there was an error fetching the version
      */
     public Version getVersion() {
         var httpClient = HttpClient.newHttpClient();
@@ -37,15 +38,22 @@ public class StatusIntegrationService extends AbstractIntegrationService {
         try {
             var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                log.error("Could not fetch version. Response: " + response.body());
-                log.debug("Response: " + response.body());
-                throw new FiwareIntegrationLayerException("Could not fetch version, there was an error from FIWARE.");
+                log.error("Could not fetch version. Response: {}", response.body());
+                log.debug("Response: {}", response.body());
+                throw new BusinessException(ErrorMessage.builder()
+                        .message("Could not fetch version, there was an error from FIWARE.")
+                        .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                        .build());
             } else {
                 log.info("Subscription created/updated successfully.");
                 return toObject(response.body());
             }
         } catch (Exception e) {
-            throw new FiwareIntegrationLayerException("Could not fetch version from FIWARE.", e);
+            log.error("Could not fetch version.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .message("Could not fetch version from FIWARE.")
+                    .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                    .build());
         }
     }
 
@@ -55,7 +63,11 @@ public class StatusIntegrationService extends AbstractIntegrationService {
                     .constructType(Version.class);
             return OBJECT_MAPPER.readValue(json, type);
         } catch (IOException e) {
-            throw new FiwareIntegrationLayerException("Could not transform JSON to object.", e);
+            log.error("Could not transform JSON to object.", e);
+            throw new BusinessException(ErrorMessage.builder()
+                    .message("Could not transform JSON to object.")
+                    .error(Error.FIWARE_INTEGRATION_LAYER_ERROR)
+                    .build());
         }
     }
 }

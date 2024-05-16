@@ -1,6 +1,5 @@
 package de.app.fivegla.integration.fiware;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -10,12 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractIntegrationService {
     private final String contextBrokerUrl;
 
-    @Getter
-    private final String tenant;
-
-    public AbstractIntegrationService(String contextBrokerUrl, String tenant) {
+    public AbstractIntegrationService(String contextBrokerUrl) {
         this.contextBrokerUrl = contextBrokerUrl;
-        this.tenant = tenant;
     }
 
     /**

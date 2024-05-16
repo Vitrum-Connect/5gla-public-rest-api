@@ -2,12 +2,11 @@ package de.app.fivegla.event;
 
 import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.GroupService;
 import de.app.fivegla.business.TenantService;
-import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.event.events.ResendSubscriptionsEvent;
 import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
-import de.app.fivegla.integration.fiware.api.FiwareIntegrationLayerException;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationStartEventHandler {
 
     private final SubscriptionStatus subscriptionStatus;
-    private final InternalBeanConfiguration internalBeanConfiguration;
+    private final SubscriptionIntegrationService subscriptionService;
     private final TenantService tenantService;
     private final GroupService groupService;
 
@@ -39,22 +38,17 @@ public class ApplicationStartEventHandler {
 
     private void triggerSubscriptionsForTenant(Tenant tenant) {
         var tenantId = tenant.getTenantId();
-        var subscriptionService = subscriptionService(tenantId);
         if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
             try {
-                subscriptionService.subscribe(EntityType.values());
+                subscriptionService.subscribe(tenant, EntityType.values());
                 log.info("Subscribed to device measurement notifications.");
                 subscriptionStatus.subscriptionSent(tenantId);
-            } catch (FiwareIntegrationLayerException e) {
-                log.error("Could not subscribe to device measurement notifications.");
+            } catch (BusinessException e) {
+                log.error("Could not subscribe to device measurement notifications.", e);
             }
         } else {
             log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
         }
-    }
-
-    private SubscriptionIntegrationService subscriptionService(String tenantId) {
-        return internalBeanConfiguration.subscriptionService(tenantId);
     }
 
 }

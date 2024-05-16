@@ -24,4 +24,22 @@ public interface CustomHeader {
      */
     String FIWARE_SERVICE = "Fiware-Service";
 
+    /**
+     * The FIWARE_SERVICE_PATH variable represents the HTTP header key for specifying the Fiware service path.
+     * <p>
+     * The value of this header is used to identify the Fiware service path that the request is associated with.
+     * It is typically used in RESTful API calls to provide service path-specific information.
+     * </p>
+     * <p>
+     * The header key is defined as "Fiware-ServicePath".
+     * </p>
+     * <p>
+     * Example usage:
+     * <pre>{@code
+     *     String fiwareServicePath = "/my-service-path";
+     *     headers.put(FIWARE_SERVICE_PATH, fiwareServicePath);
+     * }</pre>
+     * </p>
+     */
+    String FIWARE_SERVICE_PATH = "Fiware-ServicePath";
 }

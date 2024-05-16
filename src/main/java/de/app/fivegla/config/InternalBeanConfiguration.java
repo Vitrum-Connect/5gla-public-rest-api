@@ -41,16 +41,7 @@ public class InternalBeanConfiguration {
      */
     @Bean
     public StatusIntegrationService statusService() {
-        return new StatusIntegrationService(contextBrokerUrl, "unused");
-    }
-
-    /**
-     * Dependency injection for the subscription service.
-     *
-     * @return The SubscriptionService instance.
-     */
-    public SubscriptionIntegrationService subscriptionService(String tenant) {
-        return new SubscriptionIntegrationService(contextBrokerUrl, tenant, List.of(notificationUrls));
+        return new StatusIntegrationService(contextBrokerUrl);
     }
 
     /**
@@ -58,8 +49,19 @@ public class InternalBeanConfiguration {
      *
      * @return -
      */
-    public FiwareEntityIntegrationService fiwareEntityIntegrationService(String tenant) {
-        return new FiwareEntityIntegrationService(contextBrokerUrl, tenant);
+    @Bean
+    public FiwareEntityIntegrationService fiwareEntityIntegrationService() {
+        return new FiwareEntityIntegrationService(contextBrokerUrl);
+    }
+
+    /**
+     * Dependency injection for the subscription service.
+     *
+     * @return The SubscriptionService instance.
+     */
+    @Bean
+    public SubscriptionIntegrationService subscriptionService(String tenant) {
+        return new SubscriptionIntegrationService(contextBrokerUrl, List.of(notificationUrls));
     }
 
     /**

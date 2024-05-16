@@ -4,7 +4,6 @@ import de.app.fivegla.api.SubscriptionStatus;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.TenantService;
-import de.app.fivegla.config.InternalBeanConfiguration;
 import de.app.fivegla.event.events.DataImportEvent;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
@@ -35,8 +34,8 @@ public class DataImportEventHandler {
     private final SentekMeasurementImport sentekMeasurementImport;
     private final WeenatMeasurementImport weenatMeasurementImport;
     private final SubscriptionStatus subscriptionStatus;
-    private final InternalBeanConfiguration internalBeanConfiguration;
     private final TenantService tenantService;
+    private final SubscriptionIntegrationService subscriptionService;
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
@@ -51,7 +50,7 @@ public class DataImportEventHandler {
             var config = dataImportEvent.thirdPartyApiConfiguration();
             if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
                 try {
-                    subscriptionService(tenantId).subscribe(tenant, EntityType.values());
+                    subscriptionService.subscribe(tenant, EntityType.values());
                     log.info("Subscribed to device measurement notifications.");
                     subscriptionStatus.subscriptionSent(tenantId);
                 } catch (BusinessException e) {
@@ -73,7 +72,4 @@ public class DataImportEventHandler {
         }
     }
 
-    private SubscriptionIntegrationService subscriptionService(String tenantId) {
-        return internalBeanConfiguration.subscriptionService(tenantId);
-    }
 }

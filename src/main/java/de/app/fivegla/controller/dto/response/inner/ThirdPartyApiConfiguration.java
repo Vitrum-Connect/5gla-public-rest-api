@@ -15,7 +15,7 @@ public class ThirdPartyApiConfiguration {
     /**
      * Represents the tenant.
      */
-    @Schema(description = "The tenant.")
+    @Schema(description = "The tenant ID.")
     private String tenantId;
 
     /**
@@ -25,9 +25,26 @@ public class ThirdPartyApiConfiguration {
     private Manufacturer manufacturer;
 
     /**
+     * Represents the prefix used for FIWARE integration.
+     */
+    @Schema(description = "The FIWARE prefix.")
+    private String fiwarePrefix;
+
+    /**
      * Indicator if the configuration is enabled.
      */
-    @Schema(description = "Indicator if the configuration is enabled.")
+    @Schema(description = "The enabled status.")
     private boolean enabled;
 
+    /**
+     * Represents the URL of the third-party API.
+     */
+    @Schema(description = "The URL of the third-party API.")
+    private String url;
+
+    /**
+     * Represents the UUID of the third-party API. Will be set automatically to a random UUID.
+     */
+    @Schema(description = "The UUID of the third-party API.")
+    private String uuid;
 }

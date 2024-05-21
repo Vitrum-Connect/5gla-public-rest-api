@@ -58,4 +58,9 @@ public class ThirdPartyApiConfigurationService {
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId) {
         return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId);
     }
+
+    public void addMissingUuidForThirdPartyApiConfigurations() {
+        log.info("Adding missing UUIDs for third-party API configurations.");
+        thirdPartyApiConfigurationRepository.addMissingUuidForThirdPartyApiConfigurations();
+    }
 }

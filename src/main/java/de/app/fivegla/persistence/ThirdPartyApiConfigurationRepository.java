@@ -2,6 +2,7 @@ package de.app.fivegla.persistence;
 
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -69,5 +70,20 @@ public class ThirdPartyApiConfigurationRepository {
         return applicationData.getThirdPartyApiConfigurations().stream()
                 .filter(configuration -> configuration.getTenantId().equals(tenantId))
                 .toList();
+    }
+
+    /**
+     * Adds a UUID to any ThirdPartyApiConfiguration object that lacks a UUID.
+     * If a ThirdPartyApiConfiguration already has a UUID, it will not be modified.
+     * This method iterates over the list of ThirdPartyApiConfiguration objects in the applicationData
+     * and generates a random UUID for each configuration that is missing one.
+     */
+    public void addMissingUuidForThirdPartyApiConfigurations() {
+        applicationData.getThirdPartyApiConfigurations().forEach(configuration -> {
+            if (StringUtils.isBlank(configuration.getUuid())) {
+                configuration.setUuid(UUID.randomUUID().toString());
+            }
+        });
+        applicationData.persist();
     }
 }

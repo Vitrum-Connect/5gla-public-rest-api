@@ -1,6 +1,5 @@
 package de.app.fivegla.controller.tenant;
 
-import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
@@ -69,12 +68,14 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
         thirdPartyApiConfiguration.setTenantId(tenant.getTenantId());
         var thirdPartyApiConfigurationCreated = thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
         var response = CreateThirdPartyApiConfigurationResponse.builder()
-                .tenantId(thirdPartyApiConfigurationCreated.getTenantId())
-                .manufacturer(thirdPartyApiConfigurationCreated.getManufacturer())
-                .fiwarePrefix(thirdPartyApiConfigurationCreated.getFiwarePrefix())
-                .enabled(thirdPartyApiConfigurationCreated.isEnabled())
-                .url(thirdPartyApiConfigurationCreated.getUrl())
-                .uuid(thirdPartyApiConfigurationCreated.getUuid())
+                .thirdPartyApiConfiguration(ThirdPartyApiConfiguration.builder()
+                        .tenantId(thirdPartyApiConfigurationCreated.getTenantId())
+                        .manufacturer(thirdPartyApiConfigurationCreated.getManufacturer())
+                        .fiwarePrefix(thirdPartyApiConfigurationCreated.getFiwarePrefix())
+                        .enabled(thirdPartyApiConfigurationCreated.isEnabled())
+                        .url(thirdPartyApiConfigurationCreated.getUrl())
+                        .uuid(thirdPartyApiConfigurationCreated.getUuid())
+                        .build())
                 .build();
         return ResponseEntity.ok(response);
     }
@@ -109,12 +110,17 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getThirdPartyApiConfigurations(Principal principal) {
         var tenant = validateTenant(tenantService, principal);
-        var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId()).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
-                .tenantId(thirdPartyApiConfiguration.getTenantId())
-                .manufacturer(thirdPartyApiConfiguration.getManufacturer())
-                .enabled(thirdPartyApiConfiguration.isEnabled()).build()).toList();
         return ResponseEntity.ok(FindAllThirdPartyApiConfigurationsResponse.builder()
-                .thirdPartyApiConfigurations(thirdPartyApiConfigurations)
+                .thirdPartyApiConfigurations(thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId())
+                        .stream()
+                        .map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
+                                .tenantId(thirdPartyApiConfiguration.getTenantId())
+                                .manufacturer(thirdPartyApiConfiguration.getManufacturer())
+                                .fiwarePrefix(thirdPartyApiConfiguration.getFiwarePrefix())
+                                .enabled(thirdPartyApiConfiguration.isEnabled())
+                                .url(thirdPartyApiConfiguration.getUrl())
+                                .uuid(thirdPartyApiConfiguration.getUuid())
+                                .build()).toList())
                 .build());
     }
 
@@ -148,20 +154,24 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     @GetMapping(value = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(@PathVariable(value = "uuid") String uuid, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
-        var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId(), uuid).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
-                .tenantId(thirdPartyApiConfiguration.getTenantId())
-                .manufacturer(thirdPartyApiConfiguration.getManufacturer())
-                .enabled(thirdPartyApiConfiguration.isEnabled()).build()).toList();
         return ResponseEntity.ok(FindAllThirdPartyApiConfigurationsResponse.builder()
-                .thirdPartyApiConfigurations(thirdPartyApiConfigurations)
+                .thirdPartyApiConfigurations(thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId(), uuid)
+                        .stream()
+                        .map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
+                                .tenantId(thirdPartyApiConfiguration.getTenantId())
+                                .manufacturer(thirdPartyApiConfiguration.getManufacturer())
+                                .fiwarePrefix(thirdPartyApiConfiguration.getFiwarePrefix())
+                                .enabled(thirdPartyApiConfiguration.isEnabled())
+                                .url(thirdPartyApiConfiguration.getUrl())
+                                .uuid(thirdPartyApiConfiguration.getUuid())
+                                .build()).toList())
                 .build());
     }
 
     /**
      * Deletes a third-party API configuration.
      *
-     * @param principal    The principal object representing the user.
-     * @param manufacturer The manufacturer of the third-party API configuration to delete.
+     * @param principal The principal object representing the user.
      * @return A ResponseEntity object with no body and an HTTP status code of 200 (OK) if the configuration is deleted successfully.
      */
     @Operation(

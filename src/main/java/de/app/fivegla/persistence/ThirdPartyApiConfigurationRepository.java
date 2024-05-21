@@ -35,14 +35,18 @@ public class ThirdPartyApiConfigurationRepository {
     /**
      * Retrieves a list of ThirdPartyApiConfigurations based on the provided tenant ID.
      *
-     * @param name The ID of the tenant.
+     * @param tenantId The ID of the tenant for which to retrieve the third-party API configurations.
+     * @param uuid     The ID of the third party API configuration.
      * @return A list of ThirdPartyApiConfigurations that match the given tenant ID.
      */
-    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String name) {
+    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId, String uuid) {
         if (applicationData.getThirdPartyApiConfigurations() == null) {
             return Collections.emptyList();
         } else {
-            return applicationData.getThirdPartyApiConfigurations().stream().filter(configuration -> configuration.getTenantId().equals(name)).toList();
+            return applicationData.getThirdPartyApiConfigurations().stream()
+                    .filter(configuration -> configuration.getTenantId().equals(tenantId))
+                    .filter(configuration -> configuration.getUuid().equals(uuid))
+                    .toList();
         }
     }
 
@@ -57,5 +61,14 @@ public class ThirdPartyApiConfigurationRepository {
         applicationData.persist();
     }
 
-
+    /**
+     * Reads all third party API configurations.
+     *
+     * @return A list of all third party API configurations.
+     */
+    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId) {
+        return applicationData.getThirdPartyApiConfigurations().stream()
+                .filter(configuration -> configuration.getTenantId().equals(tenantId))
+                .toList();
+    }
 }

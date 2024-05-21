@@ -107,9 +107,48 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
             )
     )
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(Principal principal) {
+    public ResponseEntity<? extends Response> getThirdPartyApiConfigurations(Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId()).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
+                .tenantId(thirdPartyApiConfiguration.getTenantId())
+                .manufacturer(thirdPartyApiConfiguration.getManufacturer())
+                .enabled(thirdPartyApiConfiguration.isEnabled()).build()).toList();
+        return ResponseEntity.ok(FindAllThirdPartyApiConfigurationsResponse.builder()
+                .thirdPartyApiConfigurations(thirdPartyApiConfigurations)
+                .build());
+    }
+
+    /**
+     * Gets all third-party API configuration.
+     *
+     * @param principal The principal object representing the user.
+     * @return A ResponseEntity object containing the third-party API configurations.
+     */
+    @Operation(
+            summary = "Gets third-party API configuration.",
+            description = "Gets third-party API configuration.",
+            tags = BaseMappings.THIRD_PARTY_API_CONFIGURATION
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The third party API configurations were retrieved successfully. The response contains a list of third-party API configurations.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = FindAllThirdPartyApiConfigurationsResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @GetMapping(value = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(@PathVariable(value = "uuid") String uuid, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        var thirdPartyApiConfigurations = thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId(), uuid).stream().map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
                 .tenantId(thirdPartyApiConfiguration.getTenantId())
                 .manufacturer(thirdPartyApiConfiguration.getManufacturer())
                 .enabled(thirdPartyApiConfiguration.isEnabled()).build()).toList();

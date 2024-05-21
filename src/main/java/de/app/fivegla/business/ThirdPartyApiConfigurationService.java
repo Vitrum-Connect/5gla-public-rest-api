@@ -31,11 +31,12 @@ public class ThirdPartyApiConfigurationService {
      * Gets all third-party API configurations.
      *
      * @param tenantId The tenantId of the third-party API configuration.
+     * @param uuid     The uuid of the third-party API configuration.
      * @return A list of third-party API configurations.
      */
-    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId) {
+    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId, String uuid) {
         log.info("Getting third-party API configurations.");
-        return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId);
+        return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId,uuid);
     }
 
     /**
@@ -47,5 +48,15 @@ public class ThirdPartyApiConfigurationService {
     public void deleteThirdPartyApiConfiguration(String tenantId, Manufacturer manufacturer) {
         log.info("Deleting third-party API configuration.");
         thirdPartyApiConfigurationRepository.deleteThirdPartyApiConfiguration(tenantId, manufacturer);
+    }
+
+    /**
+     * Gets all third-party API configurations.
+     *
+     * @param tenantId The tenantId of the third-party API configuration.
+     * @return A list of third-party API configurations.
+     */
+    public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId) {
+        return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId);
     }
 }

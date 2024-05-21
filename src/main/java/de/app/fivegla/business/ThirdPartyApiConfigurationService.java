@@ -20,10 +20,11 @@ public class ThirdPartyApiConfigurationService {
      * Creates a third-party API configuration and adds it to the system.
      *
      * @param configuration The third-party API configuration to be created and added.
+     * @return The created third-party API configuration.
      */
-    public void createThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
+    public ThirdPartyApiConfiguration createThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
         log.info("Creating third-party API configuration.");
-        thirdPartyApiConfigurationRepository.addThirdPartyApiConfiguration(configuration);
+        return thirdPartyApiConfigurationRepository.addThirdPartyApiConfiguration(configuration);
     }
 
     /**

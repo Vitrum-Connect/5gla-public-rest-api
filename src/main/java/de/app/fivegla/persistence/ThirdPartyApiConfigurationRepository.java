@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -18,13 +19,17 @@ public class ThirdPartyApiConfigurationRepository {
 
     /**
      * Add third party API configuration.
+     *
+     * @return The added third party API configuration.
      */
-    public void addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
+    public ThirdPartyApiConfiguration addThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
         if (applicationData.getThirdPartyApiConfigurations() == null) {
             applicationData.setThirdPartyApiConfigurations(new ArrayList<>());
         }
+        configuration.setUuid(UUID.randomUUID().toString());
         applicationData.getThirdPartyApiConfigurations().add(configuration);
         applicationData.persist();
+        return configuration;
     }
 
     /**

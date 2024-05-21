@@ -7,6 +7,7 @@ import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateThirdPartyApiConfigurationRequest;
+import de.app.fivegla.controller.dto.response.CreateThirdPartyApiConfigurationResponse;
 import de.app.fivegla.controller.dto.response.FindAllThirdPartyApiConfigurationsResponse;
 import de.app.fivegla.controller.dto.response.inner.ThirdPartyApiConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +51,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
             description = "The third-party API configuration was created successfully.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
+                    schema = @Schema(implementation = CreateThirdPartyApiConfigurationResponse.class)
             )
     )
     @ApiResponse(
@@ -66,8 +67,16 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
         var tenant = validateTenant(tenantService, principal);
         var thirdPartyApiConfiguration = request.toEntity();
         thirdPartyApiConfiguration.setTenantId(tenant.getTenantId());
-        thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
-        return ResponseEntity.ok().body(new Response());
+        var thirdPartyApiConfigurationCreated = thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
+        var response = CreateThirdPartyApiConfigurationResponse.builder()
+                .tenantId(thirdPartyApiConfigurationCreated.getTenantId())
+                .manufacturer(thirdPartyApiConfigurationCreated.getManufacturer())
+                .fiwarePrefix(thirdPartyApiConfigurationCreated.getFiwarePrefix())
+                .enabled(thirdPartyApiConfigurationCreated.isEnabled())
+                .url(thirdPartyApiConfigurationCreated.getUrl())
+                .uuid(thirdPartyApiConfigurationCreated.getUuid())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     /**

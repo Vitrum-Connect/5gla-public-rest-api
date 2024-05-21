@@ -123,6 +123,14 @@ public class TenantService implements UserDetailsService {
     }
 
     /**
+     * Deletes a tenant by its tenantId.
+     * @param tenantId The tenantId of the tenant to delete.
+     */
+    public void delete(String tenantId) {
+        tenantRepository.deleteTenant(tenantId);
+    }
+
+    /**
      * Represents a combination of Tenant object and an access token.
      */
     public record TenantAndAccessToken(Tenant tenant, String accessToken) {

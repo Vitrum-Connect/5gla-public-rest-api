@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @Schema(name = "Response for finding all tenants.")
-public class FindAllTenantsResponse extends Response {
+public class ReadTenantsResponse extends Response {
 
     /**
      * The list of tenants.

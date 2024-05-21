@@ -7,7 +7,9 @@ import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateGroupRequest;
 import de.app.fivegla.controller.dto.request.UpdateGroupRequest;
-import de.app.fivegla.controller.dto.response.*;
+import de.app.fivegla.controller.dto.response.ReadGroupsResponse;
+import de.app.fivegla.controller.dto.response.SensorAddedToGroupResponse;
+import de.app.fivegla.controller.dto.response.UpdateGroupResponse;
 import de.app.fivegla.persistence.entity.Group;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -44,7 +47,7 @@ public class GroupController implements TenantCredentialApiAccess {
             description = "The group was created successfully.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = GroupResponse.class)
+                    schema = @Schema(implementation = ReadGroupsResponse.class)
             )
     )
     @ApiResponse(
@@ -72,7 +75,7 @@ public class GroupController implements TenantCredentialApiAccess {
             description = "The group was read successfully.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ReadGroupResponse.class)
+                    schema = @Schema(implementation = ReadGroupsResponse.class)
             )
     )
     @ApiResponse(
@@ -230,7 +233,7 @@ public class GroupController implements TenantCredentialApiAccess {
             description = "The sensor was unassigned from the group successfully.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = GroupResponse.class)
+                    schema = @Schema(implementation = ReadGroupsResponse.class)
             )
     )
     @ApiResponse(
@@ -254,15 +257,15 @@ public class GroupController implements TenantCredentialApiAccess {
         if (group.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(GroupResponse.builder()
-                .group(de.app.fivegla.controller.dto.response.inner.Group.builder()
+        return ResponseEntity.status(HttpStatus.OK).body(ReadGroupsResponse.builder()
+                .groups(List.of(de.app.fivegla.controller.dto.response.inner.Group.builder()
                         .groupId(group.get().getGroupId())
                         .name(group.get().getName())
                         .description(group.get().getDescription())
                         .createdAt(group.get().getCreatedAt().toString())
                         .updatedAt(group.get().getUpdatedAt().toString())
                         .sensorIdsAssignedToGroup(group.get().getSensorIdsAssignedToGroup())
-                        .build())
+                        .build()))
                 .build()
         );
     }
@@ -277,7 +280,7 @@ public class GroupController implements TenantCredentialApiAccess {
             description = "The sensor was reassigned to the group successfully.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = GroupResponse.class)
+                    schema = @Schema(implementation = ReadGroupsResponse.class)
             )
     )
     @ApiResponse(
@@ -289,7 +292,9 @@ public class GroupController implements TenantCredentialApiAccess {
             )
     )
     @PutMapping(value = "/{groupId}/reassign-sensor/{sensorId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> reAssignSensorToExistingGroup(String groupId, String sensorId, Principal principal) {
+    public ResponseEntity<? extends Response> reAssignSensorToExistingGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId,
+                                                                            @PathVariable("sensorId") @Parameter(description = "The unique ID of the sensor.") String sensorId,
+                                                                            Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var group = groupService.reAssignSensorToExistingGroup(tenant, groupId, sensorId);
         return createGroupResponse(group);

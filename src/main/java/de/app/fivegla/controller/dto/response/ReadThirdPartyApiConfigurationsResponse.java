@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @Schema(name = "Response for finding all third API responses.")
-public class FindAllThirdPartyApiConfigurationsResponse extends Response {
+public class ReadThirdPartyApiConfigurationsResponse extends Response {
 
     /**
      * The list of third-party API configurations.

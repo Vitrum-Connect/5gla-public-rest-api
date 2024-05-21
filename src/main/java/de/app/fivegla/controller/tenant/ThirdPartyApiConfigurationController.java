@@ -7,7 +7,7 @@ import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateThirdPartyApiConfigurationRequest;
 import de.app.fivegla.controller.dto.response.CreateThirdPartyApiConfigurationResponse;
-import de.app.fivegla.controller.dto.response.FindAllThirdPartyApiConfigurationsResponse;
+import de.app.fivegla.controller.dto.response.ReadThirdPartyApiConfigurationsResponse;
 import de.app.fivegla.controller.dto.response.inner.ThirdPartyApiConfiguration;
 import de.app.fivegla.event.events.DataImportEvent;
 import io.swagger.v3.oas.annotations.Operation;
@@ -100,7 +100,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
             description = "The third party API configurations were retrieved successfully. The response contains a list of third-party API configurations.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = FindAllThirdPartyApiConfigurationsResponse.class)
+                    schema = @Schema(implementation = ReadThirdPartyApiConfigurationsResponse.class)
             )
     )
     @ApiResponse(
@@ -114,7 +114,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getThirdPartyApiConfigurations(Principal principal) {
         var tenant = validateTenant(tenantService, principal);
-        return ResponseEntity.ok(FindAllThirdPartyApiConfigurationsResponse.builder()
+        return ResponseEntity.ok(ReadThirdPartyApiConfigurationsResponse.builder()
                 .thirdPartyApiConfigurations(thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId())
                         .stream()
                         .map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
@@ -144,7 +144,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
             description = "The third party API configurations were retrieved successfully. The response contains a list of third-party API configurations.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = FindAllThirdPartyApiConfigurationsResponse.class)
+                    schema = @Schema(implementation = ReadThirdPartyApiConfigurationsResponse.class)
             )
     )
     @ApiResponse(
@@ -158,7 +158,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     @GetMapping(value = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> getThirdPartyApiConfiguration(@PathVariable(value = "uuid") String uuid, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
-        return ResponseEntity.ok(FindAllThirdPartyApiConfigurationsResponse.builder()
+        return ResponseEntity.ok(ReadThirdPartyApiConfigurationsResponse.builder()
                 .thirdPartyApiConfigurations(thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId(), uuid)
                         .stream()
                         .map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()

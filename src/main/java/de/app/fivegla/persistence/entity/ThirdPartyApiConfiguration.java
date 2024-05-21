@@ -48,4 +48,9 @@ public class ThirdPartyApiConfiguration {
      */
     private String apiToken;
 
+    /**
+     * Represents the UUID of the third-party API. Will be set automatically to a random UUID.
+     */
+    private String uuid;
+
 }

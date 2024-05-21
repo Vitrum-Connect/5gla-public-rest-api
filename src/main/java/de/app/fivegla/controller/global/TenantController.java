@@ -8,7 +8,7 @@ import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.CreateTenantRequest;
 import de.app.fivegla.controller.dto.request.UpdateTenantRequest;
 import de.app.fivegla.controller.dto.response.CreateTenantResponse;
-import de.app.fivegla.controller.dto.response.FindAllTenantsResponse;
+import de.app.fivegla.controller.dto.response.ReadTenantsResponse;
 import de.app.fivegla.controller.dto.response.UpdateTenantResponse;
 import de.app.fivegla.controller.dto.response.inner.Tenant;
 import io.swagger.v3.oas.annotations.Operation;
@@ -118,7 +118,7 @@ public class TenantController implements ApiKeyApiAccess {
             description = "The tenants are found successfully. The response contains a list of tenants.",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = FindAllTenantsResponse.class)
+                    schema = @Schema(implementation = ReadTenantsResponse.class)
             )
     )
     @ApiResponse(
@@ -133,7 +133,7 @@ public class TenantController implements ApiKeyApiAccess {
                 .tenantId(tenant.getTenantId())
                 .description(tenant.getDescription())
                 .build()).toList();
-        return ResponseEntity.ok(FindAllTenantsResponse.builder().tenants(tenants).build());
+        return ResponseEntity.ok(ReadTenantsResponse.builder().tenants(tenants).build());
     }
 
 }

@@ -9,6 +9,7 @@ import de.app.fivegla.controller.dto.request.CreateThirdPartyApiConfigurationReq
 import de.app.fivegla.controller.dto.response.CreateThirdPartyApiConfigurationResponse;
 import de.app.fivegla.controller.dto.response.FindAllThirdPartyApiConfigurationsResponse;
 import de.app.fivegla.controller.dto.response.inner.ThirdPartyApiConfiguration;
+import de.app.fivegla.event.events.DataImportEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,7 @@ import java.security.Principal;
 @RequestMapping(BaseMappings.THIRD_PARTY_API_CONFIGURATION)
 public class ThirdPartyApiConfigurationController implements TenantCredentialApiAccess {
 
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final TenantService tenantService;
 
@@ -67,6 +70,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
         var thirdPartyApiConfiguration = request.toEntity();
         thirdPartyApiConfiguration.setTenantId(tenant.getTenantId());
         var thirdPartyApiConfigurationCreated = thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
+        applicationEventPublisher.publishEvent(new DataImportEvent(thirdPartyApiConfigurationCreated));
         var response = CreateThirdPartyApiConfigurationResponse.builder()
                 .thirdPartyApiConfiguration(ThirdPartyApiConfiguration.builder()
                         .tenantId(thirdPartyApiConfigurationCreated.getTenantId())

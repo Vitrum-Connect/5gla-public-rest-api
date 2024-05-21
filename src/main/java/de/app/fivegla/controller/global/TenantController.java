@@ -136,4 +136,31 @@ public class TenantController implements ApiKeyApiAccess {
         return ResponseEntity.ok(ReadTenantsResponse.builder().tenants(tenants).build());
     }
 
+    @Operation(
+            operationId = "tenant.delete",
+            description = "Delete a tenant based on the provided request.",
+            tags = BaseMappings.TENANT
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "The tenant was deleted successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @DeleteMapping(value = "/{tenantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> delete(@PathVariable String tenantId) {
+        tenantService.delete(tenantId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

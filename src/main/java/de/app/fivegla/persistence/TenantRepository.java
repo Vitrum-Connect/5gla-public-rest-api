@@ -5,12 +5,14 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TenantRepository {
@@ -84,5 +86,35 @@ public class TenantRepository {
      */
     public List<Tenant> findTenants() {
         return applicationData.getTenants();
+    }
+
+
+    /**
+     * Deletes a tenant with the specified tenant ID.
+     *
+     * @param tenantId The ID of the tenant to delete.
+     */
+    public void deleteTenant(String tenantId) {
+        if (null != applicationData.getTenants()) {
+            log.info("Deleting tenant with tenantId: {}", tenantId);
+            applicationData.setTenants(applicationData.getTenants().stream()
+                    .filter(t -> !t.getTenantId().equals(tenantId))
+                    .toList());
+            applicationData.persist();
+        }
+        if (null != applicationData.getGroups()) {
+            log.info("Deleting groups for tenant with tenantId: {}", tenantId);
+            applicationData.setGroups(applicationData.getGroups().stream()
+                    .filter(g -> !g.getTenant().getTenantId().equals(tenantId))
+                    .toList());
+            applicationData.persist();
+        }
+        if (null != applicationData.getThirdPartyApiConfigurations()) {
+            log.info("Deleting third party API configurations for tenant with tenantId: {}", tenantId);
+            applicationData.setThirdPartyApiConfigurations(applicationData.getThirdPartyApiConfigurations().stream()
+                    .filter(t -> !t.getTenantId().equals(tenantId))
+                    .toList());
+            applicationData.persist();
+        }
     }
 }

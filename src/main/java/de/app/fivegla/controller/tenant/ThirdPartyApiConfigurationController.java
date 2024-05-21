@@ -185,10 +185,10 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @DeleteMapping(value = "/{manufacturer}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(Principal principal, @PathVariable String manufacturer) {
+    @DeleteMapping(value = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(@PathVariable(value = "uuid") String uuid, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
-        thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(tenant.getTenantId(), Manufacturer.valueOf(manufacturer));
+        thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(tenant.getTenantId(), uuid);
         return ResponseEntity.ok().body(new Response());
     }
 

@@ -1,6 +1,5 @@
 package de.app.fivegla.business;
 
-import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.persistence.ThirdPartyApiConfigurationRepository;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -36,18 +35,18 @@ public class ThirdPartyApiConfigurationService {
      */
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId, String uuid) {
         log.info("Getting third-party API configurations.");
-        return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId,uuid);
+        return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId, uuid);
     }
 
     /**
      * Deletes a third-party API configuration.
      *
-     * @param tenantId     The tenantId of the third-party API configuration.
-     * @param manufacturer The manufacturer of the third-party API configuration.
+     * @param tenantId The tenantId of the third-party API configuration.
+     * @param uuid     The uuid of the third-party API configuration.
      */
-    public void deleteThirdPartyApiConfiguration(String tenantId, Manufacturer manufacturer) {
+    public void deleteThirdPartyApiConfiguration(String tenantId, String uuid) {
         log.info("Deleting third-party API configuration.");
-        thirdPartyApiConfigurationRepository.deleteThirdPartyApiConfiguration(tenantId, manufacturer);
+        thirdPartyApiConfigurationRepository.deleteThirdPartyApiConfiguration(tenantId, uuid);
     }
 
     /**

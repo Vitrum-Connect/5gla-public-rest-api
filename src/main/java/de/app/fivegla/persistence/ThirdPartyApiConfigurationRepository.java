@@ -1,6 +1,5 @@
 package de.app.fivegla.persistence;
 
-import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -53,11 +52,11 @@ public class ThirdPartyApiConfigurationRepository {
     /**
      * Deletes a third-party API configuration.
      *
-     * @param tenantId     The ID of the tenant for which to delete the third-party API configuration.
-     * @param manufacturer The manufacturer of the third-party API configuration.
+     * @param tenantId The ID of the tenant for which to delete the third-party API configuration.
+     * @param uuid     The ID of the third party API configuration.
      */
-    public void deleteThirdPartyApiConfiguration(String tenantId, Manufacturer manufacturer) {
-        applicationData.getThirdPartyApiConfigurations().removeIf(configuration -> configuration.getTenantId().equals(tenantId) && configuration.getManufacturer().equals(manufacturer));
+    public void deleteThirdPartyApiConfiguration(String tenantId, String uuid) {
+        applicationData.getThirdPartyApiConfigurations().removeIf(configuration -> configuration.getTenantId().equals(tenantId) && configuration.getUuid().equals(uuid));
         applicationData.persist();
     }
 

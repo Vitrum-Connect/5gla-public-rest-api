@@ -27,7 +27,7 @@ public record AgriCrop(
         var json = "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"group\":" + group.asJson() + "," +
+                "  \"customGroup\":" + group.asJson() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +
                 "  \"coordinates\":" + coordinatesAsJson(coordinates) +
                 "}";

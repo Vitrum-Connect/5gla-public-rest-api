@@ -27,7 +27,7 @@ public record DevicePosition(
         var json = "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"group\":" + group.asJson() + "," +
+                "  \"customGroup\":" + group.asJson() + "," +
                 "  \"transactionId\":" + transactionId.asJson() + "," +
                 "  \"deviceId\":" + deviceId.asJson() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson() + "," +

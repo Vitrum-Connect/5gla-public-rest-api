@@ -28,7 +28,7 @@ public record DeviceMeasurement(
         var json = "{" +
                 "  \"id\":\"" + id + "\"," +
                 "  \"type\":\"" + type + "\"," +
-                "  \"group\":" + group.asJson() + "," +
+                "  \"customGroup\":" + group.asJson() + "," +
                 "  \"name\":" + name.asJson() + "," +
                 "  \"controlledProperty\":" + controlledProperty.asJson() + "," +
                 "  \"externalDataReference\":" + externalDataReference.asJson() + "," +

@@ -20,10 +20,6 @@ logging:
     root: info
     de.app.fivegla: trace
     java.net.http: debug
-one:
-  microstream:
-    storage-directory: ${MICROSTREAM_STORAGE_DIRECTORY}
-    channel-count: 2
 
 management:
   endpoints:
@@ -33,3 +29,10 @@ management:
 server:
   servlet:
     context-path: ${CONTEXT_PATH}
+
+spring:
+  data:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}

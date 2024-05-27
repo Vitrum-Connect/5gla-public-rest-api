@@ -45,7 +45,7 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
         var devicePosition = new DevicePosition(
                 tenant.getFiwarePrefix() + deviceId,
                 entityType.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute(transactionId),
                 new TextAttribute(deviceId),
                 new DateTimeAttribute(Instant.now()),

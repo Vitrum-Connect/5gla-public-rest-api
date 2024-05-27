@@ -2,6 +2,9 @@ package de.app.fivegla.persistence.entity;
 
 import de.app.fivegla.controller.dto.request.CreateGroupRequest;
 import de.app.fivegla.controller.dto.request.UpdateGroupRequest;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,17 +16,12 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class Group {
+public class Group extends BaseEntity {
 
     /**
      * The id of the group. Should be unique within the tenant.
      */
-    private String groupId;
-
-    /**
-     * The tenant of the group.
-     */
-    private Tenant tenant;
+    private String oid;
 
     /**
      * The name of the group.
@@ -51,8 +49,15 @@ public class Group {
     private boolean defaultGroupForTenant;
 
     /**
+     * The tenant of the group.
+     */
+    @OneToMany
+    private Tenant tenant;
+
+    /**
      * The sensor ids assigned to the group.
      */
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> sensorIdsAssignedToGroup;
 
     public static Group from(CreateGroupRequest createGroupRequest) {
@@ -64,7 +69,7 @@ public class Group {
 
     public static Group from(UpdateGroupRequest updateGroupRequest) {
         Group group = new Group();
-        group.setGroupId(updateGroupRequest.getGroupId());
+        group.setOid(updateGroupRequest.getGroupId());
         group.setName(updateGroupRequest.getName());
         group.setDescription(updateGroupRequest.getDescription());
         return group;

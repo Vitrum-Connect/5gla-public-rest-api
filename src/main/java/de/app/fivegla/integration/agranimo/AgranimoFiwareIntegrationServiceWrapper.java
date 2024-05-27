@@ -41,7 +41,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo1 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
                 EntityType.AGRANIMO_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("smo1"),
                 new NumberAttribute(soilMoisture.getSmo1()),
                 new DateTimeAttribute(soilMoisture.getTms()),
@@ -53,7 +53,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo2 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
                 EntityType.AGRANIMO_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("smo2"),
                 new NumberAttribute(soilMoisture.getSmo2()),
                 new DateTimeAttribute(soilMoisture.getTms()),
@@ -65,7 +65,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo3 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
                 EntityType.AGRANIMO_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("smo3"),
                 new NumberAttribute(soilMoisture.getSmo3()),
                 new DateTimeAttribute(soilMoisture.getTms()),
@@ -77,7 +77,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
         var smo4 = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilMoisture.getDeviceId(),
                 EntityType.AGRANIMO_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("smo4"),
                 new NumberAttribute(soilMoisture.getSmo4()),
                 new DateTimeAttribute(soilMoisture.getTms()),

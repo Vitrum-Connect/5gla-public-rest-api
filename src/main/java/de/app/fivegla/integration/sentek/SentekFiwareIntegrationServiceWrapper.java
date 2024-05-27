@@ -42,7 +42,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("V1"),
                             new NumberAttribute(reading.getV1()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -56,7 +56,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("V2"),
                             new NumberAttribute(reading.getV2()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -70,7 +70,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A1"),
                             new NumberAttribute(reading.getA1()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -84,7 +84,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T1"),
                             new NumberAttribute(reading.getT1()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -98,7 +98,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A2"),
                             new NumberAttribute(reading.getA2()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -112,7 +112,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T2"),
                             new NumberAttribute(reading.getT2()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -126,7 +126,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A3"),
                             new NumberAttribute(reading.getA3()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -140,7 +140,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T3"),
                             new NumberAttribute(reading.getT3()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -154,7 +154,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A4"),
                             new NumberAttribute(reading.getA4()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -168,7 +168,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T4"),
                             new NumberAttribute(reading.getT4()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -182,7 +182,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A5"),
                             new NumberAttribute(reading.getA5()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -196,7 +196,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T5"),
                             new NumberAttribute(reading.getT5()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -210,7 +210,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A6"),
                             new NumberAttribute(reading.getA6()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -224,7 +224,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T6"),
                             new NumberAttribute(reading.getT6()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -238,7 +238,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A7"),
                             new NumberAttribute(reading.getA7()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -252,7 +252,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T7"),
                             new NumberAttribute(reading.getT7()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -266,7 +266,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A8"),
                             new NumberAttribute(reading.getA8()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -280,7 +280,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T8"),
                             new NumberAttribute(reading.getT8()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -294,7 +294,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("A9"),
                             new NumberAttribute(reading.getA9()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),
@@ -308,7 +308,7 @@ public class SentekFiwareIntegrationServiceWrapper {
                     new DeviceMeasurement(
                             tenant.getFiwarePrefix() + logger.getLoggerId(),
                             EntityType.SENTEK_SENSOR.getKey(),
-                            new TextAttribute(group.getGroupId()),
+                            new TextAttribute(group.getOid()),
                             new TextAttribute("T9"),
                             new NumberAttribute(reading.getT9()),
                             new DateTimeAttribute(reading.getDateTime().toInstant()),

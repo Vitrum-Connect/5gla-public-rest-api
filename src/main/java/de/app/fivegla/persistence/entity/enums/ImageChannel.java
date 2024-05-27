@@ -1,4 +1,4 @@
-package de.app.fivegla.integration.imageprocessing.model;
+package de.app.fivegla.persistence.entity.enums;
 
 /**
  * Image channels.

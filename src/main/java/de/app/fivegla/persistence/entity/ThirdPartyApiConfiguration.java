@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ThirdPartyApiConfiguration {
+public class ThirdPartyApiConfiguration extends BaseEntity {
 
     /**
      * Represents the tenant.

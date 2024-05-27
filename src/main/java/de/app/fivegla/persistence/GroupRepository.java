@@ -1,146 +1,64 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.persistence.entity.Group;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import de.app.fivegla.persistence.entity.Tenant;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-@Component
-@RequiredArgsConstructor
-public class GroupRepository {
-
-    private final ApplicationData applicationData;
-
-    /**
-     * Adds a group to the application data.
-     *
-     * @param group The group to be added.
-     * @return The added group.
-     */
-    public Group add(Group group) {
-        if (null == applicationData.getGroups()) {
-            applicationData.setGroups(new ArrayList<>());
-        }
-        applicationData.getGroups().add(group);
-        applicationData.persist();
-        return group;
-    }
+/**
+ * Repository for the group entity.
+ */
+@Repository
+public interface GroupRepository extends JpaRepository<Group, Long> {
 
     /**
-     * Update a group.
+     * Returns the group with the given oid.
      *
-     * @param newGroupData The new group data.
+     * @param oid The oid of the group.
+     * @return The group with the given oid.
      */
-    public Optional<Group> update(Group newGroupData) {
-        if (null == applicationData.getGroups()) {
-            applicationData.setGroups(new ArrayList<>());
-        }
-        applicationData.getGroups().stream().filter(group -> group.getGroupId().equals(newGroupData.getGroupId()))
-                .findFirst()
-                .ifPresent(group -> {
-                    group.setName(newGroupData.getName());
-                    group.setDescription(newGroupData.getDescription());
-                    group.setUpdatedAt(Instant.now());
-                    group.setSensorIdsAssignedToGroup(newGroupData.getSensorIdsAssignedToGroup());
-                });
-        applicationData.persist();
-        return get(newGroupData.getGroupId());
-    }
+    Optional<Group> findByOid(String oid);
 
     /**
-     * Find a group by its ID.
+     * Returns a list of all groups associated with the specified tenant.
      *
-     * @param groupId The ID of the group to find.
-     * @return An Optional containing the found group, or an empty Optional if no group with the specified ID is found.
+     * @param tenant The tenant for which to find the groups.
+     * @return A list of Group objects associated with the specified tenant.
      */
-    public Optional<Group> get(String groupId) {
-        if (null == applicationData.getGroups()) {
-            return Optional.empty();
-        } else {
-            return applicationData.getGroups().stream()
-                    .filter(group -> group.getGroupId().equals(groupId))
-                    .findFirst();
-        }
-    }
+    List<Group> findAllByTenant(Tenant tenant);
 
     /**
-     * Get all groups.
+     * Finds all groups that belong to a specific tenant and have the defaultGroupForTenant attribute set to true.
      *
-     * @return A list of all groups.
+     * @param tenant The tenant for which to find the groups.
+     * @return A list of Group objects that belong to the specified tenant and have defaultGroupForTenant set to true.
      */
-    public List<Group> getAll() {
-        if (null == applicationData.getGroups()) {
-            return Collections.emptyList();
-        }
-        return applicationData.getGroups();
-    }
+    Optional<Group> findByTenantAndDefaultGroupForTenantIsTrue(Tenant tenant);
 
     /**
-     * Deletes a group.
+     * Deletes the group with the given oid.
      *
-     * @param groupId The ID of the group to delete.
+     * @param oid The oid of the group to delete.
      */
-    public void delete(String groupId) {
-        if (null != applicationData.getGroups()) {
-            applicationData.getGroups().removeIf(group -> group.getGroupId().equals(groupId));
-            applicationData.persist();
-        }
-    }
+    void deleteByOid(String oid);
 
     /**
-     * Generates a unique group ID using UUID.
+     * Checks if a group exists with the given tenant and the group is the default group for the tenant.
      *
-     * @return The generated group ID.
+     * @param tenant The tenant for which to check the group existence.
+     * @return true if a group exists with the given tenant and it is the default group, false otherwise.
      */
-    public String generateGroupId() {
-        return UUID.randomUUID().toString();
-    }
+    boolean existsByTenantAndDefaultGroupForTenantIsTrue(Tenant tenant);
 
     /**
-     * Adds a sensor to a group.
+     * Finds a group based on the tenant and sensor IDs assigned to the group containing the specified sensor ID.
      *
-     * @param group    The group to which the sensor is to be added.
-     * @param sensorId The ID of the sensor to be added.
+     * @param tenant   The tenant for which to find the group.
+     * @param sensorId The sensor ID to search for in the group.
+     * @return The group with the specified sensor ID assigned, or null if not found.
      */
-    public Optional<Group> addSensorToGroup(Group group, String sensorId) {
-        if (null == group.getSensorIdsAssignedToGroup()) {
-            group.setSensorIdsAssignedToGroup(new ArrayList<>());
-        }
-        group.getSensorIdsAssignedToGroup().add(sensorId);
-        return update(group);
-    }
-
-    /**
-     * Removes a sensor from a group.
-     *
-     * @param group    The group from which the sensor is to be removed.
-     * @param sensorId The ID of the sensor to be removed.
-     */
-    public Optional<Group> removeSensorFromGroup(Group group, String sensorId) {
-        if (null != group.getSensorIdsAssignedToGroup()) {
-            group.getSensorIdsAssignedToGroup().remove(sensorId);
-        }
-        return update(group);
-    }
-
-    /**
-     * Removes a sensor ID from all groups in the application data.
-     * If the application data contains groups and each group contains a list
-     * of sensor IDs assigned to the group, the specified sensor ID will be removed
-     * from the sensorIdsAssignedToGroup list of each group.
-     *
-     * @param sensorId The ID of the sensor to be removed from all groups.
-     */
-    public void removeSensorFromAllGroups(String sensorId) {
-        if (null != applicationData.getGroups()) {
-            applicationData.getGroups().forEach(group -> {
-                if (null != group.getSensorIdsAssignedToGroup()) {
-                    group.getSensorIdsAssignedToGroup().remove(sensorId);
-                }
-            });
-            applicationData.persist();
-        }
-    }
+    Optional<Group> findByTenantAndSensorIdsAssignedToGroupContaining(Tenant tenant, String sensorId);
 }

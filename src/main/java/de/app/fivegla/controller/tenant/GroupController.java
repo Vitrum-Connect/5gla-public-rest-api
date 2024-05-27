@@ -121,7 +121,7 @@ public class GroupController implements TenantCredentialApiAccess {
         var readGroupsResponse = ReadGroupsResponse.builder()
                 .groups(groups.stream()
                         .map(group -> de.app.fivegla.controller.dto.response.inner.Group.builder()
-                                .groupId(group.getGroupId())
+                                .groupId(group.getOid())
                                 .name(group.getName())
                                 .description(group.getDescription())
                                 .createdAt(group.getCreatedAt().toString())
@@ -256,15 +256,20 @@ public class GroupController implements TenantCredentialApiAccess {
     private static ResponseEntity<? extends Response> createGroupResponse(Optional<Group> group) {
         if (group.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response());
+        } else {
+            return createGroupResponse(group.get());
         }
+    }
+
+    private static ResponseEntity<ReadGroupsResponse> createGroupResponse(Group group) {
         return ResponseEntity.status(HttpStatus.OK).body(ReadGroupsResponse.builder()
                 .groups(List.of(de.app.fivegla.controller.dto.response.inner.Group.builder()
-                        .groupId(group.get().getGroupId())
-                        .name(group.get().getName())
-                        .description(group.get().getDescription())
-                        .createdAt(group.get().getCreatedAt().toString())
-                        .updatedAt(group.get().getUpdatedAt().toString())
-                        .sensorIdsAssignedToGroup(group.get().getSensorIdsAssignedToGroup())
+                        .groupId(group.getOid())
+                        .name(group.getName())
+                        .description(group.getDescription())
+                        .createdAt(group.getCreatedAt().toString())
+                        .updatedAt(group.getUpdatedAt().toString())
+                        .sensorIdsAssignedToGroup(group.getSensorIdsAssignedToGroup())
                         .build()))
                 .build()
         );
@@ -292,9 +297,10 @@ public class GroupController implements TenantCredentialApiAccess {
             )
     )
     @PutMapping(value = "/{groupId}/reassign-sensor/{sensorId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> reAssignSensorToExistingGroup(@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId,
-                                                                            @PathVariable("sensorId") @Parameter(description = "The unique ID of the sensor.") String sensorId,
-                                                                            Principal principal) {
+    public ResponseEntity<? extends Response> reAssignSensorToExistingGroup
+            (@PathVariable("groupId") @Parameter(description = "The unique ID of the group.") String groupId,
+             @PathVariable("sensorId") @Parameter(description = "The unique ID of the sensor.") String sensorId,
+             Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var group = groupService.reAssignSensorToExistingGroup(tenant, groupId, sensorId);
         return createGroupResponse(group);

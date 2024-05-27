@@ -8,6 +8,7 @@ import de.app.fivegla.integration.fiware.api.FiwareEntityChecker;
 import de.app.fivegla.persistence.GroupRepository;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,11 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GroupService {
 
@@ -31,12 +34,21 @@ public class GroupService {
      */
     public Group add(Tenant tenant, Group group) {
         FiwareEntityChecker.checkGroupName(group.getName());
-        group.setGroupId(groupRepository.generateGroupId());
+        group.setOid(this.generateGroupId());
         group.setTenant(tenant);
         group.setCreatedAt(Instant.now());
         group.setUpdatedAt(Instant.now());
         log.info("Adding group with name: {} and description: {}", group.getName(), group.getDescription());
-        return groupRepository.add(group);
+        return groupRepository.save(group);
+    }
+
+    /**
+     * Generates a unique group id using UUID.
+     *
+     * @return A string representing a unique group id.
+     */
+    private String generateGroupId() {
+        return UUID.randomUUID().toString();
     }
 
     /**
@@ -45,9 +57,9 @@ public class GroupService {
      * @param newGroupData The new group data.
      * @return An Optional containing the updated group if it exists, or an empty Optional if the group doesn't exist.
      */
-    public Optional<Group> update(Tenant tenant, Group newGroupData) {
+    public Group update(Tenant tenant, Group newGroupData) {
         FiwareEntityChecker.checkGroupName(newGroupData.getName());
-        var group = groupRepository.get(newGroupData.getGroupId()).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+        var group = groupRepository.findByOid(newGroupData.getOid()).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not update group, since the group was not found.")
                 .build()));
@@ -57,17 +69,17 @@ public class GroupService {
                     .message("Could not update group, since the group is from another tenant.")
                     .build());
         }
-        return groupRepository.update(newGroupData);
+        return groupRepository.save(newGroupData);
     }
 
     /**
      * Retrieves a group by its ID.
      *
-     * @param groupId The ID of the group to retrieve.
+     * @param oid The ID of the group to retrieve.
      * @return An Optional containing the retrieved group, or an empty Optional if no group with the specified ID is found.
      */
-    public Optional<Group> get(Tenant tenant, String groupId) {
-        var optionalGroup = groupRepository.get(groupId);
+    public Optional<Group> get(Tenant tenant, String oid) {
+        var optionalGroup = groupRepository.findByOid(oid);
         if (optionalGroup.isPresent() && !optionalGroup.get().getTenant().getTenantId().equals(tenant.getTenantId())) {
             throw new BusinessException(ErrorMessage.builder()
                     .error(Error.TRYING_TO_ACCESS_GROUP_FROM_ANOTHER_TENANT)
@@ -84,16 +96,16 @@ public class GroupService {
      * @return A list of all groups.
      */
     public List<Group> getAll(Tenant tenant) {
-        return groupRepository.getAll().stream().filter(group -> group.getTenant().getTenantId().equals(tenant.getTenantId())).toList();
+        return groupRepository.findAllByTenant(tenant);
     }
 
     /**
      * Deletes a group by its ID.
      *
-     * @param groupId The ID of the group to delete.
+     * @param oid The ID of the group to delete.
      */
-    public void delete(Tenant tenant, String groupId) {
-        var group = groupRepository.get(groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+    public void delete(Tenant tenant, String oid) {
+        var group = groupRepository.findByOid(oid).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not update group, since the group was not found.")
                 .build()));
@@ -103,48 +115,37 @@ public class GroupService {
                     .message("Could not delete group, since the group is from another tenant.")
                     .build());
         } else {
-            groupRepository.delete(groupId);
+            groupRepository.deleteByOid(oid);
         }
     }
 
     public void createDefaultGroup(Tenant tenant) {
-        if (!checkIfThereIsAlreadyADefaultGroup(tenant)) {
+        if (!groupRepository.existsByTenantAndDefaultGroupForTenantIsTrue(tenant)) {
             Group group = new Group();
-            group.setGroupId(groupRepository.generateGroupId());
+            group.setOid(this.generateGroupId());
             group.setTenant(tenant);
             group.setName("default_group");
             group.setDescription("The default group for the tenant.");
             group.setDefaultGroupForTenant(true);
             group.setCreatedAt(Instant.now());
             group.setUpdatedAt(Instant.now());
-            groupRepository.add(group);
+            groupRepository.save(group);
         } else {
             log.info("Default group already exists for tenant with ID: {}", tenant.getTenantId());
         }
     }
 
-    private boolean checkIfThereIsAlreadyADefaultGroup(Tenant tenant) {
-        return groupRepository.getAll().stream()
-                .anyMatch(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant());
-    }
-
     /**
      * Retrieves the group with the specified group ID for the given tenant. If the group does not exist, a default group is created for the tenant and returned.
      *
-     * @param tenant  The tenant for which to retrieve the group.
-     * @param groupId The ID of the group to retrieve.
+     * @param tenant The tenant for which to retrieve the group.
+     * @param oid    The ID of the group to retrieve.
      * @return The group with the specified group ID for the given tenant, or a default group if the group does not exist.
      * @throws BusinessException If the default group for the tenant cannot be found.
      */
-    public Group getOrDefault(Tenant tenant, String groupId) {
-        var optionalGroup = groupRepository.get(groupId);
-        return optionalGroup.orElseGet(() -> groupRepository.getAll().stream()
-                .filter(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant())
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
-                        .error(Error.DEFAULT_GROUP_FOR_TENANT_NOT_FOUND)
-                        .message("Could not find the default group for the tenant.")
-                        .build())));
+    public Group getOrDefault(Tenant tenant, String oid) {
+        var optionalGroup = groupRepository.findByOid(oid);
+        return optionalGroup.orElseGet(() -> getDefaultGroupForTenant(tenant));
     }
 
     /**
@@ -155,9 +156,7 @@ public class GroupService {
      * @throws BusinessException if the default group for the tenant is not found
      */
     public Group getDefaultGroupForTenant(Tenant tenant) {
-        return groupRepository.getAll().stream()
-                .filter(group -> group.getTenant().equals(tenant) && group.isDefaultGroupForTenant())
-                .findFirst()
+        return groupRepository.findByTenantAndDefaultGroupForTenantIsTrue(tenant)
                 .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                         .error(Error.DEFAULT_GROUP_FOR_TENANT_NOT_FOUND)
                         .message("Could not find the default group for the tenant.")
@@ -174,12 +173,13 @@ public class GroupService {
      * otherwise returns an empty {@link Optional}.
      * @throws BusinessException If the group is not found.
      */
-    public Optional<Group> assignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
+    public Group assignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
         var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not assign sensor to group, since the group was not found.")
                 .build()));
-        return groupRepository.addSensorToGroup(group, sensorId);
+        group.getSensorIdsAssignedToGroup().add(sensorId);
+        return groupRepository.save(group);
     }
 
     /**
@@ -191,9 +191,7 @@ public class GroupService {
      * or the default group for the tenant if no group is found.
      */
     public Group findGroupByTenantAndSensorId(Tenant tenant, String sensorId) {
-        return groupRepository.getAll().stream()
-                .filter(group -> group.getTenant().equals(tenant) && null != group.getSensorIdsAssignedToGroup() && group.getSensorIdsAssignedToGroup().contains(sensorId))
-                .findFirst()
+        return groupRepository.findByTenantAndSensorIdsAssignedToGroupContaining(tenant, sensorId)
                 .orElse(getDefaultGroupForTenant(tenant));
     }
 
@@ -207,12 +205,13 @@ public class GroupService {
      * or an empty Optional if the group or sensor was not found.
      * @throws BusinessException If the group was not found.
      */
-    public Optional<Group> unassignSensorFromExistingGroup(Tenant tenant, String groupId, String sensorId) {
+    public Group unassignSensorFromExistingGroup(Tenant tenant, String groupId, String sensorId) {
         var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not unassign sensor from group, since the group was not found.")
                 .build()));
-        return groupRepository.removeSensorFromGroup(group, sensorId);
+        group.getSensorIdsAssignedToGroup().remove(sensorId);
+        return groupRepository.save(group);
     }
 
     /**
@@ -224,12 +223,13 @@ public class GroupService {
      * @return An Optional object containing the updated group if reassignment is successful, or empty if the group was not found.
      * @throws BusinessException If the group is not found.
      */
-    public Optional<Group> reAssignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
+    public Group reAssignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
+        unassignSensorFromExistingGroup(tenant, groupId, sensorId);
         var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
                 .message("Could not reassign sensor to group, since the group was not found.")
                 .build()));
-        groupRepository.removeSensorFromAllGroups(sensorId);
-        return groupRepository.addSensorToGroup(group, sensorId);
+        group.getSensorIdsAssignedToGroup().add(sensorId);
+        return groupRepository.save(group);
     }
 }

@@ -39,7 +39,7 @@ public class AgriCropFiwareIntegrationServiceWrapper {
         var agriCrop = new AgriCrop(
                 tenant.getFiwarePrefix() + cropId,
                 EntityType.AGRI_CROP.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new DateTimeAttribute(Instant.now()),
                 coordinates);
         fiwareEntityIntegrationService.persist(tenant, group, agriCrop);

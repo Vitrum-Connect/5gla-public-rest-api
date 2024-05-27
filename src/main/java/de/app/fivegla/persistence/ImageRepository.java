@@ -1,7 +1,7 @@
 package de.app.fivegla.persistence;
 
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.integration.imageprocessing.model.Image;
+import de.app.fivegla.persistence.entity.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

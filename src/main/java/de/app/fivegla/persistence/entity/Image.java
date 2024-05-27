@@ -1,5 +1,6 @@
-package de.app.fivegla.integration.imageprocessing.model;
+package de.app.fivegla.persistence.entity;
 
+import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

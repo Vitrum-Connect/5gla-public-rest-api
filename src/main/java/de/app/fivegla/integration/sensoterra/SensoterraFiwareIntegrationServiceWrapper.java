@@ -47,7 +47,7 @@ public class SensoterraFiwareIntegrationServiceWrapper {
         log.debug("Persisting probe data: {}", probeData);
         return new DeviceMeasurement(tenant.getFiwarePrefix() + probe.getId(),
                 EntityType.SENSOTERRA_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("value"),
                 new NumberAttribute(probeData.getValue()),
                 new DateTimeAttribute(probeData.getTimestamp()),

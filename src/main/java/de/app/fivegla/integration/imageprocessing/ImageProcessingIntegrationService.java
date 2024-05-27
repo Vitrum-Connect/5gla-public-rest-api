@@ -1,8 +1,8 @@
 package de.app.fivegla.integration.imageprocessing;
 
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.integration.imageprocessing.model.Image;
-import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
+import de.app.fivegla.persistence.entity.Image;
+import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import de.app.fivegla.persistence.ImageRepository;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -41,7 +41,7 @@ public class ImageProcessingIntegrationService {
         log.debug("Channel for the image: {}.", imageChannel);
         var micaSenseImage = imageRepository.addImage(Image.builder()
                 .oid(tenant.getFiwarePrefix() + droneId)
-                .group(group.getGroupId())
+                .group(group.getOid())
                 .channel(imageChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)

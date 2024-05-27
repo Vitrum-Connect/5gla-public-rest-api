@@ -17,8 +17,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TenantRepository {
 
-    private final ApplicationData applicationData;
-
     /**
      * Updates the tenant with the provided tenantId.
      *

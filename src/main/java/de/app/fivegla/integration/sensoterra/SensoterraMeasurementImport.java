@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.LastRunService;
+import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import de.app.fivegla.monitoring.JobMonitor;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class SensoterraMeasurementImport {
 
     private final ProbeDataIntegrationService probeDataIntegrationService;
-    private final LastRunService lastRunService;
+    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SensoterraFiwareIntegrationServiceWrapper sensoterraFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -41,10 +41,9 @@ public class SensoterraMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            var lastRun = lastRunService.getLastRun(Manufacturer.SENSOTERRA);
-            if (lastRun.isPresent()) {
+            if (null != thirdPartyApiConfiguration.getLastRun()) {
                 log.info("Running scheduled data import from Sensoterra API");
-                var seriesEntries = probeDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun.get());
+                var seriesEntries = probeDataIntegrationService.fetchAll(thirdPartyApiConfiguration, thirdPartyApiConfiguration.getLastRun().toInstant());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
@@ -57,7 +56,7 @@ public class SensoterraMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());
                 seriesEntries.entrySet().forEach(probeListEntry -> persistDataWithinFiware(tenant, probeListEntry));
             }
-            lastRunService.updateLastRun(Manufacturer.SENSOTERRA);
+            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Sensoterra API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SENSOTERRA);

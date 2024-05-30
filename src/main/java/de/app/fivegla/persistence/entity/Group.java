@@ -2,9 +2,7 @@ package de.app.fivegla.persistence.entity;
 
 import de.app.fivegla.controller.dto.request.CreateGroupRequest;
 import de.app.fivegla.controller.dto.request.UpdateGroupRequest;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,32 +13,38 @@ import java.util.List;
  */
 @Getter
 @Setter
+@Table(name = "group")
 public class Group extends BaseEntity {
 
     /**
      * The id of the group. Should be unique within the tenant.
      */
+    @Column(name = "oid", nullable = false, unique = true)
     private String oid;
 
     /**
      * The name of the group.
      */
+    @Column(name = "name", nullable = false)
     private String name;
 
     /**
      * The description of the group.
      */
+    @Column(name = "description")
     private String description;
 
     /**
      * Represents if the group is the default group for the tenant.
      */
+    @Column(name = "default_group_for_tenant", nullable = false)
     private boolean defaultGroupForTenant;
 
     /**
      * The tenant of the group.
      */
     @OneToMany
+    @Column(name = "tenant_id", nullable = false)
     private Tenant tenant;
 
     /**

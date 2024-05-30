@@ -87,7 +87,10 @@ public class TenantService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var optionalTenant = tenantRepository.findByTenantId(username);
         if (optionalTenant.isEmpty()) {
-            throw new UsernameNotFoundException("Tenant not found.");
+            throw new BusinessException(ErrorMessage.builder()
+                    .error(Error.TENANT_NOT_FOUND)
+                    .message("The tenant was not found.")
+                    .build());
         } else {
             return new TenantCredentials(optionalTenant.get());
         }

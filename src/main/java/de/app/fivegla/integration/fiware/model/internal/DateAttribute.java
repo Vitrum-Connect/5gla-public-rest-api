@@ -3,12 +3,12 @@ package de.app.fivegla.integration.fiware.model.internal;
 import de.app.fivegla.integration.fiware.api.CustomDateFormatter;
 import de.app.fivegla.integration.fiware.api.FiwareType;
 
-import java.time.Instant;
+import java.util.Date;
 
 /**
  * Represents an attribute.
  */
-public record DateTimeAttribute(Instant value) implements Attribute {
+public record DateAttribute(Date value) implements Attribute {
 
     /**
      * Converts the attribute object to JSON format.

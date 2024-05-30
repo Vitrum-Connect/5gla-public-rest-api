@@ -5,7 +5,7 @@ import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.agricrop.GpsCoordinate;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.AgriCrop;
-import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.InstantAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -40,7 +40,7 @@ public class AgriCropFiwareIntegrationServiceWrapper {
                 tenant.getFiwarePrefix() + cropId,
                 EntityType.AGRI_CROP.getKey(),
                 new TextAttribute(group.getOid()),
-                new DateTimeAttribute(Instant.now()),
+                new InstantAttribute(Instant.now()),
                 coordinates);
         fiwareEntityIntegrationService.persist(tenant, group, agriCrop);
         return agriCrop;

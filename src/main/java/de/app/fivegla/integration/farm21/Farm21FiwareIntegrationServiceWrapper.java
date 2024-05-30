@@ -7,7 +7,7 @@ import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
-import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.InstantAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
@@ -46,7 +46,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilMoisture10"),
                     new NumberAttribute(sd.getSoilMoisture10()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -58,7 +58,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilMoisture20"),
                     new NumberAttribute(sd.getSoilMoisture20()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -70,7 +70,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilMoisture30"),
                     new NumberAttribute(sd.getSoilMoisture30()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -82,7 +82,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("tempNeg10"),
                     new NumberAttribute(sd.getTempNeg10()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -94,7 +94,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("humidity"),
                     new NumberAttribute(sd.getHumidity()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -106,7 +106,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("tempPos10"),
                     new NumberAttribute(sd.getTempPos10()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -118,7 +118,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("battery"),
                     new NumberAttribute(sd.getBattery()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -130,7 +130,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilTemperature"),
                     new NumberAttribute(sd.getSoilTemperature()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());
@@ -142,7 +142,7 @@ public class Farm21FiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("airTemperature"),
                     new NumberAttribute(sd.getAirTemperature()),
-                    new DateTimeAttribute(sd.getMeasuredAt()),
+                    new InstantAttribute(sd.getMeasuredAt()),
                     new EmptyAttribute(),
                     sd.getLatitude(),
                     sd.getLongitude());

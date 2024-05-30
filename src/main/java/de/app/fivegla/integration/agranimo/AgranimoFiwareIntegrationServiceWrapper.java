@@ -7,7 +7,7 @@ import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
-import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.InstantAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
@@ -44,7 +44,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new TextAttribute(group.getOid()),
                 new TextAttribute("smo1"),
                 new NumberAttribute(soilMoisture.getSmo1()),
-                new DateTimeAttribute(soilMoisture.getTms()),
+                new InstantAttribute(soilMoisture.getTms()),
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);
@@ -56,7 +56,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new TextAttribute(group.getOid()),
                 new TextAttribute("smo2"),
                 new NumberAttribute(soilMoisture.getSmo2()),
-                new DateTimeAttribute(soilMoisture.getTms()),
+                new InstantAttribute(soilMoisture.getTms()),
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);
@@ -68,7 +68,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new TextAttribute(group.getOid()),
                 new TextAttribute("smo3"),
                 new NumberAttribute(soilMoisture.getSmo3()),
-                new DateTimeAttribute(soilMoisture.getTms()),
+                new InstantAttribute(soilMoisture.getTms()),
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);
@@ -80,7 +80,7 @@ public class AgranimoFiwareIntegrationServiceWrapper {
                 new TextAttribute(group.getOid()),
                 new TextAttribute("smo4"),
                 new NumberAttribute(soilMoisture.getSmo4()),
-                new DateTimeAttribute(soilMoisture.getTms()),
+                new InstantAttribute(soilMoisture.getTms()),
                 new EmptyAttribute(),
                 zone.getData().getPoint().getCoordinates()[0],
                 zone.getData().getPoint().getCoordinates()[1]);

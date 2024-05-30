@@ -5,7 +5,7 @@ import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
-import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.InstantAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
@@ -42,7 +42,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("temperature"),
                     new NumberAttribute(measurement.getMeasurementValues().getTemperature()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -54,7 +54,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("relativeHumidity"),
                     new NumberAttribute(measurement.getMeasurementValues().getRelativeHumidity()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -66,7 +66,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("cumulativeRainfall"),
                     new NumberAttribute(measurement.getMeasurementValues().getCumulativeRainfall()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -78,7 +78,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("windSpeed"),
                     new NumberAttribute(measurement.getMeasurementValues().getWindSpeed()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -90,7 +90,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("windGustSpeed"),
                     new NumberAttribute(measurement.getMeasurementValues().getWindGustSpeed()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -102,7 +102,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilTemperature"),
                     new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -114,7 +114,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilTemperature15"),
                     new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature15()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -126,7 +126,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilTemperature30"),
                     new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature30()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -138,7 +138,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilTemperature60"),
                     new NumberAttribute(measurement.getMeasurementValues().getSoilTemperature60()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -150,7 +150,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilWaterPotential15"),
                     new NumberAttribute(measurement.getMeasurementValues().getSoilWaterPotential15()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -162,7 +162,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilWaterPotential30"),
                     new NumberAttribute(measurement.getMeasurementValues().getSoilWaterPotential30()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -174,7 +174,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("soilWaterPotential60"),
                     new NumberAttribute(measurement.getMeasurementValues().getSoilWaterPotential60()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -186,7 +186,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("dryTemperature"),
                     new NumberAttribute(measurement.getMeasurementValues().getDryTemperature()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -198,7 +198,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("wetTemperature"),
                     new NumberAttribute(measurement.getMeasurementValues().getWetTemperature()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -210,7 +210,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("leafWetnessDuration"),
                     new NumberAttribute(measurement.getMeasurementValues().getLeafWetnessDuration()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -222,7 +222,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("leafWetnessVoltage"),
                     new NumberAttribute(measurement.getMeasurementValues().getLeafWetnessVoltage()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -234,7 +234,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("solarIrridiance"),
                     new NumberAttribute(measurement.getMeasurementValues().getSolarIrradiance()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -246,7 +246,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("minimumSolarIrridiance"),
                     new NumberAttribute(measurement.getMeasurementValues().getMinSolarIrradiance()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -258,7 +258,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("maximumSolarIrridiance"),
                     new NumberAttribute(measurement.getMeasurementValues().getMaxSolarIrradiance()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -270,7 +270,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("photosyntheticallyActiveRadiation"),
                     new NumberAttribute(measurement.getMeasurementValues().getPhotosyntheticallyActiveRadiation()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -282,7 +282,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("minimumPhotosyntheticallyActiveRadiation"),
                     new NumberAttribute(measurement.getMeasurementValues().getMinimumPhotosyntheticallyActiveRadiation()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -294,7 +294,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("maximumPhotosyntheticallyActiveRadiation"),
                     new NumberAttribute(measurement.getMeasurementValues().getMaximumPhotosyntheticallyActiveRadiation()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -306,7 +306,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("dewPoint"),
                     new NumberAttribute(measurement.getMeasurementValues().getDewPoint()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);
@@ -318,7 +318,7 @@ public class WeenatFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute("potentialEvapotranspiration"),
                     new NumberAttribute(measurement.getMeasurementValues().getPotentialEvapotranspiration()),
-                    new DateTimeAttribute(measurement.getTimestamp()),
+                    new InstantAttribute(measurement.getTimestamp()),
                     new EmptyAttribute(),
                     latitude,
                     longitude);

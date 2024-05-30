@@ -7,7 +7,7 @@ import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.integration.agvolution.model.TimeSeriesEntry;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
-import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.InstantAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
@@ -57,7 +57,7 @@ public class AgvolutionFiwareIntegrationServiceWrapper {
                     new TextAttribute(group.getOid()),
                     new TextAttribute(timeSeriesEntry.getKey()),
                     new NumberAttribute(timeSeriesValue.getValue()),
-                    new DateTimeAttribute(timeSeriesValue.getTime()),
+                    new InstantAttribute(timeSeriesValue.getTime()),
                     new EmptyAttribute(),
                     seriesEntry.getLatitude(),
                     seriesEntry.getLongitude());

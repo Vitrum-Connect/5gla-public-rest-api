@@ -19,7 +19,7 @@ public class BaseEntity {
      * The id of the entity.
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     /**

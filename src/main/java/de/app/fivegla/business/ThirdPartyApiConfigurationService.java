@@ -2,6 +2,7 @@ package de.app.fivegla.business;
 
 import de.app.fivegla.persistence.ThirdPartyApiConfigurationRepository;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class ThirdPartyApiConfigurationService {
      * @param configuration The third-party API configuration to be created and added.
      * @return The created third-party API configuration.
      */
+    @Transactional
     public ThirdPartyApiConfiguration createThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
         log.info("Creating third-party API configuration.");
         return thirdPartyApiConfigurationRepository.save(configuration);
@@ -37,7 +39,7 @@ public class ThirdPartyApiConfigurationService {
      */
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId, String uuid) {
         log.info("Getting third-party API configurations.");
-        return thirdPartyApiConfigurationRepository.findAllByTenantIdAndUuid(tenantId, uuid);
+        return thirdPartyApiConfigurationRepository.findAllByTenantTenantIdAndUuid(tenantId, uuid);
     }
 
     /**
@@ -46,9 +48,10 @@ public class ThirdPartyApiConfigurationService {
      * @param tenantId The tenantId of the third-party API configuration.
      * @param uuid     The uuid of the third-party API configuration.
      */
+    @Transactional
     public void deleteThirdPartyApiConfiguration(String tenantId, String uuid) {
         log.info("Deleting third-party API configuration.");
-        thirdPartyApiConfigurationRepository.deleteByTenantIdAndUuid(tenantId, uuid);
+        thirdPartyApiConfigurationRepository.deleteByTenantTenantIdAndUuid(tenantId, uuid);
     }
 
     /**
@@ -58,7 +61,7 @@ public class ThirdPartyApiConfigurationService {
      * @return A list of third-party API configurations.
      */
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId) {
-        return thirdPartyApiConfigurationRepository.findAllByTenantId(tenantId);
+        return thirdPartyApiConfigurationRepository.findAllByTenantTenantId(tenantId);
     }
 
     /**
@@ -66,6 +69,7 @@ public class ThirdPartyApiConfigurationService {
      *
      * @param thirdPartyApiConfiguration The third-party API configuration to be updated.
      */
+    @Transactional
     public void updateLastRun(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         thirdPartyApiConfiguration.setLastRun(Date.from(Instant.now()));
         thirdPartyApiConfigurationRepository.save(thirdPartyApiConfiguration);

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Builder
@@ -47,4 +49,10 @@ public class ThirdPartyApiConfiguration {
      */
     @Schema(description = "The UUID of the third-party API.")
     private String uuid;
+
+    /**
+     * Represents the last run of the third-party API.
+     */
+    @Schema(description = "The last run of the third-party API.")
+    private Instant lastRun;
 }

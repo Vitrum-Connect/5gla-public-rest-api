@@ -68,17 +68,18 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     public ResponseEntity<? extends Response> createThirdPartyApiConfiguration(@Valid @RequestBody CreateThirdPartyApiConfigurationRequest request, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var thirdPartyApiConfiguration = request.toEntity();
-        thirdPartyApiConfiguration.setTenantId(tenant.getTenantId());
+        thirdPartyApiConfiguration.setTenant(tenant);
         var thirdPartyApiConfigurationCreated = thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
         applicationEventPublisher.publishEvent(new DataImportEvent(thirdPartyApiConfigurationCreated));
         var response = CreateThirdPartyApiConfigurationResponse.builder()
                 .thirdPartyApiConfiguration(ThirdPartyApiConfiguration.builder()
-                        .tenantId(thirdPartyApiConfigurationCreated.getTenantId())
+                        .tenantId(thirdPartyApiConfigurationCreated.getTenant().getTenantId())
                         .manufacturer(thirdPartyApiConfigurationCreated.getManufacturer())
                         .fiwarePrefix(thirdPartyApiConfigurationCreated.getFiwarePrefix())
                         .enabled(thirdPartyApiConfigurationCreated.isEnabled())
                         .url(thirdPartyApiConfigurationCreated.getUrl())
                         .uuid(thirdPartyApiConfigurationCreated.getUuid())
+                        .lastRun(thirdPartyApiConfigurationCreated.getLastRun().toInstant())
                         .build())
                 .build();
         return ResponseEntity.ok(response);
@@ -118,12 +119,13 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
                 .thirdPartyApiConfigurations(thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId())
                         .stream()
                         .map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
-                                .tenantId(thirdPartyApiConfiguration.getTenantId())
+                                .tenantId(thirdPartyApiConfiguration.getTenant().getTenantId())
                                 .manufacturer(thirdPartyApiConfiguration.getManufacturer())
                                 .fiwarePrefix(thirdPartyApiConfiguration.getFiwarePrefix())
                                 .enabled(thirdPartyApiConfiguration.isEnabled())
                                 .url(thirdPartyApiConfiguration.getUrl())
                                 .uuid(thirdPartyApiConfiguration.getUuid())
+                                .lastRun(thirdPartyApiConfiguration.getLastRun().toInstant())
                                 .build()).toList())
                 .build());
     }
@@ -162,12 +164,13 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
                 .thirdPartyApiConfigurations(thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId(), uuid)
                         .stream()
                         .map(thirdPartyApiConfiguration -> ThirdPartyApiConfiguration.builder()
-                                .tenantId(thirdPartyApiConfiguration.getTenantId())
+                                .tenantId(thirdPartyApiConfiguration.getTenant().getTenantId())
                                 .manufacturer(thirdPartyApiConfiguration.getManufacturer())
                                 .fiwarePrefix(thirdPartyApiConfiguration.getFiwarePrefix())
                                 .enabled(thirdPartyApiConfiguration.isEnabled())
                                 .url(thirdPartyApiConfiguration.getUrl())
                                 .uuid(thirdPartyApiConfiguration.getUuid())
+                                .lastRun(thirdPartyApiConfiguration.getLastRun().toInstant())
                                 .build()).toList())
                 .build());
     }

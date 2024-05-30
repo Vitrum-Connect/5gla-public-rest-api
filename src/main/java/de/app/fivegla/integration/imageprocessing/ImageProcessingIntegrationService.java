@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service for  Sense integration.
@@ -37,21 +34,21 @@ public class ImageProcessingIntegrationService {
      * @param base64Image   The base64 encoded tiff image.
      */
     public String processImage(Tenant tenant, Group group, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
-        var image = Base64.getDecoder().decode(base64Image);
-        log.debug("Channel for the image: {}.", imageChannel);
-        var point = exifDataIntegrationService.readLocation(image);
-        var micaSenseImage = imageRepository.save(Image.builder()
-                .oid(tenant.getFiwarePrefix() + droneId)
-                .group(group)
-                .tenant(tenant)
-                .channel(imageChannel)
-                .droneId(droneId)
-                .transactionId(transactionId)
-                .base64encodedImage(base64Image)
-                .longitude(point.getX())
-                .latitude(point.getY())
-                .measuredAt(Date.from(exifDataIntegrationService.readMeasuredAt(image)))
-                .build());
+        var decodedImage = Base64.getDecoder().decode(base64Image);
+        log.debug("Channel for the decodedImage: {}.", imageChannel);
+        var point = exifDataIntegrationService.readLocation(decodedImage);
+        var image = new Image();
+        image.setOid(UUID.randomUUID().toString());
+        image.setGroup(group);
+        image.setTenant(tenant);
+        image.setDroneId(droneId);
+        image.setTransactionId(transactionId);
+        image.setChannel(imageChannel);
+        image.setLongitude(point.getX());
+        image.setLatitude(point.getY());
+        image.setMeasuredAt((Date.from(exifDataIntegrationService.readMeasuredAt(decodedImage))));
+        image.setBase64encodedImage(base64Image);
+        var micaSenseImage = imageRepository.save(image);
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
         fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, group, droneId, micaSenseImage);
         return micaSenseImage.getOid();

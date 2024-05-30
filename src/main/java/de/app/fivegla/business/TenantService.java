@@ -7,8 +7,12 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.config.security.TenantCredentials;
 import de.app.fivegla.event.events.CreateDefaultGroupForTenantEvent;
 import de.app.fivegla.event.events.ResendSubscriptionsEvent;
+import de.app.fivegla.persistence.GroupRepository;
+import de.app.fivegla.persistence.ImageRepository;
 import de.app.fivegla.persistence.TenantRepository;
+import de.app.fivegla.persistence.ThirdPartyApiConfigurationRepository;
 import de.app.fivegla.persistence.entity.Tenant;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +35,9 @@ public class TenantService implements UserDetailsService {
 
     private final TenantRepository tenantRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final GroupRepository groupRepository;
+    private final ImageRepository imageRepository;
+    private final ThirdPartyApiConfigurationRepository thirdPartyApiConfigurationRepository;
 
     /**
      * Creates a new tenant with the provided name and description.
@@ -39,6 +46,7 @@ public class TenantService implements UserDetailsService {
      * @param description The description of the tenant.
      * @return The created Tenant object.
      */
+    @Transactional
     public TenantAndAccessToken create(@NotBlank String tenantId, @NotBlank String name, String description) {
         validateTenantId(tenantId);
         checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
@@ -111,8 +119,8 @@ public class TenantService implements UserDetailsService {
      * @param description The new description of the tenant.
      * @return The updated tenant.
      */
+    @Transactional
     public Tenant update(String tenantId, String name, String description) {
-        checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
         var tenant = tenantRepository.findByTenantId(tenantId)
                 .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                         .error(Error.TENANT_NOT_FOUND)
@@ -139,7 +147,11 @@ public class TenantService implements UserDetailsService {
      *
      * @param tenantId The tenantId of the tenant to delete.
      */
+    @Transactional
     public void delete(String tenantId) {
+        groupRepository.deleteByTenantTenantId(tenantId);
+        imageRepository.deleteByTenantTenantId(tenantId);
+        thirdPartyApiConfigurationRepository.deleteByTenantTenantId(tenantId);
         tenantRepository.deleteByTenantId(tenantId);
     }
 

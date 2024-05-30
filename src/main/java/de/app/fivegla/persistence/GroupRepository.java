@@ -61,4 +61,11 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
      * @return The group with the specified sensor ID assigned, or null if not found.
      */
     Optional<Group> findByTenantAndSensorIdsAssignedToGroupContaining(Tenant tenant, String sensorId);
+
+    /**
+     * Deletes all groups associated with the specified tenant.
+     *
+     * @param tenantId The tenant for which to delete the groups.
+     */
+    void deleteByTenantTenantId(String tenantId);
 }

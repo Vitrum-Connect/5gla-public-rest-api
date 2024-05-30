@@ -2,7 +2,6 @@ package de.app.fivegla.persistence.entity;
 
 import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +10,9 @@ import java.util.Date;
 /**
  * Image.
  */
+@Entity
 @Getter
 @Setter
-@Builder
 @Table(name = "image")
 public class Image extends BaseEntity {
 
@@ -71,14 +70,15 @@ public class Image extends BaseEntity {
     /**
      * The group of the image.
      */
+    // TODO: Change to a default group in case the group is deleted.
     @ManyToOne
-    @Column(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
     /**
      * The tenant of the image.
      */
-    @ManyToOne
-    @Column(name = "tenant_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "tenant_id", nullable = false)
     private Tenant tenant;
 }

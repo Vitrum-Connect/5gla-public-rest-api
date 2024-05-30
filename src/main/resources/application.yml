@@ -1,5 +1,4 @@
 app:
-  version: '@project.version@'
   api-key: ${API_KEY}
   imagePathBaseUrl: ${IMAGE_PATH_BASE_URL}
   scheduled:
@@ -20,6 +19,7 @@ logging:
     root: info
     de.app.fivegla: trace
     java.net.http: debug
+    hibernate.SQL: debug
 
 management:
   endpoints:

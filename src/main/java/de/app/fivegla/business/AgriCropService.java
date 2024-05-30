@@ -9,6 +9,7 @@ import de.app.fivegla.integration.agricrop.AgriCropFiwareIntegrationServiceWrapp
 import de.app.fivegla.integration.fiware.model.AgriCrop;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +38,7 @@ public class AgriCropService {
      * @throws BusinessException If the CSV file cannot be parsed, or if a line does not
      *                           contain exactly two columns.
      */
+    @Transactional
     public AgriCrop createFromCsv(Tenant tenant, Group group, String cropId, String csv) {
         if (StringUtils.isNotBlank(csv)) {
             log.info("Tenant {} is parsing CSV.", tenant.getName());

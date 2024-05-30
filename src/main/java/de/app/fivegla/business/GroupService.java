@@ -31,6 +31,7 @@ public class GroupService {
      * @param group The group to be added.
      * @return The added group.
      */
+    @Transactional
     public Group add(Tenant tenant, Group group) {
         FiwareEntityChecker.checkGroupName(group.getName());
         group.setOid(this.generateGroupId());
@@ -54,6 +55,7 @@ public class GroupService {
      * @param newGroupData The new group data.
      * @return An Optional containing the updated group if it exists, or an empty Optional if the group doesn't exist.
      */
+    @Transactional
     public Group update(Tenant tenant, Group newGroupData) {
         FiwareEntityChecker.checkGroupName(newGroupData.getName());
         var group = groupRepository.findByOid(newGroupData.getOid()).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
@@ -101,6 +103,7 @@ public class GroupService {
      *
      * @param oid The ID of the group to delete.
      */
+    @Transactional
     public void delete(Tenant tenant, String oid) {
         var group = groupRepository.findByOid(oid).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
@@ -168,6 +171,7 @@ public class GroupService {
      * otherwise returns an empty {@link Optional}.
      * @throws BusinessException If the group is not found.
      */
+    @Transactional
     public Group assignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
         var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
@@ -200,6 +204,7 @@ public class GroupService {
      * or an empty Optional if the group or sensor was not found.
      * @throws BusinessException If the group was not found.
      */
+    @Transactional
     public Group unassignSensorFromExistingGroup(Tenant tenant, String groupId, String sensorId) {
         var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                 .error(Error.GROUP_NOT_FOUND)
@@ -218,6 +223,7 @@ public class GroupService {
      * @return An Optional object containing the updated group if reassignment is successful, or empty if the group was not found.
      * @throws BusinessException If the group is not found.
      */
+    @Transactional
     public Group reAssignSensorToExistingGroup(Tenant tenant, String groupId, String sensorId) {
         unassignSensorFromExistingGroup(tenant, groupId, sensorId);
         var group = get(tenant, groupId).orElseThrow(() -> new BusinessException(ErrorMessage.builder()

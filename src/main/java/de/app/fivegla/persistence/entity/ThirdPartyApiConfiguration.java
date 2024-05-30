@@ -22,8 +22,9 @@ public class ThirdPartyApiConfiguration extends BaseEntity {
     /**
      * Represents the tenant.
      */
-    @Column(name = "tenant_id", nullable = false)
-    private String tenantId;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private Tenant tenant;
 
     /**
      * Represents the manufacturer.

@@ -28,4 +28,11 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
      * @return The images with the given transaction id.
      */
     List<Image> findByTransactionId(String transactionId);
+
+    /**
+     * Deletes image entity by tenant id.
+     *
+     * @param tenantId The id of the tenant.
+     */
+    void deleteByTenantTenantId(String tenantId);
 }

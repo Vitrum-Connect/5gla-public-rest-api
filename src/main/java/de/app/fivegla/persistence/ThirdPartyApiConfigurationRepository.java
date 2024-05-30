@@ -19,7 +19,7 @@ public interface ThirdPartyApiConfigurationRepository extends JpaRepository<Thir
      * @param uuid     The uuid of the third-party API configuration to delete.
      * @return The number of deleted third-party API configurations.
      */
-    List<ThirdPartyApiConfiguration> findAllByTenantIdAndUuid(String tenantId, String uuid);
+    List<ThirdPartyApiConfiguration> findAllByTenantTenantIdAndUuid(String tenantId, String uuid);
 
     /**
      * Deletes the third-party API configuration with the given tenantId.
@@ -27,7 +27,7 @@ public interface ThirdPartyApiConfigurationRepository extends JpaRepository<Thir
      * @param tenantId The tenantId of the third-party API configuration to delete.
      * @param uuid     The uuid of the third-party API configuration to delete.
      */
-    void deleteByTenantIdAndUuid(String tenantId, String uuid);
+    void deleteByTenantTenantIdAndUuid(String tenantId, String uuid);
 
 
     /**
@@ -36,5 +36,12 @@ public interface ThirdPartyApiConfigurationRepository extends JpaRepository<Thir
      * @param tenantId The tenantId of the third-party API configurations.
      * @return A list of third-party API configurations.
      */
-    List<ThirdPartyApiConfiguration> findAllByTenantId(String tenantId);
+    List<ThirdPartyApiConfiguration> findAllByTenantTenantId(String tenantId);
+
+    /**
+     * Deletes the third-party API configurations with the given tenantId.
+     *
+     * @param tenantId The tenantId of the third-party API configurations to delete.
+     */
+    void deleteByTenantTenantId(String tenantId);
 }

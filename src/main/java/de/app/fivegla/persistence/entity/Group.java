@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Represents a group of sensors or devices, created by the tenant.
  */
+@Entity
 @Getter
 @Setter
 @Table(name = "group_for_tenant")
@@ -43,8 +44,8 @@ public class Group extends BaseEntity {
     /**
      * The tenant of the group.
      */
-    @OneToMany
-    @Column(name = "tenant_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "tenant_id", nullable = false)
     private Tenant tenant;
 
     /**

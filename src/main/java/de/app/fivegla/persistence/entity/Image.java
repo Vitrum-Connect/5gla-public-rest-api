@@ -70,7 +70,6 @@ public class Image extends BaseEntity {
     /**
      * The group of the image.
      */
-    // TODO: Change to a default group in case the group is deleted.
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;

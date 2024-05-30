@@ -6,6 +6,7 @@ import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.fiware.api.FiwareEntityChecker;
 import de.app.fivegla.persistence.GroupRepository;
+import de.app.fivegla.persistence.ImageRepository;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import jakarta.transaction.Transactional;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class GroupService {
 
     private final GroupRepository groupRepository;
+    private final ImageRepository imageRepository;
 
     /**
      * Adds a group to the application.
@@ -115,6 +117,10 @@ public class GroupService {
                     .message("Could not delete group, since the group is from another tenant.")
                     .build());
         } else {
+            var imagesForThisGroup = imageRepository.findByGroup(group);
+            var defaultGroup = getDefaultGroupForTenant(tenant);
+            imagesForThisGroup.forEach(image -> image.setGroup(defaultGroup));
+            imageRepository.saveAll(imagesForThisGroup);
             groupRepository.deleteByOid(oid);
         }
     }

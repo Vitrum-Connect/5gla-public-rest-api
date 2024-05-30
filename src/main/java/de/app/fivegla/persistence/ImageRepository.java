@@ -1,5 +1,6 @@
 package de.app.fivegla.persistence;
 
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -35,4 +36,11 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
      * @param tenantId The id of the tenant.
      */
     void deleteByTenantTenantId(String tenantId);
+
+    /**
+     * Finds images by group.
+     *
+     * @param group The group to filter the images by.
+     */
+    List<Image> findByGroup(Group group);
 }

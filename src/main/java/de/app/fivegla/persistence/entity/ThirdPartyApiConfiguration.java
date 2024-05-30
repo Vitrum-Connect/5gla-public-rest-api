@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -66,4 +68,10 @@ public class ThirdPartyApiConfiguration extends BaseEntity {
     @Column(name = "api_token")
     private String apiToken;
 
+    /**
+     * Represents the last run of the third-party API.
+     */
+    @Column(name = "last_run")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastRun;
 }

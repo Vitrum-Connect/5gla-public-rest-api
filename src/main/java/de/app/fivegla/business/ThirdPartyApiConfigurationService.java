@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -57,5 +59,15 @@ public class ThirdPartyApiConfigurationService {
      */
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId) {
         return thirdPartyApiConfigurationRepository.findAllByTenantId(tenantId);
+    }
+
+    /**
+     * Updates the last run of a third-party API configuration.
+     *
+     * @param thirdPartyApiConfiguration The third-party API configuration to be updated.
+     */
+    public void updateLastRun(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
+        thirdPartyApiConfiguration.setLastRun(Date.from(Instant.now()));
+        thirdPartyApiConfigurationRepository.save(thirdPartyApiConfiguration);
     }
 }

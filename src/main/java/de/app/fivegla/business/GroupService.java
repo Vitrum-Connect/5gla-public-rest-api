@@ -36,8 +36,6 @@ public class GroupService {
         FiwareEntityChecker.checkGroupName(group.getName());
         group.setOid(this.generateGroupId());
         group.setTenant(tenant);
-        group.setCreatedAt(Instant.now());
-        group.setUpdatedAt(Instant.now());
         log.info("Adding group with name: {} and description: {}", group.getName(), group.getDescription());
         return groupRepository.save(group);
     }
@@ -127,8 +125,6 @@ public class GroupService {
             group.setName("default_group");
             group.setDescription("The default group for the tenant.");
             group.setDefaultGroupForTenant(true);
-            group.setCreatedAt(Instant.now());
-            group.setUpdatedAt(Instant.now());
             groupRepository.save(group);
         } else {
             log.info("Default group already exists for tenant with ID: {}", tenant.getTenantId());

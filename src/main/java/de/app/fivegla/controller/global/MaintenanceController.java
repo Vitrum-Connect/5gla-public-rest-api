@@ -56,24 +56,4 @@ public class MaintenanceController implements ApiKeyApiAccess {
         dataImportScheduler.scheduleDataImport();
         return ResponseEntity.ok().body(new Response());
     }
-
-    @Operation(
-            operationId = "add-uuid-for-3rd-party-api",
-            description = "Add UUID for 3rd party API configurations.",
-            tags = BaseMappings.MAINTENANCE
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "The UUID has been added for 3rd party API configurations.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @PostMapping(value = "/add-missing-uuid-for-3rd-party-api-cfg", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> addUuidForThirdPartyApiConfigurations() {
-        thirdPartyApiConfigurationService.addMissingUuidForThirdPartyApiConfigurations();
-        return ResponseEntity.ok().body(new Response());
-    }
-
 }

@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,13 +47,12 @@ public class TenantServiceTest {
         String name = "validName";
         String description = "validDescription";
         // For tenantId validation
-        when(tenantRepository.getTenant(tenantId)).thenReturn(Optional.empty());
+        when(tenantRepository.findByTenantId(tenantId)).thenReturn(Optional.empty());
         Tenant expectedTenant = new Tenant();
-        expectedTenant.setCreatedAt(Instant.now());
         expectedTenant.setName(name);
         expectedTenant.setDescription(description);
         expectedTenant.setTenantId(tenantId);
-        when(tenantRepository.addTenant(any(Tenant.class))).thenReturn(expectedTenant);
+        when(tenantRepository.save(any(Tenant.class))).thenReturn(expectedTenant);
         var actualTenantWithAccessToken = tenantService.create(tenantId, name, description);
         assertEquals(expectedTenant, actualTenantWithAccessToken.tenant());
     }
@@ -67,7 +65,7 @@ public class TenantServiceTest {
         String description = "validDescription";
         Tenant existingTenant = new Tenant();
         existingTenant.setTenantId(tenantId);
-        when(tenantRepository.getTenant(tenantId)).thenReturn(Optional.of(existingTenant));
+        when(tenantRepository.findByTenantId(tenantId)).thenReturn(Optional.of(existingTenant));
         assertThrows(BusinessException.class, () -> tenantService.create(tenantId, name, description));
     }
 

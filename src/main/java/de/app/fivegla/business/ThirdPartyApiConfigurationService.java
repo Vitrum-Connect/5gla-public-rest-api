@@ -23,7 +23,7 @@ public class ThirdPartyApiConfigurationService {
      */
     public ThirdPartyApiConfiguration createThirdPartyApiConfiguration(ThirdPartyApiConfiguration configuration) {
         log.info("Creating third-party API configuration.");
-        return thirdPartyApiConfigurationRepository.addThirdPartyApiConfiguration(configuration);
+        return thirdPartyApiConfigurationRepository.save(configuration);
     }
 
     /**
@@ -35,7 +35,7 @@ public class ThirdPartyApiConfigurationService {
      */
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId, String uuid) {
         log.info("Getting third-party API configurations.");
-        return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId, uuid);
+        return thirdPartyApiConfigurationRepository.findAllByTenantIdAndUuid(tenantId, uuid);
     }
 
     /**
@@ -46,7 +46,7 @@ public class ThirdPartyApiConfigurationService {
      */
     public void deleteThirdPartyApiConfiguration(String tenantId, String uuid) {
         log.info("Deleting third-party API configuration.");
-        thirdPartyApiConfigurationRepository.deleteThirdPartyApiConfiguration(tenantId, uuid);
+        thirdPartyApiConfigurationRepository.deleteByTenantIdAndUuid(tenantId, uuid);
     }
 
     /**
@@ -56,11 +56,6 @@ public class ThirdPartyApiConfigurationService {
      * @return A list of third-party API configurations.
      */
     public List<ThirdPartyApiConfiguration> getThirdPartyApiConfigurations(String tenantId) {
-        return thirdPartyApiConfigurationRepository.getThirdPartyApiConfigurations(tenantId);
-    }
-
-    public void addMissingUuidForThirdPartyApiConfigurations() {
-        log.info("Adding missing UUIDs for third-party API configurations.");
-        thirdPartyApiConfigurationRepository.addMissingUuidForThirdPartyApiConfigurations();
+        return thirdPartyApiConfigurationRepository.findAllByTenantId(tenantId);
     }
 }

@@ -1,26 +1,33 @@
 package de.app.fivegla.persistence.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Represents a base entity.
+ */
 @Getter
 @Setter
 @MappedSuperclass
 public class BaseEntity {
 
+    /**
+     * The id of the entity.
+     */
     @Id
     @GeneratedValue
     private long id;
 
+    /**
+     * The creation date of the entity.
+     */
     @Version
-    private Instant version;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date version;
 
     @Override
     public boolean equals(Object o) {

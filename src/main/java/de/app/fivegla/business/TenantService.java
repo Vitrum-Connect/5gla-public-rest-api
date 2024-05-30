@@ -45,7 +45,6 @@ public class TenantService implements UserDetailsService {
         checkIfThereIsAlreadyATenantWithTheSameId(tenantId);
         log.info("Creating tenant with name: {} and description: {}", name, description);
         var tenant = new Tenant();
-        tenant.setCreatedAt(Instant.now());
         tenant.setName(name);
         tenant.setDescription(description);
         tenant.setTenantId(tenantId);

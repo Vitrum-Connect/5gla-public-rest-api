@@ -8,7 +8,6 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.util.List;
 
 /**
@@ -32,16 +31,6 @@ public class Group extends BaseEntity {
      * The description of the group.
      */
     private String description;
-
-    /**
-     * The creation date of the group.
-     */
-    private Instant createdAt;
-
-    /**
-     * The last update date of the group.
-     */
-    private Instant updatedAt;
 
     /**
      * Represents if the group is the default group for the tenant.

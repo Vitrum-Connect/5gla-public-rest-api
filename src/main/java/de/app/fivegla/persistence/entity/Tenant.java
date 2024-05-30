@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
-
 /**
  * Represents a tenant in the system.
  */
@@ -13,11 +11,6 @@ import java.time.Instant;
 @Getter
 @Setter
 public class Tenant extends BaseEntity {
-
-    /**
-     * The creation date of the tenant.
-     */
-    private Instant createdAt;
 
     /**
      * The name of the tenant.

@@ -1,6 +1,8 @@
 package de.app.fivegla.persistence.entity;
 
 import de.app.fivegla.api.Manufacturer;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +18,7 @@ public class ThirdPartyApiConfiguration extends BaseEntity {
     /**
      * Represents the manufacturer.
      */
+    @Enumerated(EnumType.STRING)
     private Manufacturer manufacturer;
 
     /**

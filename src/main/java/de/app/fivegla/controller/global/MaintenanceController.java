@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MaintenanceController implements ApiKeyApiAccess {
 
     private final DataImportScheduler dataImportScheduler;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
 
     /**
      * Run the import.

@@ -42,13 +42,14 @@ public class ImageProcessingIntegrationService {
         var point = exifDataIntegrationService.readLocation(image);
         var micaSenseImage = imageRepository.save(Image.builder()
                 .oid(tenant.getFiwarePrefix() + droneId)
-                .group(group.getOid())
+                .group(group)
+                .tenant(tenant)
                 .channel(imageChannel)
                 .droneId(droneId)
                 .transactionId(transactionId)
-                .base64Image(base64Image)
-                .longitudeAsDegreesEast(point.getX())
-                .latitudeAsDegreesNorth(point.getY())
+                .base64encodedImage(base64Image)
+                .longitude(point.getX())
+                .latitude(point.getY())
                 .measuredAt(Date.from(exifDataIntegrationService.readMeasuredAt(image)))
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());

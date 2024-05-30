@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @Builder
 @Table(name = "image")
-public class Image {
+public class Image extends BaseEntity {
 
     /**
      * The oid of the image.
@@ -46,8 +46,8 @@ public class Image {
      * The base64 encoded tiff image.
      */
     @Lob
-    @Column(name = "base64_image", nullable = false)
-    private String base64Image;
+    @Column(name = "base64_encoded_image", nullable = false)
+    private String base64encodedImage;
 
     /**
      * The time the image was taken.
@@ -59,17 +59,26 @@ public class Image {
     /**
      * The location of the image.
      */
-    @Column(name = "longitude_as_degrees_east", nullable = false)
-    private double longitudeAsDegreesEast;
+    @Column(name = "longitude", nullable = false)
+    private double longitude;
 
     /**
      * The location of the image.
      */
-    @Column(name = "latitude_as_degrees_north", nullable = false)
-    private double latitudeAsDegreesNorth;
+    @Column(name = "latitude", nullable = false)
+    private double latitude;
 
     /**
      * The group of the image.
      */
-    private String group;
+    @ManyToOne
+    @Column(name = "group_id", nullable = false)
+    private Group group;
+
+    /**
+     * The tenant of the image.
+     */
+    @ManyToOne
+    @Column(name = "tenant_id", nullable = false)
+    private Tenant tenant;
 }

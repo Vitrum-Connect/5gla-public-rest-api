@@ -34,5 +34,7 @@ spring:
   data:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
+    username: ${SPRING_DATASOURCE_USER}
     password: ${SPRING_DATASOURCE_PASSWORD}
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yml

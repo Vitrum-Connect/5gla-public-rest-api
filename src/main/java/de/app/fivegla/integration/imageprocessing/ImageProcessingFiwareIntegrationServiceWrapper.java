@@ -41,8 +41,8 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
                 new EmptyAttribute(),
                 new DateAttribute(image.getMeasuredAt()),
                 new TextAttribute(imagePathBaseUrl + image.getOid()),
-                image.getLatitudeAsDegreesNorth(),
-                image.getLongitudeAsDegreesEast());
+                image.getLatitude(),
+                image.getLongitude());
         fiwareEntityIntegrationService.persist(tenant, group, deviceMeasurement);
     }
 

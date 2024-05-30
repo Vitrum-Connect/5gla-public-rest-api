@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Table(name = "group")
+@Table(name = "group_for_tenant")
 public class Group extends BaseEntity {
 
     /**

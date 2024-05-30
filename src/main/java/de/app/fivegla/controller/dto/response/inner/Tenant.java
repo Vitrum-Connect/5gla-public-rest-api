@@ -12,12 +12,6 @@ import lombok.Setter;
 public class Tenant {
 
     /**
-     * The creation date of the tenant.
-     */
-    @Schema(description = "The creation date of the tenant.")
-    private String createdAt;
-
-    /**
      * The name of the tenant.
      */
     @Schema(description = "The name of the tenant.")

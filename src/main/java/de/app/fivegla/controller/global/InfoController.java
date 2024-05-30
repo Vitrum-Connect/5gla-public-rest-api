@@ -1,7 +1,6 @@
 package de.app.fivegla.controller.global;
 
 import de.app.fivegla.api.Response;
-import de.app.fivegla.business.LastRunService;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.response.FiwareStatusResponse;

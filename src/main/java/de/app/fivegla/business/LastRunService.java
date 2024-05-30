@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -18,16 +17,6 @@ import java.util.Optional;
 public class LastRunService {
 
     private final LastRunRepository lastRunRepository;
-
-
-    /**
-     * Retrieves the last runs for each manufacturer.
-     *
-     * @return a map containing the last runs for each manufacturer
-     */
-    public List<LastRun> getLastRuns(String tenantId) {
-        return lastRunRepository.findAllByTenantId(tenantId);
-    }
 
     /**
      * Retrieves the last run for a specific manufacturer.

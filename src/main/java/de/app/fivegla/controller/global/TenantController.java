@@ -1,6 +1,5 @@
 package de.app.fivegla.controller.global;
 
-import de.app.fivegla.api.Format;
 import de.app.fivegla.api.Response;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
@@ -65,7 +64,6 @@ public class TenantController implements ApiKeyApiAccess {
         var tenant = tenantAndAccessToken.tenant();
         var accessToken = tenantAndAccessToken.accessToken();
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateTenantResponse.builder()
-                .createdAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())
                 .tenantId(tenant.getTenantId())
                 .accessToken(accessToken)
@@ -97,7 +95,6 @@ public class TenantController implements ApiKeyApiAccess {
     public ResponseEntity<? extends Response> update(@Valid @RequestBody UpdateTenantRequest request) {
         var tenant = tenantService.update(request.getTenantId(), request.getName(), request.getDescription());
         return ResponseEntity.ok(UpdateTenantResponse.builder()
-                .updatedAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())
                 .uuid(tenant.getTenantId())
                 .build());
@@ -128,7 +125,6 @@ public class TenantController implements ApiKeyApiAccess {
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Response> findAll() {
         var tenants = tenantService.findAll().stream().map(tenant -> Tenant.builder()
-                .createdAt(Format.format(tenant.getCreatedAt()))
                 .name(tenant.getName())
                 .tenantId(tenant.getTenantId())
                 .description(tenant.getDescription())

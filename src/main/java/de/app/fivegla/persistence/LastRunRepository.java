@@ -5,8 +5,6 @@ import de.app.fivegla.persistence.entity.LastRun;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,14 +12,6 @@ import java.util.Optional;
  */
 @Repository
 public interface LastRunRepository extends JpaRepository<LastRun, Long> {
-
-    /**
-     * Retrieves all last runs for the tenant.
-     *
-     * @param tenantId the id of the tenant
-     * @return a list of last runs for the tenant
-     */
-    List<LastRun> findAllByTenantId(String tenantId);
 
     /**
      * Retrieves the last run for a specific manufacturer.

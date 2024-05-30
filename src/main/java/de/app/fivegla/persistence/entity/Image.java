@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.locationtech.jts.geom.Point;
 
 import java.util.Date;
 
@@ -60,8 +59,14 @@ public class Image {
     /**
      * The location of the image.
      */
-    // FIXME The location should be a Point, but the Point class is not serializable.
-    private Point location;
+    @Column(name = "longitude_as_degrees_east", nullable = false)
+    private double longitudeAsDegreesEast;
+
+    /**
+     * The location of the image.
+     */
+    @Column(name = "latitude_as_degrees_north", nullable = false)
+    private double latitudeAsDegreesNorth;
 
     /**
      * The group of the image.

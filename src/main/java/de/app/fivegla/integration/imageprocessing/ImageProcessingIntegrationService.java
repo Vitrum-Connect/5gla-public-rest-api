@@ -39,6 +39,7 @@ public class ImageProcessingIntegrationService {
     public String processImage(Tenant tenant, Group group, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
         var image = Base64.getDecoder().decode(base64Image);
         log.debug("Channel for the image: {}.", imageChannel);
+        var point = exifDataIntegrationService.readLocation(image);
         var micaSenseImage = imageRepository.save(Image.builder()
                 .oid(tenant.getFiwarePrefix() + droneId)
                 .group(group.getOid())
@@ -46,7 +47,8 @@ public class ImageProcessingIntegrationService {
                 .droneId(droneId)
                 .transactionId(transactionId)
                 .base64Image(base64Image)
-                .location(exifDataIntegrationService.readLocation(image))
+                .longitudeAsDegreesEast(point.getX())
+                .latitudeAsDegreesNorth(point.getY())
                 .measuredAt(Date.from(exifDataIntegrationService.readMeasuredAt(image)))
                 .build());
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());

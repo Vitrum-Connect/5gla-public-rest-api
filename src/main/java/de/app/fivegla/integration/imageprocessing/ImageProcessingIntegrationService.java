@@ -1,19 +1,16 @@
 package de.app.fivegla.integration.imageprocessing;
 
 import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.integration.imageprocessing.model.Image;
-import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
 import de.app.fivegla.persistence.ImageRepository;
 import de.app.fivegla.persistence.entity.Group;
+import de.app.fivegla.persistence.entity.Image;
 import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.*;
 
 /**
  * Service for  Sense integration.
@@ -37,18 +34,21 @@ public class ImageProcessingIntegrationService {
      * @param base64Image   The base64 encoded tiff image.
      */
     public String processImage(Tenant tenant, Group group, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
-        var image = Base64.getDecoder().decode(base64Image);
-        log.debug("Channel for the image: {}.", imageChannel);
-        var micaSenseImage = imageRepository.addImage(Image.builder()
-                .oid(tenant.getFiwarePrefix() + droneId)
-                .group(group.getGroupId())
-                .channel(imageChannel)
-                .droneId(droneId)
-                .transactionId(transactionId)
-                .base64Image(base64Image)
-                .location(exifDataIntegrationService.readLocation(image))
-                .measuredAt(exifDataIntegrationService.readMeasuredAt(image))
-                .build());
+        var decodedImage = Base64.getDecoder().decode(base64Image);
+        log.debug("Channel for the decodedImage: {}.", imageChannel);
+        var point = exifDataIntegrationService.readLocation(decodedImage);
+        var image = new Image();
+        image.setOid(UUID.randomUUID().toString());
+        image.setGroup(group);
+        image.setTenant(tenant);
+        image.setDroneId(droneId);
+        image.setTransactionId(transactionId);
+        image.setChannel(imageChannel);
+        image.setLongitude(point.getX());
+        image.setLatitude(point.getY());
+        image.setMeasuredAt((Date.from(exifDataIntegrationService.readMeasuredAt(decodedImage))));
+        image.setBase64encodedImage(base64Image);
+        var micaSenseImage = imageRepository.save(image);
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
         fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, group, droneId, micaSenseImage);
         return micaSenseImage.getOid();
@@ -61,12 +61,7 @@ public class ImageProcessingIntegrationService {
      * @return The image with the given oid.
      */
     public Optional<Image> getImage(String oid) {
-        AtomicReference<Optional<Image>> result = new AtomicReference<>(Optional.empty());
-        imageRepository.getImage(oid).ifPresent(image -> {
-            log.debug("Image with oid {} found.", oid);
-            result.set(Optional.of(image));
-        });
-        return result.get();
+        return imageRepository.findByOid(oid);
     }
 
     /**
@@ -76,7 +71,10 @@ public class ImageProcessingIntegrationService {
      * @return a list of image OIDs associated with the transaction
      */
     public List<SortableImageOids> getImageOidsForTransaction(String transactionId) {
-        return imageRepository.getImageOidsForTransaction(transactionId).stream().sorted().toList();
+        return imageRepository.findByTransactionId(transactionId).stream()
+                .map(image -> new SortableImageOids(image.getOid(), image.getMeasuredAt()))
+                .sorted()
+                .toList();
     }
 
 }

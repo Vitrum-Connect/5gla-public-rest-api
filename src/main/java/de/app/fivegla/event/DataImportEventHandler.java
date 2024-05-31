@@ -39,10 +39,10 @@ public class DataImportEventHandler {
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
-        log.info("Handling data import event for tenant {} and manufacturer {}.", dataImportEvent.thirdPartyApiConfiguration().getTenantId(), dataImportEvent.thirdPartyApiConfiguration().getManufacturer());
+        log.info("Handling data import event for tenant {} and manufacturer {}.", dataImportEvent.thirdPartyApiConfiguration().getTenant().getTenantId(), dataImportEvent.thirdPartyApiConfiguration().getManufacturer());
         var manufacturer = dataImportEvent.thirdPartyApiConfiguration().getManufacturer();
-        var tenantId = dataImportEvent.thirdPartyApiConfiguration().getTenantId();
-        var optionalTenant = tenantService.findTenantByName(tenantId);
+        var tenantId = dataImportEvent.thirdPartyApiConfiguration().getTenant().getTenantId();
+        var optionalTenant = tenantService.findByTenantId(tenantId);
         if (optionalTenant.isEmpty()) {
             log.error("Tenant with id {} not found, not able to handle data import event", tenantId);
         } else {

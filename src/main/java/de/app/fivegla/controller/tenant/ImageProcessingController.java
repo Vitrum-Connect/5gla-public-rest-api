@@ -110,7 +110,7 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
         AtomicReference<ResponseEntity<byte[]>> responseEntity = new AtomicReference<>(ResponseEntity.notFound().build());
         micaSenseImage.ifPresent(
                 image -> {
-                    byte[] decodedImage = Base64.getDecoder().decode(image.getBase64Image());
+                    byte[] decodedImage = Base64.getDecoder().decode(image.getBase64encodedImage());
                     headers.setContentLength(decodedImage.length);
                     responseEntity.set(ResponseEntity.ok().headers(headers).body(decodedImage));
                 }

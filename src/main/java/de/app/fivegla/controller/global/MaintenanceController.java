@@ -2,7 +2,6 @@ package de.app.fivegla.controller.global;
 
 
 import de.app.fivegla.api.Response;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.config.security.marker.ApiKeyApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.scheduled.DataImportScheduler;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MaintenanceController implements ApiKeyApiAccess {
 
     private final DataImportScheduler dataImportScheduler;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
 
     /**
      * Run the import.
@@ -56,24 +54,4 @@ public class MaintenanceController implements ApiKeyApiAccess {
         dataImportScheduler.scheduleDataImport();
         return ResponseEntity.ok().body(new Response());
     }
-
-    @Operation(
-            operationId = "add-uuid-for-3rd-party-api",
-            description = "Add UUID for 3rd party API configurations.",
-            tags = BaseMappings.MAINTENANCE
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "The UUID has been added for 3rd party API configurations.",
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Response.class)
-            )
-    )
-    @PostMapping(value = "/add-missing-uuid-for-3rd-party-api-cfg", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> addUuidForThirdPartyApiConfigurations() {
-        thirdPartyApiConfigurationService.addMissingUuidForThirdPartyApiConfigurations();
-        return ResponseEntity.ok().body(new Response());
-    }
-
 }

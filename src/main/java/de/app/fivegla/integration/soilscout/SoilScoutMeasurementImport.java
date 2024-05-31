@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.soilscout;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.LastRunService;
+import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 public class SoilScoutMeasurementImport {
 
     private final SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
-    private final LastRunService lastRunService;
+    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SoilScoutFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -38,10 +38,9 @@ public class SoilScoutMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            if (lastRunService.getLastRun(Manufacturer.SOILSCOUT).isPresent()) {
+            if (null != thirdPartyApiConfiguration.getLastRun()) {
                 log.info("Running scheduled data import from Soil Scout API");
-                var lastRun = lastRunService.getLastRun(Manufacturer.SOILSCOUT).get();
-                var measurements = soilScoutMeasurementIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun, Instant.now());
+                var measurements = soilScoutMeasurementIntegrationService.fetchAll(thirdPartyApiConfiguration, thirdPartyApiConfiguration.getLastRun().toInstant(), Instant.now());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
@@ -54,7 +53,7 @@ public class SoilScoutMeasurementImport {
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
             }
-            lastRunService.updateLastRun(Manufacturer.SOILSCOUT);
+            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Soil Scout API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SOILSCOUT);

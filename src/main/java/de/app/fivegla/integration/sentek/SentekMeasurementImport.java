@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.sentek;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.LastRunService;
+import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.monitoring.JobMonitor;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class SentekMeasurementImport {
 
     private final SentekSensorDataIntegrationService sentekSensorDataIntegrationService;
-    private final LastRunService lastRunService;
+    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -41,10 +41,9 @@ public class SentekMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            if (lastRunService.getLastRun(Manufacturer.SENTEK).isPresent()) {
+            if (null != thirdPartyApiConfiguration.getLastRun()) {
                 log.info("Running scheduled data import from Sentek API");
-                var lastRun = lastRunService.getLastRun(Manufacturer.SENTEK).get();
-                var measurements = sentekSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun);
+                var measurements = sentekSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, thirdPartyApiConfiguration.getLastRun().toInstant());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 log.info("Found {} measurements", measurements.size());
                 log.info("Persisting {} measurements", measurements.size());
@@ -57,7 +56,7 @@ public class SentekMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, loggerListEntry));
             }
-            lastRunService.updateLastRun(Manufacturer.SENTEK);
+            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Sentek API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);

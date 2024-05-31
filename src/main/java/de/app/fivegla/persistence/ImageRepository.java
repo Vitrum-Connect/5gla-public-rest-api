@@ -1,51 +1,46 @@
 package de.app.fivegla.persistence;
 
-import de.app.fivegla.api.dto.SortableImageOids;
-import de.app.fivegla.integration.imageprocessing.model.Image;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import de.app.fivegla.persistence.entity.Group;
+import de.app.fivegla.persistence.entity.Image;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
-@RequiredArgsConstructor
-public class ImageRepository {
-
-    private final ApplicationData applicationData;
+/**
+ * Repository for the image entity.
+ */
+@Repository
+public interface ImageRepository extends JpaRepository<Image, Long> {
 
     /**
-     * Returns the image with the given oid.
+     * Find an image by its oid.
      *
      * @param oid The oid of the image.
      * @return The image with the given oid.
      */
-    public Optional<Image> getImage(String oid) {
-        return applicationData.getImages().stream()
-                .filter(image -> image.getOid().equals(oid))
-                .findFirst();
-    }
+    Optional<Image> findByOid(String oid);
 
     /**
-     * Add image to the list of images.
+     * Find images by their transaction id.
      *
-     * @param image The image to add.
-     * @return The added image.
+     * @param transactionId The transaction id.
+     * @return The images with the given transaction id.
      */
-    public Image addImage(Image image) {
-        return applicationData.addImage(image);
-    }
+    List<Image> findByTransactionId(String transactionId);
 
     /**
-     * Retrieves the image Object IDs (Oids) associated with a specific transaction.
+     * Deletes image entity by tenant id.
      *
-     * @param transactionId The ID of the transaction.
-     * @return A list of image Object IDs (Oids) associated with the specified transaction.
+     * @param tenantId The id of the tenant.
      */
-    public List<SortableImageOids> getImageOidsForTransaction(String transactionId) {
-        return applicationData.getImages().stream()
-                .filter(image -> image.getTransactionId().equals(transactionId))
-                .map(image -> new SortableImageOids(image.getOid(), image.getMeasuredAt()))
-                .toList();
-    }
+    void deleteByTenantTenantId(String tenantId);
+
+    /**
+     * Finds images by group.
+     *
+     * @param group The group to filter the images by.
+     */
+    List<Image> findByGroup(Group group);
 }

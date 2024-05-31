@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Schema(description = "Represents a request to create a third-party API configuration.")
@@ -53,6 +55,7 @@ public class CreateThirdPartyApiConfigurationRequest {
      */
     public ThirdPartyApiConfiguration toEntity() {
         var configuration = new ThirdPartyApiConfiguration();
+        configuration.setUuid(UUID.randomUUID().toString());
         configuration.setManufacturer(manufacturer);
         configuration.setFiwarePrefix(fiwarePrefix);
         configuration.setEnabled(enabled);

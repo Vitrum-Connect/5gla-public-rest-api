@@ -22,7 +22,7 @@ import java.security.Principal;
 public interface TenantCredentialApiAccess {
 
     default Tenant validateTenant(TenantService tenantService, Principal principal) {
-        var optionalTenant = tenantService.findTenantByName(principal.getName());
+        var optionalTenant = tenantService.findByTenantId(principal.getName());
         if (optionalTenant.isEmpty()) {
             throw new BusinessException(ErrorMessage.builder().error(Error.TENANT_NOT_FOUND).message("The tenant was not found.").build());
         } else {

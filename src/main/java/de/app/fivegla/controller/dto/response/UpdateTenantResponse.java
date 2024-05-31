@@ -16,9 +16,6 @@ import lombok.Setter;
 @Schema(description = "Response wrapper.")
 public class UpdateTenantResponse extends Response {
 
-    @Schema(description = "The creation date of the tenant.")
-    private String updatedAt;
-
     @Schema(description = "The name of the tenant.")
     private String name;
 

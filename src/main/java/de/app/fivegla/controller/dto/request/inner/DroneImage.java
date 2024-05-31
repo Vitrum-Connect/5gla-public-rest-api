@@ -1,6 +1,6 @@
 package de.app.fivegla.controller.dto.request.inner;
 
-import de.app.fivegla.integration.imageprocessing.model.ImageChannel;
+import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

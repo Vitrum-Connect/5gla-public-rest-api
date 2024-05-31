@@ -14,18 +14,6 @@ import java.util.List;
 public class Group {
 
     /**
-     * The creation date of the group.
-     */
-    @Schema(description = "The creation date of the group.")
-    private String createdAt;
-
-    /**
-     * The last update date of the group.
-     */
-    @Schema(description = "The last update date of the group.")
-    private String updatedAt;
-
-    /**
      * The name of the group.
      */
     @Schema(description = "The name of the group.")

@@ -4,6 +4,7 @@ import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.deviceposition.DevicePositionFiwareIntegrationServiceWrapper;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class DevicePositionService {
      * @param latitude      The latitude value of the device position.
      * @param longitude     The longitude value of the device position.
      */
+    @Transactional
     public void createDevicePosition(Tenant tenant,
                                      Group group,
                                      EntityType entityType,

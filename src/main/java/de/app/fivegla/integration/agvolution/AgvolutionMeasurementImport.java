@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.agvolution;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.LastRunService;
+import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.agvolution.model.SeriesEntry;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 public class AgvolutionMeasurementImport {
 
     private final AgvolutionSensorDataIntegrationService agvolutionSensorDataIntegrationService;
-    private final LastRunService lastRunService;
+    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -38,10 +38,9 @@ public class AgvolutionMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            var lastRun = lastRunService.getLastRun(Manufacturer.AGVOLUTION);
-            if (lastRun.isPresent()) {
+            if (null != thirdPartyApiConfiguration.getLastRun()) {
                 log.info("Running scheduled data import from Agvolution API");
-                var seriesEntries = agvolutionSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, lastRun.get());
+                var seriesEntries = agvolutionSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, thirdPartyApiConfiguration.getLastRun().toInstant());
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGVOLUTION, seriesEntries.size());
                 log.info("Found {} seriesEntries", seriesEntries.size());
                 log.info("Persisting {} seriesEntries", seriesEntries.size());
@@ -54,7 +53,7 @@ public class AgvolutionMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGVOLUTION, seriesEntries.size());
                 seriesEntries.forEach(seriesEntry -> persistDataWithinFiware(tenant, seriesEntry));
             }
-            lastRunService.updateLastRun(Manufacturer.AGVOLUTION);
+            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agvolution API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGVOLUTION);

@@ -1,7 +1,7 @@
 package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.LastRunService;
+import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.monitoring.JobMonitor;
@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class AgranimoMeasurementImport {
 
-    private final LastRunService lastRunService;
+    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final AgranimoSoilMoistureIntegrationService agranimoSoilMoistureIntegrationService;
     private final AgranimoZoneService agranimoZoneService;
@@ -37,11 +37,10 @@ public class AgranimoMeasurementImport {
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         var begin = Instant.now();
         try {
-            var lastRun = lastRunService.getLastRun(Manufacturer.AGRANIMO);
-            if (lastRun.isPresent()) {
+            if (null != thirdPartyApiConfiguration.getLastRun()) {
                 log.info("Running scheduled data import from Agranimo API");
                 agranimoZoneService.fetchZones(thirdPartyApiConfiguration).forEach(zone -> {
-                    var waterContent = agranimoSoilMoistureIntegrationService.fetchWaterContent(thirdPartyApiConfiguration, zone, lastRun.get());
+                    var waterContent = agranimoSoilMoistureIntegrationService.fetchWaterContent(thirdPartyApiConfiguration, zone, thirdPartyApiConfiguration.getLastRun().toInstant());
                     jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, waterContent.size());
                     log.info("Found {} water content entries", waterContent.size());
                     log.info("Persisting {} water content entries", waterContent.size());
@@ -62,7 +61,7 @@ public class AgranimoMeasurementImport {
                     );
                 });
             }
-            lastRunService.updateLastRun(Manufacturer.AGRANIMO);
+            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);

@@ -5,7 +5,7 @@ import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.business.GroupService;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DeviceMeasurement;
-import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.InstantAttribute;
 import de.app.fivegla.integration.fiware.model.internal.EmptyAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
@@ -43,10 +43,10 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var temperature = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("temperature"),
                 new NumberAttribute(sensorData.getTemperature()),
-                new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
+                new InstantAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
@@ -55,10 +55,10 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var moisture = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("moisture"),
                 new NumberAttribute(sensorData.getMoisture()),
-                new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
+                new InstantAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
@@ -67,10 +67,10 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var conductivity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("conductivity"),
                 new NumberAttribute(sensorData.getConductivity()),
-                new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
+                new InstantAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
@@ -79,10 +79,10 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var salinity = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("salinity"),
                 new NumberAttribute(sensorData.getSalinity()),
-                new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
+                new InstantAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());
@@ -91,10 +91,10 @@ public class SoilScoutFiwareIntegrationServiceWrapper {
         var waterBalance = new DeviceMeasurement(
                 tenant.getFiwarePrefix() + soilScoutSensor.getId(),
                 EntityType.SOILSCOUT_SENSOR.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute("waterBalance"),
                 new NumberAttribute(sensorData.getWaterBalance()),
-                new DateTimeAttribute(sensorData.getTimestamp().toInstant()),
+                new InstantAttribute(sensorData.getTimestamp().toInstant()),
                 new EmptyAttribute(),
                 soilScoutSensor.getLocation().getLatitude(),
                 soilScoutSensor.getLocation().getLongitude());

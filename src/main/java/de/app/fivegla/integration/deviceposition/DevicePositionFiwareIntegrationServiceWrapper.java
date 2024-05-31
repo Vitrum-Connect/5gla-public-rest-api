@@ -4,7 +4,7 @@ package de.app.fivegla.integration.deviceposition;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.DevicePosition;
-import de.app.fivegla.integration.fiware.model.internal.DateTimeAttribute;
+import de.app.fivegla.integration.fiware.model.internal.InstantAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -45,10 +45,10 @@ public class DevicePositionFiwareIntegrationServiceWrapper {
         var devicePosition = new DevicePosition(
                 tenant.getFiwarePrefix() + deviceId,
                 entityType.getKey(),
-                new TextAttribute(group.getGroupId()),
+                new TextAttribute(group.getOid()),
                 new TextAttribute(transactionId),
                 new TextAttribute(deviceId),
-                new DateTimeAttribute(Instant.now()),
+                new InstantAttribute(Instant.now()),
                 latitude,
                 longitude
         );

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Sascha Doemer | sascha.doemer@lmis.de
+      changes:
+        - sqlFile:
+            path: db/changelog/V1__create_internal_schema.sql
+  - changeSet:
+      id: 2
+      author: Sascha Doemer | sascha.doemer@lmis.de
+      changes:
+          - sqlFile:
+              path: db/changelog/V2__adapt_internal_schema.sql

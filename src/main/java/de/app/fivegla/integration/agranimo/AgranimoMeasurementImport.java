@@ -61,7 +61,6 @@ public class AgranimoMeasurementImport {
                     );
                 });
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);

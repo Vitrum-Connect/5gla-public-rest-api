@@ -56,7 +56,6 @@ public class SensoterraMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());
                 seriesEntries.entrySet().forEach(probeListEntry -> persistDataWithinFiware(tenant, probeListEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Sensoterra API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SENSOTERRA);

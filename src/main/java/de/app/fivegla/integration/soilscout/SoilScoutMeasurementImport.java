@@ -53,7 +53,6 @@ public class SoilScoutMeasurementImport {
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Soil Scout API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SOILSCOUT);

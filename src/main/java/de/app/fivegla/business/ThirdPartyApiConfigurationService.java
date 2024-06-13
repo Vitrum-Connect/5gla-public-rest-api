@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -73,5 +74,15 @@ public class ThirdPartyApiConfigurationService {
     public void updateLastRun(ThirdPartyApiConfiguration thirdPartyApiConfiguration) {
         thirdPartyApiConfiguration.setLastRun(Date.from(Instant.now()));
         thirdPartyApiConfigurationRepository.save(thirdPartyApiConfiguration);
+    }
+
+    /**
+     * Finds a ThirdPartyApiConfiguration by its ID.
+     *
+     * @param id The ID of the ThirdPartyApiConfiguration.
+     * @return An Optional containing the ThirdPartyApiConfiguration with the given ID, or an empty Optional if not found.
+     */
+    public Optional<ThirdPartyApiConfiguration> findById(Long id) {
+        return thirdPartyApiConfigurationRepository.findById(id);
     }
 }

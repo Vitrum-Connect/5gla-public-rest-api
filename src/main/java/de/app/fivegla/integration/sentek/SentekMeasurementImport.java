@@ -56,7 +56,6 @@ public class SentekMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, loggerListEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Sentek API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);

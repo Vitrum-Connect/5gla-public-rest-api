@@ -70,7 +70,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
         var thirdPartyApiConfiguration = request.toEntity();
         thirdPartyApiConfiguration.setTenant(tenant);
         var thirdPartyApiConfigurationCreated = thirdPartyApiConfigurationService.createThirdPartyApiConfiguration(thirdPartyApiConfiguration);
-        applicationEventPublisher.publishEvent(new DataImportEvent(thirdPartyApiConfigurationCreated));
+        applicationEventPublisher.publishEvent(new DataImportEvent(thirdPartyApiConfigurationCreated.getId()));
         var response = CreateThirdPartyApiConfigurationResponse.builder()
                 .thirdPartyApiConfiguration(ThirdPartyApiConfiguration.builder()
                         .tenantId(thirdPartyApiConfigurationCreated.getTenant().getTenantId())

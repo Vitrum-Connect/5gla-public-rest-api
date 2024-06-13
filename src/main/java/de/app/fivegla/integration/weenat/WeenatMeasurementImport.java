@@ -55,7 +55,6 @@ public class WeenatMeasurementImport {
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, plotMeasurementsEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Weenat API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.WEENAT);

@@ -53,7 +53,6 @@ public class AgvolutionMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGVOLUTION, seriesEntries.size());
                 seriesEntries.forEach(seriesEntry -> persistDataWithinFiware(tenant, seriesEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agvolution API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGVOLUTION);

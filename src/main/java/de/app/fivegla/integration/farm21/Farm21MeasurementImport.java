@@ -56,7 +56,6 @@ public class Farm21MeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, sensorListEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Farm21 API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.FARM21);

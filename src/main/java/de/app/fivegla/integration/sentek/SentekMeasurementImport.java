@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.sentek;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.monitoring.JobMonitor;

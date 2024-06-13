@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.soilscout;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.entity.Tenant;

@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;

@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.weenat;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
 import de.app.fivegla.monitoring.JobMonitor;

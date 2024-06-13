@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.monitoring.JobMonitor;

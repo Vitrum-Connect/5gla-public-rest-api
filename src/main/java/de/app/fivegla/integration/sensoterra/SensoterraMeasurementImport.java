@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.sensoterra;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.sensoterra.model.Probe;
 import de.app.fivegla.integration.sensoterra.model.ProbeData;
 import de.app.fivegla.monitoring.JobMonitor;

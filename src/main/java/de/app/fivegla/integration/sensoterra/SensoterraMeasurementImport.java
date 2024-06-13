@@ -27,7 +27,6 @@ import java.util.Map;
 public class SensoterraMeasurementImport {
 
     private final ProbeDataIntegrationService probeDataIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SensoterraFiwareIntegrationServiceWrapper sensoterraFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 

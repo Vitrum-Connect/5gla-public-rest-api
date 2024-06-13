@@ -26,7 +26,6 @@ import java.util.Map;
 public class WeenatMeasurementImport {
 
     private final WeenatMeasuresIntegrationService weenatMeasuresIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 

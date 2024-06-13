@@ -24,7 +24,6 @@ import java.time.temporal.ChronoUnit;
 public class AgvolutionMeasurementImport {
 
     private final AgvolutionSensorDataIntegrationService agvolutionSensorDataIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final AgvolutionFiwareIntegrationServiceWrapper agvolutionFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 

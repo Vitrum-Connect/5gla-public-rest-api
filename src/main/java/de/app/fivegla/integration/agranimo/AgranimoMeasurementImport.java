@@ -24,7 +24,6 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class AgranimoMeasurementImport {
 
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final AgranimoSoilMoistureIntegrationService agranimoSoilMoistureIntegrationService;
     private final AgranimoZoneService agranimoZoneService;

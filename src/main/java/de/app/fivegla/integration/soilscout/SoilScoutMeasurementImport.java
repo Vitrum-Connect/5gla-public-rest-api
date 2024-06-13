@@ -24,7 +24,6 @@ import java.time.temporal.ChronoUnit;
 public class SoilScoutMeasurementImport {
 
     private final SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SoilScoutFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 

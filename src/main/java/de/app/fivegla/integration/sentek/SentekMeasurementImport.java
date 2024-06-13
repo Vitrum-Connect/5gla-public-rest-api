@@ -27,7 +27,6 @@ import java.util.Map;
 public class SentekMeasurementImport {
 
     private final SentekSensorDataIntegrationService sentekSensorDataIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 

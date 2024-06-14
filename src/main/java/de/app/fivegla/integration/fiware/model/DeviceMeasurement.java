@@ -26,14 +26,14 @@ public record DeviceMeasurement(
     public String asJson() {
         validate();
         var json = "{" +
-                "  \"id\":\"" + id + "\"," +
-                "  \"type\":\"" + type + "\"," +
-                "  \"customGroup\":" + group.asJson() + "," +
-                "  \"name\":" + name.asJson() + "," +
-                "  \"controlledProperty\":" + controlledProperty.asJson() + "," +
-                "  \"externalDataReference\":" + externalDataReference.asJson() + "," +
-                "  \"dateCreated\":" + dateCreated.asJson() + "," +
-                "  \"location\":" + locationAsJson(latitude, longitude) +
+                "  \"id\":\"" + id.trim() + "\"," +
+                "  \"type\":\"" + type.trim() + "\"," +
+                "  \"customGroup\":" + group.asJson().trim() + "," +
+                "  \"name\":" + name.asJson().trim() + "," +
+                "  \"controlledProperty\":" + controlledProperty.asJson().trim() + "," +
+                "  \"externalDataReference\":" + externalDataReference.asJson().trim() + "," +
+                "  \"dateCreated\":" + dateCreated.asJson().trim() + "," +
+                "  \"location\":" + locationAsJson(latitude, longitude).trim() +
                 "}";
         log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);
         return json;

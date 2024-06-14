@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.farm21;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.farm21.model.Sensor;
 import de.app.fivegla.integration.farm21.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
@@ -27,7 +26,6 @@ import java.util.Map;
 public class Farm21MeasurementImport {
 
     private final Farm21SensorDataIntegrationService farm21SensorDataIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final Farm21FiwareIntegrationServiceWrapper farm21FiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -56,7 +54,6 @@ public class Farm21MeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
                 measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, sensorListEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Farm21 API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.FARM21);

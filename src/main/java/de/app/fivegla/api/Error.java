@@ -47,7 +47,8 @@ public enum Error {
     TRYING_TO_UPDATE_GROUP_FROM_ANOTHER_TENANT(errorOf(37)),
     TRYING_TO_ACCESS_GROUP_FROM_ANOTHER_TENANT(errorOf(38)),
     TRYING_TO_DELETE_GROUP_FROM_ANOTHER_TENANT(errorOf(39)),
-    DEFAULT_GROUP_FOR_TENANT_NOT_FOUND(errorOf(40));
+    DEFAULT_GROUP_FOR_TENANT_NOT_FOUND(errorOf(40)),
+    THIRD_PARTY_API_CONFIGURATION_NOT_FOUND(errorOf(41));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

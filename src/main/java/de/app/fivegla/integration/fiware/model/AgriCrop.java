@@ -25,11 +25,11 @@ public record AgriCrop(
     public String asJson() {
         validate();
         var json = "{" +
-                "  \"id\":\"" + id + "\"," +
-                "  \"type\":\"" + type + "\"," +
-                "  \"customGroup\":" + group.asJson() + "," +
-                "  \"dateCreated\":" + dateCreated.asJson() + "," +
-                "  \"coordinates\":" + coordinatesAsJson(coordinates) +
+                "  \"id\":\"" + id.trim() + "\"," +
+                "  \"type\":\"" + type.trim() + "\"," +
+                "  \"customGroup\":" + group.asJson().trim() + "," +
+                "  \"dateCreated\":" + dateCreated.asJson().trim() + "," +
+                "  \"coordinates\":" + coordinatesAsJson(coordinates).trim() +
                 "}";
         log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);
         return json;

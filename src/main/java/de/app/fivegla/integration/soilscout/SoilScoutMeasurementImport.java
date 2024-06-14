@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.soilscout;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.soilscout.model.SensorData;
 import de.app.fivegla.monitoring.JobMonitor;
 import de.app.fivegla.persistence.entity.Tenant;
@@ -24,7 +23,6 @@ import java.time.temporal.ChronoUnit;
 public class SoilScoutMeasurementImport {
 
     private final SoilScoutMeasurementIntegrationService soilScoutMeasurementIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SoilScoutFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -53,7 +51,6 @@ public class SoilScoutMeasurementImport {
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Soil Scout API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SOILSCOUT);

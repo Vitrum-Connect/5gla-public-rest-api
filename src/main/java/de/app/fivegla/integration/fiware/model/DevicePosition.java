@@ -25,13 +25,13 @@ public record DevicePosition(
     public String asJson() {
         validate();
         var json = "{" +
-                "  \"id\":\"" + id + "\"," +
-                "  \"type\":\"" + type + "\"," +
-                "  \"customGroup\":" + group.asJson() + "," +
-                "  \"transactionId\":" + transactionId.asJson() + "," +
-                "  \"deviceId\":" + deviceId.asJson() + "," +
-                "  \"dateCreated\":" + dateCreated.asJson() + "," +
-                "  \"location\":" + locationAsJson(latitude, longitude) +
+                "  \"id\":\"" + id.trim() + "\"," +
+                "  \"type\":\"" + type.trim() + "\"," +
+                "  \"customGroup\":" + group.asJson().trim() + "," +
+                "  \"transactionId\":" + transactionId.asJson().trim() + "," +
+                "  \"deviceId\":" + deviceId.asJson().trim() + "," +
+                "  \"dateCreated\":" + dateCreated.asJson().trim() + "," +
+                "  \"location\":" + locationAsJson(latitude, longitude).trim() +
                 "}";
         log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);
         return json;

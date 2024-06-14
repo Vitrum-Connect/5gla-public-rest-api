@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.weenat;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.weenat.model.Measurements;
 import de.app.fivegla.integration.weenat.model.Plot;
 import de.app.fivegla.monitoring.JobMonitor;
@@ -26,7 +25,6 @@ import java.util.Map;
 public class WeenatMeasurementImport {
 
     private final WeenatMeasuresIntegrationService weenatMeasuresIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final WeenatFiwareIntegrationServiceWrapper weenatFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -55,7 +53,6 @@ public class WeenatMeasurementImport {
                 log.info("Persisting {} measurements", measurements.size());
                 measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, plotMeasurementsEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Weenat API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.WEENAT);

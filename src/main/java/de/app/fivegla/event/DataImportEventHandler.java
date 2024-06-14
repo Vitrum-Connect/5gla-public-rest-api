@@ -1,14 +1,14 @@
 package de.app.fivegla.event;
 
-import de.app.fivegla.api.SubscriptionStatus;
-import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.api.Error;
+import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.TenantService;
+import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.event.events.DataImportEvent;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
-import de.app.fivegla.integration.fiware.SubscriptionIntegrationService;
 import de.app.fivegla.integration.sensoterra.SensoterraMeasurementImport;
 import de.app.fivegla.integration.sentek.SentekMeasurementImport;
 import de.app.fivegla.integration.soilscout.SoilScoutMeasurementImport;
@@ -33,43 +33,36 @@ public class DataImportEventHandler {
     private final SensoterraMeasurementImport sensoterraMeasurementImport;
     private final SentekMeasurementImport sentekMeasurementImport;
     private final WeenatMeasurementImport weenatMeasurementImport;
-    private final SubscriptionStatus subscriptionStatus;
     private final TenantService tenantService;
-    private final SubscriptionIntegrationService subscriptionService;
+    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
-        log.info("Handling data import event for tenant {} and manufacturer {}.", dataImportEvent.thirdPartyApiConfiguration().getTenant().getTenantId(), dataImportEvent.thirdPartyApiConfiguration().getManufacturer());
-        var manufacturer = dataImportEvent.thirdPartyApiConfiguration().getManufacturer();
-        var tenantId = dataImportEvent.thirdPartyApiConfiguration().getTenant().getTenantId();
+        var thirdPartyApiConfiguration = thirdPartyApiConfigurationService.findById(dataImportEvent.thirdPartyApiConfigurationId())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                        .error(Error.THIRD_PARTY_API_CONFIGURATION_NOT_FOUND)
+                        .message("Third party API configuration not found.")
+                        .build()));
+        log.info("Handling data import event for tenant {} and manufacturer {}.", thirdPartyApiConfiguration.getTenant().getTenantId(), thirdPartyApiConfiguration.getManufacturer());
+        var manufacturer = thirdPartyApiConfiguration.getManufacturer();
+        var tenantId = thirdPartyApiConfiguration.getTenant().getTenantId();
         var optionalTenant = tenantService.findByTenantId(tenantId);
         if (optionalTenant.isEmpty()) {
             log.error("Tenant with id {} not found, not able to handle data import event", tenantId);
         } else {
             var tenant = optionalTenant.get();
-            var config = dataImportEvent.thirdPartyApiConfiguration();
-            if (subscriptionStatus.sendOutSubscriptions(tenantId)) {
-                try {
-                    subscriptionService.subscribe(tenant, EntityType.values());
-                    log.info("Subscribed to device measurement notifications.");
-                    subscriptionStatus.subscriptionSent(tenantId);
-                } catch (BusinessException e) {
-                    log.error("Could not subscribe to device measurement notifications.", e);
-                }
-            } else {
-                log.info("Subscriptions are disabled. Not subscribing to device measurement notifications.");
-            }
             switch (manufacturer) {
-                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant, config);
-                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant, config);
-                case AGRANIMO -> agranimoMeasurementImport.run(tenant, config);
-                case FARM21 -> farm21MeasurementImport.run(tenant, config);
-                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, config);
-                case SENTEK -> sentekMeasurementImport.run(tenant, config);
-                case WEENAT -> weenatMeasurementImport.run(tenant, config);
+                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant, thirdPartyApiConfiguration);
+                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant, thirdPartyApiConfiguration);
+                case AGRANIMO -> agranimoMeasurementImport.run(tenant, thirdPartyApiConfiguration);
+                case FARM21 -> farm21MeasurementImport.run(tenant, thirdPartyApiConfiguration);
+                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, thirdPartyApiConfiguration);
+                case SENTEK -> sentekMeasurementImport.run(tenant, thirdPartyApiConfiguration);
+                case WEENAT -> weenatMeasurementImport.run(tenant, thirdPartyApiConfiguration);
                 default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
             }
         }
+        thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
     }
 
 }

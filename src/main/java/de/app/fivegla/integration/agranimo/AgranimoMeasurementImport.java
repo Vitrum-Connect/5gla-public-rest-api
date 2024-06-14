@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.agranimo;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.agranimo.model.SoilMoisture;
 import de.app.fivegla.integration.agranimo.model.Zone;
 import de.app.fivegla.monitoring.JobMonitor;
@@ -24,7 +23,6 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class AgranimoMeasurementImport {
 
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final AgranimoFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final AgranimoSoilMoistureIntegrationService agranimoSoilMoistureIntegrationService;
     private final AgranimoZoneService agranimoZoneService;
@@ -61,7 +59,6 @@ public class AgranimoMeasurementImport {
                     );
                 });
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Agranimo API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);

@@ -1,7 +1,6 @@
 package de.app.fivegla.integration.sentek;
 
 import de.app.fivegla.api.Manufacturer;
-import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.integration.sentek.model.csv.Reading;
 import de.app.fivegla.integration.sentek.model.xml.Logger;
 import de.app.fivegla.monitoring.JobMonitor;
@@ -27,7 +26,6 @@ import java.util.Map;
 public class SentekMeasurementImport {
 
     private final SentekSensorDataIntegrationService sentekSensorDataIntegrationService;
-    private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
     private final SentekFiwareIntegrationServiceWrapper sentekFiwareIntegrationServiceWrapper;
     private final JobMonitor jobMonitor;
 
@@ -56,7 +54,6 @@ public class SentekMeasurementImport {
                 jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
                 measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, loggerListEntry));
             }
-            thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
         } catch (Exception e) {
             log.error("Error while running scheduled data import from Sentek API", e);
             jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);

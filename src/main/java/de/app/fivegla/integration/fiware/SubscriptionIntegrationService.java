@@ -47,6 +47,7 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      *                    each representing a different type.
      */
     public void subscribe(Tenant tenant, EntityType... entityTypes) {
+        removeAll(tenant); // FIXME adjust and update subscriptions instead of removing all
         var httpClient = HttpClient.newHttpClient();
         var subscriptions = createSubscriptions(entityTypes);
         for (var subscription : subscriptions) {
@@ -109,16 +110,6 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                     .build());
         }
         return entities;
-    }
-
-    /**
-     * Removes all subscriptions of the specified type.
-     *
-     * @param tenant the tenant to remove subscriptions for
-     * @param type   the type of subscriptions to be removed
-     */
-    public void removeAll(Tenant tenant, EntityType type) {
-        findAll(tenant, type).forEach(subscription -> removeSubscription(tenant, subscription));
     }
 
     /**

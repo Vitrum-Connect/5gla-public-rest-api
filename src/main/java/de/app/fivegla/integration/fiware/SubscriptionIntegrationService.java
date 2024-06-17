@@ -121,6 +121,15 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
         findAll(tenant, type).forEach(subscription -> removeSubscription(tenant, subscription));
     }
 
+    /**
+     * Removes all subscriptions of the specified type.
+     *
+     * @param tenant the tenant to remove subscriptions for
+     */
+    public void removeAll(Tenant tenant) {
+        findAll(tenant).forEach(subscription -> removeSubscription(tenant, subscription));
+    }
+
     private void removeSubscription(Tenant tenant, Subscription subscription) {
         var httpClient = HttpClient.newHttpClient();
         var httpRequest = HttpRequest.newBuilder()
@@ -156,6 +165,18 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      * @return A list of Subscription objects matching the given entityType.
      */
     public List<Subscription> findAll(Tenant tenant, EntityType entityType) {
+        return findAll(tenant).stream().filter(subscription -> subscription.getSubject().getEntities()
+                .stream()
+                .anyMatch(entity -> entity.getType().equals(entityType.getKey()))).toList();
+    }
+
+    /**
+     * Finds all subscriptions of a given entityType.
+     *
+     * @param tenant The tenant to find subscriptions for.
+     * @return A list of Subscription objects matching the given entityType.
+     */
+    public List<Subscription> findAll(Tenant tenant) {
         var httpClient = HttpClient.newHttpClient();
         var httpRequest = HttpRequest.newBuilder()
                 .header(CustomHeader.FIWARE_SERVICE, tenant.getTenantId())
@@ -172,9 +193,7 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                         .build());
             } else {
                 log.info("Subscription found successfully.");
-                return toListOfObjects(response.body()).stream().filter(subscription -> subscription.getSubject().getEntities()
-                        .stream()
-                        .anyMatch(entity -> entity.getType().equals(entityType.getKey()))).toList();
+                return toListOfObjects(response.body());
             }
         } catch (Exception e) {
             log.error("Could not find subscriptions.", e);

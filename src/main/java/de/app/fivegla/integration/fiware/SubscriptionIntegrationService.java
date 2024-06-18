@@ -47,6 +47,7 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      *                    each representing a different type.
      */
     public void subscribe(Tenant tenant, EntityType... entityTypes) {
+        removeAll(tenant); // FIXME adjust and update subscriptions instead of removing all
         var httpClient = HttpClient.newHttpClient();
         var subscriptions = createSubscriptions(entityTypes);
         for (var subscription : subscriptions) {
@@ -115,10 +116,9 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      * Removes all subscriptions of the specified type.
      *
      * @param tenant the tenant to remove subscriptions for
-     * @param type   the type of subscriptions to be removed
      */
-    public void removeAll(Tenant tenant, EntityType type) {
-        findAll(tenant, type).forEach(subscription -> removeSubscription(tenant, subscription));
+    public void removeAll(Tenant tenant) {
+        findAll(tenant).forEach(subscription -> removeSubscription(tenant, subscription));
     }
 
     private void removeSubscription(Tenant tenant, Subscription subscription) {
@@ -156,6 +156,18 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
      * @return A list of Subscription objects matching the given entityType.
      */
     public List<Subscription> findAll(Tenant tenant, EntityType entityType) {
+        return findAll(tenant).stream().filter(subscription -> subscription.getSubject().getEntities()
+                .stream()
+                .anyMatch(entity -> entity.getType().equals(entityType.getKey()))).toList();
+    }
+
+    /**
+     * Finds all subscriptions of a given entityType.
+     *
+     * @param tenant The tenant to find subscriptions for.
+     * @return A list of Subscription objects matching the given entityType.
+     */
+    public List<Subscription> findAll(Tenant tenant) {
         var httpClient = HttpClient.newHttpClient();
         var httpRequest = HttpRequest.newBuilder()
                 .header(CustomHeader.FIWARE_SERVICE, tenant.getTenantId())
@@ -172,9 +184,7 @@ public class SubscriptionIntegrationService extends AbstractIntegrationService {
                         .build());
             } else {
                 log.info("Subscription found successfully.");
-                return toListOfObjects(response.body()).stream().filter(subscription -> subscription.getSubject().getEntities()
-                        .stream()
-                        .anyMatch(entity -> entity.getType().equals(entityType.getKey()))).toList();
+                return toListOfObjects(response.body());
             }
         } catch (Exception e) {
             log.error("Could not find subscriptions.", e);

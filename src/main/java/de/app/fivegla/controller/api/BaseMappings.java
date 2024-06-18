@@ -31,4 +31,5 @@ public class BaseMappings {
     public static final String THIRD_PARTY_API_CONFIGURATION = SECURED_BY_TENANT + "/3rd-party-api-configuration";
     public static final String DEVICE_POSITION = SECURED_BY_TENANT + "/device-position";
     public static final String GROUPS = SECURED_BY_TENANT + "/groups";
+    public static final String SUBSCRIPTION = SECURED_BY_TENANT + "/subscription";
 }

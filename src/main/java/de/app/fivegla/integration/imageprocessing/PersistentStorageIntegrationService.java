@@ -44,10 +44,11 @@ public class PersistentStorageIntegrationService {
                         .build());
                 log.debug("Bucket {} created.", transactionId);
             }
+            var imageAsRawData = image.getImageAsRawData();
             client.putObject(PutObjectArgs.builder()
                     .bucket(transactionId)
                     .object(image.getName())
-                    .stream(new ByteArrayInputStream(image.getBase64encodedImage().getBytes()), image.getBase64encodedImage().length(), -1)
+                    .stream(new ByteArrayInputStream(imageAsRawData), imageAsRawData.length, -1)
                     .build());
         } catch (Exception e) {
             log.error("Could not store image on S3.", e);

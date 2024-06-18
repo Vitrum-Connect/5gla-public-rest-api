@@ -14,6 +14,10 @@ app:
       notificationUrls: ${NOTIFICATION_URLS}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
+  s3:
+    endpoint: ${S3_ENDPOINT}
+    username: ${S3_USERNAME}
+    password: ${S3_PASSWORD}
 logging:
   level:
     root: info

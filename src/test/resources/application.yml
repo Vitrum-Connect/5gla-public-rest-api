@@ -15,6 +15,10 @@ app:
       notificationUrls: https://cygnus1.5gla.de, https://cygnus2.5gla.de
   cors:
     allowed-origins: "http://localhost:8080,https://app.5gla.de/"
+  s3:
+    endpoint: http://localhost:9000
+    username: minio
+    password: minio
 logging:
   level:
     root: info

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -80,4 +81,22 @@ public class Image extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "tenant_id", nullable = false)
     private Tenant tenant;
+
+    /**
+     * Returns the image as raw data.
+     *
+     * @return the image as raw data
+     */
+    public byte[] getImageAsRawData() {
+        return Base64.getDecoder().decode(base64encodedImage);
+    }
+
+    /**
+     * Returns the name of the image.
+     *
+     * @return the name of the image
+     */
+    public String getName() {
+        return droneId + channel.name() + measuredAt.toInstant().getEpochSecond() + ".tiff";
+    }
 }

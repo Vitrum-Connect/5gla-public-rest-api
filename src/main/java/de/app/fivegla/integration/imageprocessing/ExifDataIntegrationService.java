@@ -42,7 +42,7 @@ public class ExifDataIntegrationService {
             return new GeometryFactory().createPoint(new Coordinate(gps.getLongitudeAsDegreesEast(), gps.getLatitudeAsDegreesNorth()));
         } catch (Exception e) {
             log.error("Could not read image metadata", e);
-            var errorMessage = ErrorMessage.builder().error(Error.MICASENSE_COULD_NOT_READ_IMAGE_METADATA).message("Could not read image metadata, please see log for more details.").build();
+            var errorMessage = ErrorMessage.builder().error(Error.COULD_NOT_READ_IMAGE_METADATA).message("Could not read image metadata, please see log for more details.").build();
             throw new BusinessException(errorMessage);
         }
     }
@@ -65,7 +65,7 @@ public class ExifDataIntegrationService {
             var tiffField = tiffFieldRef.get();
             if (null == tiffField) {
                 log.error("Could not find date time in image metadata");
-                var errorMessage = ErrorMessage.builder().error(Error.MICASENSE_COULD_NOT_READ_IMAGE_METADATA).message("Could not read image metadata, please see log for more details.").build();
+                var errorMessage = ErrorMessage.builder().error(Error.COULD_NOT_READ_IMAGE_METADATA).message("Could not read image metadata, please see log for more details.").build();
                 throw new BusinessException(errorMessage);
             } else {
                 var dateTime = tiffField.getValueDescription().replace("'", "");
@@ -74,7 +74,7 @@ public class ExifDataIntegrationService {
             }
         } catch (Exception e) {
             log.error("Could not read image metadata", e);
-            var errorMessage = ErrorMessage.builder().error(Error.MICASENSE_COULD_NOT_READ_IMAGE_METADATA).message("Could not read image metadata, please see log for more details.").build();
+            var errorMessage = ErrorMessage.builder().error(Error.COULD_NOT_READ_IMAGE_METADATA).message("Could not read image metadata, please see log for more details.").build();
             throw new BusinessException(errorMessage);
         }
     }

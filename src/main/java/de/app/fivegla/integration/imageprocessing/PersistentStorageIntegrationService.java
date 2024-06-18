@@ -21,11 +21,11 @@ public class PersistentStorageIntegrationService {
     @Value("${app.s3.endpoint}")
     private String endpoint;
 
-    @Value("${app.s3.username}")
-    private String username;
+    @Value("${app.s3.accessKey}")
+    private String accessKey;
 
-    @Value("${app.s3.password}")
-    private String password;
+    @Value("${app.s3.secretKey}")
+    private String secretKey;
 
     /**
      * Stores an image on S3.
@@ -58,8 +58,8 @@ public class PersistentStorageIntegrationService {
 
     private MinioClient.Builder minioClientBuilder() {
         return MinioClient.builder()
-                .endpoint("http://127.0.0.1:9000")
-                .credentials("minioadmin", "minioadmin");
+                .endpoint(endpoint)
+                .credentials(accessKey, secretKey);
     }
 
 }

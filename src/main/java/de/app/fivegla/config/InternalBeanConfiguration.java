@@ -60,7 +60,7 @@ public class InternalBeanConfiguration {
      * @return The SubscriptionService instance.
      */
     @Bean
-    public SubscriptionIntegrationService subscriptionService() {
+    public SubscriptionIntegrationService subscriptionIntegrationService() {
         return new SubscriptionIntegrationService(contextBrokerUrl, List.of(notificationUrls));
     }
 

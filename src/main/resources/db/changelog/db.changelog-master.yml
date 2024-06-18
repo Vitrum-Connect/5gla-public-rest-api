@@ -11,3 +11,9 @@ databaseChangeLog:
       changes:
           - sqlFile:
               path: db/changelog/V2__adapt_internal_schema.sql
+  - changeSet:
+      id: 3
+      author: Sascha Doemer | sascha.doemer@lmis.de
+      changes:
+          - sqlFile:
+              path: db/changelog/V3__adapt_internal_schema_for_images.sql

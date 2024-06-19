@@ -14,6 +14,10 @@ app:
       notificationUrls: ${NOTIFICATION_URLS}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
+  s3:
+    endpoint: ${S3_ENDPOINT}
+    accessKey: ${S3_ACCESS_KEY}
+    secretKey: ${S3_SECRET_KEY}
 logging:
   level:
     root: info

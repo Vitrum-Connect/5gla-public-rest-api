@@ -22,6 +22,7 @@ public class ImageProcessingIntegrationService {
 
     private final ExifDataIntegrationService exifDataIntegrationService;
     private final ImageProcessingFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
+    private final PersistentStorageIntegrationService persistentStorageIntegrationService;
     private final ImageRepository imageRepository;
 
     /**
@@ -51,6 +52,7 @@ public class ImageProcessingIntegrationService {
         var micaSenseImage = imageRepository.save(image);
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
         fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, group, droneId, micaSenseImage);
+        persistentStorageIntegrationService.storeImage(transactionId, micaSenseImage);
         return micaSenseImage.getOid();
     }
 

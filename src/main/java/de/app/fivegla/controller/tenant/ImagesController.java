@@ -7,6 +7,7 @@ import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.GetAllImagesForTransactionRequest;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
+import de.app.fivegla.controller.dto.response.AllTransactionsForTenantResponse;
 import de.app.fivegla.controller.dto.response.GetAllImagesForTransactionResponse;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
@@ -30,6 +31,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -95,8 +97,16 @@ public class ImagesController implements TenantCredentialApiAccess {
             to = Instant.now().minus(defaultSearchIntervalInDays, ChronoUnit.DAYS);
         }
         var allTransactionsWithinTheTimeRange = imageProcessingIntegrationService.listAllTransactionsForTenant(from, to, tenant.getTenantId());
-
-        return ResponseEntity.ok().build();
+        var mappedValues = new HashMap<String, Instant>();
+        allTransactionsWithinTheTimeRange.forEach(t -> {
+            mappedValues.put(t.transactionId(), t.timestampOfTheFirstImage());
+        });
+        var response = AllTransactionsForTenantResponse.builder()
+                .from(from)
+                .to(to)
+                .transactionIdWithTheFirstImageTimestamp(mappedValues)
+                .build();
+        return ResponseEntity.ok(response);
 
     }
 

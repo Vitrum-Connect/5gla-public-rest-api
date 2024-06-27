@@ -36,7 +36,7 @@ public class Image extends BaseEntity {
     private String transactionId;
 
     /**
-     * The channel of the image since the value can not be read from the EXIF.
+     * The channel of the image since the value cannot be read from the EXIF.
      */
     @Column(name = "image_channel", nullable = false)
     @Enumerated(EnumType.STRING)

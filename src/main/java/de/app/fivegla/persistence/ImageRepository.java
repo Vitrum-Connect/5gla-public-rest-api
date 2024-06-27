@@ -2,6 +2,7 @@ package de.app.fivegla.persistence;
 
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Image;
+import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -43,4 +44,13 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
      * @param group The group to filter the images by.
      */
     List<Image> findByGroup(Group group);
+
+    /**
+     * Finds images by transaction id and channel.
+     *
+     * @param transactionId The transaction id.
+     * @param channel       The channel of the image.
+     * @return The images with the given transaction id and channel.
+     */
+    List<Image> findByTransactionIdAndChannel(String transactionId, ImageChannel channel);
 }

@@ -5,10 +5,13 @@ import de.app.fivegla.business.GroupService;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
+import de.app.fivegla.controller.dto.request.GetAllImagesForTransactionRequest;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
+import de.app.fivegla.controller.dto.response.GetAllImagesForTransactionResponse;
 import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
 import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
 import de.app.fivegla.integration.imageprocessing.ImageProcessingIntegrationService;
+import de.app.fivegla.persistence.entity.Image;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,7 +35,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(BaseMappings.IMAGE_PROCESSING + "/images")
-public class ImageProcessingController implements TenantCredentialApiAccess {
+public class ImagesController implements TenantCredentialApiAccess {
 
     private final ImageProcessingIntegrationService imageProcessingIntegrationService;
     private final TenantService tenantService;
@@ -75,6 +78,39 @@ public class ImageProcessingController implements TenantCredentialApiAccess {
         });
         return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
                 .oids(oids)
+                .build());
+    }
+
+    /**
+     * Return all images for a transaction.
+     */
+    @Operation(
+            operationId = "images.get-all-images-for-transaction",
+            description = "Returns all images for a transaction.",
+            tags = BaseMappings.IMAGE_PROCESSING
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The images were found and returned.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = byte[].class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @GetMapping(value = "/transaction", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getAllImagesForTransaction(@Valid @RequestBody @Parameter(description = "The request to search for images.", required = true) GetAllImagesForTransactionRequest request) {
+        var images = imageProcessingIntegrationService.getAllImagesForTransaction(request.getTransactionId(), request.getChannel());
+        var imagesAsBase64EncodedData = images.stream().map(Image::getBase64encodedImage).toList();
+        return ResponseEntity.ok(GetAllImagesForTransactionResponse.builder()
+                .imagesAsBase64EncodedData(imagesAsBase64EncodedData)
                 .build());
     }
 

@@ -79,4 +79,14 @@ public class ImageProcessingIntegrationService {
                 .toList();
     }
 
+    /**
+     * Retrieves all images for a given transaction.
+     *
+     * @param transactionId the ID of the transaction
+     * @param channel       the channel of the image
+     * @return a list of images associated with the transaction
+     */
+    public List<Image> getAllImagesForTransaction(String transactionId, ImageChannel channel) {
+        return imageRepository.findByTransactionIdAndChannel(transactionId, channel);
+    }
 }

@@ -20,10 +20,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,6 +44,9 @@ public class ImagesController implements TenantCredentialApiAccess {
     private final ImageProcessingIntegrationService imageProcessingIntegrationService;
     private final TenantService tenantService;
     private final GroupService groupService;
+
+    @Value("${app.defaultSearchIntervalInDays}")
+    private long defaultSearchIntervalInDays;
 
     /**
      * Processes one or multiple images from the mica sense camera.
@@ -81,6 +88,18 @@ public class ImagesController implements TenantCredentialApiAccess {
                 .build());
     }
 
+    @GetMapping(value = "/transaction", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> listAllTransactionsForTenant(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(description = "Start of the search interval.") Instant from, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(description = "End of the search interval.") Instant to, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        if (to == null) {
+            to = Instant.now().minus(defaultSearchIntervalInDays, ChronoUnit.DAYS);
+        }
+        var allTransactionsWithinTheTimeRange = imageProcessingIntegrationService.listAllTransactionsForTenant(from, to, tenant.getTenantId());
+
+        return ResponseEntity.ok().build();
+
+    }
+
     /**
      * Return all images for a transaction.
      */
@@ -105,9 +124,10 @@ public class ImagesController implements TenantCredentialApiAccess {
                     schema = @Schema(implementation = Response.class)
             )
     )
-    @GetMapping(value = "/transaction", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<? extends Response> getAllImagesForTransaction(@Valid @RequestBody @Parameter(description = "The request to search for images.", required = true) GetAllImagesForTransactionRequest request) {
-        var images = imageProcessingIntegrationService.getAllImagesForTransaction(request.getTransactionId(), request.getChannel());
+    @PostMapping(value = "/images-for-transaction", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> getAllImagesForTransaction(@Valid @RequestBody @Parameter(description = "The request to search for images.", required = true) GetAllImagesForTransactionRequest request, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        var images = imageProcessingIntegrationService.getAllImagesForTransaction(request.getTransactionId(), request.getChannel(), tenant.getTenantId());
         var imagesAsBase64EncodedData = images.stream().map(Image::getBase64encodedImage).toList();
         return ResponseEntity.ok(GetAllImagesForTransactionResponse.builder()
                 .imagesAsBase64EncodedData(imagesAsBase64EncodedData)

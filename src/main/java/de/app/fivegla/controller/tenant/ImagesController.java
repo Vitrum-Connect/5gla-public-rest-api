@@ -98,9 +98,7 @@ public class ImagesController implements TenantCredentialApiAccess {
         }
         var allTransactionsWithinTheTimeRange = imageProcessingIntegrationService.listAllTransactionsForTenant(from, to, tenant.getTenantId());
         var mappedValues = new HashMap<String, Instant>();
-        allTransactionsWithinTheTimeRange.forEach(t -> {
-            mappedValues.put(t.transactionId(), t.timestampOfTheFirstImage());
-        });
+        allTransactionsWithinTheTimeRange.forEach(t -> mappedValues.put(t.transactionId(), t.timestampOfTheFirstImage()));
         var response = AllTransactionsForTenantResponse.builder()
                 .from(from)
                 .to(to)

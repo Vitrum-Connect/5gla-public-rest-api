@@ -1,6 +1,7 @@
 package de.app.fivegla.integration.imageprocessing;
 
 import de.app.fivegla.api.dto.SortableImageOids;
+import de.app.fivegla.integration.imageprocessing.dto.TransactionIdWithTheFirstImageTimestamp;
 import de.app.fivegla.persistence.ImageRepository;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Image;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -79,4 +81,35 @@ public class ImageProcessingIntegrationService {
                 .toList();
     }
 
+    /**
+     * Retrieves all images for a given transaction.
+     *
+     * @param transactionId the ID of the transaction
+     * @param channel       the channel of the image
+     * @param tenantId      the ID of the tenant
+     * @return a list of images associated with the transaction
+     */
+    public List<Image> getAllImagesForTransaction(String transactionId, ImageChannel channel, String tenantId) {
+        return imageRepository.findByTransactionIdAndChannelAndTenantTenantId(transactionId, channel, tenantId);
+    }
+
+    /**
+     * Retrieves a list of TransactionIdWithTheFirstImageTimestamp objects for a given tenant
+     * within a specified time frame.
+     *
+     * @param from     the starting time instant
+     * @param to       the ending time instant
+     * @param tenantId the unique identifier for the tenant
+     * @return a list of TransactionIdWithTheFirstImageTimestamp objects
+     */
+    public List<TransactionIdWithTheFirstImageTimestamp> listAllTransactionsForTenant(Instant from, Instant to, String tenantId) {
+        var allTransactionsForTenant = new ArrayList<TransactionIdWithTheFirstImageTimestamp>();
+        var allTransactionIdsWithinTimeFrame = imageRepository.findAllTransactionIdsWithinTimeFrame(tenantId, from, to);
+        for (String transactionId : allTransactionIdsWithinTimeFrame) {
+            var image = imageRepository.findFirstByTransactionIdOrderByMeasuredAtAsc(transactionId);
+            var transactionIdWithTheFirstImageTimestamp = new TransactionIdWithTheFirstImageTimestamp(transactionId, image.getMeasuredAt().toInstant());
+            allTransactionsForTenant.add(transactionIdWithTheFirstImageTimestamp);
+        }
+        return allTransactionsForTenant;
+    }
 }

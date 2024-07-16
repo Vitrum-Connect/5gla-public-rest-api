@@ -27,6 +27,9 @@ public class PersistentStorageIntegrationService {
     @Value("${app.s3.secretKey}")
     private String secretKey;
 
+    @Value("${app.s3.preConfiguredBucketName}")
+    private String preConfiguredBucketName;
+
     /**
      * Stores an image on S3.
      *
@@ -37,17 +40,17 @@ public class PersistentStorageIntegrationService {
         try (var client = minioClientBuilder()
                 .build()) {
             if (!client.bucketExists(BucketExistsArgs.builder()
-                    .bucket(transactionId)
+                    .bucket(preConfiguredBucketName)
                     .build())) {
                 client.makeBucket(MakeBucketArgs.builder()
-                        .bucket(transactionId)
+                        .bucket(preConfiguredBucketName)
                         .build());
                 log.debug("Bucket {} created.", transactionId);
             }
             var imageAsRawData = image.getImageAsRawData();
             client.putObject(PutObjectArgs.builder()
-                    .bucket(transactionId)
-                    .object(image.getName())
+                    .bucket(preConfiguredBucketName)
+                    .object(image.getFullFilename(image.getTenant()))
                     .stream(new ByteArrayInputStream(imageAsRawData), imageAsRawData.length, -1)
                     .build());
         } catch (Exception e) {

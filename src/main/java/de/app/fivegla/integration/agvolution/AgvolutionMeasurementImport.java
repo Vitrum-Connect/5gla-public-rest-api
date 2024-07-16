@@ -61,6 +61,29 @@ public class AgvolutionMeasurementImport {
         }
     }
 
+    /**
+     * Run scheduled data import.
+     */
+    @Async
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
+        var begin = Instant.now();
+        try {
+            log.info("Running historical data import from Agvolution API, this may take a while");
+            var seriesEntries = agvolutionSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, start);
+            log.info("Found {} seriesEntries", seriesEntries.size());
+            log.info("Persisting {} seriesEntries", seriesEntries.size());
+            jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGVOLUTION, seriesEntries.size());
+            seriesEntries.forEach(seriesEntry -> persistDataWithinFiware(tenant, seriesEntry));
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Agvolution API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.AGVOLUTION);
+        } finally {
+            log.info("Finished scheduled data import from Agvolution API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.AGVOLUTION, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
     private void persistDataWithinFiware(Tenant tenant, SeriesEntry seriesEntry) {
         try {
             agvolutionFiwareIntegrationServiceWrapper.persist(tenant, seriesEntry);

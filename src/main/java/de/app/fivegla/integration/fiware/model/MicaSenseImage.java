@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  * Device measurement.
  */
 @Slf4j
-public record DroneDeviceMeasurement(
+public record MicaSenseImage(
         String id,
         String type,
         Attribute group,

@@ -3,7 +3,7 @@ package de.app.fivegla.integration.imageprocessing;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
-import de.app.fivegla.integration.fiware.model.DroneDeviceMeasurement;
+import de.app.fivegla.integration.fiware.model.MicaSenseImage;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Image;
@@ -31,7 +31,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
      * @param image the image to create the measurement for
      */
     public void createDroneDeviceMeasurement(Tenant tenant, Group group, String droneId, Image image) {
-        var deviceMeasurement = new DroneDeviceMeasurement(
+        var deviceMeasurement = new MicaSenseImage(
                 tenant.getFiwarePrefix() + droneId,
                 EntityType.MICASENSE_IMAGE.getKey(),
                 new TextAttribute(group.getOid()),

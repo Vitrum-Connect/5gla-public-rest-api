@@ -62,7 +62,7 @@ public class AgvolutionMeasurementImport {
     }
 
     /**
-     * Run scheduled data import.
+     * Run historical data import.
      */
     @Async
     public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {

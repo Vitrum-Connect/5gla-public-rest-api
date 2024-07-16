@@ -22,7 +22,7 @@ import java.util.Optional;
 public class ThirdPartyApiConfigurationService {
 
     private final ThirdPartyApiConfigurationRepository thirdPartyApiConfigurationRepository;
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Creates a third-party API configuration and adds it to the system.
@@ -94,14 +94,14 @@ public class ThirdPartyApiConfigurationService {
     /**
      * Triggers the import of historical data for a given tenant and UUID starting from a specific date.
      *
-     * @param tenantId         the ID of the tenant for which the import will be triggered
-     * @param uuid             the UUID associated with the tenant
+     * @param tenantId           the ID of the tenant for which the import will be triggered
+     * @param uuid               the UUID associated with the tenant
      * @param startDateInThePast the start date from which the import will begin, in the past
      */
     public void triggerImport(String tenantId, String uuid, LocalDate startDateInThePast) {
         getThirdPartyApiConfigurations(tenantId, uuid).forEach(thirdPartyApiConfiguration -> {
             applicationEventPublisher.publishEvent(new HistoricalDataImportEvent(thirdPartyApiConfiguration.getId(),
-                    startDateInThePast.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                    startDateInThePast.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         });
     }
 }

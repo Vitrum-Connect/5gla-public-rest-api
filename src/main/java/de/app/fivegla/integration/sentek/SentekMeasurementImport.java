@@ -64,6 +64,29 @@ public class SentekMeasurementImport {
         }
     }
 
+    /**
+     * Run historical data import.
+     */
+    @Async
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
+        var begin = Instant.now();
+        try {
+            log.info("Running historical data import from Sentek API, this may take a while");
+            var measurements = sentekSensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, start);
+            log.info("Found {} measurements", measurements.size());
+            log.info("Persisting {} measurements", measurements.size());
+            jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENTEK, measurements.size());
+            measurements.entrySet().forEach(loggerListEntry -> persistDataWithinFiware(tenant, loggerListEntry));
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Sentek API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.SENTEK);
+        } finally {
+            log.info("Finished scheduled data import from Sentek API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.SENTEK, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
     private void persistDataWithinFiware(Tenant tenant, Map.Entry<Logger, List<Reading>> entry) {
         try {
             Logger key = entry.getKey();

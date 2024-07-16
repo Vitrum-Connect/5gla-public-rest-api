@@ -41,6 +41,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
                 new TextAttribute(image.getChannel().name()),
                 new TextAttribute(image.getBase64encodedImage()),
                 new TextAttribute(imagePathBaseUrl + image.getFullFilename(tenant)),
+                new TextAttribute(image.getMeasuredAt().toString()),
                 image.getLatitude(),
                 image.getLongitude());
         fiwareEntityIntegrationService.persist(tenant, group, deviceMeasurement);

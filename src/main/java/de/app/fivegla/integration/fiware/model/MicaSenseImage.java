@@ -20,6 +20,7 @@ public record MicaSenseImage(
         Attribute imageChannel,
         Attribute base64encodedImage,
         Attribute imagePath,
+        Attribute dateCreated,
         double latitude,
         double longitude
 ) implements FiwareEntity, Validatable {
@@ -37,6 +38,7 @@ public record MicaSenseImage(
                 "  \"imageChannel\":" + imageChannel.asJson().trim() + "," +
                 "  \"base64encodedImage\":" + base64encodedImage.asJson().trim() + "," +
                 "  \"imagePath\":" + imagePath.asJson().trim() + "," +
+                "  \"dateCreated\":" + dateCreated.asJson().trim() + "," +
                 "  \"location\":" + locationAsJson(latitude, longitude).trim() +
                 "}";
         log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);

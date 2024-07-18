@@ -64,6 +64,29 @@ public class Farm21MeasurementImport {
         }
     }
 
+    /**
+     * Run historical data import.
+     */
+    @Async
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
+        var begin = Instant.now();
+        try {
+            log.info("Running historical data import from Farm21 API, this may take a while");
+            var measurements = farm21SensorDataIntegrationService.fetchAll(thirdPartyApiConfiguration, start, Instant.now());
+            log.info("Found {} measurements", measurements.size());
+            log.info("Persisting {} measurements", measurements.size());
+            jobMonitor.logNrOfEntitiesFetched(Manufacturer.FARM21, measurements.size());
+            measurements.entrySet().forEach(sensorListEntry -> persistDataWithinFiware(tenant, sensorListEntry));
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Farm21 API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.FARM21);
+        } finally {
+            log.info("Finished scheduled data import from Farm21 API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.FARM21, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
     private void persistDataWithinFiware(Tenant tenant, Map.Entry<Sensor, List<SensorData>> entry) {
         try {
             Sensor key = entry.getKey();

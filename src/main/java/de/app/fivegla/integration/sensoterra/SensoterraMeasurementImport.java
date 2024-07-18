@@ -64,6 +64,29 @@ public class SensoterraMeasurementImport {
         }
     }
 
+    /**
+     * Run historical data import.
+     */
+    @Async
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
+        var begin = Instant.now();
+        try {
+            log.info("Running historical data import from Sensoterra API, this may take a while");
+            var seriesEntries = probeDataIntegrationService.fetchAll(thirdPartyApiConfiguration, start);
+            log.info("Found {} seriesEntries", seriesEntries.size());
+            log.info("Persisting {} seriesEntries", seriesEntries.size());
+            jobMonitor.logNrOfEntitiesFetched(Manufacturer.SENSOTERRA, seriesEntries.size());
+            seriesEntries.entrySet().forEach(probeListEntry -> persistDataWithinFiware(tenant, probeListEntry));
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Sensoterra API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.SENSOTERRA);
+        } finally {
+            log.info("Finished scheduled data import from Sensoterra API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.SENSOTERRA, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
     private void persistDataWithinFiware(Tenant tenant, Map.Entry<Probe, List<ProbeData>> entry) {
         try {
             Probe key = entry.getKey();

@@ -18,11 +18,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 
 /**
  * The JobController class handles requests related to job operations.
@@ -206,6 +208,34 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(@PathVariable(value = "uuid") String uuid, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(tenant.getTenantId(), uuid);
+        return ResponseEntity.ok().body(new Response());
+    }
+
+    @Operation(
+            summary = "Triggers a third-party API configuration to fulfill an import in the past.",
+            description = "Triggers a third-party API configuration to fulfill an import in the past.",
+            tags = BaseMappings.THIRD_PARTY_API_CONFIGURATION
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The third party API configuration was triggered successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PostMapping(value = "/{uuid}/trigger/{startDateInThePast}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> triggerThirdPartyApiConfigurationInThePast(@PathVariable(value = "uuid") String uuid, @PathVariable(value = "startDateInThePast") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDateInThePast, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        thirdPartyApiConfigurationService.triggerImport(tenant.getTenantId(), uuid, startDateInThePast);
         return ResponseEntity.ok().body(new Response());
     }
 

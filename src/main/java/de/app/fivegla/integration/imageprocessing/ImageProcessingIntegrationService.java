@@ -15,7 +15,7 @@ import java.time.Instant;
 import java.util.*;
 
 /**
- * Service for  Sense integration.
+ * Service for Sense integration.
  */
 @Slf4j
 @Service
@@ -112,4 +112,5 @@ public class ImageProcessingIntegrationService {
         }
         return allTransactionsForTenant;
     }
+
 }

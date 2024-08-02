@@ -1,13 +1,17 @@
 package de.app.fivegla.business;
 
+import de.app.fivegla.event.events.HistoricalDataImportEvent;
 import de.app.fivegla.persistence.ThirdPartyApiConfigurationRepository;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +22,7 @@ import java.util.Optional;
 public class ThirdPartyApiConfigurationService {
 
     private final ThirdPartyApiConfigurationRepository thirdPartyApiConfigurationRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Creates a third-party API configuration and adds it to the system.
@@ -84,5 +89,19 @@ public class ThirdPartyApiConfigurationService {
      */
     public Optional<ThirdPartyApiConfiguration> findById(Long id) {
         return thirdPartyApiConfigurationRepository.findById(id);
+    }
+
+    /**
+     * Triggers the import of historical data for a given tenant and UUID starting from a specific date.
+     *
+     * @param tenantId           the ID of the tenant for which the import will be triggered
+     * @param uuid               the UUID associated with the tenant
+     * @param startDateInThePast the start date from which the import will begin, in the past
+     */
+    public void triggerImport(String tenantId, String uuid, LocalDate startDateInThePast) {
+        getThirdPartyApiConfigurations(tenantId, uuid).forEach(thirdPartyApiConfiguration -> {
+            applicationEventPublisher.publishEvent(new HistoricalDataImportEvent(thirdPartyApiConfiguration.getId(),
+                    startDateInThePast.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        });
     }
 }

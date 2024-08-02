@@ -6,6 +6,7 @@ import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.TenantService;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
 import de.app.fivegla.event.events.DataImportEvent;
+import de.app.fivegla.event.events.HistoricalDataImportEvent;
 import de.app.fivegla.integration.agranimo.AgranimoMeasurementImport;
 import de.app.fivegla.integration.agvolution.AgvolutionMeasurementImport;
 import de.app.fivegla.integration.farm21.Farm21MeasurementImport;
@@ -59,6 +60,35 @@ public class DataImportEventHandler {
                 case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, thirdPartyApiConfiguration);
                 case SENTEK -> sentekMeasurementImport.run(tenant, thirdPartyApiConfiguration);
                 case WEENAT -> weenatMeasurementImport.run(tenant, thirdPartyApiConfiguration);
+                default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
+            }
+        }
+        thirdPartyApiConfigurationService.updateLastRun(thirdPartyApiConfiguration);
+    }
+
+    @EventListener(HistoricalDataImportEvent.class)
+    public void handleHistoricalDataImportEvent(HistoricalDataImportEvent historicalDataImportEvent) {
+        var thirdPartyApiConfiguration = thirdPartyApiConfigurationService.findById(historicalDataImportEvent.thirdPartyApiConfigurationId())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
+                        .error(Error.THIRD_PARTY_API_CONFIGURATION_NOT_FOUND)
+                        .message("Third party API configuration not found.")
+                        .build()));
+        log.info("Handling data import event for tenant {} and manufacturer {}.", thirdPartyApiConfiguration.getTenant().getTenantId(), thirdPartyApiConfiguration.getManufacturer());
+        var manufacturer = thirdPartyApiConfiguration.getManufacturer();
+        var tenantId = thirdPartyApiConfiguration.getTenant().getTenantId();
+        var optionalTenant = tenantService.findByTenantId(tenantId);
+        if (optionalTenant.isEmpty()) {
+            log.error("Tenant with id {} not found, not able to handle data import event", tenantId);
+        } else {
+            var tenant = optionalTenant.get();
+            switch (manufacturer) {
+                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
+                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
+                case AGRANIMO -> agranimoMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
+                case FARM21 -> farm21MeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
+                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
+                case SENTEK -> sentekMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
+                case WEENAT -> weenatMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
                 default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
             }
         }

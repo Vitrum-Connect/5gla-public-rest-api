@@ -63,6 +63,29 @@ public class WeenatMeasurementImport {
         }
     }
 
+    /**
+     * Run historical data import.
+     */
+    @Async
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
+        var begin = Instant.now();
+        try {
+            log.info("Running historical data import from Weenat API, this may take a while");
+            var measurements = weenatMeasuresIntegrationService.fetchAll(thirdPartyApiConfiguration, start);
+            jobMonitor.logNrOfEntitiesFetched(Manufacturer.WEENAT, measurements.size());
+            log.info("Found {} measurements", measurements.size());
+            log.info("Persisting {} measurements", measurements.size());
+            measurements.entrySet().forEach(plotMeasurementsEntry -> persistDataWithinFiware(tenant, plotMeasurementsEntry));
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Weenat API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.WEENAT);
+        } finally {
+            log.info("Finished scheduled data import from Weenat API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.WEENAT, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
     private void persistDataWithinFiware(Tenant tenant, Map.Entry<Plot, Measurements> entry) {
         try {
             Plot key = entry.getKey();

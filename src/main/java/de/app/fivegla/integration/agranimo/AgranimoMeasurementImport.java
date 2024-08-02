@@ -69,6 +69,36 @@ public class AgranimoMeasurementImport {
         }
     }
 
+    /**
+     * Asynchronously runs the scheduled data import from Agranimo API.
+     *
+     * @param tenant                     The tenant to import data for.
+     * @param thirdPartyApiConfiguration The configuration for the third-party API.
+     * @param start                      The start time for fetching water content data.
+     */
+    @Async
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
+        var begin = Instant.now();
+        try {
+            agranimoZoneService.fetchZones(thirdPartyApiConfiguration).forEach(zone -> {
+                var waterContent = agranimoSoilMoistureIntegrationService.fetchWaterContent(thirdPartyApiConfiguration, zone, start);
+                jobMonitor.logNrOfEntitiesFetched(Manufacturer.AGRANIMO, waterContent.size());
+                log.info("Found {} water content entries", waterContent.size());
+                log.info("Persisting {} water content entries", waterContent.size());
+                waterContent.forEach(
+                        soilMoisture -> persistDataWithinFiware(tenant, zone, soilMoisture)
+                );
+            });
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Agranimo API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.AGRANIMO);
+        } finally {
+            log.info("Finished scheduled data import from Agranimo API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.AGRANIMO, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
     private void persistDataWithinFiware(Tenant tenant, Zone zone, SoilMoisture soilMoisture) {
         try {
             fiwareIntegrationServiceWrapper.persist(tenant, zone, soilMoisture);

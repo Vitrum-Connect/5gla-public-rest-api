@@ -61,6 +61,29 @@ public class SoilScoutMeasurementImport {
         }
     }
 
+    /**
+     * Run scheduled data import.
+     */
+    @Async
+    public void run(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, Instant start) {
+        var begin = Instant.now();
+        try {
+            log.info("Running historical data import from Soil Scout API, this may take a while");
+            var measurements = soilScoutMeasurementIntegrationService.fetchAll(thirdPartyApiConfiguration, start, Instant.now());
+            jobMonitor.logNrOfEntitiesFetched(Manufacturer.SOILSCOUT, measurements.size());
+            log.info("Found {} measurements", measurements.size());
+            log.info("Persisting {} measurements", measurements.size());
+            measurements.forEach(measurement -> persistDataWithinFiware(tenant, thirdPartyApiConfiguration, measurement));
+        } catch (Exception e) {
+            log.error("Error while running scheduled data import from Soil Scout API", e);
+            jobMonitor.logErrorDuringExecution(Manufacturer.SOILSCOUT);
+        } finally {
+            log.info("Finished scheduled data import from Soil Scout API");
+            var end = Instant.now();
+            jobMonitor.logJobExecutionTime(Manufacturer.SOILSCOUT, begin.until(end, ChronoUnit.SECONDS));
+        }
+    }
+
     private void persistDataWithinFiware(Tenant tenant, ThirdPartyApiConfiguration thirdPartyApiConfiguration, SensorData measurement) {
         fiwareIntegrationServiceWrapper.persist(tenant, thirdPartyApiConfiguration, measurement);
     }

@@ -7,11 +7,9 @@ import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.GetAllImagesForTransactionRequest;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
-import de.app.fivegla.controller.dto.response.AllTransactionsForTenantResponse;
-import de.app.fivegla.controller.dto.response.GetAllImagesForTransactionResponse;
-import de.app.fivegla.controller.dto.response.ImageProcessingResponse;
-import de.app.fivegla.controller.dto.response.OidsForTransactionResponse;
+import de.app.fivegla.controller.dto.response.*;
 import de.app.fivegla.integration.imageprocessing.ImageProcessingIntegrationService;
+import de.app.fivegla.integration.imageprocessing.OrthophotoIntegrationService;
 import de.app.fivegla.persistence.entity.Image;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,6 +42,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ImagesController implements TenantCredentialApiAccess {
 
     private final ImageProcessingIntegrationService imageProcessingIntegrationService;
+    private final OrthophotoIntegrationService orthophotoIntegrationService;
     private final TenantService tenantService;
     private final GroupService groupService;
 
@@ -215,6 +214,42 @@ public class ImagesController implements TenantCredentialApiAccess {
         return ResponseEntity.ok(OidsForTransactionResponse.builder()
                 .transactionId(transactionId)
                 .oids(oids)
+                .build());
+    }
+
+    /**
+     * Triggers the orthophoto processing for the given transaction id.
+     *
+     * @param transactionId The transaction id.
+     * @return The UUID of the triggered orthophoto processing.
+     */
+    @Operation(
+            operationId = "images.calculate-combined-image",
+            description = "Triggers the orthophoto processing for the given transaction id.",
+            tags = BaseMappings.IMAGE_PROCESSING
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "The orthophoto processing was triggered successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = OrthphotoTriggeringResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PostMapping(value = "/{transactionId}/calculate-combined-image", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> calculateCombinedImage(@PathVariable String transactionId, Principal principal) {
+        validateTenant(tenantService, principal);
+        var uuid = orthophotoIntegrationService.triggerOrthophotoProcessing(transactionId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(OrthphotoTriggeringResponse.builder()
+                .uuid(uuid)
                 .build());
     }
 

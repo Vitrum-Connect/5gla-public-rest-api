@@ -20,6 +20,9 @@ app:
     accessKey: ${S3_ACCESS_KEY}
     secretKey: ${S3_SECRET_KEY}
     preConfiguredBucketName: ${S3_BUCKET_NAME}
+  orthophoto:
+    api-url: ${ORTHOPHOTO_API_URL}
+    api-key: ${ORTHOPHOTO_API_KEY}
 logging:
   level:
     root: info

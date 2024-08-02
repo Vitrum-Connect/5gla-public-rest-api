@@ -52,7 +52,7 @@ public class OrthophotoIntegrationService {
                         .build());
             } else {
                 var triggerOrthophotoProcessingResponse = response.getBody();
-                if (null != triggerOrthophotoProcessingResponse.uuid()) {
+                if (null != triggerOrthophotoProcessingResponse) {
                     log.info("Successfully triggered orthophoto processing for transaction id: {}.", transactionId);
                     log.info("Orthophoto being calculated using the following UUID: {}", triggerOrthophotoProcessingResponse.uuid());
                     return triggerOrthophotoProcessingResponse.uuid();
@@ -60,7 +60,7 @@ public class OrthophotoIntegrationService {
                     log.error("Error while starting the image calculation using the API. Status code: {}", response.getStatusCode());
                     throw new BusinessException(ErrorMessage.builder()
                             .error(Error.ORTHOPHOTO_COULD_NOT_TRIGGER_CALCULATION)
-                            .message("Could not trigger the orthophoto calculation, the UUID in the response is null.")
+                            .message("Could not trigger the orthophoto calculation, the response is null.")
                             .build());
                 }
             }

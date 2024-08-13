@@ -4,15 +4,14 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.persistence.entity.Image;
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import de.app.fivegla.persistence.entity.Tenant;
+import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -50,7 +49,7 @@ public class PersistentStorageIntegrationService {
             var imageAsRawData = image.getImageAsRawData();
             client.putObject(PutObjectArgs.builder()
                     .bucket(preConfiguredBucketName)
-                    .object(image.getFullFilename(image.getTenant()))
+                    .object(image.getFullFilename(image.getTenant(), transactionId))
                     .stream(new ByteArrayInputStream(imageAsRawData), imageAsRawData.length, -1)
                     .build());
         } catch (Exception e) {
@@ -66,5 +65,29 @@ public class PersistentStorageIntegrationService {
                 .credentials(accessKey, secretKey);
     }
 
+    /**
+     * Retrieves the result file from the S3 storage for the specified tenant and transaction ID.
+     *
+     * @param tenant        The tenant associated with the result file.
+     * @param transactionId The transaction ID of the result file.
+     * @return An Optional containing the byte array of the result file if it exists, or an empty Optional if the result file does not exist or an error occurs.
+     */
+    public Optional<byte[]> getResultFile(Tenant tenant, String transactionId) {
+        try (var client = minioClientBuilder()
+                .build()) {
+            var getObjectArgs = GetObjectArgs.builder()
+                    .bucket(preConfiguredBucketName)
+                    .object(getFileNameForResultFile(tenant, transactionId))
+                    .build();
+            return Optional.of(client.getObject(getObjectArgs).readAllBytes());
+        } catch (Exception e) {
+            log.error("Could not get result file from S3.", e);
+            return Optional.empty();
+        }
+    }
+
+    private String getFileNameForResultFile(Tenant tenant, String transactionId) {
+        return tenant.getTenantId() + "/" + transactionId + "/result.zip";
+    }
 }
 

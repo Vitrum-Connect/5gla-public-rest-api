@@ -28,9 +28,10 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
     /**
      * Create a new drone device measurement in FIWARE.
      *
-     * @param image the image to create the measurement for
+     * @param image         the image to create the measurement for
+     * @param transactionId
      */
-    public void createDroneDeviceMeasurement(Tenant tenant, Group group, String droneId, Image image) {
+    public void createDroneDeviceMeasurement(Tenant tenant, Group group, String droneId, Image image, String transactionId) {
         var deviceMeasurement = new MicaSenseImage(
                 tenant.getFiwarePrefix() + droneId,
                 EntityType.MICASENSE_IMAGE.getKey(),
@@ -40,7 +41,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
                 new TextAttribute(image.getTransactionId()),
                 new TextAttribute(image.getChannel().name()),
                 new TextAttribute(image.getBase64encodedImage()),
-                new TextAttribute(imagePathBaseUrl + image.getFullFilename(tenant)),
+                new TextAttribute(imagePathBaseUrl + image.getFullFilename(tenant, transactionId)),
                 new TextAttribute(image.getMeasuredAt().toString()),
                 image.getLatitude(),
                 image.getLongitude());

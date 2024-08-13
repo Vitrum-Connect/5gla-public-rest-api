@@ -96,7 +96,7 @@ public class Image extends BaseEntity {
      *
      * @return the name of the image
      */
-    public String getFullFilename(Tenant tenant) {
-        return tenant.getTenantId() + "/" + droneId + "/" + channel.name() + "/" + measuredAt.toInstant().getEpochSecond() + ".tiff";
+    public String getFullFilename(Tenant tenant, String transactionId) {
+        return tenant.getTenantId() + "/" + transactionId + "/" + droneId + "_" + channel.name() + "_" + measuredAt.toInstant().getEpochSecond() + ".tiff";
     }
 }

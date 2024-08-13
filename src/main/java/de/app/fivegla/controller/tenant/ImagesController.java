@@ -253,4 +253,20 @@ public class ImagesController implements TenantCredentialApiAccess {
                 .build());
     }
 
+    public ResponseEntity<byte[]> downloadCombinedImage(@PathVariable String transactionId, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        var headers = new HttpHeaders();
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+        var orthophoto = orthophotoIntegrationService.getOrthophoto(tenant, transactionId);
+        AtomicReference<ResponseEntity<byte[]>> responseEntity = new AtomicReference<>(ResponseEntity.notFound().build());
+        orthophoto.ifPresent(
+                image -> {
+                    var resultFileAsZip = orthophoto.get();
+                    headers.setContentLength(resultFileAsZip.length);
+                    responseEntity.set(ResponseEntity.ok().headers(headers).body(resultFileAsZip));
+                }
+        );
+        return responseEntity.get();
+    }
+
 }

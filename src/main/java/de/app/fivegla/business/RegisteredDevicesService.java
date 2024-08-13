@@ -2,10 +2,12 @@ package de.app.fivegla.business;
 
 import de.app.fivegla.persistence.RegisteredDeviceRepository;
 import de.app.fivegla.persistence.entity.RegisteredDevice;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -29,4 +31,14 @@ public class RegisteredDevicesService {
         return registeredDeviceRepository.save(prefilledEntity);
     }
 
+    /**
+     * Finds all registered devices for a tenant.
+     *
+     * @param tenant The tenant to find the registered devices for.
+     * @return The list of registered devices.
+     */
+    public List<RegisteredDevice> findAll(Tenant tenant) {
+        log.info("Finding all registered devices for tenant: {}", tenant);
+        return registeredDeviceRepository.findAllByTenant(tenant);
+    }
 }

@@ -36,7 +36,7 @@ public class DataImportScheduler {
         } else {
             tenants.forEach(tenant -> thirdPartyApiConfigurationService.getThirdPartyApiConfigurations(tenant.getTenantId()).forEach(configuration -> {
                 if (configuration.isEnabled()) {
-                    applicationEventPublisher.publishEvent(new DataImportEvent(configuration.getId()));
+                    applicationEventPublisher.publishEvent(new DataImportEvent(this, configuration.getId()));
                 } else {
                     log.info("Skipping data import for tenant {} and manufacturer {} because it is disabled.", tenant.getName(), configuration.getManufacturer());
                 }

@@ -1,7 +1,9 @@
 package de.app.fivegla.business;
 
+import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.event.events.HistoricalDataImportEvent;
 import de.app.fivegla.persistence.ThirdPartyApiConfigurationRepository;
+import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -100,8 +102,18 @@ public class ThirdPartyApiConfigurationService {
      */
     public void triggerImport(String tenantId, String uuid, LocalDate startDateInThePast) {
         getThirdPartyApiConfigurations(tenantId, uuid).forEach(thirdPartyApiConfiguration -> {
-            applicationEventPublisher.publishEvent(new HistoricalDataImportEvent(thirdPartyApiConfiguration.getId(),
+            applicationEventPublisher.publishEvent(new HistoricalDataImportEvent(this, thirdPartyApiConfiguration.getId(),
                     startDateInThePast.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         });
+    }
+
+    /**
+     * Finds all third-party API configurations for a given tenant and manufacturer.
+     *
+     * @param tenant       the tenant for which the configurations will be retrieved
+     * @param manufacturer the manufacturer for which the configurations will be retrieved
+     */
+    public Optional<ThirdPartyApiConfiguration> findByManufacturer(Tenant tenant, Manufacturer manufacturer) {
+        return thirdPartyApiConfigurationRepository.findFirstByTenantAndManufacturer(tenant, manufacturer);
     }
 }

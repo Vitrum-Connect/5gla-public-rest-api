@@ -253,6 +253,28 @@ public class ImagesController implements TenantCredentialApiAccess {
                 .build());
     }
 
+    @Operation(
+            operationId = "images.download-combined-image",
+            description = "Downloads the combined image for the given transaction id.",
+            tags = BaseMappings.IMAGE_PROCESSING
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The combined image was found and returned.",
+            content = @Content(
+                    mediaType = "application/zip",
+                    schema = @Schema(implementation = byte[].class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @GetMapping(value = "/{transactionId}/combined-image", produces = "application/zip")
     public ResponseEntity<byte[]> downloadCombinedImage(@PathVariable String transactionId, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         var headers = new HttpHeaders();

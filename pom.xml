@@ -167,6 +167,7 @@
     </dependencies>
 
     <build>
+        <finalName>application</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -182,7 +183,6 @@
                 <configuration>
                     <mainClass>de.app.fivegla.Application</mainClass>
                     <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
-                    <finalName>application</finalName>
                 </configuration>
             </plugin>
             <plugin>

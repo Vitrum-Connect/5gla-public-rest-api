@@ -79,7 +79,12 @@ public class PersistentStorageIntegrationService {
                     .bucket(preConfiguredBucketName)
                     .object(getFileNameForResultFile(tenant, transactionId))
                     .build();
-            return Optional.of(client.getObject(getObjectArgs).readAllBytes());
+            var getObjectResponse = client.getObject(getObjectArgs);
+            if (getObjectResponse != null) {
+                return Optional.of(getObjectResponse.readAllBytes());
+            } else {
+                return Optional.empty();
+            }
         } catch (Exception e) {
             log.error("Could not get result file from S3.", e);
             return Optional.empty();

@@ -29,13 +29,9 @@ public class OpenWeatherImportScheduler {
     @Scheduled(initialDelayString = "${app.scheduled.openweather-import.initial-delay}", fixedDelayString = "${app.scheduled.openweather-import.delay}")
     public void scheduleOpenWeatherImport() {
         log.info("Scheduled OpenWeather import started.");
-        tenantService.findAll().forEach(tenant -> {
-            thirdPartyApiConfigurationService.findByManufacturer(tenant, Manufacturer.OPEN_WEATHER).ifPresent(thirdPartyApiConfiguration -> {
-                registeredDevicesService.findAll(tenant).forEach(registeredDevice -> {
-                    applicationEventPublisher.publishEvent(new OpenWeatherImportEvent(this, thirdPartyApiConfiguration,registeredDevice.getLongitude(), registeredDevice.getLatitude()));
-                });
-            });
-        });
+        tenantService.findAll().forEach(tenant -> thirdPartyApiConfigurationService.findByManufacturer(tenant, Manufacturer.OPEN_WEATHER).ifPresent(thirdPartyApiConfiguration -> {
+            registeredDevicesService.findAll(tenant).forEach(registeredDevice -> applicationEventPublisher.publishEvent(new OpenWeatherImportEvent(this, thirdPartyApiConfiguration,registeredDevice.getLongitude(), registeredDevice.getLatitude())));
+        }));
 
     }
 }

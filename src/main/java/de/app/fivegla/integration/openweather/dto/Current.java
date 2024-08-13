@@ -2,7 +2,9 @@ package de.app.fivegla.integration.openweather.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.ToString;
 
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Current {
 

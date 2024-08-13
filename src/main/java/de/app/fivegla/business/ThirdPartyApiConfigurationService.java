@@ -101,10 +101,8 @@ public class ThirdPartyApiConfigurationService {
      * @param startDateInThePast the start date from which the import will begin, in the past
      */
     public void triggerImport(String tenantId, String uuid, LocalDate startDateInThePast) {
-        getThirdPartyApiConfigurations(tenantId, uuid).forEach(thirdPartyApiConfiguration -> {
-            applicationEventPublisher.publishEvent(new HistoricalDataImportEvent(this, thirdPartyApiConfiguration.getId(),
-                    startDateInThePast.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        });
+        getThirdPartyApiConfigurations(tenantId, uuid).forEach(thirdPartyApiConfiguration -> applicationEventPublisher.publishEvent(new HistoricalDataImportEvent(this, thirdPartyApiConfiguration.getId(),
+                startDateInThePast.atStartOfDay(ZoneId.systemDefault()).toInstant())));
     }
 
     /**

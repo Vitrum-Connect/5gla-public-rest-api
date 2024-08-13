@@ -29,7 +29,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
      * Create a new drone device measurement in FIWARE.
      *
      * @param image         the image to create the measurement for
-     * @param transactionId
+     * @param transactionId the transaction id
      */
     public void createDroneDeviceMeasurement(Tenant tenant, Group group, String droneId, Image image, String transactionId) {
         var deviceMeasurement = new MicaSenseImage(

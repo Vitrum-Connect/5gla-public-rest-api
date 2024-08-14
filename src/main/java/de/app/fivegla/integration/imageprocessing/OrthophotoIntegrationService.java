@@ -4,6 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.imageprocessing.dto.TriggerOrthophotoProcessingResponse;
+import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrthophotoIntegrationService {
 
     private final RestTemplate restTemplate;
+    private final PersistentStorageIntegrationService persistentStorageIntegrationService;
 
     @Value("${app.orthophoto.api-url}")
     private String orthophotoProcessingApi;
@@ -71,5 +75,17 @@ public class OrthophotoIntegrationService {
                     .message("Could not trigger the orthophoto calculation.")
                     .build());
         }
+    }
+
+    /**
+     * Retrieves the orthophoto file for a given transaction ID.
+     *
+     * @param tenant        The tenant for which the orthophoto file is requested.
+     * @param transactionId The ID of the transaction for which the orthophoto file is requested.
+     * @return An optional with the byte array representation of the orthophoto file if it exists,
+     * or an empty optional if the orthophoto file does not exist.
+     */
+    public Optional<byte[]> getOrthophoto(Tenant tenant, String transactionId) {
+        return persistentStorageIntegrationService.getResultFile(tenant, transactionId);
     }
 }

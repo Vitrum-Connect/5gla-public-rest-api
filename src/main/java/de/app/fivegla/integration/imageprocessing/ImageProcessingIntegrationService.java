@@ -53,7 +53,7 @@ public class ImageProcessingIntegrationService {
         image.setBase64encodedImage(base64Image);
         var micaSenseImage = imageRepository.save(image);
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, group, droneId, micaSenseImage);
+        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, group, droneId, micaSenseImage, transactionId);
         persistentStorageIntegrationService.storeImage(transactionId, micaSenseImage);
         return micaSenseImage.getOid();
     }

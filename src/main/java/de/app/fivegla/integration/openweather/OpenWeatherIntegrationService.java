@@ -3,11 +3,18 @@ package de.app.fivegla.integration.openweather;
 import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.RegisteredDevicesService;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
+import de.app.fivegla.integration.fiware.model.WeatherData;
+import de.app.fivegla.integration.fiware.model.internal.DateAttribute;
+import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
+import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.integration.openweather.dto.OpenWeatherData;
 import de.app.fivegla.integration.openweather.dto.OpenWeatherDataFromThePast;
+import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +22,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,6 +40,7 @@ public class OpenWeatherIntegrationService {
     private final RestTemplate restTemplate;
     private final RegisteredDevicesService registeredDevicesService;
     private final ThirdPartyApiConfigurationService thirdPartyApiConfigurationService;
+    private final FiwareEntityIntegrationService fiwareEntityIntegrationService;
 
     /**
      * Fetches weather data from the OpenWeather API for the given longitude and latitude.
@@ -82,32 +91,50 @@ public class OpenWeatherIntegrationService {
             registeredDevicesService.findByTenantAndSensorId(tenant, sensorId).ifPresent(registeredDevice -> {
                 var longitude = registeredDevice.getLongitude();
                 var latitude = registeredDevice.getLatitude();
-                var openWeatherData = fetchWeatherData(apiToken, latitude, longitude, startDateInThePast);
+                fetchWeatherData(apiToken, latitude, longitude, registeredDevice.getGroup(), registeredDevice.getTenant(), startDateInThePast);
                 log.info("Imported weather data from OpenWeather for sensor '{}'.", sensorId);
-                log.debug("Imported weather data from OpenWeather for sensor '{}': {}", sensorId, openWeatherData);
             });
         });
     }
 
-    private List<OpenWeatherDataFromThePast> fetchWeatherData(String apiToken, double latitude, double longitude, LocalDate startDateInThePast) {
+    private void fetchWeatherData(String apiToken, double latitude, double longitude, Group group, Tenant tenant, LocalDate startDateInThePast) {
         try {
-            var weatherDataFromThePast = new ArrayList<OpenWeatherDataFromThePast>();
             log.info("Iterating form the start date in the past, which is: {}", startDateInThePast);
             var currentIterationDate = startDateInThePast;
             while (currentIterationDate.isBefore(LocalDate.now())) {
                 log.info("Fetching weather data from OpenWeather for longitude {}, latitude {} and timestamp {}.", longitude, latitude, currentIterationDate);
-                var openWeatherData = fetchWeatherDataFromThePast(apiToken, latitude, longitude, currentIterationDate);
-                if (openWeatherData.isEmpty()) {
+                var openWeatherDataFromThePast = fetchWeatherDataFromThePast(apiToken, latitude, longitude, currentIterationDate);
+                if (openWeatherDataFromThePast.isEmpty()) {
                     break;
                 } else {
-                    weatherDataFromThePast.add(openWeatherData.get());
+                    OpenWeatherDataFromThePast historicalWeatherData = openWeatherDataFromThePast.get();
+                    var weatherData = new WeatherData(
+                            UUID.randomUUID().toString(),
+                            EntityType.OPEN_WEATHER_MAP.getKey(),
+                            new TextAttribute(group.getOid()),
+                            new DateAttribute(Date.from(Instant.ofEpochSecond(historicalWeatherData.getData().getTimestamp()))),
+                            historicalWeatherData.getLatitude(),
+                            historicalWeatherData.getLongitude(),
+                            new NumberAttribute(historicalWeatherData.getData().getTemp()),
+                            new NumberAttribute(historicalWeatherData.getData().getPressure()),
+                            new NumberAttribute(historicalWeatherData.getData().getHumidity()),
+                            new NumberAttribute(historicalWeatherData.getData().getDewPoint()),
+                            new NumberAttribute(historicalWeatherData.getData().getUvi()),
+                            new NumberAttribute(historicalWeatherData.getData().getClouds()),
+                            new NumberAttribute(historicalWeatherData.getData().getVisibility()),
+                            new NumberAttribute(historicalWeatherData.getData().getWindSpeed()),
+                            new NumberAttribute(historicalWeatherData.getData().getWindDeg()),
+                            new NumberAttribute(historicalWeatherData.getData().getWindGust()),
+                            new NumberAttribute(historicalWeatherData.getData().getRain() != null ? historicalWeatherData.getData().getRain().getOneHour() : 0),
+                            new NumberAttribute(historicalWeatherData.getData().getSnow() != null ? historicalWeatherData.getData().getSnow().getOneHour() : 0)
+                    );
+                    log.info("Persisting weather data from OpenWeather to FIWARE for longitude {}, latitude {} and timestamp {}.", longitude, latitude, currentIterationDate);
+                    fiwareEntityIntegrationService.persist(tenant, group, weatherData);
                     currentIterationDate = currentIterationDate.plusDays(1);
                 }
             }
-            return weatherDataFromThePast;
         } catch (Exception e) {
             log.error("Failed to import weather data from OpenWeather for longitude {} and latitude {}.", longitude, latitude, e);
-            return new ArrayList<>();
         }
     }
 

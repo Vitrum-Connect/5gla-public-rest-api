@@ -51,6 +51,7 @@ public class OpenWeatherImportEventHandler {
                 new NumberAttribute(openWeatherData.getCurrent().getRain() != null ? openWeatherData.getCurrent().getRain().getOneHour() : 0),
                 new NumberAttribute(openWeatherData.getCurrent().getSnow() != null ? openWeatherData.getCurrent().getSnow().getOneHour() : 0)
         );
+        log.info("Persisting weather data from OpenWeather to FIWARE for longitude {} and latitude {}.", openWeatherImportEvent.getLongitude(), openWeatherImportEvent.getLatitude());
         fiwareEntityIntegrationService.persist(openWeatherImportEvent.getThirdPartyApiConfiguration().getTenant(), openWeatherImportEvent.getGroup(), weatherData);
     }
 

@@ -2,11 +2,15 @@ package de.app.fivegla.integration.openweather.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
  * This class represents the data returned by the OpenWeather API.
  */
+@Getter
+@Setter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenWeatherDataFromThePast {
@@ -25,11 +29,5 @@ public class OpenWeatherDataFromThePast {
 
     @JsonProperty("current")
     private Data data;
-
-    @JsonProperty("rain.1h")
-    private double rainWithinOneHour;
-
-    @JsonProperty("snow.1h")
-    private double snowWithinOneHour;
 
 }

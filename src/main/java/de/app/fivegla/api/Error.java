@@ -50,7 +50,8 @@ public enum Error {
     DEFAULT_GROUP_FOR_TENANT_NOT_FOUND(errorOf(40)),
     THIRD_PARTY_API_CONFIGURATION_NOT_FOUND(errorOf(41)),
     COULD_NOT_STORE_IMAGE_ON_S3(errorOf(42)),
-    ORTHOPHOTO_COULD_NOT_TRIGGER_CALCULATION(errorOf(43));
+    ORTHOPHOTO_COULD_NOT_TRIGGER_CALCULATION(errorOf(43)),
+    COULD_NOT_IMPORT_DATA_FROM_OPEN_WEATHER(errorOf(44));
 
     private static String errorOf(int i) {
         return ERR_ + String.format("%05d", i);

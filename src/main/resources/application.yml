@@ -8,6 +8,9 @@ app:
       initial-delay: PT10S # 10 seconds
       delay: PT30M # 30 minutes
     daysInThePastForInitialImport: 1
+    openweather-import:
+      initial-delay: PT10S # 10 seconds
+      delay: PT1H # 1 hour
   fiware:
     contextBrokerUrl: ${CONTEXT_BROKER_URL}
     subscriptions:

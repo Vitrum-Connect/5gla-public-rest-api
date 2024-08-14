@@ -11,5 +11,6 @@ public enum Manufacturer {
     AGVOLUTION,
     SENSOTERRA,
     SENTEK,
-    WEENAT
+    WEENAT,
+    OPEN_WEATHER
 }

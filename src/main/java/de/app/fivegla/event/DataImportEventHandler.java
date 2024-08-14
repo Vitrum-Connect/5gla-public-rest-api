@@ -39,7 +39,7 @@ public class DataImportEventHandler {
 
     @EventListener(DataImportEvent.class)
     public void handleDataImportEvent(DataImportEvent dataImportEvent) {
-        var thirdPartyApiConfiguration = thirdPartyApiConfigurationService.findById(dataImportEvent.thirdPartyApiConfigurationId())
+        var thirdPartyApiConfiguration = thirdPartyApiConfigurationService.findById(dataImportEvent.getThirdPartyApiConfigurationId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                         .error(Error.THIRD_PARTY_API_CONFIGURATION_NOT_FOUND)
                         .message("Third party API configuration not found.")
@@ -68,7 +68,7 @@ public class DataImportEventHandler {
 
     @EventListener(HistoricalDataImportEvent.class)
     public void handleHistoricalDataImportEvent(HistoricalDataImportEvent historicalDataImportEvent) {
-        var thirdPartyApiConfiguration = thirdPartyApiConfigurationService.findById(historicalDataImportEvent.thirdPartyApiConfigurationId())
+        var thirdPartyApiConfiguration = thirdPartyApiConfigurationService.findById(historicalDataImportEvent.getThirdPartyApiConfigurationId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.builder()
                         .error(Error.THIRD_PARTY_API_CONFIGURATION_NOT_FOUND)
                         .message("Third party API configuration not found.")
@@ -82,13 +82,20 @@ public class DataImportEventHandler {
         } else {
             var tenant = optionalTenant.get();
             switch (manufacturer) {
-                case SOILSCOUT -> soilScoutScheduledMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
-                case AGVOLUTION -> agvolutionMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
-                case AGRANIMO -> agranimoMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
-                case FARM21 -> farm21MeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
-                case SENSOTERRA -> sensoterraMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
-                case SENTEK -> sentekMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
-                case WEENAT -> weenatMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.startDate());
+                case SOILSCOUT ->
+                        soilScoutScheduledMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.getStartDate());
+                case AGVOLUTION ->
+                        agvolutionMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.getStartDate());
+                case AGRANIMO ->
+                        agranimoMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.getStartDate());
+                case FARM21 ->
+                        farm21MeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.getStartDate());
+                case SENSOTERRA ->
+                        sensoterraMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.getStartDate());
+                case SENTEK ->
+                        sentekMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.getStartDate());
+                case WEENAT ->
+                        weenatMeasurementImport.run(tenant, thirdPartyApiConfiguration, historicalDataImportEvent.getStartDate());
                 default -> throw new IllegalArgumentException("Unknown manufacturer: " + manufacturer);
             }
         }

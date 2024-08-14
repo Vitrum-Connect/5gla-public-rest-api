@@ -1,10 +1,13 @@
 package de.app.fivegla.persistence;
 
+import de.app.fivegla.api.Manufacturer;
+import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.ThirdPartyApiConfiguration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository for the third-party API configuration entity.
@@ -44,4 +47,13 @@ public interface ThirdPartyApiConfigurationRepository extends JpaRepository<Thir
      * @param tenantId The tenantId of the third-party API configurations to delete.
      */
     void deleteByTenantTenantId(String tenantId);
+
+    /**
+     * Returns all third-party API configurations with the given tenantId and manufacturer.
+     *
+     * @param tenant       The tenant of the third-party API configurations.
+     * @param manufacturer The manufacturer of the third-party API configurations.
+     * @return A list of third-party API configurations.
+     */
+    Optional<ThirdPartyApiConfiguration> findFirstByTenantAndManufacturer(Tenant tenant, Manufacturer manufacturer);
 }

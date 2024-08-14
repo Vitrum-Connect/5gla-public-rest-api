@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Device measurement.
+ * Represents a MicaSense image.
  */
 @Slf4j
 public record MicaSenseImage(

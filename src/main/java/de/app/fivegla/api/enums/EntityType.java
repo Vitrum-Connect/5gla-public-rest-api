@@ -17,6 +17,7 @@ public enum EntityType {
     SOILSCOUT_SENSOR("SoilScoutSensor"),
     DEVICE_POSITION("DevicePosition"),
     AGRI_CROP("AgriCrop"),
+    OPEN_WEATHER_MAP("OpenWeatherMap"),
     UNKNOWN("Unknown");
 
     private final String key;

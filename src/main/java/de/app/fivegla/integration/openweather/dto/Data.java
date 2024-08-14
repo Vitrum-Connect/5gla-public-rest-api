@@ -2,21 +2,17 @@ package de.app.fivegla.integration.openweather.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 /**
  * This class represents the current weather data returned by the OpenWeather API.
  */
-@Setter
-@Getter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Current {
+public class Data {
 
     @JsonProperty("dt")
-    private long dt;
+    private long timestamp;
 
     @JsonProperty("sunrise")
     private long sunrise;
@@ -25,7 +21,7 @@ public class Current {
     private long sunset;
 
     @JsonProperty("temp")
-    private double temp;
+    private double temperature;
 
     @JsonProperty("feels_like")
     private double feelsLike;
@@ -52,15 +48,7 @@ public class Current {
     private double windSpeed;
 
     @JsonProperty("wind_deg")
-    private int windDeg;
+    private int windDegree;
 
-    @JsonProperty("wind_gust")
-    private double windGust;
-
-    @JsonProperty("rain")
-    private Rain rain;
-
-    @JsonProperty("snow")
-    private Snow snow;
 
 }

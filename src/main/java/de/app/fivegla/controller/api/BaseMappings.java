@@ -33,4 +33,5 @@ public class BaseMappings {
     public static final String GROUPS = SECURED_BY_TENANT + "/groups";
     public static final String SUBSCRIPTION = SECURED_BY_TENANT + "/subscription";
     public static final String REGISTERED_DEVICES = SECURED_BY_TENANT + "/registered-devices";
+    public static final String OPEN_WEATHER = SECURED_BY_TENANT + "/open-weather";
 }

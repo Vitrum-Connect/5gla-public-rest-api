@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -40,5 +41,17 @@ public class RegisteredDevicesService {
     public List<RegisteredDevice> findAll(Tenant tenant) {
         log.info("Finding all registered devices for tenant: {}", tenant);
         return registeredDeviceRepository.findAllByTenant(tenant);
+    }
+
+    /**
+     * Finds a registered device by tenant and sensor ID.
+     *
+     * @param tenant   The tenant to find the registered device for.
+     * @param sensorId The sensor ID to find the registered device for.
+     * @return The registered device.
+     */
+    public Optional<RegisteredDevice> findByTenantAndSensorId(Tenant tenant, String sensorId) {
+        log.info("Finding registered device for tenant {} and sensor ID {}.", tenant, sensorjsonId);
+        return registeredDeviceRepository.findByTenantAndOid(tenant, sensorId);
     }
 }

@@ -51,7 +51,7 @@ public class RegisteredDevicesService {
      * @return The registered device.
      */
     public Optional<RegisteredDevice> findByTenantAndSensorId(Tenant tenant, String sensorId) {
-        log.info("Finding registered device for tenant {} and sensor ID {}.", tenant, sensorjsonId);
+        log.info("Finding registered device for tenant {} and sensor ID {}.", tenant, sensorId);
         return registeredDeviceRepository.findByTenantAndOid(tenant, sensorId);
     }
 }

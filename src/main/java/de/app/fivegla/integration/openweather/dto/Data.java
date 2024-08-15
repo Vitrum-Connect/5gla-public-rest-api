@@ -9,10 +9,10 @@ import lombok.ToString;
  */
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Current {
+public class Data {
 
     @JsonProperty("dt")
-    private long dt;
+    private long timestamp;
 
     @JsonProperty("sunrise")
     private long sunrise;
@@ -21,7 +21,7 @@ public class Current {
     private long sunset;
 
     @JsonProperty("temp")
-    private double temp;
+    private double temperature;
 
     @JsonProperty("feels_like")
     private double feelsLike;
@@ -48,15 +48,7 @@ public class Current {
     private double windSpeed;
 
     @JsonProperty("wind_deg")
-    private int windDeg;
+    private int windDegree;
 
-    @JsonProperty("wind_gust")
-    private double windGust;
-
-    @JsonProperty("rain.1h")
-    private double rainWithinOneHour;
-
-    @JsonProperty("snow.1h")
-    private double snowWithinOneHour;
 
 }

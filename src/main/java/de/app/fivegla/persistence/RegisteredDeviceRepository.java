@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -22,4 +23,12 @@ public interface RegisteredDeviceRepository extends JpaRepository<RegisteredDevi
      */
     List<RegisteredDevice> findAllByTenant(Tenant tenant);
 
+    /**
+     * Finds a registered device by tenant and sensor ID.
+     *
+     * @param tenant   The tenant to find the registered device for.
+     * @param sensorId The sensor ID to find the registered device for.
+     * @return The registered device.
+     */
+    Optional<RegisteredDevice> findByTenantAndOid(Tenant tenant, String sensorId);
 }

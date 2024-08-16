@@ -48,10 +48,10 @@ public record MicaSenseImage(
     @Override
     public void validate() {
         if (StringUtils.isBlank(id)) {
-            throw new IllegalArgumentException("The id of the device measurement must not be null or blank.");
+            throw new IllegalArgumentException("The id of the MicaSense image must not be blank.");
         }
         if (StringUtils.isBlank(type)) {
-            throw new IllegalArgumentException("The type of the device measurement must not be null or blank.");
+            throw new IllegalArgumentException("The type of the MicaSense image must not be blank.");
         }
     }
 

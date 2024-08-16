@@ -15,8 +15,7 @@ public record StationaryCameraImage(
         String type,
         Attribute group,
         Attribute oid,
-        Attribute droneId,
-        Attribute transactionId,
+        Attribute cameraId,
         Attribute imageChannel,
         Attribute base64encodedImage,
         Attribute imagePath,
@@ -33,8 +32,7 @@ public record StationaryCameraImage(
                 "  \"type\":\"" + type.trim() + "\"," +
                 "  \"customGroup\":" + group.asJson().trim() + "," +
                 "  \"oid\":" + oid.asJson().trim() + "," +
-                "  \"droneId\":" + droneId.asJson().trim() + "," +
-                "  \"transactionId\":" + transactionId.asJson().trim() + "," +
+                "  \"droneId\":" + cameraId.asJson().trim() + "," +
                 "  \"imageChannel\":" + imageChannel.asJson().trim() + "," +
                 "  \"base64encodedImage\":" + base64encodedImage.asJson().trim() + "," +
                 "  \"imagePath\":" + imagePath.asJson().trim() + "," +
@@ -48,10 +46,10 @@ public record StationaryCameraImage(
     @Override
     public void validate() {
         if (StringUtils.isBlank(id)) {
-            throw new IllegalArgumentException("The id of the device measurement must not be null or blank.");
+            throw new IllegalArgumentException("The id of the stationary camera image must not be blank.");
         }
         if (StringUtils.isBlank(type)) {
-            throw new IllegalArgumentException("The type of the device measurement must not be null or blank.");
+            throw new IllegalArgumentException("The type of the stationary camera image must not be blank.");
         }
     }
 

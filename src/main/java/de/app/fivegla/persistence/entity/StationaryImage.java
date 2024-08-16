@@ -14,7 +14,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@Table(name = "image")
+@Table(name = "stationary_image")
 public class StationaryImage extends BaseEntity {
 
     /**

@@ -35,7 +35,7 @@ public class ImageProcessingIntegrationService {
      *
      * @param transactionId The transaction id.
      * @param group         The group.
-     * @param cameraId      The id of the drone.
+     * @param cameraId      The id of the camera.
      * @param imageChannel  The channel the image was taken with.
      * @param base64Image   The base64 encoded tiff image.
      */

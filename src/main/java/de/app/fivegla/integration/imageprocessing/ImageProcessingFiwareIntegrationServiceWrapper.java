@@ -36,7 +36,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
     public void createCameraImage(Tenant tenant, Group group, String cameraId, Image image, String transactionId) {
         var deviceMeasurement = new CameraImage(
                 tenant.getFiwarePrefix() + cameraId,
-                EntityType.MICASENSE_IMAGE.getKey(),
+                EntityType.IMAGE.getKey(),
                 new TextAttribute(group.getOid()),
                 new TextAttribute(image.getOid()),
                 new TextAttribute(cameraId),
@@ -58,7 +58,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
     public void createStationaryCameraImage(Tenant tenant, Group group, String cameraId, StationaryImage micaSenseImage) {
         var deviceMeasurement = new StationaryCameraImage(
                 tenant.getFiwarePrefix() + cameraId,
-                EntityType.MICASENSE_IMAGE.getKey(),
+                EntityType.STATIONARY_IMAGE.getKey(),
                 new TextAttribute(group.getOid()),
                 new TextAttribute(micaSenseImage.getOid()),
                 new TextAttribute(cameraId),

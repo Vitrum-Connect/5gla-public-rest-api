@@ -32,7 +32,7 @@ public record StationaryCameraImage(
                 "  \"type\":\"" + type.trim() + "\"," +
                 "  \"customGroup\":" + group.asJson().trim() + "," +
                 "  \"oid\":" + oid.asJson().trim() + "," +
-                "  \"droneId\":" + cameraId.asJson().trim() + "," +
+                "  \"cameraId\":" + cameraId.asJson().trim() + "," +
                 "  \"imageChannel\":" + imageChannel.asJson().trim() + "," +
                 "  \"base64encodedImage\":" + base64encodedImage.asJson().trim() + "," +
                 "  \"imagePath\":" + imagePath.asJson().trim() + "," +

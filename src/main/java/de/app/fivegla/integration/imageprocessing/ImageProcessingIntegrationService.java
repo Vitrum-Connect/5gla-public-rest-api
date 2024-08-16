@@ -116,6 +116,18 @@ public class ImageProcessingIntegrationService {
         return allTransactionsForTenant;
     }
 
+    /**
+     * Processes a stationary image by decoding the base64 image, reading the image channel,
+     * extracting the location from exif data, setting the necessary attributes of StationaryImage,
+     * saving the image to the repository, and creating a camera image using the Fiware Integration Service.
+     *
+     * @param tenant The tenant of the image
+     * @param group The group of the image
+     * @param cameraId The ID of the camera associated with the image
+     * @param imageChannel The image channel of the image
+     * @param base64Image The base64 encoded image to process
+     * @return The OID (Object ID) of the processed image
+     */
     public String processStationaryImage(Tenant tenant, Group group, String cameraId, ImageChannel imageChannel, String base64Image) {
         var decodedImage = Base64.getDecoder().decode(base64Image);
         log.debug("Channel for the decodedImage: {}.", imageChannel);
@@ -133,7 +145,7 @@ public class ImageProcessingIntegrationService {
         var micaSenseImage = stationaryImageRepository.save(image);
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
         fiwareIntegrationServiceWrapper.createStationaryCameraImage(tenant, group, cameraId, micaSenseImage);
-        // FIXME Store image in persistent storage
+        persistentStorageIntegrationService.storeStationaryImage(micaSenseImage);
         return micaSenseImage.getOid();
     }
 }

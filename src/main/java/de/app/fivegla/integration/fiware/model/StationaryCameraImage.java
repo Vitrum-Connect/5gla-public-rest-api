@@ -17,7 +17,6 @@ public record StationaryCameraImage(
         Attribute oid,
         Attribute cameraId,
         Attribute imageChannel,
-        Attribute base64encodedImage,
         Attribute imagePath,
         Attribute dateCreated,
         double latitude,
@@ -34,7 +33,6 @@ public record StationaryCameraImage(
                 "  \"oid\":" + oid.asJson().trim() + "," +
                 "  \"cameraId\":" + cameraId.asJson().trim() + "," +
                 "  \"imageChannel\":" + imageChannel.asJson().trim() + "," +
-                "  \"base64encodedImage\":" + base64encodedImage.asJson().trim() + "," +
                 "  \"imagePath\":" + imagePath.asJson().trim() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson().trim() + "," +
                 "  \"location\":" + locationAsJson(latitude, longitude).trim() +

@@ -4,6 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.persistence.entity.Image;
+import de.app.fivegla.persistence.entity.StationaryImage;
 import de.app.fivegla.persistence.entity.Tenant;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +27,34 @@ public class PersistentStorageIntegrationService {
     @Value("${app.s3.secretKey}")
     private String secretKey;
 
-    @Value("${app.s3.preConfiguredBucketName}")
-    private String preConfiguredBucketName;
+    @Value("${app.s3.preConfiguredBucketNameForImages}")
+    private String preConfiguredBucketNameForImages;
+
+    @Value("${app.s3.preConfiguredBucketNameForStationaryImages}")
+    private String preConfiguredBucketNameForStationaryImages;
 
     /**
-     * Stores an image on S3.
+     * Stores the given image with the specified transaction ID in the default pre-configured bucket for images.
      *
-     * @param transactionId The transaction id.
-     * @param image         The image to store.
+     * @param transactionId The ID of the transaction associated with the image.
+     * @param image         The image to be stored.
      */
     public void storeImage(String transactionId, Image image) {
+        var filename = image.getFullFilename(image.getTenant(), transactionId);
+        storeImage(image.getImageAsRawData(), preConfiguredBucketNameForImages, filename);
+    }
+
+    /**
+     * Stores a stationary image in the specified transaction.
+     *
+     * @param stationaryImage The stationary image to be stored.
+     */
+    public void storeStationaryImage(StationaryImage stationaryImage) {
+        var filename = stationaryImage.getFullFilename(stationaryImage.getTenant());
+        storeImage(stationaryImage.getImageAsRawData(), preConfiguredBucketNameForStationaryImages, filename);
+    }
+
+    private void storeImage(byte[] imageAsRawData, String preConfiguredBucketName, String filename) {
         try (var client = minioClientBuilder()
                 .build()) {
             if (!client.bucketExists(BucketExistsArgs.builder()
@@ -44,12 +63,10 @@ public class PersistentStorageIntegrationService {
                 client.makeBucket(MakeBucketArgs.builder()
                         .bucket(preConfiguredBucketName)
                         .build());
-                log.debug("Bucket {} created.", transactionId);
             }
-            var imageAsRawData = image.getImageAsRawData();
             client.putObject(PutObjectArgs.builder()
                     .bucket(preConfiguredBucketName)
-                    .object(image.getFullFilename(image.getTenant(), transactionId))
+                    .object(filename)
                     .stream(new ByteArrayInputStream(imageAsRawData), imageAsRawData.length, -1)
                     .build());
         } catch (Exception e) {
@@ -76,7 +93,7 @@ public class PersistentStorageIntegrationService {
         try (var client = minioClientBuilder()
                 .build()) {
             var getObjectArgs = GetObjectArgs.builder()
-                    .bucket(preConfiguredBucketName)
+                    .bucket(preConfiguredBucketNameForImages)
                     .object(getFileNameForResultFile(tenant, transactionId))
                     .build();
             var getObjectResponse = client.getObject(getObjectArgs);

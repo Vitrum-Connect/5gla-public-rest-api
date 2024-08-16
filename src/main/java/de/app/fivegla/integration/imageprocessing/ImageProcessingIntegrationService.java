@@ -3,8 +3,10 @@ package de.app.fivegla.integration.imageprocessing;
 import de.app.fivegla.api.dto.SortableImageOids;
 import de.app.fivegla.integration.imageprocessing.dto.TransactionIdWithTheFirstImageTimestamp;
 import de.app.fivegla.persistence.ImageRepository;
+import de.app.fivegla.persistence.StationaryImageRepository;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Image;
+import de.app.fivegla.persistence.entity.StationaryImage;
 import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import lombok.RequiredArgsConstructor;
@@ -26,17 +28,18 @@ public class ImageProcessingIntegrationService {
     private final ImageProcessingFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final PersistentStorageIntegrationService persistentStorageIntegrationService;
     private final ImageRepository imageRepository;
+    private final StationaryImageRepository stationaryImageRepository;
 
     /**
      * Processes an image from the mica sense camera.
      *
      * @param transactionId The transaction id.
      * @param group         The group.
-     * @param droneId       The id of the drone.
+     * @param cameraId      The id of the camera.
      * @param imageChannel  The channel the image was taken with.
      * @param base64Image   The base64 encoded tiff image.
      */
-    public String processImage(Tenant tenant, Group group, String transactionId, String droneId, ImageChannel imageChannel, String base64Image) {
+    public String processImage(Tenant tenant, Group group, String transactionId, String cameraId, ImageChannel imageChannel, String base64Image) {
         var decodedImage = Base64.getDecoder().decode(base64Image);
         log.debug("Channel for the decodedImage: {}.", imageChannel);
         var point = exifDataIntegrationService.readLocation(decodedImage);
@@ -44,7 +47,7 @@ public class ImageProcessingIntegrationService {
         image.setOid(UUID.randomUUID().toString());
         image.setGroup(group);
         image.setTenant(tenant);
-        image.setDroneId(droneId);
+        image.setCameraId(cameraId);
         image.setTransactionId(transactionId);
         image.setChannel(imageChannel);
         image.setLongitude(point.getX());
@@ -53,7 +56,7 @@ public class ImageProcessingIntegrationService {
         image.setBase64encodedImage(base64Image);
         var micaSenseImage = imageRepository.save(image);
         log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createDroneDeviceMeasurement(tenant, group, droneId, micaSenseImage, transactionId);
+        fiwareIntegrationServiceWrapper.createCameraImage(tenant, group, cameraId, micaSenseImage, transactionId);
         persistentStorageIntegrationService.storeImage(transactionId, micaSenseImage);
         return micaSenseImage.getOid();
     }
@@ -113,4 +116,24 @@ public class ImageProcessingIntegrationService {
         return allTransactionsForTenant;
     }
 
+    public String processStationaryImage(Tenant tenant, Group group, String cameraId, ImageChannel imageChannel, String base64Image) {
+        var decodedImage = Base64.getDecoder().decode(base64Image);
+        log.debug("Channel for the decodedImage: {}.", imageChannel);
+        var point = exifDataIntegrationService.readLocation(decodedImage);
+        var image = new StationaryImage();
+        image.setOid(UUID.randomUUID().toString());
+        image.setGroup(group);
+        image.setTenant(tenant);
+        image.setCameraId(cameraId);
+        image.setChannel(imageChannel);
+        image.setLongitude(point.getX());
+        image.setLatitude(point.getY());
+        image.setMeasuredAt((Date.from(exifDataIntegrationService.readMeasuredAt(decodedImage))));
+        image.setBase64encodedImage(base64Image);
+        var micaSenseImage = stationaryImageRepository.save(image);
+        log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
+        fiwareIntegrationServiceWrapper.createStationaryCameraImage(tenant, group, cameraId, micaSenseImage);
+        // FIXME Store image in persistent storage
+        return micaSenseImage.getOid();
+    }
 }

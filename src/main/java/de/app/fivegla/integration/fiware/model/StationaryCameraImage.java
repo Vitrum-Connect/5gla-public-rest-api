@@ -7,16 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Represents a MicaSense image.
+ * Represents a Stationary Camera Image.
  */
 @Slf4j
-public record CameraImage(
+public record StationaryCameraImage(
         String id,
         String type,
         Attribute group,
         Attribute oid,
         Attribute cameraId,
-        Attribute transactionId,
         Attribute imageChannel,
         Attribute base64encodedImage,
         Attribute imagePath,
@@ -34,7 +33,6 @@ public record CameraImage(
                 "  \"customGroup\":" + group.asJson().trim() + "," +
                 "  \"oid\":" + oid.asJson().trim() + "," +
                 "  \"cameraId\":" + cameraId.asJson().trim() + "," +
-                "  \"transactionId\":" + transactionId.asJson().trim() + "," +
                 "  \"imageChannel\":" + imageChannel.asJson().trim() + "," +
                 "  \"base64encodedImage\":" + base64encodedImage.asJson().trim() + "," +
                 "  \"imagePath\":" + imagePath.asJson().trim() + "," +
@@ -48,10 +46,10 @@ public record CameraImage(
     @Override
     public void validate() {
         if (StringUtils.isBlank(id)) {
-            throw new IllegalArgumentException("The id of the camera image must not be blank.");
+            throw new IllegalArgumentException("The id of the stationary camera image must not be blank.");
         }
         if (StringUtils.isBlank(type)) {
-            throw new IllegalArgumentException("The type of the camera image must not be blank.");
+            throw new IllegalArgumentException("The type of the stationary camera image must not be blank.");
         }
     }
 

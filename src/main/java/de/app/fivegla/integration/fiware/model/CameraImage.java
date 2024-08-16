@@ -51,7 +51,7 @@ public record CameraImage(
             throw new IllegalArgumentException("The id of the MicaSense image must not be blank.");
         }
         if (StringUtils.isBlank(type)) {
-            throw new IllegalArgumentException("The type of the MicaSense image must not be blank.");
+            throw new IllegalArgumentException("The type of the camera image must not be blank.");
         }
     }
 

@@ -4,6 +4,7 @@ import de.app.fivegla.api.Error;
 import de.app.fivegla.api.ErrorMessage;
 import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.enums.EntityType;
+import de.app.fivegla.api.Manufacturer;
 import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.business.RegisteredDevicesService;
 import de.app.fivegla.business.ThirdPartyApiConfigurationService;
@@ -12,8 +13,13 @@ import de.app.fivegla.integration.fiware.model.WeatherData;
 import de.app.fivegla.integration.fiware.model.internal.DateAttribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
+import de.app.fivegla.business.RegisteredDevicesService;
+import de.app.fivegla.business.ThirdPartyApiConfigurationService;
+import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.openweather.dto.OpenWeatherData;
 import de.app.fivegla.integration.openweather.dto.OpenWeatherDataFromThePast;
+import de.app.fivegla.persistence.entity.Group;
+import de.app.fivegla.persistence.entity.Tenant;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +28,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service

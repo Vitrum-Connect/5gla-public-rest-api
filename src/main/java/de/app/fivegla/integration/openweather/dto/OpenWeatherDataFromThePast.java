@@ -30,4 +30,10 @@ public class OpenWeatherDataFromThePast {
     @JsonProperty("current")
     private Data data;
 
+    @JsonProperty("rain.1h")
+    private double rainWithinOneHour;
+
+    @JsonProperty("snow.1h")
+    private double snowWithinOneHour;
+
 }

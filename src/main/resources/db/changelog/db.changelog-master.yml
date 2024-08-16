@@ -34,4 +34,4 @@ databaseChangeLog:
       author: Sascha Doemer | sascha.doemer@lmis.de
       changes:
         - sqlFile:
-            path: V6__remove_txid_from_stationary_images.sql
+            path: db/changelog/V6__remove_txid_from_stationary_images.sql

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "image")
-public class Image extends BaseEntity {
+public class StationaryImage extends BaseEntity {
 
     /**
      * The oid of the image.
@@ -28,12 +27,6 @@ public class Image extends BaseEntity {
      */
     @Column(name = "camera_id", nullable = false)
     private String cameraId;
-
-    /**
-     * The transaction id.
-     */
-    @Column(name = "transaction_id", nullable = false)
-    private String transactionId;
 
     /**
      * The channel of the image since the value cannot be read from the EXIF.
@@ -83,20 +76,11 @@ public class Image extends BaseEntity {
     private Tenant tenant;
 
     /**
-     * Returns the image as raw data.
-     *
-     * @return the image as raw data
-     */
-    public byte[] getImageAsRawData() {
-        return Base64.getDecoder().decode(base64encodedImage);
-    }
-
-    /**
      * Returns the name of the image.
      *
      * @return the name of the image
      */
-    public String getFullFilename(Tenant tenant, String transactionId) {
-        return tenant.getTenantId() + "/" + transactionId + "/" + cameraId + "_" + channel.name() + "_" + measuredAt.toInstant().getEpochSecond() + ".tiff";
+    public String getFullFilename(Tenant tenant) {
+        return tenant.getTenantId() + "/" + cameraId + "/" + channel.name() + "/" + measuredAt.toInstant().getEpochSecond() + ".tiff";
     }
 }

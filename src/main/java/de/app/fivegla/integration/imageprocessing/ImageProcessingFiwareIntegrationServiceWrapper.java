@@ -3,10 +3,11 @@ package de.app.fivegla.integration.imageprocessing;
 
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
-import de.app.fivegla.integration.fiware.model.MicaSenseImage;
+import de.app.fivegla.integration.fiware.model.CameraImage;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Image;
+import de.app.fivegla.persistence.entity.StationaryImage;
 import de.app.fivegla.persistence.entity.Tenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,18 +27,18 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
     private String imagePathBaseUrl;
 
     /**
-     * Create a new drone device measurement in FIWARE.
+     * Create a new image device measurement in FIWARE.
      *
      * @param image         the image to create the measurement for
      * @param transactionId the transaction id
      */
-    public void createDroneDeviceMeasurement(Tenant tenant, Group group, String droneId, Image image, String transactionId) {
-        var deviceMeasurement = new MicaSenseImage(
-                tenant.getFiwarePrefix() + droneId,
+    public void createCameraImage(Tenant tenant, Group group, String cameraId, Image image, String transactionId) {
+        var deviceMeasurement = new CameraImage(
+                tenant.getFiwarePrefix() + cameraId,
                 EntityType.MICASENSE_IMAGE.getKey(),
                 new TextAttribute(group.getOid()),
                 new TextAttribute(image.getOid()),
-                new TextAttribute(droneId),
+                new TextAttribute(cameraId),
                 new TextAttribute(image.getTransactionId()),
                 new TextAttribute(image.getChannel().name()),
                 new TextAttribute(image.getBase64encodedImage()),
@@ -48,4 +49,12 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
         fiwareEntityIntegrationService.persist(tenant, group, deviceMeasurement);
     }
 
+    /**
+     * Create a new stationary image device measurement in FIWARE.
+     *
+     * @param micaSenseImage the image to create the measurement for
+     */
+    public void createStationaryCameraImage(Tenant tenant, Group group, String cameraId, StationaryImage micaSenseImage) {
+        // FIXME: Save stationary image in FIWARE
+    }
 }

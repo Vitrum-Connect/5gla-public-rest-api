@@ -14,11 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Schema(description = "Request for image processing.")
-public class ImageProcessingRequest {
-
-    @NotBlank
-    @Schema(description = "The transaction id.")
-    private String transactionId;
+public class StationaryImageProcessingRequest {
 
     @NotBlank
     @Schema(description = "The id of the camera.")

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "A single image to process.")
-public class DroneImage {
+public class CameraImage {
 
     @Schema(description = "The channel of the image.")
     private ImageChannel imageChannel;

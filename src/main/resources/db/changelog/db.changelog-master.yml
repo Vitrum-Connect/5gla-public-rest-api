@@ -23,3 +23,9 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/V4__add_registered_devices.sql
+  - changeSet:
+      id: 5
+      author: Sascha Doemer | sascha.doemer@lmis.de
+      changes:
+        - sqlFile:
+            path: db/changelog/V5__add_stationary_images.sql

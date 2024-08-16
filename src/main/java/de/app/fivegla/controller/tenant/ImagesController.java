@@ -7,6 +7,7 @@ import de.app.fivegla.config.security.marker.TenantCredentialApiAccess;
 import de.app.fivegla.controller.api.BaseMappings;
 import de.app.fivegla.controller.dto.request.GetAllImagesForTransactionRequest;
 import de.app.fivegla.controller.dto.request.ImageProcessingRequest;
+import de.app.fivegla.controller.dto.request.StationaryImageProcessingRequest;
 import de.app.fivegla.controller.dto.response.*;
 import de.app.fivegla.integration.imageprocessing.ImageProcessingIntegrationService;
 import de.app.fivegla.integration.imageprocessing.OrthophotoIntegrationService;
@@ -81,7 +82,47 @@ public class ImagesController implements TenantCredentialApiAccess {
         var group = groupService.getOrDefault(tenant, request.getGroupId());
         var oids = new ArrayList<String>();
         request.getImages().forEach(droneImage -> {
-            var oid = imageProcessingIntegrationService.processImage(tenant, group, request.getTransactionId(), request.getDroneId(), droneImage.getImageChannel(), droneImage.getBase64Image());
+            var oid = imageProcessingIntegrationService.processImage(tenant, group, request.getTransactionId(), request.getCameraId(), droneImage.getImageChannel(), droneImage.getBase64Image());
+            oids.add(oid);
+        });
+        return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()
+                .oids(oids)
+                .build());
+    }
+
+    /**
+     * Processes one or multiple images from the mica sense camera.
+     *
+     * @return HTTP status 200 if image was processed successfully.
+     */
+    @Operation(
+            operationId = "images.process-stationary-image",
+            description = "Processes one or multiple stationary images from the mica sense camera.",
+            tags = BaseMappings.IMAGE_PROCESSING
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Images were processed successfully.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ImageProcessingResponse.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PostMapping(value = "/stationary", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Response> processImage(@Valid @RequestBody @Parameter(description = "The image processing request.", required = true) StationaryImageProcessingRequest request, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        var group = groupService.getOrDefault(tenant, request.getGroupId());
+        var oids = new ArrayList<String>();
+        request.getImages().forEach(droneImage -> {
+            var oid = imageProcessingIntegrationService.processStationaryImage(tenant, group, request.getCameraId(), droneImage.getImageChannel(), droneImage.getBase64Image());
             oids.add(oid);
         });
         return ResponseEntity.status(HttpStatus.CREATED).body(ImageProcessingResponse.builder()

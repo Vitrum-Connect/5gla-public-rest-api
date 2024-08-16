@@ -10,12 +10,12 @@ import org.apache.commons.lang3.StringUtils;
  * Represents a MicaSense image.
  */
 @Slf4j
-public record MicaSenseImage(
+public record CameraImage(
         String id,
         String type,
         Attribute group,
         Attribute oid,
-        Attribute droneId,
+        Attribute cameraId,
         Attribute transactionId,
         Attribute imageChannel,
         Attribute base64encodedImage,
@@ -33,7 +33,7 @@ public record MicaSenseImage(
                 "  \"type\":\"" + type.trim() + "\"," +
                 "  \"customGroup\":" + group.asJson().trim() + "," +
                 "  \"oid\":" + oid.asJson().trim() + "," +
-                "  \"droneId\":" + droneId.asJson().trim() + "," +
+                "  \"cameraId\":" + cameraId.asJson().trim() + "," +
                 "  \"transactionId\":" + transactionId.asJson().trim() + "," +
                 "  \"imageChannel\":" + imageChannel.asJson().trim() + "," +
                 "  \"base64encodedImage\":" + base64encodedImage.asJson().trim() + "," +

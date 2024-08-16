@@ -4,6 +4,7 @@ package de.app.fivegla.integration.imageprocessing;
 import de.app.fivegla.api.enums.EntityType;
 import de.app.fivegla.integration.fiware.FiwareEntityIntegrationService;
 import de.app.fivegla.integration.fiware.model.CameraImage;
+import de.app.fivegla.integration.fiware.model.StationaryCameraImage;
 import de.app.fivegla.integration.fiware.model.internal.TextAttribute;
 import de.app.fivegla.persistence.entity.Group;
 import de.app.fivegla.persistence.entity.Image;
@@ -35,7 +36,7 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
     public void createCameraImage(Tenant tenant, Group group, String cameraId, Image image, String transactionId) {
         var deviceMeasurement = new CameraImage(
                 tenant.getFiwarePrefix() + cameraId,
-                EntityType.MICASENSE_IMAGE.getKey(),
+                EntityType.IMAGE.getKey(),
                 new TextAttribute(group.getOid()),
                 new TextAttribute(image.getOid()),
                 new TextAttribute(cameraId),
@@ -55,6 +56,18 @@ public class ImageProcessingFiwareIntegrationServiceWrapper {
      * @param micaSenseImage the image to create the measurement for
      */
     public void createStationaryCameraImage(Tenant tenant, Group group, String cameraId, StationaryImage micaSenseImage) {
-        // FIXME: Save stationary image in FIWARE
+        var deviceMeasurement = new StationaryCameraImage(
+                tenant.getFiwarePrefix() + cameraId,
+                EntityType.STATIONARY_IMAGE.getKey(),
+                new TextAttribute(group.getOid()),
+                new TextAttribute(micaSenseImage.getOid()),
+                new TextAttribute(cameraId),
+                new TextAttribute(micaSenseImage.getChannel().name()),
+                new TextAttribute(micaSenseImage.getBase64encodedImage()),
+                new TextAttribute(imagePathBaseUrl + micaSenseImage.getFullFilename(tenant)),
+                new TextAttribute(micaSenseImage.getMeasuredAt().toString()),
+                micaSenseImage.getLatitude(),
+                micaSenseImage.getLongitude());
+        fiwareEntityIntegrationService.persist(tenant, group, deviceMeasurement);
     }
 }

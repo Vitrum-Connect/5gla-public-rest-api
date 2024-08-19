@@ -59,7 +59,7 @@ public class OpenWeatherController implements TenantCredentialApiAccess {
         var tenant = validateTenant(tenantService, principal);
         log.info("Importing weather data from OpenWeather for sensor '{}'.", sensorId);
         openWeatherIntegrationService.importWeatherDataFromThePast(tenant, sensorId, startDateInThePast);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new Response());
     }
 
 }

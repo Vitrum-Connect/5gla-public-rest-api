@@ -208,7 +208,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     public ResponseEntity<? extends Response> deleteThirdPartyApiConfiguration(@PathVariable(value = "uuid") String uuid, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         thirdPartyApiConfigurationService.deleteThirdPartyApiConfiguration(tenant.getTenantId(), uuid);
-        return ResponseEntity.ok().body(new Response());
+        return ResponseEntity.ok(new Response());
     }
 
     @Operation(
@@ -236,7 +236,7 @@ public class ThirdPartyApiConfigurationController implements TenantCredentialApi
     public ResponseEntity<? extends Response> triggerThirdPartyApiConfigurationInThePast(@PathVariable(value = "uuid") String uuid, @PathVariable(value = "startDateInThePast") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDateInThePast, Principal principal) {
         var tenant = validateTenant(tenantService, principal);
         thirdPartyApiConfigurationService.triggerImport(tenant.getTenantId(), uuid, startDateInThePast);
-        return ResponseEntity.ok().body(new Response());
+        return ResponseEntity.ok(new Response());
     }
 
 }

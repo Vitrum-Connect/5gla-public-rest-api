@@ -19,6 +19,7 @@ public enum EntityType {
     DEVICE_POSITION("DevicePosition"),
     AGRI_CROP("AgriCrop"),
     OPEN_WEATHER_MAP("OpenWeatherMap"),
+    MANUAL_PRECIPITATION_EVENT("ManualPrecipitationEvent"),
     UNKNOWN("Unknown");
 
     private final String key;

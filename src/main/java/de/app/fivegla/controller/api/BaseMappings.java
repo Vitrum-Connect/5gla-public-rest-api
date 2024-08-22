@@ -35,4 +35,5 @@ public class BaseMappings {
     public static final String REGISTERED_DEVICES = SECURED_BY_TENANT + "/registered-devices";
     public static final String OPEN_WEATHER = SECURED_BY_TENANT + "/open-weather";
     public static final String WEATHER_DATA = SECURED_BY_TENANT + "/weather-data";
+    public static final String PRECIPITATION = SECURED_BY_TENANT + "/precipitation";
 }

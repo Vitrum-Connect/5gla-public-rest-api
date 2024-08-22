@@ -20,7 +20,8 @@ public enum EntityType {
     AGRI_CROP("AgriCrop"),
     OPEN_WEATHER_MAP("OpenWeatherMap"),
     MANUAL_PRECIPITATION_EVENT("ManualPrecipitationEvent"),
-    UNKNOWN("Unknown");
+    UNKNOWN("Unknown"),
+    MANUAL_WEATHER_DATA_EVENT("ManualWeatherDataEvent");
 
     private final String key;
 

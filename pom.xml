@@ -127,12 +127,6 @@
             <version>2.10.1</version>
         </dependency>
 
-        <!-- PROMETHEUS -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-
         <!-- JAXB -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
@@ -162,6 +156,16 @@
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>8.5.10</version>
+        </dependency>
+
+        <!-- MICROMEETER -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
     </dependencies>

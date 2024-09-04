@@ -23,6 +23,7 @@ public class BaseMappings {
     public static final String MAINTENANCE = SECURED_BY_API_KEY + "/maintenance";
     public static final String INFO = SECURED_BY_API_KEY + "/info";
     public static final String TENANT = SECURED_BY_API_KEY + "/tenant";
+    public static final String HEARTBEAT = SECURED_BY_API_KEY + "/heartbeat";
 
     // SECURED_BY_TENANT
 

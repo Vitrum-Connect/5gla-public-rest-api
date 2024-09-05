@@ -1,13 +1,14 @@
 package de.app.fivegla.integration.imageprocessing;
 
+import de.app.fivegla.api.ErrorMessage;
+import de.app.fivegla.api.Error;
 import de.app.fivegla.api.dto.SortableImageOids;
+import de.app.fivegla.api.exceptions.BusinessException;
 import de.app.fivegla.integration.imageprocessing.dto.TransactionIdWithTheFirstImageTimestamp;
 import de.app.fivegla.persistence.ImageRepository;
 import de.app.fivegla.persistence.StationaryImageRepository;
-import de.app.fivegla.persistence.entity.Group;
-import de.app.fivegla.persistence.entity.Image;
-import de.app.fivegla.persistence.entity.StationaryImage;
-import de.app.fivegla.persistence.entity.Tenant;
+import de.app.fivegla.persistence.TransactionRepository;
+import de.app.fivegla.persistence.entity.*;
 import de.app.fivegla.persistence.entity.enums.ImageChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class ImageProcessingIntegrationService {
     private final ImageProcessingFiwareIntegrationServiceWrapper fiwareIntegrationServiceWrapper;
     private final PersistentStorageIntegrationService persistentStorageIntegrationService;
     private final ImageRepository imageRepository;
+    private final TransactionRepository transactionRepository;
     private final StationaryImageRepository stationaryImageRepository;
 
     /**
@@ -40,25 +42,47 @@ public class ImageProcessingIntegrationService {
      * @param base64Image   The base64 encoded tiff image.
      */
     public String processImage(Tenant tenant, Group group, String transactionId, String cameraId, ImageChannel imageChannel, String base64Image) {
-        var decodedImage = Base64.getDecoder().decode(base64Image);
-        log.debug("Channel for the decodedImage: {}.", imageChannel);
-        var point = exifDataIntegrationService.readLocation(decodedImage);
-        var image = new Image();
-        image.setOid(UUID.randomUUID().toString());
-        image.setGroup(group);
-        image.setTenant(tenant);
-        image.setCameraId(cameraId);
-        image.setTransactionId(transactionId);
-        image.setChannel(imageChannel);
-        image.setLongitude(point.getX());
-        image.setLatitude(point.getY());
-        image.setMeasuredAt((Date.from(exifDataIntegrationService.readMeasuredAt(decodedImage))));
-        image.setBase64encodedImage(base64Image);
-        var micaSenseImage = imageRepository.save(image);
-        log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
-        fiwareIntegrationServiceWrapper.createCameraImage(tenant, group, cameraId, micaSenseImage, transactionId);
-        persistentStorageIntegrationService.storeImage(transactionId, micaSenseImage);
-        return micaSenseImage.getOid();
+        var currentTransaction = createNewTransactionIfNecessary(transactionId, tenant);
+        if (currentTransaction.isProcessed()) {
+            log.warn("Transaction with id {} is already processed.", transactionId);
+            throw new BusinessException(ErrorMessage.builder()
+                    .error(Error.TRANSACTION_ALREADY_PROCESSED)
+                    .message("Transaction is already processed.")
+                    .build());
+        } else {
+            var decodedImage = Base64.getDecoder().decode(base64Image);
+            log.debug("Channel for the decodedImage: {}.", imageChannel);
+            var point = exifDataIntegrationService.readLocation(decodedImage);
+            var image = new Image();
+            image.setOid(UUID.randomUUID().toString());
+            image.setGroup(group);
+            image.setTenant(tenant);
+            image.setCameraId(cameraId);
+            image.setTransactionId(transactionId);
+            image.setChannel(imageChannel);
+            image.setLongitude(point.getX());
+            image.setLatitude(point.getY());
+            image.setMeasuredAt((Date.from(exifDataIntegrationService.readMeasuredAt(decodedImage))));
+            image.setBase64encodedImage(base64Image);
+            var micaSenseImage = imageRepository.save(image);
+            log.debug("Image with oid {} added to the application data.", micaSenseImage.getOid());
+            fiwareIntegrationServiceWrapper.createCameraImage(tenant, group, cameraId, micaSenseImage, transactionId);
+            persistentStorageIntegrationService.storeImage(transactionId, micaSenseImage);
+            return micaSenseImage.getOid();
+        }
+    }
+
+    private Transaction createNewTransactionIfNecessary(String transactionId, Tenant tenant) {
+        var transaction = transactionRepository.findByTransactionId(transactionId);
+        if (transaction.isEmpty()) {
+            var newTransaction = new Transaction();
+            newTransaction.setTransactionId(transactionId);
+            newTransaction.setTenant(tenant);
+            newTransaction.markAsActive();
+            return transactionRepository.save(newTransaction);
+        } else {
+            return transaction.get();
+        }
     }
 
     /**
@@ -121,11 +145,11 @@ public class ImageProcessingIntegrationService {
      * extracting the location from exif data, setting the necessary attributes of StationaryImage,
      * saving the image to the repository, and creating a camera image using the Fiware Integration Service.
      *
-     * @param tenant The tenant of the image
-     * @param group The group of the image
-     * @param cameraId The ID of the camera associated with the image
+     * @param tenant       The tenant of the image
+     * @param group        The group of the image
+     * @param cameraId     The ID of the camera associated with the image
      * @param imageChannel The image channel of the image
-     * @param base64Image The base64 encoded image to process
+     * @param base64Image  The base64 encoded image to process
      * @return The OID (Object ID) of the processed image
      */
     public String processStationaryImage(Tenant tenant, Group group, String cameraId, ImageChannel imageChannel, String base64Image) {
@@ -147,5 +171,24 @@ public class ImageProcessingIntegrationService {
         fiwareIntegrationServiceWrapper.createStationaryCameraImage(tenant, group, cameraId, micaSenseImage);
         persistentStorageIntegrationService.storeStationaryImage(micaSenseImage);
         return micaSenseImage.getOid();
+    }
+
+    /**
+     * Retrieves the stationary image with the given oid.
+     *
+     * @param transactionId The oid of the image.
+     */
+    public void markTransactionAsProcessed(String transactionId) {
+        var transaction = transactionRepository.findByTransactionId(transactionId);
+        if (transaction.isEmpty()) {
+            log.warn("Transaction with id {} does not exist.", transactionId);
+            throw new BusinessException(ErrorMessage.builder()
+                    .error(Error.TRANSACTION_DOES_NOT_EXIST)
+                    .message("Transaction does not exist.")
+                    .build());
+        } else {
+            transaction.get().markAsProcessed();
+            transactionRepository.save(transaction.get());
+        }
     }
 }

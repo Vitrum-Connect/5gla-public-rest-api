@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "transaction")
+@Table(name = "transaction_state")
 public class Transaction extends BaseEntity {
 
     /**

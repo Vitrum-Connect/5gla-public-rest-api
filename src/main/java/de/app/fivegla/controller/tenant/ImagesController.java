@@ -332,4 +332,33 @@ public class ImagesController implements TenantCredentialApiAccess {
         return responseEntity.get();
     }
 
+    @Operation(
+            operationId = "images.mark-as-processed",
+            description = "Marks the transaction with the given ID as processed.",
+            tags = BaseMappings.IMAGE_PROCESSING
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "The transaction was marked as processed.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "The request is invalid.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Response.class)
+            )
+    )
+    @PostMapping(value = "/{transactionId}/mark-as-processed", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> markImageAsProcessed(@PathVariable String transactionId, Principal principal) {
+        var tenant = validateTenant(tenantService, principal);
+        log.info("Marking transaction with id {} as processed.", transactionId);
+        log.debug("Tenant: {}", tenant);
+        imageProcessingIntegrationService.markTransactionAsProcessed(transactionId);
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -28,7 +28,11 @@ public class UpdateOrCreateFiwareEntitiesRequest {
     private List<FiwareEntity> entities;
 
     public String asJson() {
-        return "{\"actionType\":\"" + actionType + "\",\"entities\":[" + entitiesAsJson() + "]}";
+        return "{\"actionType\":\"" + actionType + "\",\"entities\":[" + entitiesAsJson() + "," + entitiesAsSmartModelJson() + "]}";
+    }
+
+    private String entitiesAsSmartModelJson() {
+        return entities.stream().filter(FiwareEntity::shouldCreateSmartModelEntity).map(FiwareEntity::asSmartModelJson).collect(Collectors.joining(","));
     }
 
     private String entitiesAsJson() {

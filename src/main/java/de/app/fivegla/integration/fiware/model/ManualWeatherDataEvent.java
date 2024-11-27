@@ -5,6 +5,7 @@ import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
 import de.app.fivegla.integration.fiware.model.internal.NumberAttribute;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
@@ -52,6 +53,11 @@ public record ManualWeatherDataEvent(
     }
 
     @Override
+    public String asSmartModelJson() {
+        throw new NotImplementedException("Smart model JSON is not supported for ManualWeatherDataEvent.");
+    }
+
+    @Override
     public void validate() {
         if (StringUtils.isBlank(id)) {
             throw new IllegalArgumentException("The id of the entity must not be null or blank.");
@@ -69,5 +75,10 @@ public record ManualWeatherDataEvent(
     @Override
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean shouldCreateSmartModelEntity() {
+        return false;
     }
 }

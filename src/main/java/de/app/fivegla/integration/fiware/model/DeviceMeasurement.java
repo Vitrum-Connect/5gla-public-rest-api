@@ -1,5 +1,6 @@
 package de.app.fivegla.integration.fiware.model;
 
+import de.app.fivegla.api.enums.SmartModelEntityType;
 import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
@@ -40,6 +41,23 @@ public record DeviceMeasurement(
     }
 
     @Override
+    public String asSmartModelJson() {
+        validate();
+        var json = "{" +
+                "  \"id\":\"" + id.trim() + "\"," +
+                "  \"type\":\"" + SmartModelEntityType.DEVICE_MEASUREMENT.getKey() + "\"," +
+                "  \"customGroup\":" + group.asJson().trim() + "," +
+                "  \"name\":" + name.asJson().trim() + "," +
+                "  \"controlledProperty\":" + controlledProperty.asJson().trim() + "," +
+                "  \"externalDataReference\":" + externalDataReference.asJson().trim() + "," +
+                "  \"dateCreated\":" + dateCreated.asJson().trim() + "," +
+                "  \"location\":" + locationAsJson(latitude, longitude).trim() +
+                "}";
+        log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);
+        return json;
+    }
+
+    @Override
     public void validate() {
         if (StringUtils.isBlank(id)) {
             throw new IllegalArgumentException("The id of the device measurement must not be null or blank.");
@@ -57,5 +75,10 @@ public record DeviceMeasurement(
     @Override
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean shouldCreateSmartModelEntity() {
+        return true;
     }
 }

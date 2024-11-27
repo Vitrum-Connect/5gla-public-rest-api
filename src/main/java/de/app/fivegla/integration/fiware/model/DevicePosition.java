@@ -4,6 +4,7 @@ import de.app.fivegla.integration.fiware.model.api.FiwareEntity;
 import de.app.fivegla.integration.fiware.model.api.Validatable;
 import de.app.fivegla.integration.fiware.model.internal.Attribute;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -38,6 +39,11 @@ public record DevicePosition(
     }
 
     @Override
+    public String asSmartModelJson() {
+        throw new NotImplementedException("Smart model JSON is not supported for DevicePosition.");
+    }
+
+    @Override
     public void validate() {
         if (StringUtils.isBlank(id)) {
             throw new IllegalArgumentException("The id of the device position must not be null or blank.");
@@ -55,5 +61,10 @@ public record DevicePosition(
     @Override
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean shouldCreateSmartModelEntity() {
+        return false;
     }
 }

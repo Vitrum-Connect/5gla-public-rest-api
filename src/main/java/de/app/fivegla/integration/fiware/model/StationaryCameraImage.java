@@ -42,6 +42,11 @@ public record StationaryCameraImage(
     }
 
     @Override
+    public String asSmartModelJson() {
+        throw new UnsupportedOperationException("Smart model JSON is not supported for StationaryCameraImage.");
+    }
+
+    @Override
     public void validate() {
         if (StringUtils.isBlank(id)) {
             throw new IllegalArgumentException("The id of the stationary camera image must not be blank.");
@@ -59,5 +64,10 @@ public record StationaryCameraImage(
     @Override
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean shouldCreateSmartModelEntity() {
+        return false;
     }
 }

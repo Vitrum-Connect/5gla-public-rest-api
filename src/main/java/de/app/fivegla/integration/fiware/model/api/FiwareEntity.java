@@ -19,6 +19,13 @@ public interface FiwareEntity {
     String asJson();
 
     /**
+     * Converts the FiwareEntity object to JSON format for a smart model.
+     *
+     * @return The FiwareEntity object in JSON format for a smart model.
+     */
+    String asSmartModelJson();
+
+    /**
      * Returns the JSON representation of the location coordinates.
      *
      * @param latitude  the latitude coordinate
@@ -72,4 +79,11 @@ public interface FiwareEntity {
      * @return The type of the FiwareEntity object.
      */
     String getType();
+
+    /**
+     * Returns whether a smart model entity should be created.
+     *
+     * @return true if a smart model entity should be created, false otherwise
+     */
+    boolean shouldCreateSmartModelEntity();
 }

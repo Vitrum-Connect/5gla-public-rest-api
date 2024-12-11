@@ -29,7 +29,7 @@ public record AgriCrop(
                 "  \"type\":\"" + type.trim() + "\"," +
                 "  \"customGroup\":" + group.asJson().trim() + "," +
                 "  \"dateCreated\":" + dateCreated.asJson().trim() + "," +
-                "  \"coordinates\":" + coordinatesAsJson(coordinates).trim() +
+                "  \"location\":" + coordinatesAsJson(coordinates).trim() +
                 "}";
         log.debug("{} as JSON: {}", this.getClass().getSimpleName(), json);
         return json;

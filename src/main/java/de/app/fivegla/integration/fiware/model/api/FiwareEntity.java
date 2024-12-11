@@ -50,7 +50,7 @@ public interface FiwareEntity {
             return "{}";
         } else {
             return "{" +
-                    "  \"type\":\"" + FiwareType.GEO_JSON.getKey() + "\"," +
+                    "  \"type\":\"" + FiwareType.GEO_PROPERTY.getKey() + "\"," +
                     "  \"value\": {" +
                     "    \"type\":\"Polygon\"," +
                     "    \"coordinates\": [" + coordinates.stream().map(c -> "[" + c.getLatitude() + "," + c.getLongitude() + "]").reduce((a, b) -> a + "," + b).orElse("") + "]" +
